@@ -14,7 +14,7 @@
 
 <a
 	href="/t/{tool.slug}"
-	class="group flex items-start gap-3 rounded-lg border border-line bg-surface p-3 transition-colors duration-120 hover:border-accent/50 hover:bg-surface-2/40"
+	class="group flex items-start gap-3 rounded-(--radius-lg) border border-line bg-surface p-3 transition-all duration-120 hover:-translate-y-px hover:border-accent/50 hover:shadow-md hover:shadow-black/5"
 >
 	<span
 		class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-line bg-surface-2 text-dim transition-colors duration-120 group-hover:border-accent/40 group-hover:text-accent"

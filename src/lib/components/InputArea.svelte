@@ -67,6 +67,7 @@
 		></textarea>
 		{#if badge.length > 0}
 			<div
+				data-testid="input-badge"
 				class="pointer-events-none absolute -top-2.5 right-3 flex items-center gap-1.5 rounded-md border border-line bg-surface px-2 py-0.5 font-mono text-[11px] leading-4"
 			>
 				{#each badge as seg, i (i)}

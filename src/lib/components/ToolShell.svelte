@@ -7,6 +7,8 @@
 	import { iconFor } from '$lib/tools/icons';
 	import { pushRecentTool } from '$lib/state/app.svelte';
 	import ToolCard from './ToolCard.svelte';
+	import PlusCorners from './PlusCorners.svelte';
+	import Eyebrow from './Eyebrow.svelte';
 	import { ChevronDown } from 'lucide-svelte';
 
 	interface Props {
@@ -96,11 +98,13 @@
 		</span>
 	</header>
 
-	<div class="mb-10">
+	<!-- The tool itself sits in a framed panel, lifted off the page background. -->
+	<div class="relative mb-12 rounded-(--radius-xl) border border-line bg-surface p-4 shadow-lg shadow-black/[0.03] sm:p-6">
+		<PlusCorners />
 		{@render children()}
 	</div>
 
-	<details class="group mb-8 rounded-lg border border-line">
+	<details class="group mb-8 rounded-(--radius-lg) border border-line bg-surface">
 		<summary
 			class="flex cursor-pointer items-center justify-between px-4 py-3 text-sm font-medium select-none"
 		>
@@ -126,7 +130,10 @@
 	</details>
 
 	<section aria-labelledby="related-heading">
-		<h2 id="related-heading" class="mb-3 text-sm font-medium">Related tools</h2>
+		<div class="mb-3 flex items-center gap-3">
+			<Eyebrow id="related-heading" text="Related tools" />
+			<span class="h-px grow bg-line" aria-hidden="true"></span>
+		</div>
 		<div class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
 			{#each related as r (r.slug)}
 				<ToolCard tool={r} />

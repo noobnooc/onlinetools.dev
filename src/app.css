@@ -22,9 +22,10 @@
 	--surface: #ffffff;
 	--surface-2: #f2f4f7;
 	--border: #e4e7ec;
-	--text: #14171c;
+	--text: #101114;
 	--text-dim: #667085;
-	--accent: #4c8dff;
+	/* Slightly deeper blue on light backgrounds for contrast. */
+	--accent: #3672f0;
 	--ok: #16a06b;
 	--warn: #b97509;
 	--err: #d92d34;
@@ -47,6 +48,8 @@
 		'JetBrains Mono', ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
 	--radius-md: 8px;
 	--radius-sm: 6px;
+	--radius-lg: 10px;
+	--radius-xl: 14px;
 }
 
 html {
