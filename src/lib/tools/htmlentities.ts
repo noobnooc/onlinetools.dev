@@ -46,7 +46,7 @@ export function encodeEntities(input: string, options: EntityEncodeOptions = {})
 
 export function decodeEntities(input: string): ToolResult {
 	let sawInvalid: string | null = null;
-	const out = input.replace(/&(#x?[0-9a-fA-F]+|[a-zA-Z][a-zA-Z0-9]*);/g, (full, body: string) => {
+	const out = input.replace(/&(#[xX]?[0-9a-fA-F]+|[a-zA-Z][a-zA-Z0-9]*);/g, (full, body: string) => {
 		if (body.startsWith('#x') || body.startsWith('#X')) {
 			const cp = parseInt(body.slice(2), 16);
 			return Number.isFinite(cp) && cp <= 0x10ffff ? String.fromCodePoint(cp) : full;

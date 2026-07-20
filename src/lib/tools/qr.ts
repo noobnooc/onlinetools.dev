@@ -1,6 +1,11 @@
 import { type ToolResult, ok, err } from './types';
 import qrcodegen from 'qrcode-generator';
 
+// The library's default stringToBytes truncates to Latin-1, mangling CJK and
+// emoji. Encode as real UTF-8 so any text scans back correctly.
+(qrcodegen as unknown as { stringToBytes: (s: string) => number[] }).stringToBytes = (s) =>
+	Array.from(new TextEncoder().encode(s));
+
 export type EcLevel = 'L' | 'M' | 'Q' | 'H';
 
 export interface QrResult {

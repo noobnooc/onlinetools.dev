@@ -89,16 +89,28 @@ function flatten(obj: unknown, prefix = '', out: Record<string, unknown> = {}): 
 	return out;
 }
 
-function csvEscape(v: unknown, delimiter: string): string {
+/** Raw cell text for a flattened value (before any CSV escaping). */
+function cellText(v: unknown): string {
 	if (v === null || v === undefined) return '';
-	const s = Array.isArray(v) ? JSON.stringify(v) : String(v);
-	if (s.includes('"') || s.includes(delimiter) || s.includes('\n')) {
+	return Array.isArray(v) ? JSON.stringify(v) : String(v);
+}
+
+function csvEscape(s: string, delimiter: string): string {
+	if (s.includes('"') || s.includes(delimiter) || s.includes('\n') || s.includes('\r')) {
 		return '"' + s.replace(/"/g, '""') + '"';
 	}
 	return s;
 }
 
-export function jsonToCsv(input: string, delimiter = ','): ToolResult<{ csv: string; rows: number; columns: string[] }> {
+export interface CsvResult {
+	csv: string;
+	rows: number;
+	columns: string[];
+	/** Unescaped cell values, header row first — use this for table rendering. */
+	grid: string[][];
+}
+
+export function jsonToCsv(input: string, delimiter = ','): ToolResult<CsvResult> {
 	let parsed: unknown;
 	try {
 		parsed = JSON.parse(input);
@@ -114,11 +126,54 @@ export function jsonToCsv(input: string, delimiter = ','): ToolResult<{ csv: str
 			if (!columns.includes(key)) columns.push(key);
 		}
 	}
-	const lines = [
-		columns.map((c) => csvEscape(c, delimiter)).join(delimiter),
-		...flatRows.map((row) => columns.map((c) => csvEscape(row[c], delimiter)).join(delimiter))
+	const grid: string[][] = [
+		columns,
+		...flatRows.map((row) => columns.map((c) => cellText(row[c])))
 	];
-	return ok({ csv: lines.join('\n'), rows: array.length, columns });
+	const lines = grid.map((cells) => cells.map((c) => csvEscape(c, delimiter)).join(delimiter));
+	return ok({ csv: lines.join('\n'), rows: array.length, columns, grid });
+}
+
+/**
+ * Parse one or more RFC 4180 CSV records (quoted fields, escaped quotes,
+ * embedded delimiters/newlines). Used to verify round-trips in tests.
+ */
+export function parseCsv(text: string, delimiter = ','): string[][] {
+	const rows: string[][] = [];
+	let row: string[] = [];
+	let field = '';
+	let inQuotes = false;
+	for (let i = 0; i < text.length; i++) {
+		const ch = text[i];
+		if (inQuotes) {
+			if (ch === '"') {
+				if (text[i + 1] === '"') {
+					field += '"';
+					i++;
+				} else {
+					inQuotes = false;
+				}
+			} else {
+				field += ch;
+			}
+		} else if (ch === '"') {
+			inQuotes = true;
+		} else if (ch === delimiter) {
+			row.push(field);
+			field = '';
+		} else if (ch === '\n' || ch === '\r') {
+			if (ch === '\r' && text[i + 1] === '\n') i++;
+			row.push(field);
+			field = '';
+			rows.push(row);
+			row = [];
+		} else {
+			field += ch;
+		}
+	}
+	row.push(field);
+	rows.push(row);
+	return rows;
 }
 
 /* ---------- JSON → TypeScript ---------- */

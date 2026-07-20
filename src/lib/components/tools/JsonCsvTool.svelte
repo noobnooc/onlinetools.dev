@@ -19,13 +19,8 @@
 		currentResult.text = csv?.csv ?? '';
 	});
 
-	/** Small table preview of the first rows. */
-	const preview = $derived.by(() => {
-		if (!csv) return null;
-		const lines = csv.csv.split('\n').slice(0, 9);
-		// Simple split for preview only; the real output handles quoting properly.
-		return lines.map((l) => l.split(delimiter === '\t' ? '\t' : delimiter).slice(0, 8));
-	});
+	/** Table preview straight from the structured grid — no string re-parsing. */
+	const preview = $derived(csv ? csv.grid.slice(0, 9).map((row) => row.slice(0, 8)) : null);
 
 	const badge = $derived.by((): BadgeSegment[] => {
 		if (input.trim() === '') return [];
