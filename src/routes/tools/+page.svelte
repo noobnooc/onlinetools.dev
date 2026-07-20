@@ -15,7 +15,7 @@
 	<link rel="canonical" href="https://onlinetools.dev/tools" />
 </svelte:head>
 
-<div class="mx-auto max-w-6xl px-4 py-10">
+<div class="mx-auto max-w-5xl px-6 py-8">
 	<h1 class="mb-1 text-xl font-semibold tracking-tight">All tools</h1>
 	<p class="mb-8 text-sm text-dim">
 		{TOOLS.length} tools, every one computed in your browser. More arriving steadily — see the

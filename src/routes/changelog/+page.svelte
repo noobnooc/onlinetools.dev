@@ -4,11 +4,30 @@
 	<link rel="canonical" href="https://onlinetools.dev/changelog" />
 </svelte:head>
 
-<div class="mx-auto max-w-3xl px-4 py-10">
+<div class="mx-auto max-w-3xl px-6 py-8">
 	<h1 class="mb-8 text-xl font-semibold tracking-tight">Changelog</h1>
 
 	<section class="relative border-l border-line pb-8 pl-6">
 		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full bg-accent" aria-hidden="true"></span>
+		<h2 class="text-sm font-medium">App shell & offline install</h2>
+		<p class="mt-0.5 font-mono text-xs text-dim">2026-07 · v0.3</p>
+		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
+			<li>
+				The site is now an app: a persistent sidebar lists every tool by category with the
+				current one highlighted; on phones it becomes a slide-in drawer behind a compact top bar.
+			</li>
+			<li>
+				Installable PWA — a service worker caches visited pages and assets, so every tool you have
+				opened keeps working with no connection, and the app can be added to your dock or home
+				screen.
+			</li>
+			<li>Denser, left-aligned overview page sized for the workspace layout.</li>
+			<li>Fixed: JSON → CSV preview misaligned quoted cells; QR codes now encode CJK/emoji as UTF-8.</li>
+		</ul>
+	</section>
+
+	<section class="relative border-l border-line pb-8 pl-6">
+		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
 		<h2 class="text-sm font-medium">16 new tools & a visual pass</h2>
 		<p class="mt-0.5 font-mono text-xs text-dim">2026-07 · v0.2</p>
 		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">

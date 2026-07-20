@@ -68,7 +68,7 @@
 	{@html `<script type="application/ld+json">${jsonLd}</${'script'}>`}
 </svelte:head>
 
-<article class="mx-auto max-w-4xl px-4 py-8">
+<article class="mx-auto max-w-4xl px-6 py-8">
 	<nav class="mb-4 flex items-center gap-1.5 font-mono text-[11px] text-dim/80" aria-label="Breadcrumb">
 		<a href="/tools" class="hover:text-fg">tools</a>
 		<span aria-hidden="true">/</span>

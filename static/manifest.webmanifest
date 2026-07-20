@@ -1,0 +1,32 @@
+{
+	"name": "onlinetools.dev — Developer Tools",
+	"short_name": "onlinetools",
+	"description": "Fast, keyboard-first developer tools that run entirely in your browser. Private and offline-capable.",
+	"id": "/",
+	"start_url": "/",
+	"scope": "/",
+	"display": "standalone",
+	"orientation": "any",
+	"background_color": "#FAFBFC",
+	"theme_color": "#FAFBFC",
+	"icons": [
+		{
+			"src": "/favicon.svg",
+			"sizes": "any",
+			"type": "image/svg+xml",
+			"purpose": "any"
+		},
+		{
+			"src": "/icon-maskable.svg",
+			"sizes": "any",
+			"type": "image/svg+xml",
+			"purpose": "maskable"
+		}
+	],
+	"shortcuts": [
+		{ "name": "JSON Formatter", "url": "/t/json-formatter" },
+		{ "name": "Base64 Decode", "url": "/t/base64-decode" },
+		{ "name": "JWT Decoder", "url": "/t/jwt-decoder" },
+		{ "name": "Timestamp Converter", "url": "/t/timestamp-converter" }
+	]
+}

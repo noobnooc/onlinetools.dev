@@ -34,36 +34,41 @@
 	{@html `<script type="application/ld+json">${jsonLd}</${'script'}>`}
 </svelte:head>
 
-<!-- First-screen backdrop: a blueprint dot grid under a single, barely-there ambient light. -->
 <div class="relative">
+	<!-- Blueprint dot grid under a faint ambient light, app-workspace backdrop. -->
 	<div
-		class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-96 opacity-50"
-		style="background-image: radial-gradient(color-mix(in srgb, var(--border) 85%, transparent) 1px, transparent 1px); background-size: 24px 24px; mask-image: linear-gradient(to bottom, black 20%, transparent 90%); -webkit-mask-image: linear-gradient(to bottom, black 20%, transparent 90%)"
+		class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-72 opacity-50"
+		style="background-image: radial-gradient(color-mix(in srgb, var(--border) 85%, transparent) 1px, transparent 1px); background-size: 24px 24px; mask-image: linear-gradient(to bottom, black 15%, transparent 90%); -webkit-mask-image: linear-gradient(to bottom, black 15%, transparent 90%)"
 		aria-hidden="true"
 	></div>
 	<div
-		class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-80 opacity-60"
-		style="background: radial-gradient(60% 100% at 50% 0%, color-mix(in srgb, var(--accent) 6%, transparent), transparent 70%)"
+		class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-64 opacity-60"
+		style="background: radial-gradient(50% 100% at 35% 0%, color-mix(in srgb, var(--accent) 6%, transparent), transparent 70%)"
 		aria-hidden="true"
 	></div>
 
-	<div class="mx-auto max-w-6xl px-4 pt-14 pb-10">
-		<!-- Compact, functional hero: a sentence of positioning, then the product itself. -->
-		<div class="mx-auto mb-8 max-w-2xl text-center">
-			<div class="mb-4 flex justify-center"><Eyebrow text="{TOOLS.length} tools · local-first" /></div>
-			<h1 class="text-2xl font-semibold tracking-tight sm:text-3xl">
-				Developer tools that run in your browser
-			</h1>
-			<p class="mt-2 text-sm text-dim">
-				No upload, no signup, no waiting. Your data never leaves this page.
-			</p>
+	<div class="mx-auto max-w-5xl px-6 py-8">
+		<!-- Workspace header: left-aligned, functional. -->
+		<div class="mb-6 flex flex-wrap items-end justify-between gap-4">
+			<div>
+				<div class="mb-2"><Eyebrow text="{TOOLS.length} tools · local-first" /></div>
+				<h1 class="text-xl font-semibold tracking-tight sm:text-2xl">
+					Developer tools that run in your browser
+				</h1>
+				<p class="mt-1 text-sm text-dim">No upload, no signup, no waiting.</p>
+			</div>
+			<div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 pb-1 font-mono text-[11px] text-dim/80">
+				<span class="flex items-center gap-1.5"><ClipboardPaste size={12} /> paste to detect</span>
+				<span class="flex items-center gap-1.5"><WifiOff size={12} /> works offline</span>
+				<span class="flex items-center gap-1.5"><Kbd keys="?" /> shortcuts</span>
+			</div>
 		</div>
 
-		<div class="mx-auto mb-4 max-w-2xl">
+		<div class="mb-10">
 			<button
 				type="button"
 				onclick={() => openPalette()}
-				class="flex w-full items-center gap-3 rounded-lg border border-line bg-surface px-4 py-3.5 text-left shadow-lg shadow-black/5 transition-colors duration-120 hover:border-accent/50"
+				class="flex w-full items-center gap-3 rounded-(--radius-lg) border border-line bg-surface px-4 py-3 text-left shadow-lg shadow-black/5 transition-colors duration-120 hover:border-accent/50"
 			>
 				<Search size={16} class="shrink-0 text-dim" />
 				<span class="grow text-sm text-dim">Search {TOOLS.length} tools, or paste anything…</span>
@@ -71,18 +76,8 @@
 			</button>
 		</div>
 
-		<div class="mx-auto mb-14 flex max-w-2xl flex-wrap items-center justify-center gap-x-5 gap-y-1.5 font-mono text-[11px] text-dim/80">
-			<span class="flex items-center gap-1.5">
-				<span class="inline-block h-1.5 w-1.5 rounded-full bg-ok" aria-hidden="true"></span>
-				Everything runs locally
-			</span>
-			<span class="flex items-center gap-1.5"><ClipboardPaste size={12} /> Paste anywhere to auto-detect</span>
-			<span class="flex items-center gap-1.5"><WifiOff size={12} /> Works offline</span>
-			<span class="flex items-center gap-1.5"><Kbd keys="?" /> for shortcuts</span>
-		</div>
-
 		<!-- Featured bento: two large cards with live-looking vignettes, four compact. -->
-		<section class="relative mb-14" aria-labelledby="featured-heading">
+		<section class="relative mb-12" aria-labelledby="featured-heading">
 			<div class="mb-4 flex items-baseline justify-between">
 				<Eyebrow id="featured-heading" text="Start here" />
 				<a href="/tools" class="flex items-center gap-1 text-xs text-dim transition-colors duration-120 hover:text-accent">
@@ -179,7 +174,7 @@
 		</section>
 
 		<!-- Keyboard band -->
-		<section class="relative mb-14 rounded-(--radius-lg) border border-line bg-surface px-6 py-5" aria-label="Keyboard shortcuts">
+		<section class="relative mb-12 rounded-(--radius-lg) border border-line bg-surface px-6 py-5" aria-label="Keyboard shortcuts">
 			<PlusCorners />
 			<div class="flex flex-wrap items-center justify-between gap-x-8 gap-y-3">
 				<div>
