@@ -1,0 +1,118 @@
+<script lang="ts">
+	import type { Snippet } from 'svelte';
+	import type { ToolMeta } from '$lib/tools/registry';
+	import { TOOL_BY_SLUG } from '$lib/tools/registry';
+	import type { ToolContent } from '$lib/tools/content';
+	import { pushRecentTool } from '$lib/state/app.svelte';
+	import ToolCard from './ToolCard.svelte';
+	import { ChevronDown } from 'lucide-svelte';
+
+	interface Props {
+		tool: ToolMeta;
+		content: ToolContent;
+		children: Snippet;
+	}
+
+	let { tool, content, children }: Props = $props();
+
+	$effect(() => {
+		pushRecentTool(tool.slug);
+	});
+
+	const related = $derived(
+		tool.related
+			.map((slug) => TOOL_BY_SLUG.get(slug))
+			.filter((t): t is ToolMeta => t !== undefined)
+	);
+
+	const canonical = $derived(`https://onlinetools.dev/t/${tool.slug}`);
+
+	const jsonLd = $derived(
+		JSON.stringify([
+			{
+				'@context': 'https://schema.org',
+				'@type': 'SoftwareApplication',
+				name: tool.name,
+				description: tool.description,
+				url: canonical,
+				applicationCategory: 'DeveloperApplication',
+				operatingSystem: 'Any',
+				offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+			},
+			{
+				'@context': 'https://schema.org',
+				'@type': 'FAQPage',
+				mainEntity: content.faqs.map((f) => ({
+					'@type': 'Question',
+					name: f.q,
+					acceptedAnswer: { '@type': 'Answer', text: f.a }
+				}))
+			}
+		])
+	);
+</script>
+
+<svelte:head>
+	<title>{tool.name} — Free & Private | onlinetools.dev</title>
+	<meta name="description" content="{tool.description}. Runs entirely in your browser — no upload, no signup, works offline." />
+	<link rel="canonical" href={canonical} />
+	<meta property="og:title" content={tool.name} />
+	<meta property="og:description" content={tool.description} />
+	<meta property="og:url" content={canonical} />
+	<meta property="og:type" content="website" />
+	{@html `<script type="application/ld+json">${jsonLd}</${'script'}>`}
+</svelte:head>
+
+<article class="mx-auto max-w-4xl px-4 py-8">
+	<header class="mb-6 flex flex-wrap items-baseline justify-between gap-2">
+		<div>
+			<h1 class="text-xl font-semibold tracking-tight">{tool.name}</h1>
+			<p class="mt-1 text-sm text-dim">{tool.description}</p>
+		</div>
+		<span
+			class="flex items-center gap-1.5 rounded-md border border-line bg-surface px-2 py-1 font-mono text-[11px] text-dim"
+			title="This tool computes everything in your browser. Your input is never uploaded."
+		>
+			<span class="inline-block h-1.5 w-1.5 rounded-full bg-ok" aria-hidden="true"></span>
+			Runs locally
+		</span>
+	</header>
+
+	<div class="mb-10">
+		{@render children()}
+	</div>
+
+	<details class="group mb-8 rounded-lg border border-line">
+		<summary
+			class="flex cursor-pointer items-center justify-between px-4 py-3 text-sm font-medium select-none"
+		>
+			About this tool
+			<ChevronDown size={15} class="text-dim transition-transform duration-180 group-open:rotate-180" />
+		</summary>
+		<div class="border-t border-line px-4 py-4">
+			<div class="max-w-prose space-y-3 text-sm leading-relaxed text-dim">
+				{#each content.about as paragraph (paragraph)}
+					<p>{paragraph}</p>
+				{/each}
+			</div>
+			<h2 class="mt-6 mb-3 text-sm font-medium text-fg">Frequently asked questions</h2>
+			<dl class="space-y-4">
+				{#each content.faqs as faq (faq.q)}
+					<div class="max-w-prose">
+						<dt class="text-sm font-medium">{faq.q}</dt>
+						<dd class="mt-1 text-sm leading-relaxed text-dim">{faq.a}</dd>
+					</div>
+				{/each}
+			</dl>
+		</div>
+	</details>
+
+	<section aria-labelledby="related-heading">
+		<h2 id="related-heading" class="mb-3 text-sm font-medium">Related tools</h2>
+		<div class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+			{#each related as r (r.slug)}
+				<ToolCard tool={r} />
+			{/each}
+		</div>
+	</section>
+</article>
