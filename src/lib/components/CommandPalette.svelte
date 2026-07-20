@@ -5,7 +5,8 @@
 	import { searchTools, TOOLS, TOOL_BY_SLUG, type ToolMeta } from '$lib/tools/registry';
 	import { detect, type Detection } from '$lib/detect/detectors';
 	import { encodeState, MAX_SHARED_INPUT } from '$lib/state/urlstate';
-	import { Search, CornerDownLeft } from 'lucide-svelte';
+	import { iconFor } from '$lib/tools/icons';
+	import { Search, CornerDownLeft, Zap } from 'lucide-svelte';
 
 	interface Entry {
 		kind: 'tool' | 'action';
@@ -137,6 +138,7 @@
 			</div>
 			<ul class="max-h-[50vh] overflow-y-auto p-1.5" role="listbox" aria-label="Results">
 				{#each entries as entry, i (entry.kind + entry.tool.slug + (entry.payload ?? ''))}
+					{@const Icon = entry.kind === 'action' ? Zap : iconFor(entry.tool.slug)}
 					<li role="option" aria-selected={i === selected}>
 						<button
 							type="button"
@@ -145,13 +147,21 @@
 							onclick={() => run(entry)}
 							onmousemove={() => (selected = i)}
 						>
-							<span class="flex min-w-0 flex-col">
-								<span class="truncate text-sm {entry.kind === 'action' ? 'text-accent' : ''}">
-									{entry.label}
+							<span class="flex min-w-0 items-center gap-2.5">
+								<span
+									class="flex h-6 w-6 shrink-0 items-center justify-center rounded-md border border-line text-dim
+										{entry.kind === 'action' ? 'border-accent/40 text-accent' : ''}"
+								>
+									<Icon size={13} />
 								</span>
-								{#if entry.hint}
-									<span class="truncate font-mono text-xs text-dim">{entry.hint}</span>
-								{/if}
+								<span class="flex min-w-0 flex-col">
+									<span class="truncate text-sm {entry.kind === 'action' ? 'text-accent' : ''}">
+										{entry.label}
+									</span>
+									{#if entry.hint}
+										<span class="truncate font-mono text-xs text-dim">{entry.hint}</span>
+									{/if}
+								</span>
 							</span>
 							{#if i === selected}
 								<CornerDownLeft size={13} class="shrink-0 text-dim" />

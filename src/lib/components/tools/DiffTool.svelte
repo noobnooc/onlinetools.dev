@@ -41,11 +41,21 @@
 	</div>
 
 	{#if diff}
-		<p class="font-mono text-xs">
-			<span class="text-ok">+{diff.stats.added}</span>
-			<span class="ml-2 text-err">−{diff.stats.removed}</span>
-			<span class="ml-2 text-dim">{diff.stats.unchanged} unchanged</span>
-		</p>
+		{@const total = diff.stats.added + diff.stats.removed + diff.stats.unchanged}
+		<div class="flex items-center gap-3">
+			<p class="shrink-0 font-mono text-xs">
+				<span class="text-ok">+{diff.stats.added}</span>
+				<span class="ml-2 text-err">−{diff.stats.removed}</span>
+				<span class="ml-2 text-dim">{diff.stats.unchanged} unchanged</span>
+			</p>
+			{#if total > 0}
+				<div class="flex h-1.5 grow overflow-hidden rounded-full bg-surface-2" aria-hidden="true">
+					<div class="bg-ok/70" style="width: {(diff.stats.added / total) * 100}%"></div>
+					<div class="bg-err/70" style="width: {(diff.stats.removed / total) * 100}%"></div>
+					<div class="bg-line" style="width: {(diff.stats.unchanged / total) * 100}%"></div>
+				</div>
+			{/if}
+		</div>
 	{/if}
 
 	<OutputPanel

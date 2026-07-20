@@ -1,6 +1,7 @@
 <script lang="ts">
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
+	import JsonTree from '../JsonTree.svelte';
 	import { formatJson, validateJson } from '$lib/tools/json';
 	import { initFromHash } from '$lib/state/hashstate.svelte';
 	import { formatBytes, byteLength } from '$lib/utils/format';
@@ -11,6 +12,7 @@
 	let input = $state('');
 	let indent = $state<'2' | '4' | 'tab' | 'min'>('2');
 	let sortKeys = $state(false);
+	let view = $state<'text' | 'tree'>('text');
 
 	initFromHash((s) => {
 		if (s.input) input = s.input;
@@ -28,6 +30,14 @@
 				})
 	);
 	const output = $derived(result?.ok ? result.value : '');
+	const parsed = $derived.by((): unknown => {
+		if (!result?.ok) return undefined;
+		try {
+			return JSON.parse(input);
+		} catch {
+			return undefined;
+		}
+	});
 
 	$effect(() => {
 		currentResult.text = output;
@@ -68,10 +78,36 @@
 			<input type="checkbox" bind:checked={sortKeys} class="accent-(--accent)" />
 			Sort keys
 		</label>
+		<div class="flex rounded-md border border-line p-0.5" role="radiogroup" aria-label="Output view">
+			{#each [['text', 'Text'], ['tree', 'Tree']] as [v, label] (v)}
+				<button
+					type="button"
+					role="radio"
+					aria-checked={view === v}
+					class="rounded-[5px] px-3 py-1 text-sm transition-colors duration-120
+						{view === v ? 'bg-surface-2 text-fg' : 'text-dim hover:text-fg'}"
+					onclick={() => (view = v as typeof view)}>{label}</button
+				>
+			{/each}
+		</div>
 	</div>
 	<OutputPanel
 		value={output}
 		filename="formatted.json"
 		shareState={input.trim() === '' ? null : { input, indent, ...(sortKeys ? { sort: '1' } : {}) }}
-	/>
+	>
+		{#if view === 'tree' && parsed !== undefined}
+			<div class="max-h-[32rem] overflow-auto">
+				<JsonTree value={parsed} />
+			</div>
+			<p class="mt-2 border-t border-line/50 pt-2 text-[11px] text-dim">
+				Hover a node to copy its JSONPath — try it in the
+				<a href="/t/jsonpath-tester" class="text-accent hover:underline">JSONPath tester</a>.
+			</p>
+		{:else if output !== ''}
+			<pre class="max-h-[32rem] overflow-auto font-mono text-sm leading-relaxed whitespace-pre-wrap break-all">{output}</pre>
+		{:else}
+			<p class="font-mono text-sm text-dim/50">—</p>
+		{/if}
+	</OutputPanel>
 </div>

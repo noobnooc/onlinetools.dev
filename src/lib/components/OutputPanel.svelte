@@ -1,7 +1,12 @@
 <script lang="ts">
 	import { copyText, downloadText, byteLength, formatBytes } from '$lib/utils/format';
-	import { shareUrl } from '$lib/state/urlstate';
-	import { Copy, Check, Download, Link } from 'lucide-svelte';
+	import { shareUrl, encodeState, MAX_SHARED_INPUT } from '$lib/state/urlstate';
+	import { detect } from '$lib/detect/detectors';
+	import { TOOLS, TOOL_BY_SLUG } from '$lib/tools/registry';
+	import { pushRecentTool } from '$lib/state/app.svelte';
+	import { page } from '$app/state';
+	import { goto } from '$app/navigation';
+	import { Copy, Check, Download, Link, ArrowRight } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';
 
 	interface Props {
@@ -21,6 +26,29 @@
 	let linkCopied = $state(false);
 	let shareTooLarge = $state(false);
 	let flash = $state(false);
+	let chainOpen = $state(false);
+
+	/** Pipeline seed: send this output into another tool, detections first. */
+	const chainTargets = $derived.by(() => {
+		if (value === '' || value.length > MAX_SHARED_INPUT) return [];
+		const current = page.url.pathname.replace(/^\/t\//, '');
+		const detected = detect(value)
+			.flatMap((d) => d.actions.map((a) => a.tool))
+			.filter((slug, i, arr) => arr.indexOf(slug) === i && slug !== current)
+			.slice(0, 3);
+		const rest = TOOLS.map((t) => t.slug).filter((s) => s !== current && !detected.includes(s));
+		return [...detected, ...rest].map((slug) => ({
+			slug,
+			name: TOOL_BY_SLUG.get(slug)?.name ?? slug,
+			suggested: detected.includes(slug)
+		}));
+	});
+
+	function continueWith(slug: string) {
+		chainOpen = false;
+		pushRecentTool(slug);
+		void goto(`/t/${slug}#s=${encodeState({ input: value })}`);
+	}
 
 	// One short highlight when the result changes — the "updated" cue.
 	$effect(() => {
@@ -91,6 +119,43 @@
 						{#if linkCopied}<Check size={13} class="text-ok" /><span class="text-ok">Link copied</span>
 						{:else}<Link size={13} /><span>Share</span>{/if}
 					</button>
+				{/if}
+				{#if chainTargets.length > 0}
+					<div class="relative">
+						<button
+							type="button"
+							class="flex items-center gap-1 rounded-md px-1.5 py-1 text-xs transition-colors duration-120
+								{chainOpen ? 'bg-surface-2 text-fg' : 'text-dim hover:bg-surface-2 hover:text-fg'}"
+							onclick={() => (chainOpen = !chainOpen)}
+							aria-expanded={chainOpen}
+							title="Send this result into another tool"
+						>
+							<ArrowRight size={13} /><span>Continue with</span>
+						</button>
+						{#if chainOpen}
+							<!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
+							<div class="fixed inset-0 z-10" onclick={() => (chainOpen = false)}></div>
+							<ul
+								class="absolute right-0 z-20 mt-1 max-h-64 w-56 overflow-y-auto rounded-lg border border-line bg-surface p-1 shadow-xl shadow-black/20"
+								role="menu"
+							>
+								{#each chainTargets as target (target.slug)}
+									<li role="none">
+										<button
+											type="button"
+											role="menuitem"
+											class="w-full rounded-md px-2.5 py-1.5 text-left text-xs transition-colors duration-120 hover:bg-surface-2
+												{target.suggested ? 'text-accent' : 'text-fg'}"
+											onclick={() => continueWith(target.slug)}
+										>
+											{target.name}
+											{#if target.suggested}<span class="ml-1 text-[10px] text-dim">suggested</span>{/if}
+										</button>
+									</li>
+								{/each}
+							</ul>
+						{/if}
+					</div>
 				{/if}
 			</div>
 		{/if}

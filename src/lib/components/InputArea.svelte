@@ -6,7 +6,7 @@
 	 */
 	export interface BadgeSegment {
 		text: string;
-		tone?: 'ok' | 'err' | 'dim' | 'accent';
+		tone?: 'ok' | 'err' | 'warn' | 'dim' | 'accent';
 	}
 
 	interface Props {
@@ -36,6 +36,7 @@
 	const toneClass: Record<string, string> = {
 		ok: 'text-ok',
 		err: 'text-err',
+		warn: 'text-warn',
 		dim: 'text-dim',
 		accent: 'text-accent'
 	};

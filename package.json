@@ -27,5 +27,12 @@
 		"vite": "^8.1.5",
 		"vitest": "^4.1.10",
 		"wrangler": "^4.112.0"
+	},
+	"dependencies": {
+		"bcryptjs": "^3.0.3",
+		"qrcode-generator": "^2.0.4",
+		"smol-toml": "^1.7.0",
+		"ua-parser-js": "^2.0.10",
+		"yaml": "^2.9.0"
 	}
 }

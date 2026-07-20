@@ -128,6 +128,150 @@ export const TOOLS: ToolMeta[] = [
 		aliases: ['color', 'colour', 'hex to rgb', 'hsl', 'oklch'],
 		keywords: ['color converter', 'hex to rgb', 'rgb to hsl', 'oklch converter'],
 		related: ['regex-tester', 'json-formatter', 'url-parser', 'diff-checker', 'uuid-generator', 'base64-decode']
+	},
+	{
+		slug: 'case-converter',
+		name: 'Case Converter',
+		description: 'Switch between camelCase, snake_case, kebab-case, PascalCase and more',
+		category: 'text',
+		aliases: ['camel', 'snake', 'kebab', 'pascal', 'naming', 'case'],
+		keywords: ['case converter', 'camelcase to snake_case', 'text case', 'naming convention'],
+		related: ['slug-generator', 'sort-lines', 'word-counter', 'json-to-typescript', 'regex-tester', 'diff-checker']
+	},
+	{
+		slug: 'word-counter',
+		name: 'Word Counter',
+		description: 'Count words, characters, sentences, bytes and reading time as you type',
+		category: 'text',
+		aliases: ['wc', 'count words', 'character count', 'char count'],
+		keywords: ['word counter', 'character counter', 'word count online', 'reading time'],
+		related: ['case-converter', 'sort-lines', 'lorem-ipsum-generator', 'unicode-inspector', 'diff-checker', 'slug-generator']
+	},
+	{
+		slug: 'lorem-ipsum-generator',
+		name: 'Lorem Ipsum Generator',
+		description: 'Generate placeholder words, sentences or paragraphs for mockups',
+		category: 'text',
+		aliases: ['lorem', 'ipsum', 'placeholder text', 'dummy text'],
+		keywords: ['lorem ipsum generator', 'placeholder text', 'dummy text generator'],
+		related: ['word-counter', 'slug-generator', 'case-converter', 'uuid-generator', 'password-generator', 'qr-code-generator']
+	},
+	{
+		slug: 'slug-generator',
+		name: 'Slug Generator',
+		description: 'Turn titles into clean URL slugs with separator and length options',
+		category: 'text',
+		aliases: ['slugify', 'url slug', 'permalink'],
+		keywords: ['slug generator', 'slugify online', 'url slug', 'title to slug'],
+		related: ['case-converter', 'url-encode-decode', 'lorem-ipsum-generator', 'word-counter', 'url-parser', 'uuid-generator']
+	},
+	{
+		slug: 'sort-lines',
+		name: 'Sort & Dedupe Lines',
+		description: 'Sort lines alphabetically or naturally, remove duplicates and empties',
+		category: 'text',
+		aliases: ['dedupe', 'unique lines', 'sort text', 'remove duplicates'],
+		keywords: ['sort lines online', 'remove duplicate lines', 'dedupe text', 'sort alphabetically'],
+		related: ['diff-checker', 'word-counter', 'case-converter', 'json-formatter', 'regex-tester', 'slug-generator']
+	},
+	{
+		slug: 'html-entities',
+		name: 'HTML Entities Encode / Decode',
+		description: 'Escape text for HTML or decode &amp;-style entities back to characters',
+		category: 'encoding',
+		aliases: ['html escape', 'html encode', 'entities', 'amp'],
+		keywords: ['html entities', 'html encode', 'html decode', 'escape html'],
+		related: ['url-encode-decode', 'unicode-inspector', 'base64-decode', 'json-formatter', 'regex-tester', 'slug-generator']
+	},
+	{
+		slug: 'unicode-inspector',
+		name: 'Unicode Character Inspector',
+		description: 'See code points, UTF-8/UTF-16 bytes and escapes for every character',
+		category: 'encoding',
+		aliases: ['unicode', 'code point', 'utf8', 'utf-8', 'char inspector'],
+		keywords: ['unicode inspector', 'code point lookup', 'utf-8 encoder', 'character encoding'],
+		related: ['html-entities', 'base64-decode', 'word-counter', 'url-encode-decode', 'json-formatter', 'case-converter']
+	},
+	{
+		slug: 'cron-parser',
+		name: 'Cron Expression Parser',
+		description: 'Explain any cron schedule in plain English with the next run times',
+		category: 'time',
+		aliases: ['cron', 'crontab', 'cron schedule', 'cron expression'],
+		keywords: ['cron parser', 'cron expression', 'crontab generator', 'cron next run'],
+		related: ['timestamp-converter', 'regex-tester', 'json-formatter', 'uuid-generator', 'hash-generator', 'sort-lines']
+	},
+	{
+		slug: 'password-generator',
+		name: 'Password Generator',
+		description: 'Random passwords with charset options and an honest entropy meter',
+		category: 'generators',
+		aliases: ['password', 'random password', 'passphrase', 'pwgen'],
+		keywords: ['password generator', 'strong password', 'random password generator'],
+		related: ['uuid-generator', 'bcrypt-generator', 'hash-generator', 'qr-code-generator', 'base64-decode', 'lorem-ipsum-generator']
+	},
+	{
+		slug: 'qr-code-generator',
+		name: 'QR Code Generator',
+		description: 'Generate crisp QR codes as SVG or PNG — no watermark, no upload',
+		category: 'generators',
+		aliases: ['qr', 'qrcode', 'qr code'],
+		keywords: ['qr code generator', 'free qr code', 'qr code svg', 'url to qr'],
+		related: ['url-parser', 'password-generator', 'uuid-generator', 'base64-decode', 'slug-generator', 'color-converter']
+	},
+	{
+		slug: 'json-to-yaml',
+		name: 'JSON ↔ YAML ↔ TOML Converter',
+		description: 'Convert between JSON, YAML and TOML with format auto-detection',
+		category: 'json',
+		aliases: ['yaml', 'toml', 'yaml to json', 'json to toml', 'yml'],
+		keywords: ['json to yaml', 'yaml to json', 'toml converter', 'yaml converter'],
+		related: ['json-formatter', 'json-to-csv', 'json-to-typescript', 'jsonpath-tester', 'diff-checker', 'base64-decode']
+	},
+	{
+		slug: 'json-to-csv',
+		name: 'JSON → CSV Converter',
+		description: 'Flatten arrays of JSON objects into CSV with proper escaping',
+		category: 'json',
+		aliases: ['csv', 'json csv', 'export csv'],
+		keywords: ['json to csv', 'json to csv converter', 'json array to csv'],
+		related: ['json-formatter', 'json-to-yaml', 'json-to-typescript', 'jsonpath-tester', 'sort-lines', 'diff-checker']
+	},
+	{
+		slug: 'json-to-typescript',
+		name: 'JSON → TypeScript Types',
+		description: 'Infer TypeScript interfaces from a JSON sample instantly',
+		category: 'json',
+		aliases: ['ts types', 'typescript interface', 'json to ts', 'json2ts'],
+		keywords: ['json to typescript', 'json to interface', 'generate typescript types'],
+		related: ['json-formatter', 'json-to-yaml', 'jsonpath-tester', 'json-to-csv', 'case-converter', 'diff-checker']
+	},
+	{
+		slug: 'jsonpath-tester',
+		name: 'JSONPath Tester',
+		description: 'Query JSON with JSONPath expressions and see every match with its path',
+		category: 'json',
+		aliases: ['jsonpath', 'json query', 'json path'],
+		keywords: ['jsonpath tester', 'jsonpath online', 'json query', 'jsonpath evaluator'],
+		related: ['json-formatter', 'json-to-yaml', 'json-to-typescript', 'json-to-csv', 'regex-tester', 'jwt-decoder']
+	},
+	{
+		slug: 'bcrypt-generator',
+		name: 'Bcrypt Hash & Verify',
+		description: 'Hash passwords with bcrypt and check hashes against plaintext',
+		category: 'crypto',
+		aliases: ['bcrypt', 'bcrypt hash', 'bcrypt check', 'password hash'],
+		keywords: ['bcrypt generator', 'bcrypt online', 'bcrypt verify', 'bcrypt hash'],
+		related: ['hash-generator', 'password-generator', 'jwt-decoder', 'uuid-generator', 'base64-decode', 'json-formatter']
+	},
+	{
+		slug: 'user-agent-parser',
+		name: 'User-Agent Parser',
+		description: 'Identify browser, engine, OS and device from a User-Agent string',
+		category: 'web',
+		aliases: ['ua', 'useragent', 'user agent', 'browser detect'],
+		keywords: ['user agent parser', 'ua parser', 'user agent lookup', 'browser detection'],
+		related: ['url-parser', 'jwt-decoder', 'regex-tester', 'json-formatter', 'timestamp-converter', 'hash-generator']
 	}
 ];
 

@@ -3,6 +3,8 @@
 	import type { ToolMeta } from '$lib/tools/registry';
 	import { TOOL_BY_SLUG } from '$lib/tools/registry';
 	import type { ToolContent } from '$lib/tools/content';
+	import { CATEGORY_LABELS } from '$lib/tools/registry';
+	import { iconFor } from '$lib/tools/icons';
 	import { pushRecentTool } from '$lib/state/app.svelte';
 	import ToolCard from './ToolCard.svelte';
 	import { ChevronDown } from 'lucide-svelte';
@@ -26,6 +28,7 @@
 	);
 
 	const canonical = $derived(`https://onlinetools.dev/t/${tool.slug}`);
+	const Icon = $derived(iconFor(tool.slug));
 
 	const jsonLd = $derived(
 		JSON.stringify([
@@ -64,10 +67,25 @@
 </svelte:head>
 
 <article class="mx-auto max-w-4xl px-4 py-8">
-	<header class="mb-6 flex flex-wrap items-baseline justify-between gap-2">
-		<div>
-			<h1 class="text-xl font-semibold tracking-tight">{tool.name}</h1>
-			<p class="mt-1 text-sm text-dim">{tool.description}</p>
+	<nav class="mb-4 flex items-center gap-1.5 font-mono text-[11px] text-dim/80" aria-label="Breadcrumb">
+		<a href="/tools" class="hover:text-fg">tools</a>
+		<span aria-hidden="true">/</span>
+		<span>{CATEGORY_LABELS[tool.category].toLowerCase()}</span>
+		<span aria-hidden="true">/</span>
+		<span class="text-dim">{tool.slug}</span>
+	</nav>
+	<header class="mb-6 flex flex-wrap items-start justify-between gap-3">
+		<div class="flex items-start gap-3">
+			<span
+				class="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-line bg-surface text-accent"
+				aria-hidden="true"
+			>
+				<Icon size={18} />
+			</span>
+			<div>
+				<h1 class="text-xl font-semibold tracking-tight">{tool.name}</h1>
+				<p class="mt-1 text-sm text-dim">{tool.description}</p>
+			</div>
 		</div>
 		<span
 			class="flex items-center gap-1.5 rounded-md border border-line bg-surface px-2 py-1 font-mono text-[11px] text-dim"

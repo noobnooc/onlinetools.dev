@@ -20,18 +20,73 @@
 	const result = $derived(input.trim() === '' ? null : parseTimestamp(input, now));
 	const info = $derived(result?.ok ? result.value : null);
 
-	const localFormatter = new Intl.DateTimeFormat(undefined, {
-		dateStyle: 'full',
-		timeStyle: 'long'
-	});
-	const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+	const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+	const ZONES: Array<{ tz: string; label: string }> = [
+		{ tz: 'UTC', label: 'UTC' },
+		{ tz: 'America/Los_Angeles', label: 'Los Angeles' },
+		{ tz: 'America/New_York', label: 'New York' },
+		{ tz: 'Europe/London', label: 'London' },
+		{ tz: 'Europe/Berlin', label: 'Berlin' },
+		{ tz: 'Asia/Shanghai', label: 'Shanghai' },
+		{ tz: 'Asia/Tokyo', label: 'Tokyo' }
+	];
+
+	interface ZoneRow {
+		label: string;
+		time: string;
+		date: string;
+		/** Fractional hour of day 0..24 for the day-strip marker. */
+		hourOfDay: number;
+		dayDelta: number;
+		isLocal: boolean;
+	}
+
+	function zoneRows(epochMs: number): ZoneRow[] {
+		const d = new Date(epochMs);
+		const zones = [{ tz: localTz, label: `${localTz.split('/').pop()?.replace(/_/g, ' ')} (local)` },
+			...ZONES.filter((z) => z.tz !== localTz)];
+		const isoDay = (tz: string) =>
+			new Intl.DateTimeFormat('en-CA', { timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit' }).format(d);
+		const localDay = isoDay(localTz);
+		return zones.map((z, i) => {
+			const parts = new Intl.DateTimeFormat('en-GB', {
+				timeZone: z.tz,
+				hour: '2-digit',
+				minute: '2-digit',
+				second: '2-digit',
+				hour12: false
+			}).formatToParts(d);
+			const get = (type: string) => parts.find((p) => p.type === type)?.value ?? '00';
+			const hour = Number(get('hour')) % 24;
+			const minute = Number(get('minute'));
+			const date = new Intl.DateTimeFormat('en-US', {
+				timeZone: z.tz,
+				weekday: 'short',
+				month: 'short',
+				day: 'numeric'
+			}).format(d);
+			const zoneDay = isoDay(z.tz);
+			// ISO dates compare lexicographically, so this yields the day offset sign.
+			const dayDelta = zoneDay === localDay ? 0 : zoneDay > localDay ? 1 : -1;
+			return {
+				label: z.label,
+				time: `${get('hour')}:${get('minute')}:${get('second')}`,
+				date,
+				hourOfDay: hour + minute / 60,
+				dayDelta,
+				isLocal: i === 0
+			};
+		});
+	}
+
+	const zones = $derived(info ? zoneRows(info.epochMs) : []);
 
 	const rows = $derived(
 		info
 			? ([
 					['ISO 8601', info.iso],
 					['UTC', info.utc],
-					[`Local (${timezone})`, localFormatter.format(new Date(info.epochMs))],
 					['Relative', info.relative],
 					['Unix seconds', String(info.unixSeconds)],
 					['Unix milliseconds', String(info.unixMilliseconds)]
@@ -39,7 +94,11 @@
 			: []
 	);
 
-	const output = $derived(rows.map(([k, v]) => `${k}: ${v}`).join('\n'));
+	const output = $derived(
+		info
+			? [...rows.map(([k, v]) => `${k}: ${v}`), '', ...zones.map((z) => `${z.label}: ${z.date} ${z.time}`)].join('\n')
+			: ''
+	);
 
 	$effect(() => {
 		currentResult.text = output;
@@ -72,20 +131,55 @@
 			title="Use current time as input">{Math.floor(now / 1000)}</button
 		>
 	</p>
-	<OutputPanel value={output} filename="timestamp.txt" shareState={input.trim() === '' ? null : { input }}>
-		{#if info}
+
+	{#if info}
+		<div class="overflow-hidden rounded-lg border border-line">
 			<table class="w-full font-mono text-sm">
 				<tbody>
 					{#each rows as [key, val] (key)}
-						<tr class="border-b border-line/50 last:border-0">
-							<th scope="row" class="py-1.5 pr-4 text-left font-normal whitespace-nowrap text-dim">{key}</th>
-							<td class="py-1.5 break-all">{val}</td>
+						<tr class="border-b border-line/60 bg-surface">
+							<th scope="row" class="py-1.5 pr-4 pl-3 text-left font-normal whitespace-nowrap text-dim">{key}</th>
+							<td class="py-1.5 pr-3 break-all">{val}</td>
 						</tr>
 					{/each}
 				</tbody>
 			</table>
-		{:else}
-			<p class="font-mono text-sm text-dim/50">—</p>
-		{/if}
-	</OutputPanel>
+		</div>
+
+		<!-- Timezone comparison with a 24h day-strip per zone -->
+		<div>
+			<span class="mb-1.5 block text-xs font-medium tracking-wide text-dim uppercase">Across timezones</span>
+			<div class="overflow-hidden rounded-lg border border-line">
+				{#each zones as z (z.label)}
+					<div
+						class="grid grid-cols-[minmax(7rem,1fr)_auto_minmax(6rem,2fr)] items-center gap-3 border-b border-line/60 px-3 py-2 last:border-0
+							{z.isLocal ? 'bg-surface-2/60' : 'bg-surface'}"
+					>
+						<span class="truncate text-sm {z.isLocal ? 'font-medium' : 'text-dim'}">{z.label}</span>
+						<span class="text-right font-mono text-sm tabular-nums">
+							{z.time}
+							<span class="ml-1 text-[11px] text-dim">{z.date}</span>
+							{#if z.dayDelta !== 0}
+								<span class="ml-1 rounded border border-line px-1 text-[10px] text-warn">{z.dayDelta > 0 ? '+1d' : '−1d'}</span>
+							{/if}
+						</span>
+						<!-- Day strip: 24h bar, night dimmed, marker at the zone's local time -->
+						<div class="relative hidden h-2 rounded-full bg-surface-2 sm:block" aria-hidden="true">
+							<div class="absolute inset-y-0 rounded-l-full bg-line/40" style="left: 0; width: {(7 / 24) * 100}%"></div>
+							<div class="absolute inset-y-0 rounded-r-full bg-line/40" style="left: {(21 / 24) * 100}%; right: 0"></div>
+							<div
+								class="absolute top-1/2 h-3 w-[3px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent"
+								style="left: {(z.hourOfDay / 24) * 100}%"
+							></div>
+						</div>
+					</div>
+				{/each}
+			</div>
+			<p class="mt-1.5 text-[11px] text-dim/70">
+				The marker shows each zone's local hour on a 24h strip — dimmed ends are 21:00–07:00.
+			</p>
+		</div>
+	{/if}
+
+	<OutputPanel value={output} filename="timestamp.txt" shareState={input.trim() === '' ? null : { input }} />
 </div>
