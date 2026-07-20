@@ -7,6 +7,7 @@
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import { Copy, Check, Download, Link, ArrowRight } from 'lucide-svelte';
+	import EmptyState from './EmptyState.svelte';
 	import type { Snippet } from 'svelte';
 
 	interface Props {
@@ -18,9 +19,18 @@
 		shareState?: Record<string, string> | null;
 		/** Optional custom rendering; defaults to a <pre> of value. */
 		children?: Snippet;
+		/** Hint shown in the empty state before there is any output. */
+		emptyHint?: string;
 	}
 
-	let { value, label = 'Output', filename = 'output.txt', shareState = null, children }: Props = $props();
+	let {
+		value,
+		label = 'Output',
+		filename = 'output.txt',
+		shareState = null,
+		children,
+		emptyHint = 'Output appears here as you type'
+	}: Props = $props();
 
 	let copied = $state(false);
 	let linkCopied = $state(false);
@@ -174,7 +184,7 @@
 		{:else if value !== ''}
 			<pre class="overflow-x-auto font-mono text-sm leading-relaxed whitespace-pre-wrap break-all">{value}</pre>
 		{:else}
-			<p class="font-mono text-sm text-dim/50">—</p>
+			<EmptyState hint={emptyHint} />
 		{/if}
 	</div>
 </div>

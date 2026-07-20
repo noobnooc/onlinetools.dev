@@ -3,6 +3,7 @@
 	import { TOOLS, CATEGORY_LABELS, type ToolCategory } from '$lib/tools/registry';
 	import { CATEGORY_ICONS } from '$lib/tools/icons';
 	import ToolCard from '$lib/components/ToolCard.svelte';
+	import Kbd from '$lib/components/Kbd.svelte';
 	import { Search, ClipboardPaste, WifiOff, Keyboard } from 'lucide-svelte';
 
 	const categories = [...new Set(TOOLS.map((t) => t.category))] as ToolCategory[];
@@ -27,8 +28,13 @@
 	{@html `<script type="application/ld+json">${jsonLd}</${'script'}>`}
 </svelte:head>
 
-<!-- Single, barely-there ambient light behind the first screen. -->
+<!-- First-screen backdrop: a blueprint dot grid under a single, barely-there ambient light. -->
 <div class="relative">
+	<div
+		class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-96 opacity-50"
+		style="background-image: radial-gradient(color-mix(in srgb, var(--border) 85%, transparent) 1px, transparent 1px); background-size: 24px 24px; mask-image: linear-gradient(to bottom, black 20%, transparent 90%); -webkit-mask-image: linear-gradient(to bottom, black 20%, transparent 90%)"
+		aria-hidden="true"
+	></div>
 	<div
 		class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-80 opacity-60"
 		style="background: radial-gradient(60% 100% at 50% 0%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 70%)"
@@ -45,7 +51,7 @@
 			>
 				<Search size={16} class="shrink-0 text-dim" />
 				<span class="grow text-sm text-dim">Search {TOOLS.length} tools, or paste anything…</span>
-				<kbd class="rounded border border-line bg-surface-2 px-1.5 py-0.5 font-mono text-[11px] text-dim">⌘K</kbd>
+				<Kbd keys="⌘K" />
 			</button>
 		</div>
 
@@ -56,7 +62,7 @@
 			</span>
 			<span class="flex items-center gap-1.5"><ClipboardPaste size={12} /> Paste anywhere to auto-detect</span>
 			<span class="flex items-center gap-1.5"><WifiOff size={12} /> Works offline</span>
-			<span class="flex items-center gap-1.5"><Keyboard size={12} /> <kbd class="font-mono">?</kbd> for shortcuts</span>
+			<span class="flex items-center gap-1.5"><Keyboard size={12} /> <Kbd keys="?" /> for shortcuts</span>
 		</div>
 
 		{#each categories as cat (cat)}

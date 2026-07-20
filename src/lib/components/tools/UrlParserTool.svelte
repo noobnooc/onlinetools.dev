@@ -1,6 +1,7 @@
 <script lang="ts">
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
+	import EmptyState from '../EmptyState.svelte';
 	import { parseUrl } from '$lib/tools/url';
 	import { initFromHash } from '$lib/state/hashstate.svelte';
 	import { currentResult } from '$lib/state/app.svelte';
@@ -83,7 +84,7 @@
 				</tbody>
 			</table>
 		{:else}
-			<p class="font-mono text-sm text-dim/50">—</p>
+			<EmptyState hint="URL components appear here" />
 		{/if}
 	</OutputPanel>
 </div>

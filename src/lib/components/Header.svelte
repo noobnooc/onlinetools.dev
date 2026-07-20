@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { openPalette, getTheme, setTheme } from '$lib/state/app.svelte';
+	import Kbd from './Kbd.svelte';
 	import { Search, Sun, Moon } from 'lucide-svelte';
 
 	let theme = $state<'dark' | 'light'>('dark');
@@ -28,7 +29,7 @@
 			>
 				<Search size={14} />
 				<span class="hidden sm:inline">Search tools</span>
-				<kbd class="rounded border border-line bg-surface-2 px-1 font-mono text-[11px]">⌘K</kbd>
+				<Kbd keys="⌘K" />
 			</button>
 			<nav class="hidden items-center gap-1 sm:flex" aria-label="Primary">
 				<a

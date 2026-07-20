@@ -1,6 +1,7 @@
 <script lang="ts">
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
+	import EmptyState from '../EmptyState.svelte';
 	import JsonTree from '../JsonTree.svelte';
 	import { formatJson, validateJson } from '$lib/tools/json';
 	import { initFromHash } from '$lib/state/hashstate.svelte';
@@ -107,7 +108,7 @@
 		{:else if output !== ''}
 			<pre class="max-h-[32rem] overflow-auto font-mono text-sm leading-relaxed whitespace-pre-wrap break-all">{output}</pre>
 		{:else}
-			<p class="font-mono text-sm text-dim/50">—</p>
+			<EmptyState hint="Formatted JSON appears here — try the sample" />
 		{/if}
 	</OutputPanel>
 </div>

@@ -56,6 +56,14 @@ html {
 	color-scheme: dark;
 }
 
+/* Numbers in monospaced contexts always align in columns (Geist-style). */
+pre,
+code,
+kbd,
+.font-mono {
+	font-variant-numeric: tabular-nums;
+}
+
 html:not(.dark) {
 	color-scheme: light;
 }

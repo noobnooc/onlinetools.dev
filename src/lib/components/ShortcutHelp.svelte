@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Dialog } from 'bits-ui';
+	import Kbd from './Kbd.svelte';
 	import { shortcutHelp } from '$lib/state/app.svelte';
 
 	const SHORTCUTS: Array<[string, string]> = [
@@ -22,9 +23,7 @@
 			<dl class="space-y-2">
 				{#each SHORTCUTS as [key, desc] (key)}
 					<div class="flex items-center justify-between gap-4">
-						<dt>
-							<kbd class="rounded border border-line bg-surface-2 px-1.5 py-0.5 font-mono text-xs">{key}</kbd>
-						</dt>
+						<dt><Kbd keys={key} size="md" /></dt>
 						<dd class="text-sm text-dim">{desc}</dd>
 					</div>
 				{/each}

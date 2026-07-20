@@ -6,6 +6,7 @@
 	import { detect, type Detection } from '$lib/detect/detectors';
 	import { encodeState, MAX_SHARED_INPUT } from '$lib/state/urlstate';
 	import { iconFor } from '$lib/tools/icons';
+	import Kbd from './Kbd.svelte';
 	import { Search, CornerDownLeft, Zap } from 'lucide-svelte';
 
 	interface Entry {
@@ -172,8 +173,10 @@
 					<li class="px-2.5 py-6 text-center text-sm text-dim">No matching tool</li>
 				{/each}
 			</ul>
-			<div class="flex items-center gap-3 border-t border-line px-3 py-2 font-mono text-[11px] text-dim/70">
-				<span>↑↓ navigate</span><span>↵ open</span><span>esc close</span>
+			<div class="flex items-center gap-4 border-t border-line px-3 py-2 font-mono text-[11px] text-dim/70">
+				<span class="flex items-center gap-1.5"><Kbd keys="↑↓" /> navigate</span>
+				<span class="flex items-center gap-1.5"><Kbd keys="↵" /> open</span>
+				<span class="flex items-center gap-1.5"><Kbd keys="esc" /> close</span>
 			</div>
 		</Dialog.Content>
 	</Dialog.Portal>

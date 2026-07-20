@@ -1,6 +1,7 @@
 <script lang="ts">
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
+	import EmptyState from '../EmptyState.svelte';
 	import { hashText, hmacText, HASH_ALGORITHMS, type HashAlgorithm } from '$lib/tools/hash';
 	import { initFromHash } from '$lib/state/hashstate.svelte';
 	import { formatBytes, byteLength } from '$lib/utils/format';
@@ -107,7 +108,7 @@
 				{/each}
 			</div>
 		{:else}
-			<p class="font-mono text-sm text-dim/50">—</p>
+			<EmptyState hint="Digests update live as you type" />
 		{/if}
 	</OutputPanel>
 	<p class="text-xs text-dim">

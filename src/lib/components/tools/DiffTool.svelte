@@ -1,6 +1,7 @@
 <script lang="ts">
 	import InputArea from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
+	import EmptyState from '../EmptyState.svelte';
 	import { diffLines } from '$lib/tools/diff';
 	import { initFromHash } from '$lib/state/hashstate.svelte';
 	import { currentResult } from '$lib/state/app.svelte';
@@ -80,7 +81,7 @@
 				{/each}
 			</div>
 		{:else}
-			<p class="font-mono text-sm text-dim/50">—</p>
+			<EmptyState hint="The line-by-line diff appears here" />
 		{/if}
 	</OutputPanel>
 </div>
