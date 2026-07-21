@@ -175,8 +175,8 @@ export const DETECTORS: Detector[] = [
 				type: 'csv',
 				label: 'CSV',
 				confidence: 0.7,
-				tool: 'csv-to-json',
-				actions: [{ label: 'Convert to JSON', tool: 'csv-to-json' }]
+				tool: 'json-to-csv',
+				actions: [{ label: 'Convert to JSON', tool: 'json-to-csv' }]
 			};
 		}
 	},

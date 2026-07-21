@@ -16,7 +16,7 @@
 	<div lang="en">
 	<section class="relative border-l border-line pb-8 pl-6">
 		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full bg-accent" aria-hidden="true"></span>
-		<h2 class="text-sm font-medium">Thirteen new tools, two new categories</h2>
+		<h2 class="text-sm font-medium">Twelve new tools, two new categories</h2>
 		<p class="mt-0.5 font-mono text-xs text-dim">v2026.07.22</p>
 		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
 			<li>
@@ -31,14 +31,16 @@
 				re-encoding a single pixel.
 			</li>
 			<li>
-				Data &amp; encoding: XML ↔ JSON and CSV → JSON converters, JSON Schema validation
-				and inference (Ajv), a string escaper for six dialects, a BigInt-exact number base
-				converter, and text ↔ hex/binary.
+				Data &amp; encoding: an XML ↔ JSON converter, JSON Schema validation and inference
+				(Ajv), a string escaper for six dialects, a BigInt-exact number base converter, and
+				text ↔ hex/binary.
 			</li>
 			<li>
 				Existing tools grew up: the JWT decoder now signs and verifies (HS/RS/ES via
-				WebCrypto), the cron parser gained a visual expression builder, and the timestamp
-				converter adds RFC 2822 output and a date-difference calculator.
+				WebCrypto), the cron parser gained a visual expression builder, the timestamp
+				converter adds RFC 2822 output and a date-difference calculator, and the JSON → CSV
+				converter became bidirectional — it now parses CSV back into typed JSON objects
+				with delimiter auto-detection.
 			</li>
 			<li>
 				Smart Paste now recognizes XML, CSV, Markdown and hex byte dumps.

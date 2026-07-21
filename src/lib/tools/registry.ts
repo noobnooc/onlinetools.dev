@@ -272,11 +272,11 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'json-to-csv',
-		name: 'JSON → CSV Converter',
-		description: 'Flatten arrays of JSON objects into CSV with proper escaping',
+		name: 'JSON ↔ CSV Converter',
+		description: 'Flatten JSON to CSV, or parse CSV back into typed JSON objects',
 		category: 'json',
-		aliases: ['csv', 'json csv', 'export csv'],
-		keywords: ['json to csv', 'json to csv converter', 'json array to csv'],
+		aliases: ['csv', 'json csv', 'export csv', 'csv to json', 'csv2json', 'csv parser', 'tsv to json'],
+		keywords: ['json to csv', 'csv to json', 'json to csv converter', 'csv to json converter', 'tsv to json'],
 		related: ['json-formatter', 'json-to-yaml', 'json-to-typescript', 'jsonpath-tester', 'sort-lines', 'diff-checker']
 	},
 	{
@@ -313,7 +313,7 @@ export const TOOLS: ToolMeta[] = [
 		category: 'code',
 		aliases: ['sql', 'sql beautify', 'sql pretty', 'format sql', 'sql minify'],
 		keywords: ['sql formatter', 'format sql online', 'sql beautifier', 'sql minifier', 'pretty print sql'],
-		related: ['json-formatter', 'xml-formatter', 'csv-to-json', 'string-escape', 'diff-checker', 'regex-tester']
+		related: ['json-formatter', 'xml-formatter', 'json-to-csv', 'string-escape', 'diff-checker', 'regex-tester']
 	},
 	{
 		slug: 'xml-formatter',
@@ -331,16 +331,7 @@ export const TOOLS: ToolMeta[] = [
 		category: 'json',
 		aliases: ['xml to json', 'json to xml', 'xml2json', 'xml json'],
 		keywords: ['xml to json', 'json to xml', 'xml to json converter', 'convert xml online'],
-		related: ['xml-formatter', 'json-formatter', 'json-to-yaml', 'csv-to-json', 'json-to-csv', 'jsonpath-tester']
-	},
-	{
-		slug: 'csv-to-json',
-		name: 'CSV → JSON Converter',
-		description: 'Parse CSV into JSON objects with delimiter detection and typed values',
-		category: 'json',
-		aliases: ['csv to json', 'csv2json', 'csv parser', 'tsv to json'],
-		keywords: ['csv to json', 'csv to json converter', 'convert csv to json online', 'tsv to json'],
-		related: ['json-to-csv', 'json-formatter', 'json-to-yaml', 'xml-to-json', 'json-to-typescript', 'sort-lines']
+		related: ['xml-formatter', 'json-formatter', 'json-to-yaml', 'json-to-csv', 'json-schema-validator', 'jsonpath-tester']
 	},
 	{
 		slug: 'markdown-to-html',
@@ -412,7 +403,7 @@ export const TOOLS: ToolMeta[] = [
 		category: 'json',
 		aliases: ['json schema', 'schema validator', 'json validate schema', 'generate json schema'],
 		keywords: ['json schema validator', 'json schema generator', 'validate json schema online', 'infer json schema'],
-		related: ['json-formatter', 'json-to-typescript', 'jsonpath-tester', 'json-to-yaml', 'xml-to-json', 'csv-to-json']
+		related: ['json-formatter', 'json-to-typescript', 'jsonpath-tester', 'json-to-yaml', 'xml-to-json', 'json-to-csv']
 	},
 	{
 		slug: 'exif-viewer',

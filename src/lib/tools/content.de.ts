@@ -556,7 +556,7 @@ const TOOL_CONTENT_DE: Record<string, ToolContent> = {
 		about: [
 			'Füge ein Array von JSON-Objekten ein und erhalte ein tabellenfertiges CSV: Verschachtelte Objekte werden zu Spaltennamen mit Punkten flachgezogen (user.address.city), Spalten werden über alle Zeilen vereinigt (fehlende Werte werden leere Zellen), und das Quoting folgt RFC 4180 — Kommas, Anführungszeichen und Zeilenumbrüche in Werten überstehen Excel und Google Sheets.',
 			'Das ist der schnellste Weg von einer API-Antwort zu einer Tabelle, die jemand filtern und pivotieren kann. Die Spaltenvereinigung zählt bei realen Daten mit heterogenen Objekten — Zeile 1 kann Felder vermissen lassen, die Zeile 40 hat, und der Konverter geht damit um, statt zu scheitern oder Daten zu verwerfen.',
-			'Arrays innerhalb von Zeilen werden als JSON-Strings serialisiert statt in Spalten explodiert — eine bewusste Entscheidung, die eine Eingabezeile als eine Ausgabezeile erhält. Eine Semikolon-Trennzeichen-Option deckt Regionen ab, in denen Excel ; statt , erwartet.'
+			'Der Konverter läuft auch rückwärts: Füge einen CSV-Export ein und erhalte ein JSON-Array von Objekten, deren Keys aus der Kopfzeile stammen — mit automatischer Trennzeichen-Erkennung (Komma, Semikolon, Tab, Pipe) und optional typisierten Werten: Zahlen, Booleans und null werden echte JSON-Typen. Beide Richtungen laufen vollständig in deinem Browser, Kunden-Exporte verlassen deinen Rechner also nie.'
 		],
 		faqs: [
 			{
@@ -574,6 +574,14 @@ const TOOL_CONTENT_DE: Record<string, ToolContent> = {
 			{
 				q: 'Verarbeitet der Konverter auch ein einzelnes Objekt (kein Array)?',
 				a: 'Ja — ein einzelnes Objekt wird zu einem einzeiligen CSV. Objekte mit IDs als Keys ({"a1":{...},"a2":{...}}) konvertieren allerdings als eine breite Zeile; wandle sie zuerst in ein Array um, wenn jeder Wert eine Zeile sein soll.'
+			},
+			{
+				q: 'Wie geht CSV → JSON mit gequoteten Feldern und eingebetteten Zeilenumbrüchen um?',
+				a: 'Gemäß RFC 4180: In doppelte Anführungszeichen eingefasste Felder dürfen das Trennzeichen, verdoppelte Anführungszeichen ("") für ein literales Anführungszeichen und Zeilenumbrüche enthalten. Excel und die meisten Datenbanken exportieren genau dieses Format — reale Dateien parsen also korrekt.'
+			},
+			{
+				q: 'Warum verlieren meine Postleitzahlen bei CSV → JSON ihre führenden Nullen?',
+				a: 'Die typisierte Konvertierung macht aus 02134 die Zahl 2134. Deaktiviere „Typisierte Werte“, und jede Zelle bleibt ein String — exakt wie geschrieben. Die richtige Wahl für Bezeichner, Telefonnummern und alles mit führenden Nullen.'
 			}
 		]
 	},
@@ -886,32 +894,6 @@ const TOOL_CONTENT_DE: Record<string, ToolContent> = {
 			{
 				q: 'Warum lehnt JSON → XML mein Top-Level-Array ab?',
 				a: 'Ein XML-Dokument muss genau ein Wurzelelement haben, und ein nacktes Array hat keins. Wickle das Array in ein Objekt — {"items": {"item": [...]}} — und der Konverter erzeugt ein wohlgeformtes Dokument.'
-			}
-		]
-	},
-
-	'csv-to-json': {
-		about: [
-			'Füge einen CSV-Export ein — aus Excel, einem Datenbank-Dump, einem Analytics-Download — und erhalte ein JSON-Array von Objekten, deren Keys aus der Kopfzeile stammen. Das Trennzeichen wird über Komma, Semikolon, Tab und Pipe automatisch erkannt (manuell festlegbar), das Quoting folgt RFC 4180 — eingebettete Kommata, Anführungszeichen und sogar Zeilenumbrüche in gequoteten Feldern parsen also korrekt.',
-			'Die typisierte Konvertierung erkennt Zahlen, true/false und null und gibt echte JSON-Typen statt Strings aus; schalte sie ab, wenn führende Nullen oder große Bezeichner wörtlich überleben müssen. Dateien ohne Kopfzeile werden zu Arrays von Arrays, und doppelte Header-Namen bekommen numerische Suffixe, statt sich gegenseitig stillschweigend zu überschreiben.',
-			'Tabellen enthalten tendenziell die sensibelsten Daten, mit denen Entwickler hantieren — Kundenlisten, Gehälter, Bestellhistorien. Die Konvertierung passiert vollständig in deinem Browser; nichts wird hochgeladen.'
-		],
-		faqs: [
-			{
-				q: 'Warum wurde meine semikolongetrennte Datei als eine Spalte geparst?',
-				a: 'Die automatische Erkennung sampelt die ersten Zeilen und wählt das Trennzeichen, das konsistente Spaltenzahlen ergibt — eine Datei aus einspaltigen Zeilen kann sie täuschen. Lege das Trennzeichen über den Umschalter fest, und das Parsen folgt sofort.'
-			},
-			{
-				q: 'Wie verhalten sich gequotete Felder und eingebettete Zeilenumbrüche?',
-				a: 'Gemäß RFC 4180: In doppelte Anführungszeichen eingefasste Felder dürfen das Trennzeichen, verdoppelte Anführungszeichen ("") für ein literales Anführungszeichen und Zeilenumbrüche enthalten. Excel und die meisten Datenbanken exportieren genau dieses Format.'
-			},
-			{
-				q: 'Warum verlieren meine Postleitzahlen ihre führenden Nullen?',
-				a: 'Die typisierte Konvertierung macht aus 02134 die Zahl 2134. Deaktiviere „Typisierte Werte“, und jede Zelle bleibt ein String — exakt wie geschrieben.'
-			},
-			{
-				q: 'Kann ich TSV- oder pipe-getrennte Dateien konvertieren?',
-				a: 'Ja — Tab und Pipe sind vollwertige Trennzeichen, automatisch erkannt oder manuell festgelegt. Der Parser ist derselbe; nur der Separator ändert sich.'
 			}
 		]
 	},

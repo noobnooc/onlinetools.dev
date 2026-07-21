@@ -527,8 +527,8 @@ const zh: Messages = {
 			description: '在 JSON、YAML、TOML 之间转换,自动识别格式'
 		},
 		'json-to-csv': {
-			name: 'JSON → CSV 转换',
-			description: '将 JSON 对象数组展平为 CSV,正确处理转义'
+			name: 'JSON ↔ CSV 转换',
+			description: '将 JSON 展平为 CSV,或把 CSV 解析回类型化的 JSON 对象'
 		},
 		'json-to-typescript': {
 			name: 'JSON → TypeScript 类型',
@@ -573,10 +573,6 @@ const zh: Messages = {
 		'xml-to-json': {
 			name: 'XML ↔ JSON 转换',
 			description: 'XML 与 JSON 双向互转,属性也不丢失'
-		},
-		'csv-to-json': {
-			name: 'CSV → JSON 转换',
-			description: '把 CSV 解析成 JSON 对象,自动识别分隔符,支持类型化值'
 		},
 		'markdown-to-html': {
 			name: 'Markdown ↔ HTML 转换',

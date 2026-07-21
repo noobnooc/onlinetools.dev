@@ -525,8 +525,8 @@ const es: Messages = {
 			description: 'Convierte entre JSON, YAML y TOML con detección automática de formato'
 		},
 		'json-to-csv': {
-			name: 'Conversor JSON → CSV',
-			description: 'Aplana arrays de objetos JSON a CSV con el escapado correcto'
+			name: 'Conversor JSON ↔ CSV',
+			description: 'Aplana JSON a CSV, o parsea CSV de vuelta a objetos JSON tipados'
 		},
 		'json-to-typescript': {
 			name: 'JSON → tipos TypeScript',
@@ -571,10 +571,6 @@ const es: Messages = {
 		'xml-to-json': {
 			name: 'Conversor XML ↔ JSON',
 			description: 'Convierte documentos XML a JSON y de vuelta, atributos incluidos'
-		},
-		'csv-to-json': {
-			name: 'Conversor CSV → JSON',
-			description: 'Parsea CSV a objetos JSON con detección de delimitador y valores tipados'
 		},
 		'markdown-to-html': {
 			name: 'Conversor Markdown ↔ HTML',

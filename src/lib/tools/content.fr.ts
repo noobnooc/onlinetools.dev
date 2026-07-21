@@ -556,7 +556,7 @@ const TOOL_CONTENT_FR: Record<string, ToolContent> = {
 		about: [
 			'Collez un tableau d’objets JSON et obtenez un CSV prêt pour le tableur : les objets imbriqués sont aplatis en noms de colonnes à points (user.address.city), les colonnes sont fusionnées sur l’ensemble des lignes (les valeurs manquantes deviennent des cellules vides), et les guillemets suivent la RFC 4180 : virgules, guillemets et sauts de ligne à l’intérieur des valeurs survivent à Excel et Google Sheets.',
 			'C’est le chemin le plus rapide d’une réponse d’API vers une feuille de calcul que quelqu’un peut filtrer et croiser. La fusion des colonnes compte avec des données réelles, où les objets sont hétérogènes — la ligne 1 peut manquer de champs que la ligne 40 possède, et le convertisseur le gère au lieu d’échouer ou de perdre des données.',
-			'Les tableaux à l’intérieur des lignes sont sérialisés en chaînes JSON plutôt qu’éclatés en colonnes — un choix délibéré qui garde une ligne d’entrée pour une ligne de sortie. Une option point-virgule couvre les régions où Excel attend ; plutôt que ,.'
+			'Le convertisseur fonctionne aussi en sens inverse : collez un export CSV et obtenez un tableau JSON d’objets dont les clés viennent de la ligne d’en-tête, avec détection automatique du délimiteur (virgule, point-virgule, tabulation, pipe) et valeurs typées en option — nombres, booléens et null deviennent de vrais types JSON. Les deux sens s’exécutent entièrement dans votre navigateur : les exports clients ne quittent jamais votre machine.'
 		],
 		faqs: [
 			{
@@ -574,6 +574,14 @@ const TOOL_CONTENT_FR: Record<string, ToolContent> = {
 			{
 				q: 'Le convertisseur gère-t-il un objet seul (pas un tableau) ?',
 				a: 'Oui — un objet isolé devient un CSV d’une ligne. Attention toutefois : des objets indexés par identifiant ({"a1":{...},"a2":{...}}) se convertissent en une seule ligne très large ; transformez-les d’abord en tableau si chaque valeur doit être une ligne.'
+			},
+			{
+				q: 'Comment CSV → JSON gère-t-il les champs entre guillemets et les sauts de ligne intégrés ?',
+				a: 'Selon la RFC 4180 : les champs entourés de guillemets doubles peuvent contenir le délimiteur, des guillemets doublés ("") pour un guillemet littéral, et des sauts de ligne. Excel et la plupart des bases de données exportent exactement ce format, si bien que les fichiers réels s’analysent correctement.'
+			},
+			{
+				q: 'Pourquoi mes codes postaux perdent-ils leurs zéros initiaux en CSV → JSON ?',
+				a: 'La conversion typée transforme 02134 en nombre 2134. Décochez « Valeurs typées » et chaque cellule reste une chaîne, exactement telle qu’écrite — le bon choix pour les identifiants, les numéros de téléphone et tout ce qui comporte des zéros initiaux.'
 			}
 		]
 	},
@@ -886,32 +894,6 @@ const TOOL_CONTENT_FR: Record<string, ToolContent> = {
 			{
 				q: 'Pourquoi JSON → XML rejette-t-il mon tableau de premier niveau ?',
 				a: 'Un document XML doit avoir exactement un élément racine, et un tableau nu n’en a aucun. Enveloppez le tableau dans un objet — {"items": {"item": [...]}} — et le convertisseur produit un document bien formé.'
-			}
-		]
-	},
-
-	'csv-to-json': {
-		about: [
-			'Collez un export CSV — d’Excel, d’un dump de base de données, d’un téléchargement analytics — et obtenez un tableau JSON d’objets dont les clés viennent de la ligne d’en-tête. Le délimiteur est détecté automatiquement parmi virgule, point-virgule, tabulation et pipe (vous pouvez le fixer manuellement), et les guillemets suivent la RFC 4180 : virgules, guillemets et même sauts de ligne à l’intérieur des champs entre guillemets s’analysent correctement.',
-			'La conversion typée reconnaît les nombres, true/false et null et émet de vrais types JSON plutôt que des chaînes ; désactivez-la quand les zéros initiaux ou les grands identifiants doivent survivre tels quels. Les fichiers sans ligne d’en-tête se convertissent en tableaux de tableaux, et les noms d’en-tête en double reçoivent des suffixes numériques au lieu de s’écraser en silence.',
-			'Les feuilles de calcul contiennent souvent les données les plus sensibles que manipulent les développeurs — listes de clients, salaires, historiques de commandes. La conversion se fait entièrement dans votre navigateur ; rien n’est envoyé.'
-		],
-		faqs: [
-			{
-				q: 'Pourquoi mon fichier séparé par des points-virgules s’est-il analysé en une seule colonne ?',
-				a: 'La détection automatique échantillonne les premières lignes et choisit le délimiteur qui donne des nombres de colonnes cohérents — un fichier de lignes à colonne unique peut la tromper. Fixez le délimiteur avec le sélecteur et l’analyse suit immédiatement.'
-			},
-			{
-				q: 'Comment se comportent les champs entre guillemets et les sauts de ligne intégrés ?',
-				a: 'Selon la RFC 4180 : les champs entourés de guillemets doubles peuvent contenir le délimiteur, des guillemets doublés ("") pour un guillemet littéral, et des sauts de ligne. Excel et la plupart des bases de données exportent exactement ce format.'
-			},
-			{
-				q: 'Pourquoi mes codes postaux perdent-ils leurs zéros initiaux ?',
-				a: 'La conversion typée transforme 02134 en nombre 2134. Décochez « Valeurs typées » et chaque cellule reste une chaîne, exactement telle qu’écrite.'
-			},
-			{
-				q: 'Puis-je convertir des fichiers TSV ou délimités par des pipes ?',
-				a: 'Oui — tabulation et pipe sont des délimiteurs de plein droit, détectés automatiquement ou fixés à la main. Le parseur est le même ; seul le séparateur change.'
 			}
 		]
 	},

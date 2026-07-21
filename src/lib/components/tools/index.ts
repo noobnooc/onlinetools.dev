@@ -39,7 +39,6 @@ export const TOOL_COMPONENTS: Record<string, () => Promise<{ default: Component 
 	'sql-formatter': () => import('./SqlFormatterTool.svelte'),
 	'xml-formatter': () => import('./XmlFormatterTool.svelte'),
 	'xml-to-json': () => import('./XmlJsonTool.svelte'),
-	'csv-to-json': () => import('./CsvJsonTool.svelte'),
 	'markdown-to-html': () => import('./MarkdownTool.svelte'),
 	'html-formatter': () => import('./HtmlFormatterTool.svelte'),
 	'css-formatter': () => import('./CssFormatterTool.svelte'),

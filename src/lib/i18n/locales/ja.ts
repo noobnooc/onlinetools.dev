@@ -525,8 +525,8 @@ const ja: Messages = {
 			description: 'JSON、YAML、TOML を相互変換。フォーマットを自動判別'
 		},
 		'json-to-csv': {
-			name: 'JSON → CSV変換',
-			description: 'JSON オブジェクトの配列を正しいエスケープで CSV に変換'
+			name: 'JSON ↔ CSV変換',
+			description: 'JSON をフラット化して CSV に変換、CSV は型付きの JSON オブジェクトに逆変換'
 		},
 		'json-to-typescript': {
 			name: 'JSON → TypeScript型',
@@ -571,10 +571,6 @@ const ja: Messages = {
 		'xml-to-json': {
 			name: 'XML ↔ JSON変換',
 			description: 'XML ドキュメントと JSON を相互変換。属性も含めて変換'
-		},
-		'csv-to-json': {
-			name: 'CSV → JSON変換',
-			description: 'CSV を区切り文字の自動判別と型付きの値で JSON オブジェクトに変換'
 		},
 		'markdown-to-html': {
 			name: 'Markdown ↔ HTML変換',
