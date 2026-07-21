@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tt } from '$lib/i18n';
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
 	import Segmented from '../Segmented.svelte';
@@ -45,23 +46,23 @@
 	<div class="flex flex-wrap items-center gap-4 text-sm">
 		<Segmented
 			bind:value={mode}
-			label="Direction"
+			label={tt('direction')}
 			options={[
-				{ value: 'encode', label: 'Encode' },
-				{ value: 'decode', label: 'Decode' }
+				{ value: 'encode', label: tt('encode') },
+				{ value: 'decode', label: tt('decode') }
 			]}
 		/>
 		{#if mode === 'encode'}
 			<label class="flex items-center gap-2 text-dim">
 				<input type="checkbox" bind:checked={urlSafe} />
-				URL-safe (no padding)
+				{tt('b64UrlSafe')}
 			</label>
 		{/if}
 	</div>
 	<InputArea
 		bind:value={input}
-		label={mode === 'encode' ? 'Text to encode' : 'Base64 to decode'}
-		placeholder={mode === 'encode' ? 'Any text, unicode included' : 'aGVsbG8gd29ybGQ='}
+		label={mode === 'encode' ? tt('b64InputEnc') : tt('b64InputDec')}
+		placeholder={mode === 'encode' ? tt('b64PhEnc') : 'aGVsbG8gd29ybGQ='}
 		{badge}
 		rows={7}
 		error={result && !result.ok ? { message: result.error } : null}

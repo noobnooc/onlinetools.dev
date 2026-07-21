@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tt } from '$lib/i18n';
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import Segmented from '../Segmented.svelte';
 	import { generateQr, type EcLevel } from '$lib/tools/qr';
@@ -67,7 +68,7 @@
 <div class="space-y-4">
 	<InputArea
 		bind:value={input}
-		label="Content"
+		label={tt('qrContent')}
 		placeholder="https://example.com — or any text, WiFi config, contact card…"
 		{badge}
 		rows={3}
@@ -75,14 +76,14 @@
 		onsample={() => (input = 'https://onlinetools.dev')}
 	/>
 	<div class="flex flex-wrap items-center gap-4 text-sm">
-		<span class="text-dim">Error correction</span>
+		<span class="text-dim">{tt('qrEc')}</span>
 		<Segmented
 			bind:value={ecLevel}
-			label="Error correction level"
+			label={tt('qrEc')}
 			options={EC_LEVELS.map(([level, pct]) => ({
 				value: level,
 				label: level,
-				title: `Survives ${pct} damage`,
+				title: tt('qrEcT', { pct }),
 				mono: true
 			}))}
 		/>
@@ -100,17 +101,17 @@
 					onclick={downloadSvg}
 					class="flex items-center gap-1.5 rounded-md border border-line bg-surface px-3 py-1.5 text-sm transition-colors duration-120 hover:border-accent/50"
 				>
-					<Download size={13} /> SVG (vector, print)
+					<Download size={13} /> {tt('qrSvg')}
 				</button>
 				<button
 					type="button"
 					onclick={downloadPng}
 					class="flex items-center gap-1.5 rounded-md border border-line bg-surface px-3 py-1.5 text-sm transition-colors duration-120 hover:border-accent/50"
 				>
-					<Download size={13} /> PNG (chat, slides)
+					<Download size={13} /> {tt('qrPng')}
 				</button>
 				<p class="max-w-52 text-xs text-dim">
-					The content is encoded directly — no redirect service, nothing expires, no scan tracking.
+					{tt('qrNote')}
 				</p>
 			</div>
 		</div>

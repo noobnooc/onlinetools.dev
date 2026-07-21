@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tt } from '$lib/i18n';
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
 	import { jsonToTypescript } from '$lib/tools/dataconvert';
@@ -33,7 +34,7 @@
 <div class="space-y-4">
 	<InputArea
 		bind:value={input}
-		label="JSON sample"
+		label={tt('jtInput')}
 		placeholder={'{"id": 1, "name": "Ada", "tags": ["a"]}'}
 		{badge}
 		rows={8}
@@ -43,7 +44,7 @@
 				'{\n  "id": 42,\n  "name": "Ada Lovelace",\n  "email": null,\n  "roles": ["admin", "dev"],\n  "profile": {\n    "joined": "2024-03-14",\n    "verified": true,\n    "login-count": 128\n  }\n}')}
 	/>
 	<label class="flex items-center gap-2 text-sm text-dim">
-		Root type name
+		{tt('jtRoot')}
 		<input
 			type="text"
 			bind:value={rootName}
@@ -58,6 +59,6 @@
 		shareState={input.trim() === '' ? null : { input, name: rootName }}
 	/>
 	<p class="text-xs text-dim">
-		Inferred from this one sample — mark fields optional and widen nullables where your data varies.
+		{tt('jtNote')}
 	</p>
 </div>

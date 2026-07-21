@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tt } from '$lib/i18n';
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
 	import { parseTimestamp } from '$lib/tools/timestamp';
@@ -87,9 +88,9 @@
 			? ([
 					['ISO 8601', info.iso],
 					['UTC', info.utc],
-					['Relative', info.relative],
-					['Unix seconds', String(info.unixSeconds)],
-					['Unix milliseconds', String(info.unixMilliseconds)]
+					[tt('tsRelative'), info.relative],
+					[tt('tsUnixS'), String(info.unixSeconds)],
+					[tt('tsUnixMs'), String(info.unixMilliseconds)]
 				] as Array<[string, string]>)
 			: []
 	);
@@ -116,7 +117,7 @@
 <div class="space-y-4">
 	<InputArea
 		bind:value={input}
-		label="Timestamp or date"
+		label={tt('tsInput')}
 		placeholder="1700000000 · 1700000000000 · 2026-07-20T12:00:00Z"
 		{badge}
 		rows={2}
@@ -124,11 +125,11 @@
 		onsample={() => (input = String(Math.floor(now / 1000)))}
 	/>
 	<p class="font-mono text-xs text-dim">
-		Current unix time: <button
+		{tt('tsNow')} <button
 			type="button"
 			class="text-accent hover:underline"
 			onclick={() => (input = String(Math.floor(now / 1000)))}
-			title="Use current time as input">{Math.floor(now / 1000)}</button
+			title={tt('tsNowT')}>{Math.floor(now / 1000)}</button
 		>
 	</p>
 
@@ -148,7 +149,7 @@
 
 		<!-- Timezone comparison with a 24h day-strip per zone -->
 		<div>
-			<span class="mb-1.5 block text-xs font-medium tracking-wide text-dim uppercase">Across timezones</span>
+			<span class="mb-1.5 block text-xs font-medium tracking-wide text-dim uppercase">{tt('tsZones')}</span>
 			<div class="overflow-hidden rounded-lg border border-line">
 				{#each zones as z (z.label)}
 					<div
@@ -176,7 +177,7 @@
 				{/each}
 			</div>
 			<p class="mt-1.5 text-[11px] text-dim/70">
-				The marker shows each zone's local hour on a 24h strip — dimmed ends are 21:00–07:00.
+				{tt('tsNote')}
 			</p>
 		</div>
 	{/if}

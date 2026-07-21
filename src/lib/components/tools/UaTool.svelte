@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tt } from '$lib/i18n';
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
 	import { parseUserAgent } from '$lib/tools/useragent';
@@ -35,7 +36,7 @@
 <div class="space-y-4">
 	<InputArea
 		bind:value={input}
-		label="User-Agent string"
+		label={tt('uaInput')}
 		placeholder="Mozilla/5.0 (…) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
 		{badge}
 		rows={3}
@@ -45,10 +46,10 @@
 	{#if ua}
 		<div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
 			{#each [
-				{ icon: Globe, label: 'Browser', main: ua.browser.name, sub: ua.browser.version },
-				{ icon: Cog, label: 'Engine', main: ua.engine.name, sub: ua.engine.version },
-				{ icon: MonitorSmartphone, label: 'Operating system', main: ua.os.name, sub: ua.os.version },
-				{ icon: Cpu, label: 'Device', main: ua.device.type, sub: `${ua.device.vendor} ${ua.device.model} · ${ua.cpu.architecture}` }
+				{ icon: Globe, label: tt('uaBrowser'), main: ua.browser.name, sub: ua.browser.version },
+				{ icon: Cog, label: tt('uaEngine'), main: ua.engine.name, sub: ua.engine.version },
+				{ icon: MonitorSmartphone, label: tt('uaOs'), main: ua.os.name, sub: ua.os.version },
+				{ icon: Cpu, label: tt('uaDevice'), main: ua.device.type, sub: `${ua.device.vendor} ${ua.device.model} · ${ua.cpu.architecture}` }
 			] as card (card.label)}
 				{@const Icon = card.icon}
 				<div class="flex items-start gap-3 rounded-lg border border-line bg-surface px-4 py-3">
@@ -66,7 +67,6 @@
 	{/if}
 	<OutputPanel value={output} filename="user-agent.txt" shareState={input.trim() === '' ? null : { input }} />
 	<p class="text-xs text-dim">
-		The “Sample” button inserts your own browser's User-Agent. Use feature detection, not UA sniffing,
-		for runtime decisions.
+		{tt('uaNote')}
 	</p>
 </div>

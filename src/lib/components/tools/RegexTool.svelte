@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tt } from '$lib/i18n';
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
 	import { testRegex } from '$lib/tools/regex';
@@ -64,7 +65,7 @@
 <div class="space-y-4">
 	<div>
 		<label for="regex-pattern" class="mb-1.5 block text-xs font-medium tracking-wide text-dim uppercase"
-			>Pattern</label
+			>{tt('rxPattern')}</label
 		>
 		<div class="flex items-center gap-0 rounded-lg border {result && !result.ok ? 'border-err/60' : 'border-line'} bg-surface-2 focus-within:border-accent">
 			<span class="pl-3 font-mono text-sm text-dim select-none">/</span>
@@ -98,8 +99,8 @@
 
 	<InputArea
 		bind:value={text}
-		label="Test string"
-		placeholder="Paste text to test the pattern against"
+		label={tt('rxTest')}
+		placeholder={tt('rxTestPh')}
 		{badge}
 		rows={6}
 		onsample={() => {
@@ -111,7 +112,7 @@
 
 	{#if text !== '' && pattern !== '' && result?.ok}
 		<div>
-			<span class="mb-1.5 block text-xs font-medium tracking-wide text-dim uppercase">Highlighted</span>
+			<span class="mb-1.5 block text-xs font-medium tracking-wide text-dim uppercase">{tt('rxHighlighted')}</span>
 			<pre
 				class="max-h-64 overflow-auto rounded-lg border border-line bg-surface px-3 py-2.5 font-mono text-sm leading-relaxed whitespace-pre-wrap break-all">{#each segments as seg, i (i)}{#if seg.hit}<mark
 							class="rounded-[3px] bg-accent/25 text-inherit">{seg.text}</mark
@@ -120,7 +121,7 @@
 		{#if matches.length > 0}
 			<div>
 				<span class="mb-1.5 block text-xs font-medium tracking-wide text-dim uppercase"
-					>Matches ({matches.length})</span
+					>{tt('rxMatches')} ({matches.length})</span
 				>
 				<div class="max-h-64 space-y-1.5 overflow-auto">
 					{#each matches.slice(0, 200) as m, i (i)}
@@ -146,7 +147,7 @@
 
 	<OutputPanel
 		value={output}
-		label="Matched text"
+		label={tt('rxMatched')}
 		filename="matches.txt"
 		shareState={pattern === '' ? null : { pattern, flags, input: text }}
 	/>

@@ -18,6 +18,8 @@ export interface Messages {
 	/** Native language name, shown in the switcher. */
 	name: string;
 	ui: Record<keyof typeof en.ui, string>;
+	/** Tool-internal labels (controls, stat tiles, notes) shared via one flat namespace. */
+	tl: Record<keyof typeof en.tl, string>;
 	categories: Record<ToolCategory, string>;
 	tools: Record<string, ToolL10n>;
 }
@@ -45,6 +47,13 @@ function messages(): Messages {
 /** UI string lookup with English fallback and {var} interpolation. */
 export function t(key: keyof Messages['ui'], vars?: Record<string, string | number>): string {
 	let s = messages().ui[key] ?? en.ui[key];
+	if (vars) for (const [k, v] of Object.entries(vars)) s = s.replaceAll(`{${k}}`, String(v));
+	return s;
+}
+
+/** Tool-internal label lookup (same semantics as t, separate namespace). */
+export function tt(key: keyof Messages['tl'], vars?: Record<string, string | number>): string {
+	let s = messages().tl?.[key] ?? en.tl[key];
 	if (vars) for (const [k, v] of Object.entries(vars)) s = s.replaceAll(`{${k}}`, String(v));
 	return s;
 }

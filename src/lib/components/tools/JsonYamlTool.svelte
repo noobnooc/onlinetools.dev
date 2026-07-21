@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tt } from '$lib/i18n';
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
 	import Segmented from '../Segmented.svelte';
@@ -44,15 +45,15 @@
 <div class="space-y-4">
 	<div class="flex flex-wrap items-center gap-4 text-sm">
 		<div class="flex items-center gap-2 text-dim">
-			From
+			{tt('jyFrom')}
 			<Segmented
 				bind:value={from}
-				label="Source format"
+				label={tt('jySource')}
 				options={[
 					{
 						value: 'auto',
 						label: detected ? `Auto · ${detected.toUpperCase()}` : 'Auto',
-						title: 'Detect the source format from the content'
+						title: tt('jyAutoT')
 					},
 					...FORMATS.map((f) => ({ value: f, label: f.toUpperCase() }))
 				]}
@@ -61,13 +62,13 @@
 		<span class="font-mono text-dim">→</span>
 		<Segmented
 			bind:value={to}
-			label="Target format"
+			label={tt('jyTarget')}
 			options={FORMATS.map((f) => ({ value: f, label: f.toUpperCase() }))}
 		/>
 	</div>
 	<InputArea
 		bind:value={input}
-		label="Input ({effectiveFrom ?? 'unknown format'})"
+		label="{tt('jyInput')} ({effectiveFrom ?? tt('jyUnknown')})"
 		placeholder={'{"server": {"host": "example.com", "ports": [80, 443]}}'}
 		{badge}
 		rows={9}

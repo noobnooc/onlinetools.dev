@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tt } from '$lib/i18n';
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
 	import EmptyState from '../EmptyState.svelte';
@@ -68,26 +69,26 @@
 <div class="space-y-4">
 	<InputArea
 		bind:value={input}
-		label="Text to hash"
-		placeholder="Any text — hashes update as you type"
+		label={tt('hashInput')}
+		placeholder={tt('hashPh')}
 		{badge}
 		rows={5}
 		onsample={() => (input = 'The quick brown fox jumps over the lazy dog')}
 	/>
 	<label class="block">
 		<span class="mb-1.5 block text-xs font-medium tracking-wide text-dim uppercase"
-			>HMAC secret key <span class="normal-case">(optional)</span></span
+			>{tt('hashHmac')} <span class="normal-case">{tt('hashOptional')}</span></span
 		>
 		<input
 			type="text"
 			bind:value={hmacKey}
 			spellcheck="false"
 			autocomplete="off"
-			placeholder="Leave empty for plain hashes"
+			placeholder={tt('hashHmacPh')}
 			class="w-full rounded-lg border border-line bg-surface-2 px-3 py-2 font-mono text-sm outline-none placeholder:text-dim/50 focus:border-accent"
 		/>
 	</label>
-	<OutputPanel value={output} label="Digests" filename="hashes.txt" shareState={input === '' ? null : { input }}>
+	<OutputPanel value={output} label={tt('hashDigests')} filename="hashes.txt" shareState={input === '' ? null : { input }}>
 		{#if digests.length > 0}
 			<div class="space-y-1">
 				{#each digests as d (d.algo)}
@@ -108,11 +109,10 @@
 				{/each}
 			</div>
 		{:else}
-			<EmptyState hint="Digests update live as you type" />
+			<EmptyState hint={tt('hashEmpty')} />
 		{/if}
 	</OutputPanel>
 	<p class="text-xs text-dim">
-		MD5 and SHA-1 are shown for legacy checksums only — use SHA-256 or stronger for anything
-		security-relevant.
+		{tt('hashNote')}
 	</p>
 </div>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tt } from '$lib/i18n';
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
 	import Segmented from '../Segmented.svelte';
@@ -37,7 +38,7 @@
 <div class="space-y-4">
 	<InputArea
 		bind:value={input}
-		label="JSON array of objects"
+		label={tt('jcInput')}
 		placeholder={'[{"name": "Ada", "role": "admin"}, {"name": "Alan"}]'}
 		{badge}
 		rows={8}
@@ -48,14 +49,14 @@
 	/>
 	<div class="flex flex-wrap items-center gap-4 text-sm">
 		<div class="flex items-center gap-2 text-dim">
-			Delimiter
+			{tt('jcDelimiter')}
 			<Segmented
 				bind:value={delimiter}
-				label="CSV delimiter"
+				label={tt('jcDelimiter')}
 				options={[
-					{ value: ',', label: ',', title: 'Comma', mono: true },
-					{ value: ';', label: ';', title: 'Semicolon (EU Excel)', mono: true },
-					{ value: '\t', label: '⇥', title: 'Tab', mono: true }
+					{ value: ',', label: ',', title: tt('jcComma'), mono: true },
+					{ value: ';', label: ';', title: tt('jcSemicolon'), mono: true },
+					{ value: '\t', label: '⇥', title: tt('jcTab'), mono: true }
 				]}
 			/>
 		</div>

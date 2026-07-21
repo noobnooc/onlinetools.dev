@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tt } from '$lib/i18n';
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import { convertCase, CASE_STYLES, tokenize } from '$lib/tools/text';
 	import { initFromHash } from '$lib/state/hashstate.svelte';
@@ -40,7 +41,7 @@
 <div class="space-y-4">
 	<InputArea
 		bind:value={input}
-		label="Text or identifier (one per line)"
+		label={tt('caseInput')}
 		placeholder="getUserByID
 response_status_code"
 		{badge}
@@ -70,7 +71,7 @@ response_status_code"
 		</div>
 	{:else}
 		<p class="rounded-lg border border-line bg-surface px-3 py-6 text-center font-mono text-sm text-dim/50">
-			All nine styles appear here as you type
+			{tt('caseEmpty')}
 		</p>
 	{/if}
 </div>

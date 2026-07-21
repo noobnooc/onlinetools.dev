@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tt } from '$lib/i18n';
 	import OutputPanel from '../OutputPanel.svelte';
 	import Segmented from '../Segmented.svelte';
 	import { bcryptHash, bcryptVerify, bcryptInfo } from '$lib/tools/bcrypt';
@@ -57,29 +58,29 @@
 <div class="space-y-4">
 	<Segmented
 		bind:value={mode}
-		label="Mode"
+		label={tt('mode')}
 		options={[
-			{ value: 'hash', label: 'Hash', title: 'Hash a password' },
-			{ value: 'verify', label: 'Verify', title: 'Verify a password against a hash' }
+			{ value: 'hash', label: tt('bcHash'), title: tt('bcHashT') },
+			{ value: 'verify', label: tt('bcVerify'), title: tt('bcVerifyT') }
 		]}
 	/>
 
 	{#if mode === 'hash'}
 		<label class="block">
-			<span class="mb-1.5 block text-xs font-medium tracking-wide text-dim uppercase">Password</span>
+			<span class="mb-1.5 block text-xs font-medium tracking-wide text-dim uppercase">{tt('bcPassword')}</span>
 			<input
 				type="text"
 				bind:value={password}
 				spellcheck="false"
 				autocomplete="off"
-				placeholder="stays in your browser"
+				placeholder={tt('bcPh')}
 				class="w-full rounded-lg border border-line bg-surface-2 px-3 py-2.5 font-mono text-sm outline-none placeholder:text-dim/50 focus:border-accent"
 				onkeydown={(e) => e.key === 'Enter' && doHash()}
 			/>
 		</label>
 		<div class="flex flex-wrap items-center gap-4 text-sm">
 			<label class="flex items-center gap-2 text-dim">
-				Cost factor
+				{tt('bcCost')}
 				<input type="range" bind:value={rounds} min="4" max="14" class="w-32 accent-(--accent)" />
 				<span class="w-16 font-mono text-fg tabular-nums">{rounds} <span class="text-dim">(2^{rounds})</span></span>
 			</label>
@@ -90,15 +91,15 @@
 				class="flex items-center gap-1.5 rounded-md bg-accent px-3 py-1.5 text-sm font-medium text-white transition-opacity duration-120 hover:opacity-90 disabled:opacity-40"
 			>
 				{#if working}<LoaderCircle size={13} class="animate-spin" />{/if}
-				Hash
+				{tt('bcHash')}
 			</button>
 			{#if hashMs > 0}<span class="font-mono text-xs text-dim">{hashMs} ms</span>{/if}
 		</div>
 		{#if error}<p class="font-mono text-xs text-err" role="alert">{error}</p>{/if}
-		<OutputPanel value={hashOut} label="Bcrypt hash" filename="bcrypt.txt" />
+		<OutputPanel value={hashOut} label={tt('bcHashLbl')} filename="bcrypt.txt" />
 	{:else}
 		<label class="block">
-			<span class="mb-1.5 block text-xs font-medium tracking-wide text-dim uppercase">Password</span>
+			<span class="mb-1.5 block text-xs font-medium tracking-wide text-dim uppercase">{tt('bcPassword')}</span>
 			<input
 				type="text"
 				bind:value={verifyPassword}
@@ -108,7 +109,7 @@
 			/>
 		</label>
 		<label class="block">
-			<span class="mb-1.5 block text-xs font-medium tracking-wide text-dim uppercase">Bcrypt hash</span>
+			<span class="mb-1.5 block text-xs font-medium tracking-wide text-dim uppercase">{tt('bcHashLbl')}</span>
 			<input
 				type="text"
 				bind:value={verifyHash}
@@ -126,7 +127,7 @@
 			class="flex items-center gap-1.5 rounded-md bg-accent px-3 py-1.5 text-sm font-medium text-white transition-opacity duration-120 hover:opacity-90 disabled:opacity-40"
 		>
 			{#if working}<LoaderCircle size={13} class="animate-spin" />{/if}
-			Verify
+			{tt('bcVerify')}
 		</button>
 		{#if verifyError}<p class="font-mono text-xs text-err" role="alert">{verifyError}</p>{/if}
 		{#if verifyResult !== null}
@@ -143,21 +144,20 @@
 	{#if info}
 		<div class="grid grid-cols-3 gap-2">
 			<div class="rounded-lg border border-line bg-surface px-3 py-2">
-				<span class="block text-[11px] tracking-wide text-dim uppercase">Version</span>
+				<span class="block text-[11px] tracking-wide text-dim uppercase">{tt('bcVersion')}</span>
 				<span class="font-mono text-sm">${info.version}$</span>
 			</div>
 			<div class="rounded-lg border border-line bg-surface px-3 py-2">
-				<span class="block text-[11px] tracking-wide text-dim uppercase">Cost</span>
+				<span class="block text-[11px] tracking-wide text-dim uppercase">{tt('bcCostShort')}</span>
 				<span class="font-mono text-sm">{info.rounds} <span class="text-dim">(2^{info.rounds})</span></span>
 			</div>
 			<div class="rounded-lg border border-line bg-surface px-3 py-2">
-				<span class="block text-[11px] tracking-wide text-dim uppercase">Salt</span>
+				<span class="block text-[11px] tracking-wide text-dim uppercase">{tt('bcSalt')}</span>
 				<span class="block truncate font-mono text-sm" title={info.salt}>{info.salt}</span>
 			</div>
 		</div>
 	{/if}
 	<p class="text-xs text-dim">
-		Hashing runs in your browser — nothing is transmitted. Browser JS is slower than native bcrypt, so
-		treat timings as an upper bound.
+		{tt('bcNote')}
 	</p>
 </div>

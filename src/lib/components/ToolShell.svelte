@@ -15,10 +15,12 @@
 	interface Props {
 		tool: ToolMeta;
 		content: ToolContent;
+		/** Locale the About/FAQ content is written in ('en' when falling back). */
+		contentLocale?: string;
 		children: Snippet;
 	}
 
-	let { tool, content, children }: Props = $props();
+	let { tool, content, contentLocale = 'en', children }: Props = $props();
 
 	$effect(() => {
 		pushRecentTool(tool.slug);
@@ -113,7 +115,7 @@
 			{t('aboutTool')}
 			<ChevronDown size={15} class="text-dim transition-transform duration-180 group-open:rotate-180" />
 		</summary>
-		<div class="border-t border-line px-4 py-4" lang="en">
+		<div class="border-t border-line px-4 py-4" lang={contentLocale}>
 			<div class="max-w-prose space-y-3 text-sm leading-relaxed text-dim">
 				{#each content.about as paragraph (paragraph)}
 					<p>{paragraph}</p>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tt } from '$lib/i18n';
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
 	import { decodeJwt } from '$lib/tools/jwt';
@@ -76,23 +77,23 @@
 	{#if segments}
 		<!-- Colored token anatomy: header · payload · signature -->
 		<div>
-			<span class="mb-1.5 block text-xs font-medium tracking-wide text-dim uppercase">Token anatomy</span>
+			<span class="mb-1.5 block text-xs font-medium tracking-wide text-dim uppercase">{tt('jwtAnatomy')}</span>
 			<div class="overflow-x-auto rounded-lg border border-line bg-surface px-3 py-2.5 font-mono text-xs leading-relaxed break-all">
 				<span class="text-accent">{segments[0]}</span><span class="text-dim">.</span><span
 					class="text-fg">{segments[1]}</span
 				><span class="text-dim">.</span><span class="text-dim/60">{segments[2]}</span>
 			</div>
 			<div class="mt-1.5 flex gap-4 font-mono text-[11px]">
-				<span class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-accent"></span> header</span>
-				<span class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-(--text)"></span> payload</span>
-				<span class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-(--text-dim) opacity-60"></span> signature (not verified)</span>
+				<span class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-accent"></span> {tt('jwtHeader')}</span>
+				<span class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-(--text)"></span> {tt('jwtPayload')}</span>
+				<span class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-(--text-dim) opacity-60"></span> {tt('jwtSignature')}</span>
 			</div>
 		</div>
 	{/if}
 
 	{#if jwt}
 		<div class="grid grid-cols-1 gap-2 sm:grid-cols-3">
-			{#each [['Issued', jwt.issuedAt], ['Expires', jwt.expiresAt], ['Not before', jwt.notBefore]] as [label, value] (label)}
+			{#each [[tt('jwtIssued'), jwt.issuedAt], [tt('jwtExpires'), jwt.expiresAt], [tt('jwtNotBefore'), jwt.notBefore]] as [label, value] (label)}
 				{#if value}
 					<div class="rounded-lg border border-line bg-surface px-3 py-2">
 						<span class="block text-[11px] tracking-wide text-dim uppercase">{label}</span>
@@ -104,7 +105,7 @@
 		{#if lifetime}
 			<div class="rounded-lg border border-line bg-surface px-4 py-3">
 				<div class="flex items-baseline justify-between text-xs">
-					<span class="font-medium tracking-wide text-dim uppercase">Lifetime</span>
+					<span class="font-medium tracking-wide text-dim uppercase">{tt('jwtLifetime')}</span>
 					<span class="font-mono {lifetime.expired ? 'text-err' : 'text-ok'}">
 						{lifetime.expired ? `expired ${lifetime.remaining.replace('in ', '')}` : `expires ${lifetime.remaining}`}
 					</span>
@@ -124,7 +125,6 @@
 
 	<OutputPanel value={output} filename="jwt-decoded.txt" shareState={input.trim() === '' ? null : { input }} />
 	<p class="text-xs text-dim">
-		Decoding only reads the token — it does not verify the signature. Verify signatures server-side
-		with the issuer's keys.
+		{tt('jwtNote')}
 	</p>
 </div>

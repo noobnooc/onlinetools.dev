@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tt } from '$lib/i18n';
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
 	import EmptyState from '../EmptyState.svelte';
@@ -56,7 +57,7 @@
 <div class="space-y-4">
 	<InputArea
 		bind:value={input}
-		label="JSON input"
+		label={tt('jfInput')}
 		placeholder={'Paste JSON here — {"like": "this"}'}
 		{badge}
 		rows={10}
@@ -65,28 +66,28 @@
 	/>
 	<div class="flex flex-wrap items-center gap-4 text-sm">
 		<div class="flex items-center gap-2 text-dim">
-			Indent
+			{tt('jfIndent')}
 			<Segmented
 				bind:value={indent}
-				label="Indentation"
+				label={tt('jfIndentation')}
 				options={[
-					{ value: '2', label: '··', title: '2 spaces', mono: true },
-					{ value: '4', label: '····', title: '4 spaces', mono: true },
-					{ value: 'tab', label: '⇥', title: 'Tabs', mono: true },
-					{ value: 'min', label: '{}', title: 'Minified — no whitespace', mono: true }
+					{ value: '2', label: '··', title: tt('jfSp2'), mono: true },
+					{ value: '4', label: '····', title: tt('jfSp4'), mono: true },
+					{ value: 'tab', label: '⇥', title: tt('jfTabs'), mono: true },
+					{ value: 'min', label: '{}', title: tt('jfMin'), mono: true }
 				]}
 			/>
 		</div>
 		<label class="flex items-center gap-2 text-dim">
 			<input type="checkbox" bind:checked={sortKeys} />
-			Sort keys
+			{tt('jfSortKeys')}
 		</label>
 		<Segmented
 			bind:value={view}
-			label="Output view"
+			label={tt('jfText')}
 			options={[
-				{ value: 'text', label: 'Text' },
-				{ value: 'tree', label: 'Tree' }
+				{ value: 'text', label: tt('jfText') },
+				{ value: 'tree', label: tt('jfTree') }
 			]}
 		/>
 	</div>
@@ -100,8 +101,8 @@
 				<JsonTree value={parsed} />
 			</div>
 			<p class="mt-2 border-t border-line/50 pt-2 text-[11px] text-dim">
-				Hover a node to copy its JSONPath — try it in the
-				<a href="/t/jsonpath-tester" class="text-accent hover:underline">JSONPath tester</a>.
+				{tt('jfTreeHint')}
+				<a href="/t/jsonpath-tester" class="text-accent hover:underline">{tt('jfTreeLink')}</a>.
 			</p>
 		{:else if output !== ''}
 			<pre class="max-h-[32rem] overflow-auto font-mono text-sm leading-relaxed whitespace-pre-wrap break-all">{output}</pre>

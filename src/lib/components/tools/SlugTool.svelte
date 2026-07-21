@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tt } from '$lib/i18n';
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
 	import Segmented from '../Segmented.svelte';
@@ -40,7 +41,7 @@
 <div class="space-y-4">
 	<InputArea
 		bind:value={input}
-		label="Title (one per line)"
+		label={tt('slugInput')}
 		placeholder="10 Things I Learned Building a Design System"
 		{badge}
 		rows={4}
@@ -48,22 +49,22 @@
 	/>
 	<div class="flex flex-wrap items-center gap-4 text-sm">
 		<div class="flex items-center gap-2 text-dim">
-			Separator
+			{tt('slugSep')}
 			<Segmented
 				bind:value={separator}
-				label="Separator"
+				label={tt('slugSep')}
 				options={[
-					{ value: '-', label: '-', title: 'Hyphen', mono: true },
-					{ value: '_', label: '_', title: 'Underscore', mono: true }
+					{ value: '-', label: '-', title: tt('slugHyphen'), mono: true },
+					{ value: '_', label: '_', title: tt('slugUnderscore'), mono: true }
 				]}
 			/>
 		</div>
 		<label class="flex items-center gap-2 text-dim">
 			<input type="checkbox" bind:checked={lowercase} class="accent-(--accent)" />
-			Lowercase
+			{tt('lowercase')}
 		</label>
 		<label class="flex items-center gap-2 text-dim">
-			Max length
+			{tt('slugMax')}
 			<input
 				type="number"
 				bind:value={maxLength}
@@ -75,5 +76,5 @@
 			/>
 		</label>
 	</div>
-	<OutputPanel value={output} label="Slug" filename="slugs.txt" shareState={input.trim() === '' ? null : { input }} />
+	<OutputPanel value={output} label={tt('slugOut')} filename="slugs.txt" shareState={input.trim() === '' ? null : { input }} />
 </div>

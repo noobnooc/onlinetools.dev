@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tt } from '$lib/i18n';
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
 	import Segmented from '../Segmented.svelte';
@@ -44,26 +45,26 @@
 	<div class="flex flex-wrap items-center gap-4 text-sm">
 		<Segmented
 			bind:value={mode}
-			label="Direction"
+			label={tt('direction')}
 			options={[
-				{ value: 'encode', label: 'Encode' },
-				{ value: 'decode', label: 'Decode' }
+				{ value: 'encode', label: tt('encode') },
+				{ value: 'decode', label: tt('decode') }
 			]}
 		/>
 		{#if mode === 'encode'}
 			<label class="flex items-center gap-2 text-dim">
 				<input type="checkbox" bind:checked={all} class="accent-(--accent)" />
-				Encode all non-ASCII
+				{tt('heAll')}
 			</label>
 			<label class="flex items-center gap-2 text-dim">
 				<input type="checkbox" bind:checked={numeric} class="accent-(--accent)" />
-				Numeric only
+				{tt('heNumeric')}
 			</label>
 		{/if}
 	</div>
 	<InputArea
 		bind:value={input}
-		label={mode === 'encode' ? 'Text to escape' : 'HTML with entities'}
+		label={mode === 'encode' ? tt('heInputEnc') : tt('heInputDec')}
 		placeholder={mode === 'encode' ? '<a href="x">Fish & chips</a>' : '&lt;b&gt;caf&eacute;&lt;/b&gt; &rarr; &#x1F389;'}
 		{badge}
 		rows={6}

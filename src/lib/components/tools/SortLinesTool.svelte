@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tt } from '$lib/i18n';
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
 	import Segmented from '../Segmented.svelte';
@@ -42,41 +43,41 @@
 <div class="space-y-4">
 	<InputArea
 		bind:value={input}
-		label="Lines"
-		placeholder="one per line"
+		label={tt('slInput')}
+		placeholder={tt('slPh')}
 		{badge}
 		rows={8}
 		onsample={() => (input = 'banana\napple\nitem10\nitem2\nApple\nbanana\n\n  cherry  ')}
 	/>
 	<div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
 		<div class="flex items-center gap-2 text-dim">
-			Sort
+			{tt('slSort')}
 			<Segmented
 				bind:value={sort}
-				label="Sort order"
+				label={tt('slSort')}
 				options={[
-					{ value: 'none', label: '=', title: 'Keep order', mono: true },
-					{ value: 'asc', label: 'A→Z', title: 'Ascending', mono: true },
-					{ value: 'desc', label: 'Z→A', title: 'Descending', mono: true },
-					{ value: 'natural', label: '1,2,10', title: 'Natural — numbers in order', mono: true },
-					{ value: 'length', label: '≡', title: 'By line length', mono: true },
-					{ value: 'shuffle', label: '⤨', title: 'Shuffle', mono: true }
+					{ value: 'none', label: '=', title: tt('slKeep'), mono: true },
+					{ value: 'asc', label: 'A→Z', title: tt('slAsc'), mono: true },
+					{ value: 'desc', label: 'Z→A', title: tt('slDesc'), mono: true },
+					{ value: 'natural', label: '1,2,10', title: tt('slNatural'), mono: true },
+					{ value: 'length', label: '≡', title: tt('slLength'), mono: true },
+					{ value: 'shuffle', label: '⤨', title: tt('slShuffle'), mono: true }
 				]}
 			/>
 		</div>
 		<label class="flex items-center gap-2 text-dim">
-			<input type="checkbox" bind:checked={dedupe} class="accent-(--accent)" /> Dedupe
+			<input type="checkbox" bind:checked={dedupe} class="accent-(--accent)" /> {tt('slDedupe')}
 		</label>
 		{#if dedupe}
 			<label class="flex items-center gap-2 text-dim">
-				<input type="checkbox" bind:checked={caseInsensitive} class="accent-(--accent)" /> Ignore case
+				<input type="checkbox" bind:checked={caseInsensitive} class="accent-(--accent)" /> {tt('slIgnoreCase')}
 			</label>
 		{/if}
 		<label class="flex items-center gap-2 text-dim">
-			<input type="checkbox" bind:checked={trim} class="accent-(--accent)" /> Trim
+			<input type="checkbox" bind:checked={trim} class="accent-(--accent)" /> {tt('slTrim')}
 		</label>
 		<label class="flex items-center gap-2 text-dim">
-			<input type="checkbox" bind:checked={removeEmpty} class="accent-(--accent)" /> Drop empty
+			<input type="checkbox" bind:checked={removeEmpty} class="accent-(--accent)" /> {tt('slDropEmpty')}
 		</label>
 	</div>
 	<OutputPanel

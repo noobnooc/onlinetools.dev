@@ -99,6 +99,259 @@ const en = {
 		scPaste: 'Smart Paste — detect content and suggest tools',
 		scNav: 'Navigate and confirm in panels'
 	},
+	tl: {
+		// Shared controls
+		direction: 'Direction',
+		encode: 'Encode',
+		decode: 'Decode',
+		mode: 'Mode',
+		count: 'Count',
+		lengthLbl: 'Length',
+		uppercase: 'Uppercase',
+		lowercase: 'Lowercase',
+		regenerate: 'Regenerate',
+
+		// Base64
+		b64InputEnc: 'Text to encode',
+		b64InputDec: 'Base64 to decode',
+		b64PhEnc: 'Any text, unicode included',
+		b64UrlSafe: 'URL-safe (no padding)',
+
+		// Bcrypt
+		bcHash: 'Hash',
+		bcVerify: 'Verify',
+		bcHashT: 'Hash a password',
+		bcVerifyT: 'Verify a password against a hash',
+		bcPassword: 'Password',
+		bcCost: 'Cost factor',
+		bcHashLbl: 'Bcrypt hash',
+		bcPh: 'stays in your browser',
+		bcVersion: 'Version',
+		bcCostShort: 'Cost',
+		bcSalt: 'Salt',
+		bcNote:
+			'Hashing runs in your browser — nothing is transmitted. Browser JS is slower than native bcrypt, so treat timings as an upper bound.',
+
+		// Case converter
+		caseInput: 'Text or identifier (one per line)',
+		caseEmpty: 'All nine styles appear here as you type',
+
+		// Color
+		colorInput: 'Color',
+		colorFormats: 'Formats',
+		colorRgb: 'RGB channels',
+		colorContrast: 'Text contrast (WCAG)',
+
+		// Cron
+		cronInput: 'Cron expression',
+		cronEvalIn: 'evaluated in',
+		cronNext: 'Next 5 runs',
+		cronNone: 'No runs within the next 5 years',
+
+		// Diff
+		diffOriginal: 'Original',
+		diffChanged: 'Changed',
+		diffLbl: 'Diff',
+		diffUnchanged: 'unchanged',
+		diffEmpty: 'The line-by-line diff appears here',
+
+		// Hash
+		hashInput: 'Text to hash',
+		hashPh: 'Any text — hashes update as you type',
+		hashHmac: 'HMAC secret key',
+		hashOptional: '(optional)',
+		hashHmacPh: 'Leave empty for plain hashes',
+		hashDigests: 'Digests',
+		hashEmpty: 'Digests update live as you type',
+		hashNote:
+			'MD5 and SHA-1 are shown for legacy checksums only — use SHA-256 or stronger for anything security-relevant.',
+
+		// HTML entities
+		heAll: 'Encode all non-ASCII',
+		heNumeric: 'Numeric only',
+		heInputEnc: 'Text to escape',
+		heInputDec: 'HTML with entities',
+
+		// JSON → CSV
+		jcInput: 'JSON array of objects',
+		jcDelimiter: 'Delimiter',
+		jcComma: 'Comma',
+		jcSemicolon: 'Semicolon (EU Excel)',
+		jcTab: 'Tab',
+
+		// JSON formatter
+		jfInput: 'JSON input',
+		jfIndent: 'Indent',
+		jfIndentation: 'Indentation',
+		jfSp2: '2 spaces',
+		jfSp4: '4 spaces',
+		jfTabs: 'Tabs',
+		jfMin: 'Minified — no whitespace',
+		jfSortKeys: 'Sort keys',
+		jfText: 'Text',
+		jfTree: 'Tree',
+		jfTreeHint: 'Hover a node to copy its JSONPath — try it in the',
+		jfTreeLink: 'JSONPath tester',
+
+		// JSONPath
+		jpExpr: 'JSONPath expression',
+		jpDoc: 'JSON document',
+		jpMatches: 'Matches',
+		jpResults: 'Result values',
+
+		// JSON → TypeScript
+		jtInput: 'JSON sample',
+		jtRoot: 'Root type name',
+		jtNote:
+			'Inferred from this one sample — mark fields optional and widen nullables where your data varies.',
+
+		// JSON ↔ YAML ↔ TOML
+		jyFrom: 'From',
+		jySource: 'Source format',
+		jyAutoT: 'Detect the source format from the content',
+		jyTarget: 'Target format',
+		jyInput: 'Input',
+		jyUnknown: 'unknown format',
+
+		// JWT
+		jwtAnatomy: 'Token anatomy',
+		jwtHeader: 'header',
+		jwtPayload: 'payload',
+		jwtSignature: 'signature (not verified)',
+		jwtIssued: 'Issued',
+		jwtExpires: 'Expires',
+		jwtNotBefore: 'Not before',
+		jwtLifetime: 'Lifetime',
+		jwtNote:
+			"Decoding only reads the token — it does not verify the signature. Verify signatures server-side with the issuer's keys.",
+
+		// Lorem
+		loremUnit: 'Unit',
+		loremWords: 'Words',
+		loremSentences: 'Sentences',
+		loremParagraphs: 'Paragraphs',
+		loremClassic: 'Start with “Lorem ipsum…”',
+
+		// Password
+		pwWeak: 'Weak',
+		pwFair: 'Fair',
+		pwStrong: 'Strong',
+		pwExcellent: 'Excellent',
+		pwNoLookalikes: 'No look-alikes (0O1lI)',
+		pwEntropy: 'Entropy',
+		pwBits: 'bits',
+		pwNote: '≥ 80 bits withstands offline cracking of fast hashes; ≥ 100 bits is effectively unguessable.',
+		pwOut: 'Passwords',
+		pwCrypto: 'Generated with crypto.getRandomValues, in your browser only. Nothing is stored or transmitted.',
+
+		// QR
+		qrContent: 'Content',
+		qrEc: 'Error correction',
+		qrEcT: 'Survives {pct} damage',
+		qrSvg: 'SVG (vector, print)',
+		qrPng: 'PNG (chat, slides)',
+		qrNote: 'The content is encoded directly — no redirect service, nothing expires, no scan tracking.',
+
+		// Regex
+		rxPattern: 'Pattern',
+		rxTest: 'Test string',
+		rxTestPh: 'Paste text to test the pattern against',
+		rxHighlighted: 'Highlighted',
+		rxMatches: 'Matches',
+		rxMatched: 'Matched text',
+
+		// Slug
+		slugInput: 'Title (one per line)',
+		slugSep: 'Separator',
+		slugHyphen: 'Hyphen',
+		slugUnderscore: 'Underscore',
+		slugMax: 'Max length',
+		slugOut: 'Slug',
+
+		// Sort lines
+		slInput: 'Lines',
+		slPh: 'one per line',
+		slSort: 'Sort',
+		slKeep: 'Keep order',
+		slAsc: 'Ascending',
+		slDesc: 'Descending',
+		slNatural: 'Natural — numbers in order',
+		slLength: 'By line length',
+		slShuffle: 'Shuffle',
+		slDedupe: 'Dedupe',
+		slIgnoreCase: 'Ignore case',
+		slTrim: 'Trim',
+		slDropEmpty: 'Drop empty',
+
+		// Timestamp
+		tsInput: 'Timestamp or date',
+		tsNow: 'Current unix time:',
+		tsNowT: 'Use current time as input',
+		tsRelative: 'Relative',
+		tsUnixS: 'Unix seconds',
+		tsUnixMs: 'Unix milliseconds',
+		tsZones: 'Across timezones',
+		tsNote: "The marker shows each zone's local hour on a 24h strip — dimmed ends are 21:00–07:00.",
+
+		// User-Agent
+		uaInput: 'User-Agent string',
+		uaBrowser: 'Browser',
+		uaEngine: 'Engine',
+		uaOs: 'Operating system',
+		uaDevice: 'Device',
+		uaNote:
+			"The “Sample” button inserts your own browser's User-Agent. Use feature detection, not UA sniffing, for runtime decisions.",
+
+		// Unicode
+		uniInput: 'Text to inspect',
+		uniPh: 'Paste anything — invisible characters become visible here',
+		uniGraphemes: 'Graphemes',
+		uniGraphemesHint: 'what users see',
+		uniCodePoints: 'Code points',
+		uniUtf16: 'UTF-16 units',
+		uniUtf16Hint: 'JS .length',
+		uniUtf8: 'UTF-8 bytes',
+		uniLimit: 'Showing the first 300 characters.',
+
+		// URL parser
+		upInput: 'URL',
+		upProtocol: 'Protocol',
+		upHost: 'Host',
+		upHostname: 'Hostname',
+		upPort: 'Port',
+		upPath: 'Path',
+		upFragment: 'Fragment',
+		upOrigin: 'Origin',
+		upQuery: 'Query parameters',
+		upDefault: '(default)',
+		upNone: '(none)',
+		upEmpty: 'URL components appear here',
+
+		// URL encode/decode
+		urlComponent: 'Component mode (encodeURIComponent)',
+		urlInputDec: 'Encoded text to decode',
+
+		// UUID
+		uuidOut: 'Generated IDs',
+		uuidFormat: 'ID format',
+		uuidHintV4: 'random',
+		uuidHintV7: 'time-ordered',
+		uuidHintUlid: 'time-ordered, base32',
+		uuidHintNano: 'short, url-safe',
+		uuidNote:
+			'Generated with crypto.getRandomValues — cryptographically secure, created in your browser, never logged anywhere.',
+
+		// Word counter
+		wcWords: 'Words',
+		wcChars: 'Characters',
+		wcCharsHint: '{n} without spaces',
+		wcReading: 'Reading time',
+		wcReadingHint: 'at 220 wpm',
+		wcLines: 'Lines',
+		wcSentences: 'Sentences',
+		wcParagraphs: 'Paragraphs',
+		wcAvg: 'Avg word length'
+	},
 	categories: CATEGORY_LABELS,
 	tools: Object.fromEntries(
 		TOOLS.map((t) => [t.slug, { name: t.name, description: t.description }])

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tt } from '$lib/i18n';
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import StatTile from '../StatTile.svelte';
 	import { inspectChars, unicodeSummary } from '$lib/tools/unicode';
@@ -34,18 +35,18 @@
 <div class="space-y-4">
 	<InputArea
 		bind:value={input}
-		label="Text to inspect"
-		placeholder="Paste anything — invisible characters become visible here"
+		label={tt('uniInput')}
+		placeholder={tt('uniPh')}
 		{badge}
 		rows={3}
 		onsample={() => (input = 'Héllo​ 世界 🎉 é')}
 	/>
 	{#if input !== ''}
 		<div class="grid grid-cols-2 gap-2 sm:grid-cols-4">
-			<StatTile label="Graphemes" value={summary.graphemes} hint="what users see" />
-			<StatTile label="Code points" value={summary.codePoints} />
-			<StatTile label="UTF-16 units" value={summary.utf16Units} hint="JS .length" />
-			<StatTile label="UTF-8 bytes" value={summary.utf8Bytes} />
+			<StatTile label={tt('uniGraphemes')} value={summary.graphemes} hint={tt('uniGraphemesHint')} />
+			<StatTile label={tt('uniCodePoints')} value={summary.codePoints} />
+			<StatTile label={tt('uniUtf16')} value={summary.utf16Units} hint={tt('uniUtf16Hint')} />
+			<StatTile label={tt('uniUtf8')} value={summary.utf8Bytes} />
 		</div>
 		<div class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
 			{#each chars as c, i (i)}
@@ -70,7 +71,7 @@
 			{/each}
 		</div>
 		{#if summary.codePoints > 300}
-			<p class="text-xs text-dim">Showing the first 300 characters.</p>
+			<p class="text-xs text-dim">{tt('uniLimit')}</p>
 		{/if}
 	{/if}
 </div>

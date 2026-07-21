@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tt } from '$lib/i18n';
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
 	import Segmented from '../Segmented.svelte';
@@ -42,22 +43,22 @@
 	<div class="flex flex-wrap items-center gap-4 text-sm">
 		<Segmented
 			bind:value={mode}
-			label="Direction"
+			label={tt('direction')}
 			options={[
-				{ value: 'encode', label: 'Encode' },
-				{ value: 'decode', label: 'Decode' }
+				{ value: 'encode', label: tt('encode') },
+				{ value: 'decode', label: tt('decode') }
 			]}
 		/>
 		{#if mode === 'encode'}
 			<label class="flex items-center gap-2 text-dim" title="Component mode escapes &, = and / — use it for values inside a query string">
 				<input type="checkbox" bind:checked={component} class="accent-(--accent)" />
-				Component mode (encodeURIComponent)
+				{tt('urlComponent')}
 			</label>
 		{/if}
 	</div>
 	<InputArea
 		bind:value={input}
-		label={mode === 'encode' ? 'Text to encode' : 'Encoded text to decode'}
+		label={mode === 'encode' ? tt('b64InputEnc') : tt('urlInputDec')}
 		placeholder={mode === 'encode' ? 'a param value with spaces & symbols' : 'hello%20world%21'}
 		{badge}
 		rows={5}

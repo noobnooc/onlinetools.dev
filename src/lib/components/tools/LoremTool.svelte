@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tt } from '$lib/i18n';
 	import OutputPanel from '../OutputPanel.svelte';
 	import Segmented from '../Segmented.svelte';
 	import { loremIpsum, type LoremOptions } from '$lib/tools/text';
@@ -37,15 +38,15 @@
 	<div class="flex flex-wrap items-center gap-4 text-sm">
 		<Segmented
 			bind:value={unit}
-			label="Unit"
+			label={tt('loremUnit')}
 			options={[
-				{ value: 'words', label: 'Words' },
-				{ value: 'sentences', label: 'Sentences' },
-				{ value: 'paragraphs', label: 'Paragraphs' }
+				{ value: 'words', label: tt('loremWords') },
+				{ value: 'sentences', label: tt('loremSentences') },
+				{ value: 'paragraphs', label: tt('loremParagraphs') }
 			]}
 		/>
 		<label class="flex items-center gap-2 text-dim">
-			Count
+			{tt('count')}
 			<input
 				type="number"
 				bind:value={count}
@@ -56,14 +57,14 @@
 		</label>
 		<label class="flex items-center gap-2 text-dim">
 			<input type="checkbox" bind:checked={startClassic} class="accent-(--accent)" />
-			Start with “Lorem ipsum…”
+			{tt('loremClassic')}
 		</label>
 		<button
 			type="button"
 			onclick={generate}
 			class="flex items-center gap-1.5 rounded-md bg-accent px-3 py-1.5 text-sm font-medium text-white transition-opacity duration-120 hover:opacity-90"
 		>
-			<RefreshCw size={13} /> Regenerate
+			<RefreshCw size={13} /> {tt('regenerate')}
 		</button>
 	</div>
 	{#if error}<p class="font-mono text-xs text-err" role="alert">{error}</p>{/if}

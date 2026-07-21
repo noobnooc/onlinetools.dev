@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tt } from '$lib/i18n';
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
 	import { queryJsonPath } from '$lib/tools/dataconvert';
@@ -44,7 +45,7 @@
 <div class="space-y-4">
 	<div>
 		<label for="jsonpath-expr" class="mb-1.5 block text-xs font-medium tracking-wide text-dim uppercase"
-			>JSONPath expression</label
+			>{tt('jpExpr')}</label
 		>
 		<input
 			id="jsonpath-expr"
@@ -72,7 +73,7 @@
 
 	<InputArea
 		bind:value={json}
-		label="JSON document"
+		label={tt('jpDoc')}
 		placeholder={'{"store": {"book": [ … ]}}'}
 		{badge}
 		rows={8}
@@ -86,7 +87,7 @@
 	{#if matches.length > 0}
 		<div>
 			<span class="mb-1.5 block text-xs font-medium tracking-wide text-dim uppercase"
-				>Matches ({matches.length})</span
+				>{tt('jpMatches')} ({matches.length})</span
 			>
 			<div class="max-h-72 space-y-1.5 overflow-auto">
 				{#each matches.slice(0, 100) as m (m.path)}
@@ -101,7 +102,7 @@
 
 	<OutputPanel
 		value={result?.ok ? output : ''}
-		label="Result values"
+		label={tt('jpResults')}
 		filename="jsonpath-result.json"
 		shareState={json.trim() === '' ? null : { input: json, path }}
 	/>

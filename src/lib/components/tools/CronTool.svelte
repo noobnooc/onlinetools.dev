@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tt } from '$lib/i18n';
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import { parseCron, nextRuns } from '$lib/tools/cron';
 	import { formatRelative } from '$lib/tools/timestamp';
@@ -56,7 +57,7 @@
 <div class="space-y-4">
 	<InputArea
 		bind:value={input}
-		label="Cron expression"
+		label={tt('cronInput')}
 		placeholder="*/15 9-17 * * 1-5"
 		{badge}
 		rows={1}
@@ -77,7 +78,7 @@
 	{#if cron}
 		<p class="rounded-lg border border-line bg-surface px-4 py-3 text-sm">
 			{cron.description}
-			<span class="text-dim"> — evaluated in {timezone}</span>
+			<span class="text-dim"> — {tt('cronEvalIn')} {timezone}</span>
 		</p>
 
 		<div class="grid grid-cols-1 gap-2 sm:grid-cols-5">
@@ -107,7 +108,7 @@
 		</div>
 
 		<div>
-			<span class="mb-1.5 block text-xs font-medium tracking-wide text-dim uppercase">Next 5 runs</span>
+			<span class="mb-1.5 block text-xs font-medium tracking-wide text-dim uppercase">{tt('cronNext')}</span>
 			<ol class="overflow-hidden rounded-lg border border-line">
 				{#each runs as run, i (run)}
 					<li class="flex items-center justify-between gap-3 border-b border-line/60 bg-surface px-4 py-2.5 last:border-0">
@@ -118,7 +119,7 @@
 						<span class="font-mono text-xs text-dim">{formatRelative(run - now)}</span>
 					</li>
 				{:else}
-					<li class="px-4 py-3 text-sm text-dim">No runs within the next 5 years</li>
+					<li class="px-4 py-3 text-sm text-dim">{tt('cronNone')}</li>
 				{/each}
 			</ol>
 		</div>
