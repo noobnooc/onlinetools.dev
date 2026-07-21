@@ -160,6 +160,11 @@ const ja: Messages = {
 		icLarger: '元より大きい',
 		icBgNote: 'JPEG は透過をサポートしません — 透明部分は白に合成されます。',
 		icNote: '変換にはブラウザの canvas エンコーダを使うため、ファイルサイズはブラウザにより多少異なります。',
+		fgAppleBg: 'Apple アイコン背景',
+		fgFiles: '生成されたファイル',
+		fgHtml: 'HTML <link> タグ',
+		fgSmall: '元画像は {px}px です — それを超えるサイズは拡大され、ぼやける可能性があります',
+		fgNote: 'ICO には 16・32・48 px を格納。Apple タッチアイコンは透過不可のため選択した背景色に合成され、PWA アイコンはアルファを保持します。正方形でない元画像は中央でトリミングされます。',
 		irBy: 'リサイズ基準',
 		irWidth: '幅',
 		irHeight: '高さ',
@@ -438,6 +443,10 @@ const ja: Messages = {
 		'image-resizer': {
 			name: '画像リサイズ',
 			description: '幅・高さ・パーセント指定で画像をリサイズ — 完全オフライン'
+		},
+		'favicon-generator': {
+			name: 'Favicon ジェネレーター',
+			description: '任意の画像から favicon.ico と PNG・manifest アイコン一式を生成'
 		}
 	}
 };

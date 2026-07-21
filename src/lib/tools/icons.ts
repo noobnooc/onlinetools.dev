@@ -30,6 +30,7 @@ import {
 	FileImage,
 	Images,
 	Scaling,
+	AppWindow,
 	Wrench
 } from 'lucide-svelte';
 import type { ToolCategory } from './registry';
@@ -67,7 +68,8 @@ export const TOOL_ICONS: Record<string, IconComponent> = {
 	'user-agent-parser': MonitorSmartphone,
 	'image-to-base64': FileImage,
 	'image-converter': Images,
-	'image-resizer': Scaling
+	'image-resizer': Scaling,
+	'favicon-generator': AppWindow
 };
 
 export function iconFor(slug: string): IconComponent {

@@ -17,9 +17,11 @@
 		<p class="mt-0.5 font-mono text-xs text-dim">v2026.07.21c</p>
 		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
 			<li>
-				New Image category (30 tools total): Image ↔ Base64 converter with data URL, CSS and
+				New Image category (31 tools total): Image ↔ Base64 converter with data URL, CSS and
 				HTML snippets in both directions; image format converter between PNG, JPEG and WebP
-				with a live quality dial; and an image resizer by width, height or percentage.
+				with a live quality dial; an image resizer by width, height or percentage; and a
+				favicon generator that packs favicon.ico (16/32/48), the Apple touch and PWA PNG
+				set, a starter webmanifest and the matching &lt;link&gt; tags into one ZIP.
 			</li>
 			<li>
 				Like everything else here, images are processed entirely in your browser on a local

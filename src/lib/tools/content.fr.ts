@@ -784,6 +784,32 @@ const TOOL_CONTENT_FR: Record<string, ToolContent> = {
 				a: 'Oui. Le pipeline canvas réencode des pixels purs — modèle d’appareil, horodatages, coordonnées GPS et toutes les autres balises EXIF disparaissent de la sortie. C’est généralement un gain de confidentialité pour des images destinées au web public ; si vous devez préserver les métadonnées, conservez l’original à côté.'
 			}
 		]
+	},
+
+	'favicon-generator': {
+		about: [
+			'Déposez une image — idéalement un logo carré de 512px ou plus — et obtenez le kit favicon complet : un favicon.ico contenant 16, 32 et 48 px pour les onglets et les marque-pages, des PNG aux tailles standard dont l’icône tactile Apple de 180px et les icônes PWA de 192/512px, un site.webmanifest de départ, et les balises <link> à coller dans votre <head>. Un seul ZIP contient tout, nommé exactement comme les conventions l’attendent.',
+			'Les détails que les tutoriels favicon ratent souvent sont gérés : l’ICO embarque des entrées compressées en PNG (supporté partout depuis Windows Vista, bien plus léger que les icônes BMP héritées) ; l’icône tactile Apple est aplatie sur la couleur de fond de votre choix, car iOS remplace la transparence par du noir ; et les icônes PWA gardent leur canal alpha. Les sources non carrées sont recadrées au centre plutôt qu’écrasées.',
+			'Réduire un logo à 16px est destructif par nature — les détails fins ne survivent tout simplement pas — la rangée d’aperçu montre donc chaque taille à ses dimensions réelles, pour juger la lisibilité avant de publier. Tout est rendu sur un canvas local et les conteneurs ICO/ZIP sont assemblés octet par octet dans la page ; votre logo n’est jamais envoyé nulle part.'
+		],
+		faqs: [
+			{
+				q: 'Quelles tailles de favicon faut-il vraiment en 2026 ?',
+				a: 'Moins que le folklore ne le prétend : un favicon.ico avec 16/32/48 pour l’héritage et la barre d’adresse, un apple-touch-icon.png de 180px, et des PNG de 192/512px référencés depuis le manifest. Les navigateurs modernes choisissent la meilleure correspondance exactement dans cet ensemble — les packs de 20 fichiers de certains générateurs relèvent du culte du cargo.'
+			},
+			{
+				q: 'Pourquoi mon logo est-il illisible à 16px ?',
+				a: 'Seize pixels, c’est brutalement petit — logotypes, traits fins et dégradés délicats se dissolvent. Les bons favicons réduisent la marque à un seul glyphe ou une forme à fort contraste. Si l’aperçu 16px ici est de la bouillie, recadrez sur la partie distinctive de la marque ou utilisez une variante simplifiée pour les petites tailles.'
+			},
+			{
+				q: 'Ai-je encore besoin d’un .ico, ou les favicons PNG suffisent-ils ?',
+				a: 'Tous les navigateurs modernes acceptent les favicons PNG, mais /favicon.ico reste le chemin que les agents, robots et vieux outils demandent aveuglément. Y servir un vrai ICO coûte quelques kilo-octets et élimine toute une classe de 404 et de bizarreries — gardez-le à côté de vos links PNG.'
+			},
+			{
+				q: 'Pourquoi l’icône tactile Apple a-t-elle besoin d’une couleur de fond ?',
+				a: 'iOS ne rend pas la transparence des icônes d’écran d’accueil — l’alpha de votre PNG est composé sur du noir. Aplatir d’avance sur une couleur choisie garde un résultat intentionnel. Choisissez le fond qui va avec votre icône, et rappelez-vous qu’iOS arrondit lui-même les coins : fournissez un carré plein cadre.'
+			}
+		]
 	}
 };
 

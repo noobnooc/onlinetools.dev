@@ -95,6 +95,49 @@ export async function encodeImage(
 	return ok({ blob, dataUrl, width, height });
 }
 
+/** Load a data URL into an <img> element for repeated canvas drawing. */
+export function loadImageElement(dataUrl: string): Promise<HTMLImageElement | null> {
+	return new Promise((resolve) => {
+		const img = new Image();
+		img.onload = () => resolve(img);
+		img.onerror = () => resolve(null);
+		img.src = dataUrl;
+	});
+}
+
+/**
+ * Render the largest centered square of the source at size×size and return
+ * PNG bytes. A background color flattens transparency (Apple touch icons);
+ * omit it to keep alpha.
+ */
+export async function drawSquarePng(
+	img: HTMLImageElement,
+	size: number,
+	background?: string
+): Promise<Uint8Array | null> {
+	const w = img.naturalWidth;
+	const h = img.naturalHeight;
+	if (w <= 0 || h <= 0) return null;
+	const s = Math.min(w, h);
+	const sx = Math.floor((w - s) / 2);
+	const sy = Math.floor((h - s) / 2);
+	const canvas = document.createElement('canvas');
+	canvas.width = size;
+	canvas.height = size;
+	const ctx = canvas.getContext('2d');
+	if (!ctx) return null;
+	if (background) {
+		ctx.fillStyle = background;
+		ctx.fillRect(0, 0, size, size);
+	}
+	ctx.imageSmoothingEnabled = true;
+	ctx.imageSmoothingQuality = 'high';
+	ctx.drawImage(img, sx, sy, s, s, 0, 0, size, size);
+	const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, 'image/png'));
+	if (!blob) return null;
+	return new Uint8Array(await blob.arrayBuffer());
+}
+
 export function downloadBlob(blob: Blob, filename: string) {
 	const url = URL.createObjectURL(blob);
 	const a = document.createElement('a');

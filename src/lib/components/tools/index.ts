@@ -34,5 +34,6 @@ export const TOOL_COMPONENTS: Record<string, () => Promise<{ default: Component 
 	'user-agent-parser': () => import('./UaTool.svelte'),
 	'image-to-base64': () => import('./ImageBase64Tool.svelte'),
 	'image-converter': () => import('./ImageConvertTool.svelte'),
-	'image-resizer': () => import('./ImageResizeTool.svelte')
+	'image-resizer': () => import('./ImageResizeTool.svelte'),
+	'favicon-generator': () => import('./FaviconTool.svelte')
 };
