@@ -112,43 +112,43 @@
 				<span class="mr-1 font-mono text-[11px] text-dim/70">{formatBytes(byteLength(value))}</span>
 				<button
 					type="button"
-					class="flex items-center gap-1 rounded-md px-1.5 py-1 text-xs whitespace-nowrap text-dim transition-colors duration-120 hover:bg-surface-2 hover:text-fg"
+					class="flex items-center gap-1 rounded-md p-2 text-xs whitespace-nowrap sm:px-1.5 sm:py-1 text-dim transition-colors duration-120 hover:bg-surface-2 hover:text-fg"
 					onclick={onCopy}
 					title="Copy result (⌘⇧C)"
 				>
-					{#if copied}<Check size={13} class="text-ok" /><span class="text-ok">{t('copied')}</span>
-					{:else}<Copy size={13} /><span>{t('copy')}</span>{/if}
+					{#if copied}<Check size={13} class="text-ok" /><span class="hidden text-ok sm:inline">{t('copied')}</span>
+					{:else}<Copy size={13} /><span class="hidden sm:inline">{t('copy')}</span>{/if}
 				</button>
 				<button
 					type="button"
-					class="flex items-center gap-1 rounded-md px-1.5 py-1 text-xs whitespace-nowrap text-dim transition-colors duration-120 hover:bg-surface-2 hover:text-fg"
+					class="flex items-center gap-1 rounded-md p-2 text-xs whitespace-nowrap sm:px-1.5 sm:py-1 text-dim transition-colors duration-120 hover:bg-surface-2 hover:text-fg"
 					onclick={() => downloadText(value, filename)}
 					title="Download result"
 				>
-					<Download size={13} /><span>{t('download')}</span>
+					<Download size={13} /><span class="hidden sm:inline">{t('download')}</span>
 				</button>
 				{#if shareState}
 					<button
 						type="button"
-						class="flex items-center gap-1 rounded-md px-1.5 py-1 text-xs whitespace-nowrap text-dim transition-colors duration-120 hover:bg-surface-2 hover:text-fg"
+						class="flex items-center gap-1 rounded-md p-2 text-xs whitespace-nowrap sm:px-1.5 sm:py-1 text-dim transition-colors duration-120 hover:bg-surface-2 hover:text-fg"
 						onclick={onShare}
 						title="Copy a link that restores this state"
 					>
-						{#if linkCopied}<Check size={13} class="text-ok" /><span class="text-ok">{t('linkCopied')}</span>
-						{:else}<Link size={13} /><span>{t('share')}</span>{/if}
+						{#if linkCopied}<Check size={13} class="text-ok" /><span class="hidden text-ok sm:inline">{t('linkCopied')}</span>
+						{:else}<Link size={13} /><span class="hidden sm:inline">{t('share')}</span>{/if}
 					</button>
 				{/if}
 				{#if chainTargets.length > 0}
 					<div class="relative">
 						<button
 							type="button"
-							class="flex items-center gap-1 rounded-md px-1.5 py-1 text-xs whitespace-nowrap transition-colors duration-120
+							class="flex items-center gap-1 rounded-md p-2 text-xs whitespace-nowrap sm:px-1.5 sm:py-1 transition-colors duration-120
 								{chainOpen ? 'bg-surface-2 text-fg' : 'text-dim hover:bg-surface-2 hover:text-fg'}"
 							onclick={() => (chainOpen = !chainOpen)}
 							aria-expanded={chainOpen}
 							title="Send this result into another tool"
 						>
-							<ArrowRight size={13} /><span>{t('continueWith')}</span>
+							<ArrowRight size={13} /><span class="hidden sm:inline">{t('continueWith')}</span>
 						</button>
 						{#if chainOpen}
 							<!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
