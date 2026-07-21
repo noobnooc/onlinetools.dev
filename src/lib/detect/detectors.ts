@@ -4,6 +4,7 @@ import { isLikelyBase64Text } from '$lib/tools/base64';
 import { isLikelyTimestamp } from '$lib/tools/timestamp';
 import { isUuid } from '$lib/tools/uuid';
 import { isLikelyColor } from '$lib/tools/color';
+import { isLikelyImageDataUrl } from '$lib/tools/image';
 
 export interface Detection {
 	/** Detector id, e.g. "jwt". */
@@ -130,6 +131,19 @@ export const DETECTORS: Detector[] = [
 				confidence: 0.75,
 				tool: 'url-encode-decode',
 				actions: [{ label: 'Decode', tool: 'url-encode-decode' }]
+			};
+		}
+	},
+	{
+		id: 'image-data-url',
+		detect(input) {
+			if (!isLikelyImageDataUrl(input)) return null;
+			return {
+				type: 'image-data-url',
+				label: 'Image data URL',
+				confidence: 0.97,
+				tool: 'image-to-base64',
+				actions: [{ label: 'Preview / download', tool: 'image-to-base64' }]
 			};
 		}
 	},

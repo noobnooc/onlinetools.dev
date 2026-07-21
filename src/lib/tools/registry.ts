@@ -5,7 +5,8 @@ export type ToolCategory =
 	| 'time'
 	| 'generators'
 	| 'crypto'
-	| 'web';
+	| 'web'
+	| 'image';
 
 export const CATEGORY_LABELS: Record<ToolCategory, string> = {
 	encoding: 'Encoding',
@@ -14,7 +15,8 @@ export const CATEGORY_LABELS: Record<ToolCategory, string> = {
 	time: 'Date & Time',
 	generators: 'Generators',
 	crypto: 'Hashing & Crypto',
-	web: 'Web'
+	web: 'Web',
+	image: 'Image'
 };
 
 export interface ToolMeta {
@@ -46,7 +48,7 @@ export const TOOLS: ToolMeta[] = [
 		category: 'encoding',
 		aliases: ['b64', 'base 64', 'base64 encode', 'atob', 'btoa'],
 		keywords: ['base64 decode', 'base64 encode', 'base64 converter'],
-		related: ['url-encode-decode', 'jwt-decoder', 'json-formatter', 'hash-generator', 'uuid-generator', 'regex-tester']
+		related: ['url-encode-decode', 'jwt-decoder', 'json-formatter', 'hash-generator', 'uuid-generator', 'image-to-base64']
 	},
 	{
 		slug: 'timestamp-converter',
@@ -217,7 +219,7 @@ export const TOOLS: ToolMeta[] = [
 		category: 'generators',
 		aliases: ['qr', 'qrcode', 'qr code'],
 		keywords: ['qr code generator', 'free qr code', 'qr code svg', 'url to qr'],
-		related: ['url-parser', 'password-generator', 'uuid-generator', 'base64-decode', 'slug-generator', 'color-converter']
+		related: ['url-parser', 'password-generator', 'uuid-generator', 'image-to-base64', 'slug-generator', 'color-converter']
 	},
 	{
 		slug: 'json-to-yaml',
@@ -272,6 +274,33 @@ export const TOOLS: ToolMeta[] = [
 		aliases: ['ua', 'useragent', 'user agent', 'browser detect'],
 		keywords: ['user agent parser', 'ua parser', 'user agent lookup', 'browser detection'],
 		related: ['url-parser', 'jwt-decoder', 'regex-tester', 'json-formatter', 'timestamp-converter', 'hash-generator']
+	},
+	{
+		slug: 'image-to-base64',
+		name: 'Image ↔ Base64 Converter',
+		description: 'Turn images into Base64 data URLs and back — with CSS and HTML snippets',
+		category: 'image',
+		aliases: ['image to base64', 'base64 image', 'data url', 'data uri', 'img to base64'],
+		keywords: ['image to base64', 'base64 to image', 'data url generator', 'image data uri'],
+		related: ['image-converter', 'image-resizer', 'base64-decode', 'qr-code-generator', 'color-converter', 'url-encode-decode']
+	},
+	{
+		slug: 'image-converter',
+		name: 'Image Format Converter',
+		description: 'Convert images between PNG, JPEG and WebP with a quality dial',
+		category: 'image',
+		aliases: ['png to webp', 'jpg to png', 'webp converter', 'convert image', 'image format'],
+		keywords: ['image converter', 'png to webp', 'jpeg to webp', 'webp to png', 'convert image online'],
+		related: ['image-resizer', 'image-to-base64', 'qr-code-generator', 'color-converter', 'base64-decode', 'json-formatter']
+	},
+	{
+		slug: 'image-resizer',
+		name: 'Image Resizer',
+		description: 'Resize images by width, height or percentage — sharp and entirely offline',
+		category: 'image',
+		aliases: ['resize image', 'image resize', 'scale image', 'shrink image', 'image compressor'],
+		keywords: ['image resizer', 'resize image online', 'scale image', 'compress image'],
+		related: ['image-converter', 'image-to-base64', 'qr-code-generator', 'color-converter', 'base64-decode', 'diff-checker']
 	}
 ];
 

@@ -706,6 +706,84 @@ const TOOL_CONTENT_IT: Record<string, ToolContent> = {
 				a: 'CSS Color Module Level 4 ha standardizzato i canali separati da spazio con un /alpha opzionale, e ogni browser moderno lo supporta. La forma con le virgole funziona ancora, ma quella con gli spazi è ciò che usano le nuove specifiche (e questo strumento).'
 			}
 		]
+	},
+
+	'image-to-base64': {
+		about: [
+			'Trascina, scegli o incolla un’immagine e ottieni il suo Base64 in tutte le forme che possono servirti: un data URL pronto all’uso, una dichiarazione CSS background-image, un tag <img> completo con le dimensioni reali e il payload Base64 grezzo. Funziona anche al contrario: incolla un data URL o un blocco Base64 nudo e l’immagine viene decodificata, mostrata in anteprima e scaricabile come file.',
+			'Il formato viene riconosciuto dai byte magici, non dall’estensione o dal tipo MIME dichiarato: un PNG rinominato in .jpg (o un data URL etichettato male) si converte comunque correttamente. Il pannello delle dimensioni è onesto sul costo: Base64 gonfia i dati di circa un terzo, e la dimensione codificata esatta compare accanto all’originale, così decidi subito se incorporare conviene.',
+			'A differenza della maggior parte dei siti immagine-Base64, qui non viene caricato nulla: il file è letto con l’API FileReader del browser e codificato nella pagina. Questo rende lo strumento sicuro per screenshot di dashboard interne, immagini di prodotti non ancora usciti o qualsiasi cosa tu preferisca non consegnare al server di uno sconosciuto.'
+		],
+		faqs: [
+			{
+				q: 'Quando conviene incorporare un’immagine in Base64 invece di collegare un file?',
+				a: 'Quando l’immagine è piccola (indicativamente sotto i 10 KB), cambia di rado e costerebbe una richiesta HTTP in più — icone, loghi nelle email, documenti HTML a file singolo. Per tutto il resto vince il file separato: si mette in cache indipendentemente, si carica in parallelo e non gonfia il tuo HTML o CSS del 33%.'
+			},
+			{
+				q: 'Perché la versione Base64 è circa un terzo più grande del mio file?',
+				a: 'Base64 rappresenta ogni 3 byte binari con 4 caratteri ASCII: un sovraccarico strutturale del +33% (più fino a due caratteri di padding). Gzip o Brotli sul server ne recupera una parte, ma il rigonfiamento è insito nella codifica — scambia dimensione con la possibilità di incorporare binario nel testo.'
+			},
+			{
+				q: 'Posso decodificare un data URL trovato in un foglio di stile o nell’HTML?',
+				a: 'Sì — passa a Base64 → immagine e incolla tutto, prefisso data: compreso. Anche i data URL SVG percent-encoded (quelli senza ;base64) si decodificano, e a capo e spazi nel payload vengono rimossi automaticamente. Il risultato si vede in anteprima nella pagina e si scarica con l’estensione giusta.'
+			},
+			{
+				q: 'Funziona con SVG, GIF e ICO o solo con PNG e JPEG?',
+				a: 'Tutto ciò che lo sniffer riconosce si converte in Base64: PNG, JPEG, WebP, GIF, SVG, BMP, ICO e AVIF. Per l’SVG in particolare, considera che il sorgente XML è spesso più piccolo e leggibile incorporato così com’è — codificare SVG in Base64 ha senso soprattutto quando virgolette ed escaping diventano un problema.'
+			}
+		]
+	},
+
+	'image-converter': {
+		about: [
+			'Converti un’immagine tra PNG, JPEG e WebP senza installare niente e senza caricarla da nessuna parte: trascina il file, scegli il formato di destinazione, regola la qualità con lo slider e guarda la dimensione di uscita aggiornarsi in tempo reale. Il riquadro Δ mostra esattamente quanto il file convertito è più piccolo (o più grande): scegliere la qualità smette di essere un tirare a indovinare.',
+			'I tre formati hanno mestieri diversi. PNG è lossless con trasparenza completa — giusto per screenshot, asset di interfaccia e tutto ciò che ha bordi netti o testo. JPEG comprime le fotografie in modo aggressivo ma non ha canale alfa e sfuma i bordi duri. WebP batte tipicamente JPEG del 25–35% a qualità comparabile, supporta la trasparenza ed è supportato da tutti i browser attuali — per il web è quasi sempre la risposta.',
+			'La conversione avviene su un canvas nel tuo browser: l’immagine viene decodificata, ridisegnata e ricodificata dagli stessi codec che il browser usa per mostrare le pagine. È questo a rendere lo strumento privato — ed è anche il motivo per cui i byte esatti variano leggermente tra Chrome, Firefox e Safari, ognuno col proprio encoder.'
+		],
+		faqs: [
+			{
+				q: 'Che qualità dovrei usare per JPEG e WebP?',
+				a: 'Tra 75 e 90 copre quasi ogni uso reale. A 85 la maggior parte delle foto è visivamente indistinguibile dall’originale a una frazione della dimensione; sotto ~70 compaiono artefatti a blocchi nei gradienti e negli incarnati; sopra 90 la dimensione sale ripida per guadagni invisibili. Trascina lo slider guardando il riquadro della dimensione: il punto giusto di solito è evidente.'
+			},
+			{
+				q: 'Perché il mio PNG è diventato più grande convertendolo in JPEG?',
+				a: 'JPEG è fatto per i gradienti fotografici, non per i colori piatti. Screenshot, diagrammi e grafica di interfaccia si comprimono benissimo come PNG (lunghe serie di pixel identici), ma costringono JPEG a memorizzare rumore attorno a ogni bordo netto — file più grandi e ringing visibile. Tieni la grafica in PNG o convertila in WebP.'
+			},
+			{
+				q: 'Che fine fa la trasparenza convertendo in JPEG?',
+				a: 'JPEG non ha canale alfa, quindi le zone trasparenti vanno riempite con qualcosa — questo strumento le appiattisce su bianco, la convenzione per le immagini web. Se la trasparenza deve sopravvivere, scegli PNG o WebP come destinazione.'
+			},
+			{
+				q: 'Perché il mio browser non può esportare AVIF o HEIC qui?',
+				a: 'L’API toBlob del canvas codifica solo i formati per cui il browser include un encoder — PNG e JPEG ovunque, WebP in Chromium e Firefox. La codifica AVIF è ancora rara e HEIC è gravato da brevetti: i browser li decodificano ma non li producono. Se scegli un formato che il tuo browser non sa scrivere, lo strumento lo dice invece di rifilarti un PNG in silenzio.'
+			}
+		]
+	},
+
+	'image-resizer': {
+		about: [
+			'Ridimensiona un’immagine a una larghezza esatta, un’altezza esatta o una percentuale dell’originale — l’altra dimensione segue in automatico, niente viene stirato. Scegli un formato di uscita (o mantieni quello di origine), imposta la qualità per i formati lossy, guarda l’anteprima e scarica. I riquadri prima/dopo mostrano dimensioni e peso del file a colpo d’occhio.',
+			'Il ridimensionamento usa la modalità di smoothing di alta qualità del browser, che applica un vero ricampionamento invece della decimazione nearest-neighbor: le foto rimpicciolite restano nitide invece di tremolare di aliasing. Ridurre è anche il modo onesto di alleggerire il file: dimezzare entrambe le dimensioni elimina tre quarti dei pixel, cosa che nessuno slider di qualità può eguagliare.',
+			'I file non lasciano mai la pagina: decodifica, ricampionamento e ricodifica girano su un canvas locale. Non c’è barra di avanzamento dell’upload perché non c’è alcun upload — una foto da 40 megapixel si ridimensiona alla velocità con cui la tua macchina riesce a ridisegnarla, e funziona anche col cavo di rete staccato.'
+		],
+		faqs: [
+			{
+				q: 'Rimpicciolire e poi ringrandire ripristina la mia immagine?',
+				a: 'No — la riduzione scarta pixel per sempre. Portare una foto da 3000px a 300px conserva l’1% dei dati; ringrandirla interpola il 99% mancante come sfocatura. Conserva il file originale ed esporta da lì le copie ridimensionate, invece di ridimensionare l’unica copia che hai.'
+			},
+			{
+				q: 'Perché la mia immagine ingrandita sembra morbida?',
+				a: 'L’ingrandimento non può creare dettagli mai catturati — il browser interpola tra i pixel esistenti, e oltre ~2× il risultato appare morbido. Un vero upscaling oltre quella soglia richiede strumenti ML che allucinano dettagli plausibili; un ricampionatore canvas, di proposito, non inventa nulla.'
+			},
+			{
+				q: 'Come raggiungo una dimensione obiettivo, tipo «sotto i 200 KB»?',
+				a: 'Usa entrambe le leve: prima ridimensiona alle dimensioni massime davvero necessarie (1200px di larghezza bastano per la maggior parte dei layout web), poi scegli WebP o JPEG e abbassa la qualità finché il riquadro della dimensione scende sotto l’obiettivo. La riduzione delle dimensioni fa il grosso del lavoro — la qualità rifinisce il resto.'
+			},
+			{
+				q: 'Il ridimensionamento elimina i metadati EXIF come la posizione GPS?',
+				a: 'Sì. La pipeline canvas ricodifica pixel puri — modello della fotocamera, timestamp, coordinate GPS e ogni altro tag EXIF spariscono dall’output. Per immagini destinate al web pubblico di solito è un vantaggio di privacy; se i metadati ti servono, conserva l’originale a parte.'
+			}
+		]
 	}
 };
 

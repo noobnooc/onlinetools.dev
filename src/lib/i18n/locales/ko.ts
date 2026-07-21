@@ -132,6 +132,43 @@ const ko: Messages = {
 		heNumeric: '숫자 엔티티만',
 		heInputEnc: '이스케이프할 텍스트',
 		heInputDec: '엔티티가 있는 HTML',
+		imgDrop: '이미지를 끌어다 놓거나, 클릭해 선택하거나, 클립보드에서 붙여넣으세요',
+		imgLocal: '브라우저 안에서만 처리 — 아무것도 업로드되지 않습니다',
+		imgReplace: '끌어놓기·클릭·붙여넣기로 교체',
+		imgSource: '원본 이미지',
+		imgOriginal: '원본',
+		imgDimensions: '크기',
+		imgDownload: '{fmt} 다운로드',
+		imgErrNotImage: '인식할 수 없는 이미지 형식입니다 (PNG, JPEG, WebP, GIF, SVG, BMP, ICO, AVIF 지원)',
+		imgErrDecode: '브라우저가 이 이미지를 디코딩할 수 없습니다',
+		imgErrEncode: '브라우저가 이 이미지를 인코딩할 수 없습니다',
+		imgErrFormat: '이 브라우저는 {fmt} 인코딩을 지원하지 않습니다 — PNG나 JPEG을 사용해 보세요',
+		i2bToB64: '이미지 → Base64',
+		i2bFromB64: 'Base64 → 이미지',
+		i2bInput: 'Data URL 또는 순수 Base64',
+		i2bDataUrl: 'Data URL',
+		i2bRawB64: '순수 Base64',
+		i2bCss: 'CSS 배경',
+		i2bHtml: 'HTML <img>',
+		i2bEncodedSize: 'Base64 크기',
+		i2bOverhead: '바이너리 대비 +{pct}%',
+		i2bNote: '인라인화하면 요청 하나를 아끼지만 문서가 커지고 캐시가 무력화됩니다 — 아이콘 등 10 KB 이하 자산에 적합합니다.',
+		icTarget: '변환 대상',
+		icQuality: '품질',
+		icConverted: '변환 후',
+		icSmaller: '원본보다 작음',
+		icLarger: '원본보다 큼',
+		icBgNote: 'JPEG은 투명도를 지원하지 않습니다 — 투명 영역은 흰색으로 합성됩니다.',
+		icNote: '변환에는 브라우저의 canvas 인코더를 사용하므로 파일 크기는 브라우저마다 조금씩 다릅니다.',
+		irBy: '조절 기준',
+		irWidth: '너비',
+		irHeight: '높이',
+		irPercent: '퍼센트',
+		irFormat: '형식',
+		irKeep: '유지',
+		irResized: '조절 후',
+		irScale: '배율',
+		irNote: '축소에는 고품질 스무딩을 사용합니다. 확대는 디테일을 만들어내지 못합니다 — 2× 이상이면 흐릿해집니다.',
 		jcInput: 'JSON 객체 배열',
 		jcDelimiter: '구분자',
 		jcComma: '쉼표',
@@ -278,7 +315,8 @@ const ko: Messages = {
 		time: '날짜 & 시간',
 		generators: '생성기',
 		crypto: '해시 & 암호화',
-		web: '웹'
+		web: '웹',
+		image: '이미지'
 	},
 	tools: {
 		'json-formatter': {
@@ -388,6 +426,18 @@ const ko: Messages = {
 		'user-agent-parser': {
 			name: 'User-Agent 파서',
 			description: 'UA 문자열에서 브라우저·엔진·OS·기기 식별'
+		},
+		'image-to-base64': {
+			name: '이미지 ↔ Base64 변환기',
+			description: '이미지와 Base64 Data URL 상호 변환 — CSS·HTML 스니펫 포함'
+		},
+		'image-converter': {
+			name: '이미지 형식 변환기',
+			description: 'PNG, JPEG, WebP 간 이미지 변환, 품질 조절 지원'
+		},
+		'image-resizer': {
+			name: '이미지 크기 조절',
+			description: '너비·높이·퍼센트로 이미지 크기 조절 — 완전 오프라인'
 		}
 	}
 };

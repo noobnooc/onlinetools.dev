@@ -26,6 +26,10 @@ import {
 	Route,
 	ShieldCheck,
 	MonitorSmartphone,
+	Image,
+	FileImage,
+	Images,
+	Scaling,
 	Wrench
 } from 'lucide-svelte';
 import type { ToolCategory } from './registry';
@@ -60,7 +64,10 @@ export const TOOL_ICONS: Record<string, IconComponent> = {
 	'json-to-typescript': FileCode,
 	'jsonpath-tester': Route,
 	'bcrypt-generator': ShieldCheck,
-	'user-agent-parser': MonitorSmartphone
+	'user-agent-parser': MonitorSmartphone,
+	'image-to-base64': FileImage,
+	'image-converter': Images,
+	'image-resizer': Scaling
 };
 
 export function iconFor(slug: string): IconComponent {
@@ -74,5 +81,6 @@ export const CATEGORY_ICONS: Record<ToolCategory, IconComponent> = {
 	time: Clock,
 	generators: FingerprintPattern,
 	crypto: ShieldCheck,
-	web: Globe
+	web: Globe,
+	image: Image
 };

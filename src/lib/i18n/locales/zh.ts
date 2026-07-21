@@ -129,6 +129,43 @@ const zh: Messages = {
 		heNumeric: '仅数字实体',
 		heInputEnc: '待转义文本',
 		heInputDec: '含实体的 HTML',
+		imgDrop: '拖入图片、点击选择,或直接粘贴剪贴板中的图片',
+		imgLocal: '全程在浏览器中处理 — 不会上传任何内容',
+		imgReplace: '拖入、点击或粘贴以替换',
+		imgSource: '源图片',
+		imgOriginal: '原始',
+		imgDimensions: '尺寸',
+		imgDownload: '下载 {fmt}',
+		imgErrNotImage: '无法识别的图片格式(支持 PNG、JPEG、WebP、GIF、SVG、BMP、ICO、AVIF)',
+		imgErrDecode: '浏览器无法解码这张图片',
+		imgErrEncode: '浏览器无法编码这张图片',
+		imgErrFormat: '当前浏览器无法编码 {fmt} — 请尝试 PNG 或 JPEG',
+		i2bToB64: '图片 → Base64',
+		i2bFromB64: 'Base64 → 图片',
+		i2bInput: 'Data URL 或纯 Base64',
+		i2bDataUrl: 'Data URL',
+		i2bRawB64: '纯 Base64',
+		i2bCss: 'CSS 背景',
+		i2bHtml: 'HTML <img>',
+		i2bEncodedSize: 'Base64 大小',
+		i2bOverhead: '较二进制 +{pct}%',
+		i2bNote: '内联可省去一次请求,但会让文档变大并失去缓存 — 适合图标等 10 KB 以下的小资源。',
+		icTarget: '转换为',
+		icQuality: '质量',
+		icConverted: '转换后',
+		icSmaller: '小于原图',
+		icLarger: '大于原图',
+		icBgNote: 'JPEG 不支持透明 — 透明区域会被压平为白色。',
+		icNote: '转换使用浏览器的 canvas 编码器,文件大小在不同浏览器间会略有差异。',
+		irBy: '缩放方式',
+		irWidth: '宽度',
+		irHeight: '高度',
+		irPercent: '百分比',
+		irFormat: '格式',
+		irKeep: '不变',
+		irResized: '缩放后',
+		irScale: '比例',
+		irNote: '缩小使用高质量平滑算法。放大无法凭空生成细节 — 超过 2× 会明显发虚。',
 		jcInput: 'JSON 对象数组',
 		jcDelimiter: '分隔符',
 		jcComma: '逗号',
@@ -275,7 +312,8 @@ const zh: Messages = {
 		time: '日期时间',
 		generators: '生成器',
 		crypto: '哈希与加密',
-		web: 'Web'
+		web: 'Web',
+		image: '图片'
 	},
 	tools: {
 		'json-formatter': {
@@ -385,6 +423,18 @@ const zh: Messages = {
 		'user-agent-parser': {
 			name: 'User-Agent 解析器',
 			description: '从 UA 字符串识别浏览器、内核、操作系统与设备'
+		},
+		'image-to-base64': {
+			name: '图片 ↔ Base64 转换',
+			description: '图片与 Base64 Data URL 互转,附 CSS 与 HTML 代码片段'
+		},
+		'image-converter': {
+			name: '图片格式转换',
+			description: '在 PNG、JPEG、WebP 之间转换图片,可调压缩质量'
+		},
+		'image-resizer': {
+			name: '图片缩放',
+			description: '按宽度、高度或百分比缩放图片 — 清晰且完全离线'
 		}
 	}
 };

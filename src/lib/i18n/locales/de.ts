@@ -132,6 +132,43 @@ const de: Messages = {
 		heNumeric: 'Nur numerische Entities',
 		heInputEnc: 'Zu escapender Text',
 		heInputDec: 'HTML mit Entities',
+		imgDrop: 'Bild hierher ziehen, klicken zum Auswählen oder aus der Zwischenablage einfügen',
+		imgLocal: 'Bleibt in deinem Browser — nichts wird hochgeladen',
+		imgReplace: 'Ziehen, klicken oder einfügen zum Ersetzen',
+		imgSource: 'Quellbild',
+		imgOriginal: 'Original',
+		imgDimensions: 'Abmessungen',
+		imgDownload: '{fmt} herunterladen',
+		imgErrNotImage: 'Kein erkanntes Bildformat (PNG, JPEG, WebP, GIF, SVG, BMP, ICO, AVIF)',
+		imgErrDecode: 'Der Browser konnte dieses Bild nicht dekodieren',
+		imgErrEncode: 'Der Browser konnte dieses Bild nicht kodieren',
+		imgErrFormat: 'Dieser Browser kann kein {fmt} kodieren — versuche PNG oder JPEG',
+		i2bToB64: 'Bild → Base64',
+		i2bFromB64: 'Base64 → Bild',
+		i2bInput: 'Data-URL oder rohes Base64',
+		i2bDataUrl: 'Data-URL',
+		i2bRawB64: 'Rohes Base64',
+		i2bCss: 'CSS-Hintergrund',
+		i2bHtml: 'HTML <img>',
+		i2bEncodedSize: 'Base64-Größe',
+		i2bOverhead: '+{pct}% ggü. Binär',
+		i2bNote: 'Inlining spart einen Request, bläht aber das Dokument auf und umgeht den Cache — ideal für Icons und Assets unter ~10 KB.',
+		icTarget: 'Umwandeln in',
+		icQuality: 'Qualität',
+		icConverted: 'Konvertiert',
+		icSmaller: 'kleiner als das Original',
+		icLarger: 'größer als das Original',
+		icBgNote: 'JPEG kennt keine Transparenz — transparente Bereiche werden auf Weiß reduziert.',
+		icNote: 'Die Konvertierung nutzt den Canvas-Encoder deines Browsers; exakte Dateigrößen variieren daher leicht.',
+		irBy: 'Skalieren nach',
+		irWidth: 'Breite',
+		irHeight: 'Höhe',
+		irPercent: 'Prozent',
+		irFormat: 'Format',
+		irKeep: 'Beibehalten',
+		irResized: 'Skaliert',
+		irScale: 'Maßstab',
+		irNote: 'Verkleinern nutzt hochwertige Glättung. Vergrößern erfindet keine Details — ab 2× wird es sichtbar weich.',
 		jcInput: 'JSON-Array von Objekten',
 		jcDelimiter: 'Trennzeichen',
 		jcComma: 'Komma',
@@ -278,7 +315,8 @@ const de: Messages = {
 		time: 'Datum & Zeit',
 		generators: 'Generatoren',
 		crypto: 'Hashing & Krypto',
-		web: 'Web'
+		web: 'Web',
+		image: 'Bild'
 	},
 	tools: {
 		'json-formatter': {
@@ -388,6 +426,18 @@ const de: Messages = {
 		'user-agent-parser': {
 			name: 'User-Agent-Parser',
 			description: 'Browser, Engine, OS und Gerät aus einem User-Agent-String erkennen'
+		},
+		'image-to-base64': {
+			name: 'Bild ↔ Base64 Konverter',
+			description: 'Bilder in Base64-Data-URLs umwandeln und zurück — mit CSS- und HTML-Snippets'
+		},
+		'image-converter': {
+			name: 'Bildformat-Konverter',
+			description: 'Bilder zwischen PNG, JPEG und WebP konvertieren, mit Qualitätsregler'
+		},
+		'image-resizer': {
+			name: 'Bildgrößen-Änderung',
+			description: 'Bilder nach Breite, Höhe oder Prozent skalieren — scharf und komplett offline'
 		}
 	}
 };

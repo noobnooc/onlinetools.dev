@@ -132,6 +132,43 @@ const fr: Messages = {
 		heNumeric: 'Entités numériques uniquement',
 		heInputEnc: 'Texte à échapper',
 		heInputDec: 'HTML avec entités',
+		imgDrop: 'Déposez une image, cliquez pour parcourir ou collez depuis le presse-papiers',
+		imgLocal: 'Tout reste dans votre navigateur — rien n’est envoyé',
+		imgReplace: 'Déposez, cliquez ou collez pour remplacer',
+		imgSource: 'Image source',
+		imgOriginal: 'Originale',
+		imgDimensions: 'Dimensions',
+		imgDownload: 'Télécharger {fmt}',
+		imgErrNotImage: 'Format d’image non reconnu (PNG, JPEG, WebP, GIF, SVG, BMP, ICO, AVIF)',
+		imgErrDecode: 'Le navigateur n’a pas pu décoder cette image',
+		imgErrEncode: 'Le navigateur n’a pas pu encoder cette image',
+		imgErrFormat: 'Ce navigateur ne sait pas encoder le {fmt} — essayez PNG ou JPEG',
+		i2bToB64: 'Image → Base64',
+		i2bFromB64: 'Base64 → image',
+		i2bInput: 'Data URL ou Base64 brut',
+		i2bDataUrl: 'Data URL',
+		i2bRawB64: 'Base64 brut',
+		i2bCss: 'Fond CSS',
+		i2bHtml: 'HTML <img>',
+		i2bEncodedSize: 'Taille en Base64',
+		i2bOverhead: '+{pct}% vs binaire',
+		i2bNote: 'L’inlining économise une requête mais alourdit le document et neutralise le cache — idéal pour les icônes et ressources de moins de ~10 Ko.',
+		icTarget: 'Convertir en',
+		icQuality: 'Qualité',
+		icConverted: 'Convertie',
+		icSmaller: 'plus petite que l’originale',
+		icLarger: 'plus grande que l’originale',
+		icBgNote: 'Le JPEG ne gère pas la transparence — les zones transparentes sont aplaties sur du blanc.',
+		icNote: 'La conversion utilise l’encodeur canvas de votre navigateur ; la taille exacte varie donc légèrement selon les navigateurs.',
+		irBy: 'Redimensionner par',
+		irWidth: 'Largeur',
+		irHeight: 'Hauteur',
+		irPercent: 'Pourcentage',
+		irFormat: 'Format',
+		irKeep: 'Conserver',
+		irResized: 'Redimensionnée',
+		irScale: 'Échelle',
+		irNote: 'La réduction utilise un lissage de haute qualité. L’agrandissement n’invente pas de détail — attendez-vous à du flou au-delà de 2×.',
 		jcInput: 'Tableau JSON d’objets',
 		jcDelimiter: 'Délimiteur',
 		jcComma: 'Virgule',
@@ -278,7 +315,8 @@ const fr: Messages = {
 		time: 'Date et heure',
 		generators: 'Générateurs',
 		crypto: 'Hachage et crypto',
-		web: 'Web'
+		web: 'Web',
+		image: 'Image'
 	},
 	tools: {
 		'json-formatter': {
@@ -388,6 +426,18 @@ const fr: Messages = {
 		'user-agent-parser': {
 			name: 'Analyseur de User-Agent',
 			description: 'Identifiez navigateur, moteur, OS et appareil depuis une chaîne User-Agent'
+		},
+		'image-to-base64': {
+			name: 'Convertisseur image ↔ Base64',
+			description: 'Convertit les images en data URLs Base64 et inversement — avec extraits CSS et HTML'
+		},
+		'image-converter': {
+			name: 'Convertisseur de format d’image',
+			description: 'Convertit les images entre PNG, JPEG et WebP avec réglage de qualité'
+		},
+		'image-resizer': {
+			name: 'Redimensionneur d’images',
+			description: 'Redimensionne par largeur, hauteur ou pourcentage — net et entièrement hors ligne'
 		}
 	}
 };

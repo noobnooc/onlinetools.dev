@@ -132,6 +132,43 @@ const pt: Messages = {
 		heNumeric: 'Só numéricas',
 		heInputEnc: 'Texto a escapar',
 		heInputDec: 'HTML com entidades',
+		imgDrop: 'Solte uma imagem, clique para escolher ou cole da área de transferência',
+		imgLocal: 'Fica no seu navegador — nada é enviado',
+		imgReplace: 'Solte, clique ou cole para substituir',
+		imgSource: 'Imagem de origem',
+		imgOriginal: 'Original',
+		imgDimensions: 'Dimensões',
+		imgDownload: 'Baixar {fmt}',
+		imgErrNotImage: 'Formato de imagem não reconhecido (PNG, JPEG, WebP, GIF, SVG, BMP, ICO, AVIF)',
+		imgErrDecode: 'O navegador não conseguiu decodificar esta imagem',
+		imgErrEncode: 'O navegador não conseguiu codificar esta imagem',
+		imgErrFormat: 'Este navegador não codifica {fmt} — tente PNG ou JPEG',
+		i2bToB64: 'Imagem → Base64',
+		i2bFromB64: 'Base64 → imagem',
+		i2bInput: 'Data URL ou Base64 puro',
+		i2bDataUrl: 'Data URL',
+		i2bRawB64: 'Base64 puro',
+		i2bCss: 'Fundo CSS',
+		i2bHtml: 'HTML <img>',
+		i2bEncodedSize: 'Tamanho em Base64',
+		i2bOverhead: '+{pct}% vs binário',
+		i2bNote: 'Embutir economiza uma requisição, mas incha o documento e anula o cache — ideal para ícones e recursos abaixo de ~10 KB.',
+		icTarget: 'Converter para',
+		icQuality: 'Qualidade',
+		icConverted: 'Convertida',
+		icSmaller: 'menor que a original',
+		icLarger: 'maior que a original',
+		icBgNote: 'JPEG não tem transparência — áreas transparentes são achatadas sobre branco.',
+		icNote: 'A conversão usa o codificador canvas do navegador; o tamanho exato varia um pouco entre navegadores.',
+		irBy: 'Redimensionar por',
+		irWidth: 'Largura',
+		irHeight: 'Altura',
+		irPercent: 'Porcentagem',
+		irFormat: 'Formato',
+		irKeep: 'Manter',
+		irResized: 'Redimensionada',
+		irScale: 'Escala',
+		irNote: 'Reduzir usa suavização de alta qualidade. Ampliar não cria detalhes — espere desfoque além de 2×.',
 		jcInput: 'Array JSON de objetos',
 		jcDelimiter: 'Delimitador',
 		jcComma: 'Vírgula',
@@ -278,7 +315,8 @@ const pt: Messages = {
 		time: 'Data e hora',
 		generators: 'Geradores',
 		crypto: 'Hashes e cripto',
-		web: 'Web'
+		web: 'Web',
+		image: 'Imagem'
 	},
 	tools: {
 		'json-formatter': {
@@ -388,6 +426,18 @@ const pt: Messages = {
 		'user-agent-parser': {
 			name: 'Analisador de User-Agent',
 			description: 'Identifique navegador, engine, SO e dispositivo a partir de uma string User-Agent'
+		},
+		'image-to-base64': {
+			name: 'Conversor imagem ↔ Base64',
+			description: 'Converta imagens em data URLs Base64 e vice-versa — com trechos CSS e HTML'
+		},
+		'image-converter': {
+			name: 'Conversor de formato de imagem',
+			description: 'Converta imagens entre PNG, JPEG e WebP com controle de qualidade'
+		},
+		'image-resizer': {
+			name: 'Redimensionador de imagens',
+			description: 'Redimensione por largura, altura ou porcentagem — nítido e totalmente offline'
 		}
 	}
 };
