@@ -14,6 +14,8 @@ const pt: Messages = {
 		footerPrivacy: 'Roda no seu navegador — nada do que você cola é enviado',
 		allTools: 'Todas as ferramentas',
 		changelog: 'Novidades',
+		changelogMetaDescription:
+			'Novidades do onlinetools.dev — novas ferramentas, recursos e correções, tudo executado localmente no seu navegador.',
 		releaseDate: 'Data da versão',
 		language: 'Idioma',
 		openNav: 'Abrir navegação',

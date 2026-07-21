@@ -1,16 +1,19 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/SeoHead.svelte';
+	import { t } from '$lib/i18n';
 </script>
 
 <SeoHead
 	path="/changelog"
-	title="Changelog — onlinetools.dev"
-	description="What's new on onlinetools.dev — new tools, features and fixes."
+	title="{t('changelog')} — onlinetools.dev"
+	description={t('changelogMetaDescription')}
 />
 
 <div class="mx-auto max-w-3xl px-6 py-8">
-	<h1 class="mb-8 text-xl font-semibold tracking-tight">Changelog</h1>
+	<h1 class="mb-8 text-xl font-semibold tracking-tight">{t('changelog')}</h1>
 
+	<!-- Release notes are English-only content; the surrounding page chrome is localized. -->
+	<div lang="en">
 	<section class="relative border-l border-line pb-8 pl-6">
 		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full bg-accent" aria-hidden="true"></span>
 		<h2 class="text-sm font-medium">Image tools</h2>
@@ -139,4 +142,5 @@
 			install, and embedded AI actions inside individual tools.
 		</p>
 	</section>
+	</div>
 </div>

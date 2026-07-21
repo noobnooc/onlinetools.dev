@@ -1,14 +1,39 @@
 <script lang="ts">
 	import { TOOLS, type ToolCategory } from '$lib/tools/registry';
-	import { t, ltCategory, lp } from '$lib/i18n';
+	import { t, lt, ltCategory, lp, locale, canonical } from '$lib/i18n';
 	import ToolCard from '$lib/components/ToolCard.svelte';
 	import Eyebrow from '$lib/components/Eyebrow.svelte';
 	import SeoHead from '$lib/components/SeoHead.svelte';
 
 	const categories = [...new Set(TOOLS.map((t) => t.category))] as ToolCategory[];
+
+	const jsonLd = $derived(
+		JSON.stringify({
+			'@context': 'https://schema.org',
+			'@type': 'CollectionPage',
+			name: t('toolsTitle'),
+			description: t('toolsMetaDescription'),
+			url: canonical('/tools'),
+			inLanguage: locale(),
+			mainEntity: {
+				'@type': 'ItemList',
+				numberOfItems: TOOLS.length,
+				itemListElement: TOOLS.map((tool, i) => ({
+					'@type': 'ListItem',
+					position: i + 1,
+					name: lt(tool).name,
+					url: canonical(`/t/${tool.slug}`)
+				}))
+			}
+		})
+	);
 </script>
 
 <SeoHead path="/tools" title={t('toolsTitle')} description={t('toolsMetaDescription')} />
+
+<svelte:head>
+	{@html `<script type="application/ld+json">${jsonLd}</${'script'}>`}
+</svelte:head>
 
 <div class="mx-auto max-w-5xl px-6 py-8">
 	<h1 class="mb-1 text-xl font-semibold tracking-tight">{t('allTools')}</h1>

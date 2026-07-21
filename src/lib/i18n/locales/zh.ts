@@ -14,6 +14,8 @@ const zh: Messages = {
 		footerPrivacy: '全部在你的浏览器中运行 — 粘贴的内容不会被上传',
 		allTools: '全部工具',
 		changelog: '更新日志',
+		changelogMetaDescription:
+			'onlinetools.dev 的最新动态——新增工具、新功能与问题修复,全部在浏览器本地运行。',
 		releaseDate: '发布日期',
 		language: '语言',
 		openNav: '打开导航',

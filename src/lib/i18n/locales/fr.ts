@@ -14,6 +14,8 @@ const fr: Messages = {
 		footerPrivacy: 'Tout s’exécute dans votre navigateur — rien de ce que vous collez n’est envoyé',
 		allTools: 'Tous les outils',
 		changelog: 'Journal des modifications',
+		changelogMetaDescription:
+			"Nouveautés d'onlinetools.dev — nouveaux outils, fonctionnalités et correctifs, le tout exécuté localement dans votre navigateur.",
 		releaseDate: 'Date de version',
 		language: 'Langue',
 		openNav: 'Ouvrir la navigation',

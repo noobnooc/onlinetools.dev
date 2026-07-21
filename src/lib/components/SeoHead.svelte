@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { alternates, BASE, canonical, locale } from '$lib/i18n';
+	import { LOCALES, OG_LOCALES } from '$lib/i18n/codes';
 
 	/**
 	 * Localized SEO head: canonical for the current locale, hreflang
@@ -13,6 +14,8 @@
 	}
 
 	let { path, title, description }: Props = $props();
+
+	const ogImageAlt = 'onlinetools.dev — developer tools that run in your browser';
 </script>
 
 <svelte:head>
@@ -27,13 +30,18 @@
 	<meta property="og:description" content={description} />
 	<meta property="og:url" content={canonical(path)} />
 	<meta property="og:type" content="website" />
-	<meta property="og:locale" content={locale()} />
+	<meta property="og:locale" content={OG_LOCALES[locale()]} />
+	{#each LOCALES.filter((l) => l !== locale()) as l (l)}
+		<meta property="og:locale:alternate" content={OG_LOCALES[l]} />
+	{/each}
 	<meta property="og:image" content="{BASE}/og.png" />
+	<meta property="og:image:type" content="image/png" />
 	<meta property="og:image:width" content="1200" />
 	<meta property="og:image:height" content="630" />
-	<meta property="og:image:alt" content="onlinetools.dev — developer tools that run in your browser" />
+	<meta property="og:image:alt" content={ogImageAlt} />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content={title} />
 	<meta name="twitter:description" content={description} />
 	<meta name="twitter:image" content="{BASE}/og.png" />
+	<meta name="twitter:image:alt" content={ogImageAlt} />
 </svelte:head>

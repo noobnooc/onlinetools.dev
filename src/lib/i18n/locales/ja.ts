@@ -14,6 +14,8 @@ const ja: Messages = {
 		footerPrivacy: 'すべてブラウザ内で動作 — 貼り付けた内容がアップロードされることはありません',
 		allTools: 'すべてのツール',
 		changelog: '更新履歴',
+		changelogMetaDescription:
+			'onlinetools.dev の最新情報 — 新しいツール、機能、修正。すべてブラウザ内でローカルに動作します。',
 		releaseDate: 'リリース日',
 		language: '言語',
 		openNav: 'ナビゲーションを開く',

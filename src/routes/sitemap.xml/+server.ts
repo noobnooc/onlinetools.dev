@@ -1,5 +1,6 @@
 import { TOOLS } from '$lib/tools/registry';
 import { LOCALES } from '$lib/i18n/codes';
+import { SITE_UPDATED } from '$lib/version';
 
 export const prerender = true;
 
@@ -19,7 +20,8 @@ export function GET(): Response {
 			`\t\t<xhtml:link rel="alternate" hreflang="x-default" href="${loc(page, 'en')}"/>`
 		].join('\n');
 		return LOCALES.map(
-			(lang) => `\t<url>\n\t\t<loc>${loc(page, lang)}</loc>\n${alternates}\n\t</url>`
+			(lang) =>
+				`\t<url>\n\t\t<loc>${loc(page, lang)}</loc>\n\t\t<lastmod>${SITE_UPDATED}</lastmod>\n${alternates}\n\t</url>`
 		);
 	});
 	const body = `<?xml version="1.0" encoding="UTF-8"?>

@@ -2,7 +2,7 @@
 	import { openPalette } from '$lib/state/app.svelte';
 	import { TOOLS, TOOL_BY_SLUG, type ToolCategory } from '$lib/tools/registry';
 	import { iconFor } from '$lib/tools/icons';
-	import { t, lt, ltCategory, lp, locale } from '$lib/i18n';
+	import { t, lt, ltCategory, lp, locale, canonical } from '$lib/i18n';
 	import ToolCard from '$lib/components/ToolCard.svelte';
 	import Kbd from '$lib/components/Kbd.svelte';
 	import Eyebrow from '$lib/components/Eyebrow.svelte';
@@ -23,7 +23,8 @@
 			'@context': 'https://schema.org',
 			'@type': 'WebSite',
 			name: 'onlinetools.dev',
-			url: 'https://onlinetools.dev/',
+			alternateName: 'onlinetools',
+			url: canonical('/'),
 			inLanguage: locale(),
 			description: t('homeMetaDescription')
 		})
