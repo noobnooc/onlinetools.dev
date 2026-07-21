@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { openPalette, getTheme, setTheme } from '$lib/state/app.svelte';
+	import { openPalette } from '$lib/state/app.svelte';
 	import { TOOLS, CATEGORY_LABELS, type ToolCategory } from '$lib/tools/registry';
 	import { iconFor } from '$lib/tools/icons';
 	import Kbd from './Kbd.svelte';
-	import { Search, Sun, Moon, House } from 'lucide-svelte';
+	import ThemeToggle from './ThemeToggle.svelte';
+	import { Search, House } from 'lucide-svelte';
 
 	/** Rendered inside both the desktop rail and the mobile drawer. */
 	interface Props {
@@ -14,16 +15,6 @@
 	let { onnavigate }: Props = $props();
 
 	const categories = [...new Set(TOOLS.map((t) => t.category))] as ToolCategory[];
-
-	let theme = $state<'dark' | 'light'>('light');
-	$effect(() => {
-		theme = getTheme();
-	});
-
-	function toggleTheme() {
-		theme = theme === 'dark' ? 'light' : 'dark';
-		setTheme(theme);
-	}
 
 	/**
 	 * Compact rail label: drop subtitles and generic suffixes so rows never
@@ -50,16 +41,19 @@
 </script>
 
 <div class="flex h-full flex-col">
-	<!-- Brand -->
-	<a href="/" onclick={onnavigate} class="flex shrink-0 items-center gap-2.5 px-4 pt-4 pb-3">
-		<span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#0B0D10]" aria-hidden="true">
-			<span class="block h-3 w-3 rounded-full border-2 border-accent"></span>
-		</span>
-		<span class="min-w-0 leading-tight">
-			<span class="block text-sm font-semibold tracking-tight">onlinetools.dev</span>
-			<span class="block text-[11px] text-dim">Developer tools</span>
-		</span>
-	</a>
+	<!-- Brand + theme -->
+	<div class="flex shrink-0 items-center justify-between gap-2 px-4 pt-4 pb-3">
+		<a href="/" onclick={onnavigate} class="flex min-w-0 items-center gap-2.5">
+			<span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#0B0D10]" aria-hidden="true">
+				<span class="block h-3 w-3 rounded-full border-2 border-accent"></span>
+			</span>
+			<span class="min-w-0 leading-tight">
+				<span class="block truncate text-sm font-semibold tracking-tight">onlinetools.dev</span>
+				<span class="block text-[11px] text-dim">Developer tools</span>
+			</span>
+		</a>
+		<ThemeToggle />
+	</div>
 
 	<!-- Search -->
 	<div class="shrink-0 px-3">
@@ -77,8 +71,12 @@
 		</button>
 	</div>
 
-	<!-- Navigation -->
-	<nav class="grow overflow-y-auto px-3 pt-3 pb-2" aria-label="Tools">
+	<!-- Navigation — masked top and bottom so the list fades out, not clips -->
+	<nav
+		class="grow overflow-y-auto px-3 pt-3 pb-5"
+		aria-label="Tools"
+		style="mask-image: linear-gradient(to bottom, transparent, black 18px, black calc(100% - 22px), transparent); -webkit-mask-image: linear-gradient(to bottom, transparent, black 18px, black calc(100% - 22px), transparent)"
+	>
 		<a
 			href="/"
 			aria-current={current === '/' ? 'page' : undefined}
@@ -115,28 +113,4 @@
 			</div>
 		{/each}
 	</nav>
-
-	<!-- Footer of the rail -->
-	<div class="flex shrink-0 items-center justify-between px-4 py-3">
-		<span class="flex items-center gap-1.5 font-mono text-[10px] text-dim/80" title="All computation happens in your browser. Works offline.">
-			<span class="inline-block h-1.5 w-1.5 rounded-full bg-ok" aria-hidden="true"></span>
-			Offline
-		</span>
-		<div class="flex items-center gap-0.5">
-			<a
-				href="/changelog"
-				onclick={onnavigate}
-				class="rounded-md px-1.5 py-1 text-[11px] text-dim transition-colors duration-120 hover:bg-fg/[0.05] hover:text-fg"
-				>v0.3</a
-			>
-			<button
-				type="button"
-				onclick={toggleTheme}
-				class="rounded-md p-1.5 text-dim transition-colors duration-120 hover:bg-fg/[0.05] hover:text-fg"
-				aria-label="Toggle color theme"
-			>
-				{#if theme === 'dark'}<Sun size={13} />{:else}<Moon size={13} />{/if}
-			</button>
-		</div>
-	</div>
 </div>

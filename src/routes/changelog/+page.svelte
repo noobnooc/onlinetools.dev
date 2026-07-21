@@ -9,6 +9,29 @@
 
 	<section class="relative border-l border-line pb-8 pl-6">
 		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full bg-accent" aria-hidden="true"></span>
+		<h2 class="text-sm font-medium">Floating workspace & unified controls</h2>
+		<p class="mt-0.5 font-mono text-xs text-dim">v2026.07.21 — versions are dates from here on</p>
+		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
+			<li>
+				New shell: the sidebar and page share one recessed canvas, and the content lives in a
+				floating rounded card that stays fixed in the viewport — scrolling happens inside it.
+			</li>
+			<li>
+				Sidebar cleaned up: compact tool labels that never truncate, an active pill that reads on
+				the canvas, scroll fade-outs top and bottom, and a three-state theme control (system /
+				dark / light) beside the brand.
+			</li>
+			<li>
+				Every form control now shares one look: small selects became segmented toggles with
+				visual options (indent as ··&nbsp;/&nbsp;····&nbsp;/&nbsp;⇥&nbsp;/&nbsp;{'{}'}, CSV
+				delimiter as ,&nbsp;/&nbsp;;&nbsp;/&nbsp;⇥, sort order as A→Z), and checkboxes, selects
+				and inputs are custom-styled everywhere.
+			</li>
+		</ul>
+	</section>
+
+	<section class="relative border-l border-line pb-8 pl-6">
+		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
 		<h2 class="text-sm font-medium">App shell & offline install</h2>
 		<p class="mt-0.5 font-mono text-xs text-dim">2026-07 · v0.3</p>
 		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">

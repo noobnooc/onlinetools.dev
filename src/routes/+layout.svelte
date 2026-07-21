@@ -57,9 +57,10 @@
 							<span class="inline-block h-1.5 w-1.5 rounded-full bg-ok" aria-hidden="true"></span>
 							Runs in your browser — nothing you paste is uploaded
 						</span>
-						<nav class="flex gap-4" aria-label="Footer">
+						<nav class="flex items-center gap-4" aria-label="Footer">
 							<a href="/tools" class="transition-colors duration-120 hover:text-fg">All tools</a>
 							<a href="/changelog" class="transition-colors duration-120 hover:text-fg">Changelog</a>
+							<a href="/changelog" class="text-dim/50 transition-colors duration-120 hover:text-fg" title="Release date">v2026.07.21</a>
 						</nav>
 					</div>
 				</footer>
