@@ -160,6 +160,11 @@ const de: Messages = {
 		icLarger: 'größer als das Original',
 		icBgNote: 'JPEG kennt keine Transparenz — transparente Bereiche werden auf Weiß reduziert.',
 		icNote: 'Die Konvertierung nutzt den Canvas-Encoder deines Browsers; exakte Dateigrößen variieren daher leicht.',
+		fgAppleBg: 'Apple-Icon-Hintergrund',
+		fgFiles: 'Erzeugte Dateien',
+		fgHtml: 'HTML-<link>-Tags',
+		fgSmall: 'Quelle ist {px}px — größere Icons werden hochskaliert und können weich wirken',
+		fgNote: 'Das ICO packt 16, 32 und 48 px. Apple-Touch-Icons können nicht transparent sein und werden auf die gewählte Hintergrundfarbe reduziert; PWA-Icons behalten ihren Alphakanal. Nicht-quadratische Quellen werden mittig zugeschnitten.',
 		irBy: 'Skalieren nach',
 		irWidth: 'Breite',
 		irHeight: 'Höhe',
@@ -438,6 +443,10 @@ const de: Messages = {
 		'image-resizer': {
 			name: 'Bildgrößen-Änderung',
 			description: 'Bilder nach Breite, Höhe oder Prozent skalieren — scharf und komplett offline'
+		},
+		'favicon-generator': {
+			name: 'Favicon-Generator',
+			description: 'Macht aus jedem Bild favicon.ico plus das komplette PNG- und Manifest-Icon-Set'
 		}
 	}
 };

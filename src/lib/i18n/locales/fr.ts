@@ -160,6 +160,11 @@ const fr: Messages = {
 		icLarger: 'plus grande que l’originale',
 		icBgNote: 'Le JPEG ne gère pas la transparence — les zones transparentes sont aplaties sur du blanc.',
 		icNote: 'La conversion utilise l’encodeur canvas de votre navigateur ; la taille exacte varie donc légèrement selon les navigateurs.',
+		fgAppleBg: 'Fond de l’icône Apple',
+		fgFiles: 'Fichiers générés',
+		fgHtml: 'Balises <link> HTML',
+		fgSmall: 'La source fait {px}px — les icônes plus grandes seront agrandies et pourront paraître floues',
+		fgNote: 'L’ICO contient 16, 32 et 48 px. L’icône tactile Apple ne peut pas être transparente : elle est aplatie sur le fond choisi ; les icônes PWA gardent leur alpha. Les sources non carrées sont recadrées au centre.',
 		irBy: 'Redimensionner par',
 		irWidth: 'Largeur',
 		irHeight: 'Hauteur',
@@ -438,6 +443,10 @@ const fr: Messages = {
 		'image-resizer': {
 			name: 'Redimensionneur d’images',
 			description: 'Redimensionne par largeur, hauteur ou pourcentage — net et entièrement hors ligne'
+		},
+		'favicon-generator': {
+			name: 'Générateur de favicon',
+			description: 'Transforme n’importe quelle image en favicon.ico avec le set complet d’icônes PNG et manifest'
 		}
 	}
 };

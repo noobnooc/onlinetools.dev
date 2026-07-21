@@ -160,6 +160,11 @@ const pt: Messages = {
 		icLarger: 'maior que a original',
 		icBgNote: 'JPEG não tem transparência — áreas transparentes são achatadas sobre branco.',
 		icNote: 'A conversão usa o codificador canvas do navegador; o tamanho exato varia um pouco entre navegadores.',
+		fgAppleBg: 'Fundo do ícone Apple',
+		fgFiles: 'Arquivos gerados',
+		fgHtml: 'Tags <link> HTML',
+		fgSmall: 'A origem tem {px}px — ícones maiores serão ampliados e podem ficar borrados',
+		fgNote: 'O ICO empacota 16, 32 e 48 px. O ícone de toque da Apple não aceita transparência e é achatado sobre o fundo escolhido; os ícones PWA mantêm o alfa. Origens não quadradas são cortadas ao centro.',
 		irBy: 'Redimensionar por',
 		irWidth: 'Largura',
 		irHeight: 'Altura',
@@ -438,6 +443,10 @@ const pt: Messages = {
 		'image-resizer': {
 			name: 'Redimensionador de imagens',
 			description: 'Redimensione por largura, altura ou porcentagem — nítido e totalmente offline'
+		},
+		'favicon-generator': {
+			name: 'Gerador de favicon',
+			description: 'Transforme qualquer imagem em favicon.ico mais o conjunto completo de ícones PNG e manifest'
 		}
 	}
 };

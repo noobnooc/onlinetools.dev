@@ -160,6 +160,11 @@ const ko: Messages = {
 		icLarger: '원본보다 큼',
 		icBgNote: 'JPEG은 투명도를 지원하지 않습니다 — 투명 영역은 흰색으로 합성됩니다.',
 		icNote: '변환에는 브라우저의 canvas 인코더를 사용하므로 파일 크기는 브라우저마다 조금씩 다릅니다.',
+		fgAppleBg: 'Apple 아이콘 배경',
+		fgFiles: '생성된 파일',
+		fgHtml: 'HTML <link> 태그',
+		fgSmall: '원본이 {px}px입니다 — 그보다 큰 아이콘은 확대되어 흐릿할 수 있습니다',
+		fgNote: 'ICO에는 16, 32, 48px가 담깁니다. Apple 터치 아이콘은 투명도를 지원하지 않아 선택한 배경색 위에 평탄화되며, PWA 아이콘은 알파를 유지합니다. 정사각형이 아닌 원본은 중앙 기준으로 잘립니다.',
 		irBy: '조절 기준',
 		irWidth: '너비',
 		irHeight: '높이',
@@ -438,6 +443,10 @@ const ko: Messages = {
 		'image-resizer': {
 			name: '이미지 크기 조절',
 			description: '너비·높이·퍼센트로 이미지 크기 조절 — 완전 오프라인'
+		},
+		'favicon-generator': {
+			name: '파비콘 생성기',
+			description: '이미지 하나로 favicon.ico와 PNG·manifest 아이콘 세트 전체 생성'
 		}
 	}
 };

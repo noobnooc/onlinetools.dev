@@ -157,6 +157,11 @@ const zh: Messages = {
 		icLarger: '大于原图',
 		icBgNote: 'JPEG 不支持透明 — 透明区域会被压平为白色。',
 		icNote: '转换使用浏览器的 canvas 编码器,文件大小在不同浏览器间会略有差异。',
+		fgAppleBg: 'Apple 图标背景',
+		fgFiles: '生成的文件',
+		fgHtml: 'HTML <link> 标签',
+		fgSmall: '源图为 {px}px — 超过该尺寸的图标将被放大,可能发虚',
+		fgNote: 'ICO 内打包 16、32、48 px。Apple 触摸图标不支持透明,会压平到所选背景色上;PWA 图标保留透明通道。非正方形的源图会居中裁剪。',
 		irBy: '缩放方式',
 		irWidth: '宽度',
 		irHeight: '高度',
@@ -435,6 +440,10 @@ const zh: Messages = {
 		'image-resizer': {
 			name: '图片缩放',
 			description: '按宽度、高度或百分比缩放图片 — 清晰且完全离线'
+		},
+		'favicon-generator': {
+			name: 'Favicon 生成器',
+			description: '把任意图片变成 favicon.ico 及完整的 PNG 与 manifest 图标套件'
 		}
 	}
 };

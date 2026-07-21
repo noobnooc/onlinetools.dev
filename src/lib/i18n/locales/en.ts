@@ -208,6 +208,14 @@ const en = {
 		icNote:
 			"Conversion uses your browser's canvas encoder, so exact file sizes vary slightly between browsers.",
 
+		// Favicon generator
+		fgAppleBg: 'Apple icon background',
+		fgFiles: 'Generated files',
+		fgHtml: 'HTML <link> tags',
+		fgSmall: 'Source is {px}px — icons above that size will be upscaled and may look soft',
+		fgNote:
+			'The ICO packs 16, 32 and 48 px. Apple touch icons cannot be transparent, so theirs is flattened onto the chosen background; PWA icons keep their alpha. Non-square sources are center-cropped.',
+
 		// Image resizer
 		irBy: 'Resize by',
 		irWidth: 'Width',

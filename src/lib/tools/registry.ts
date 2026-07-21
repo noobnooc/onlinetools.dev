@@ -57,7 +57,7 @@ export const TOOLS: ToolMeta[] = [
 		category: 'image',
 		aliases: ['image to base64', 'base64 image', 'data url', 'data uri', 'img to base64'],
 		keywords: ['image to base64', 'base64 to image', 'data url generator', 'image data uri'],
-		related: ['image-converter', 'image-resizer', 'base64-decode', 'qr-code-generator', 'color-converter', 'url-encode-decode']
+		related: ['image-converter', 'image-resizer', 'favicon-generator', 'base64-decode', 'qr-code-generator', 'color-converter']
 	},
 	{
 		slug: 'image-converter',
@@ -66,7 +66,7 @@ export const TOOLS: ToolMeta[] = [
 		category: 'image',
 		aliases: ['png to webp', 'jpg to png', 'webp converter', 'convert image', 'image format'],
 		keywords: ['image converter', 'png to webp', 'jpeg to webp', 'webp to png', 'convert image online'],
-		related: ['image-resizer', 'image-to-base64', 'qr-code-generator', 'color-converter', 'base64-decode', 'json-formatter']
+		related: ['image-resizer', 'image-to-base64', 'favicon-generator', 'qr-code-generator', 'color-converter', 'base64-decode']
 	},
 	{
 		slug: 'image-resizer',
@@ -75,7 +75,16 @@ export const TOOLS: ToolMeta[] = [
 		category: 'image',
 		aliases: ['resize image', 'image resize', 'scale image', 'shrink image', 'image compressor'],
 		keywords: ['image resizer', 'resize image online', 'scale image', 'compress image'],
-		related: ['image-converter', 'image-to-base64', 'qr-code-generator', 'color-converter', 'base64-decode', 'diff-checker']
+		related: ['image-converter', 'image-to-base64', 'favicon-generator', 'qr-code-generator', 'color-converter', 'base64-decode']
+	},
+	{
+		slug: 'favicon-generator',
+		name: 'Favicon Generator',
+		description: 'Turn any image into favicon.ico plus the full PNG and manifest icon set',
+		category: 'image',
+		aliases: ['favicon', 'ico', 'png to ico', 'favicon.ico', 'apple touch icon'],
+		keywords: ['favicon generator', 'png to ico', 'favicon.ico generator', 'apple touch icon generator'],
+		related: ['image-resizer', 'image-converter', 'image-to-base64', 'qr-code-generator', 'color-converter', 'slug-generator']
 	},
 	{
 		slug: 'timestamp-converter',
