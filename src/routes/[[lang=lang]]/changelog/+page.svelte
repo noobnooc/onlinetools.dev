@@ -13,6 +13,38 @@
 
 	<section class="relative border-l border-line pb-8 pl-6">
 		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full bg-accent" aria-hidden="true"></span>
+		<h2 class="text-sm font-medium">Thirteen new tools, two new categories</h2>
+		<p class="mt-0.5 font-mono text-xs text-dim">v2026.07.22</p>
+		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
+			<li>
+				New Code &amp; Markup category: SQL formatter with six dialects, XML formatter &amp;
+				validator with exact error positions, HTML / CSS / JavaScript beautifiers with real
+				minification (Terser for JS), and a bidirectional Markdown ↔ HTML converter with a
+				sanitized live preview.
+			</li>
+			<li>
+				New Privacy category: an EXIF viewer &amp; remover that decodes camera, GPS and
+				editing metadata from JPEG, PNG and WebP — and strips it losslessly, without
+				re-encoding a single pixel.
+			</li>
+			<li>
+				Data &amp; encoding: XML ↔ JSON and CSV → JSON converters, JSON Schema validation
+				and inference (Ajv), a string escaper for six dialects, a BigInt-exact number base
+				converter, and text ↔ hex/binary.
+			</li>
+			<li>
+				Existing tools grew up: the JWT decoder now signs and verifies (HS/RS/ES via
+				WebCrypto), the cron parser gained a visual expression builder, and the timestamp
+				converter adds RFC 2822 output and a date-difference calculator.
+			</li>
+			<li>
+				Smart Paste now recognizes XML, CSV, Markdown and hex byte dumps.
+			</li>
+		</ul>
+	</section>
+
+	<section class="relative border-l border-line pb-8 pl-6">
+		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
 		<h2 class="text-sm font-medium">Image tools</h2>
 		<p class="mt-0.5 font-mono text-xs text-dim">v2026.07.21c</p>
 		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">

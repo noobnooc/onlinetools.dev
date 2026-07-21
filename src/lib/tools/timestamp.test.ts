@@ -81,3 +81,45 @@ describe('isLikelyTimestamp', () => {
 		expect(isLikelyTimestamp('hello')).toBe(false);
 	});
 });
+
+/* ---------- extensions ---------- */
+
+import { toRfc2822, zoneViews, dateDiff, DEFAULT_ZONES } from './timestamp';
+
+describe('toRfc2822', () => {
+	it('formats a known instant in UTC', () => {
+		expect(toRfc2822(Date.UTC(2026, 6, 20, 12, 0, 0))).toBe('Mon, 20 Jul 2026 12:00:00 +0000');
+	});
+});
+
+describe('zoneViews', () => {
+	it('renders the same instant across timezones with offsets', () => {
+		const views = zoneViews(Date.UTC(2026, 0, 15, 12, 0, 0));
+		expect(views.length).toBe(DEFAULT_ZONES.length);
+		const shanghai = views.find((v) => v.zone === 'Asia/Shanghai');
+		expect(shanghai?.formatted).toBe('2026-01-15 20:00:00');
+		expect(shanghai?.offset).toBe('UTC+8');
+		const ny = views.find((v) => v.zone === 'America/New_York');
+		expect(ny?.formatted).toBe('2026-01-15 07:00:00');
+	});
+});
+
+describe('dateDiff', () => {
+	it('breaks a difference into d/h/m/s', () => {
+		const a = Date.UTC(2026, 0, 1, 0, 0, 0);
+		const b = Date.UTC(2026, 0, 3, 5, 30, 10);
+		const d = dateDiff(a, b);
+		expect(d.days).toBe(2);
+		expect(d.hours).toBe(5);
+		expect(d.minutes).toBe(30);
+		expect(d.seconds).toBe(10);
+		expect(d.negative).toBe(false);
+		expect(d.totalDays).toBe(2);
+		expect(d.totalHours).toBe(53);
+	});
+	it('marks reversed order as negative with same magnitudes', () => {
+		const d = dateDiff(1000, 0);
+		expect(d.negative).toBe(true);
+		expect(d.seconds).toBe(1);
+	});
+});

@@ -149,3 +149,56 @@ describe('nextRuns', () => {
 		expect(runs('0 0 1 1 *', new Date(2026, 0, 2), 3)).toHaveLength(3);
 	});
 });
+
+/* ---------- builder ---------- */
+
+import { buildCron, type CronBuilderState } from './cron';
+
+const EVERY: CronBuilderState = {
+	minute: { mode: 'every' },
+	hour: { mode: 'every' },
+	dom: { mode: 'every' },
+	month: { mode: 'every' },
+	dow: { mode: 'every' }
+};
+
+describe('buildCron', () => {
+	it('builds * * * * * from all-every', () => {
+		const r = buildCron(EVERY);
+		expect(r.ok && r.value.expression === '* * * * *').toBe(true);
+	});
+	it('builds steps and specific values', () => {
+		const r = buildCron({
+			...EVERY,
+			minute: { mode: 'step', step: 15 },
+			hour: { mode: 'at', at: [9, 17] },
+			dow: { mode: 'at', at: [1, 5] }
+		});
+		expect(r.ok).toBe(true);
+		if (r.ok) {
+			expect(r.value.expression).toBe('*/15 9,17 * * 1,5');
+			expect(r.value.parsed.description.length).toBeGreaterThan(0);
+		}
+	});
+	it('dedupes, sorts and validates selections', () => {
+		const r = buildCron({ ...EVERY, minute: { mode: 'at', at: [30, 0, 30] } });
+		expect(r.ok && r.value.expression === '0,30 * * * *').toBe(true);
+	});
+	it('normalizes step of 1 to *', () => {
+		const r = buildCron({ ...EVERY, minute: { mode: 'step', step: 1 } });
+		expect(r.ok && r.value.expression === '* * * * *').toBe(true);
+	});
+	it('rejects empty selections and out-of-range values', () => {
+		expect(buildCron({ ...EVERY, hour: { mode: 'at', at: [] } }).ok).toBe(false);
+		expect(buildCron({ ...EVERY, hour: { mode: 'at', at: [24] } }).ok).toBe(false);
+		expect(buildCron({ ...EVERY, minute: { mode: 'step', step: 0 } }).ok).toBe(false);
+	});
+	it('round-trips through parseCron', () => {
+		const r = buildCron({ ...EVERY, month: { mode: 'at', at: [12] }, dom: { mode: 'at', at: [25] } });
+		expect(r.ok).toBe(true);
+		if (r.ok) {
+			expect(r.value.expression).toBe('* * 25 12 *');
+			expect(r.value.parsed.description).toContain('December');
+		}
+	});
+});

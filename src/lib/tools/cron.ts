@@ -161,6 +161,62 @@ export function parseCron(expression: string): ToolResult<ParsedCron> {
 	return ok({ fields: tuple, description: describe(tuple) });
 }
 
+/* ---------- builder ---------- */
+
+export interface CronFieldSpec {
+	mode: 'every' | 'step' | 'at';
+	/** Interval for `step` mode. */
+	step?: number;
+	/** Selected values for `at` mode. */
+	at?: number[];
+}
+
+export interface CronBuilderState {
+	minute: CronFieldSpec;
+	hour: CronFieldSpec;
+	dom: CronFieldSpec;
+	month: CronFieldSpec;
+	dow: CronFieldSpec;
+}
+
+function fieldToken(spec: CronFieldSpec, fieldIndex: number): string | { error: string } {
+	const def = FIELD_DEFS[fieldIndex];
+	switch (spec.mode) {
+		case 'every':
+			return '*';
+		case 'step': {
+			const s = spec.step ?? 0;
+			if (!Number.isInteger(s) || s < 1) return { error: `Step for ${def.name} must be a whole number ≥ 1` };
+			return s === 1 ? '*' : `*/${s}`;
+		}
+		case 'at': {
+			const vals = [...new Set(spec.at ?? [])].sort((a, b) => a - b);
+			if (vals.length === 0) return { error: `Select at least one ${def.name} value` };
+			for (const v of vals) {
+				if (!Number.isInteger(v) || v < def.min || v > def.max) {
+					return { error: `${v} is out of range for ${def.name} (${def.min}–${def.max})` };
+				}
+			}
+			return vals.join(',');
+		}
+	}
+}
+
+/** Compose a 5-field expression from structured selections and validate it. */
+export function buildCron(state: CronBuilderState): ToolResult<{ expression: string; parsed: ParsedCron }> {
+	const specs = [state.minute, state.hour, state.dom, state.month, state.dow];
+	const tokens: string[] = [];
+	for (let i = 0; i < 5; i++) {
+		const t = fieldToken(specs[i], i);
+		if (typeof t !== 'string') return err(t.error);
+		tokens.push(t);
+	}
+	const expression = tokens.join(' ');
+	const parsed = parseCron(expression);
+	if (!parsed.ok) return parsed as ToolResult<{ expression: string; parsed: ParsedCron }>;
+	return ok({ expression, parsed: parsed.value });
+}
+
 /**
  * Next N run times after `from` (ms epoch), evaluated in local time.
  * Standard cron semantics: when both day-of-month and day-of-week are

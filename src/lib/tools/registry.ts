@@ -6,7 +6,9 @@ export type ToolCategory =
 	| 'generators'
 	| 'crypto'
 	| 'web'
-	| 'image';
+	| 'image'
+	| 'code'
+	| 'privacy';
 
 export const CATEGORY_LABELS: Record<ToolCategory, string> = {
 	encoding: 'Encoding',
@@ -16,7 +18,9 @@ export const CATEGORY_LABELS: Record<ToolCategory, string> = {
 	generators: 'Generators',
 	crypto: 'Hashing & Crypto',
 	web: 'Web',
-	image: 'Image'
+	image: 'Image',
+	code: 'Code & Markup',
+	privacy: 'Privacy'
 };
 
 export interface ToolMeta {
@@ -301,6 +305,123 @@ export const TOOLS: ToolMeta[] = [
 		aliases: ['bcrypt', 'bcrypt hash', 'bcrypt check', 'password hash'],
 		keywords: ['bcrypt generator', 'bcrypt online', 'bcrypt verify', 'bcrypt hash'],
 		related: ['hash-generator', 'password-generator', 'jwt-decoder', 'uuid-generator', 'base64-decode', 'json-formatter']
+	},
+	{
+		slug: 'sql-formatter',
+		name: 'SQL Formatter',
+		description: 'Format SQL with dialect-aware keywords, or minify it to one line',
+		category: 'code',
+		aliases: ['sql', 'sql beautify', 'sql pretty', 'format sql', 'sql minify'],
+		keywords: ['sql formatter', 'format sql online', 'sql beautifier', 'sql minifier', 'pretty print sql'],
+		related: ['json-formatter', 'xml-formatter', 'csv-to-json', 'string-escape', 'diff-checker', 'regex-tester']
+	},
+	{
+		slug: 'xml-formatter',
+		name: 'XML Formatter & Validator',
+		description: 'Pretty-print, minify and validate XML with exact error positions',
+		category: 'code',
+		aliases: ['xml', 'xml beautify', 'xml pretty', 'xml validator', 'xml lint'],
+		keywords: ['xml formatter', 'xml validator', 'pretty print xml', 'xml minifier', 'format xml online'],
+		related: ['xml-to-json', 'json-formatter', 'html-formatter', 'sql-formatter', 'string-escape', 'html-entities']
+	},
+	{
+		slug: 'xml-to-json',
+		name: 'XML ↔ JSON Converter',
+		description: 'Convert XML documents to JSON and back, attributes included',
+		category: 'json',
+		aliases: ['xml to json', 'json to xml', 'xml2json', 'xml json'],
+		keywords: ['xml to json', 'json to xml', 'xml to json converter', 'convert xml online'],
+		related: ['xml-formatter', 'json-formatter', 'json-to-yaml', 'csv-to-json', 'json-to-csv', 'jsonpath-tester']
+	},
+	{
+		slug: 'csv-to-json',
+		name: 'CSV → JSON Converter',
+		description: 'Parse CSV into JSON objects with delimiter detection and typed values',
+		category: 'json',
+		aliases: ['csv to json', 'csv2json', 'csv parser', 'tsv to json'],
+		keywords: ['csv to json', 'csv to json converter', 'convert csv to json online', 'tsv to json'],
+		related: ['json-to-csv', 'json-formatter', 'json-to-yaml', 'xml-to-json', 'json-to-typescript', 'sort-lines']
+	},
+	{
+		slug: 'markdown-to-html',
+		name: 'Markdown ↔ HTML Converter',
+		description: 'Render Markdown to HTML with live preview, or turn HTML back into Markdown',
+		category: 'code',
+		aliases: ['markdown', 'md', 'markdown preview', 'html to markdown', 'md to html'],
+		keywords: ['markdown to html', 'html to markdown', 'markdown preview online', 'markdown converter'],
+		related: ['html-formatter', 'html-entities', 'diff-checker', 'word-counter', 'slug-generator', 'string-escape']
+	},
+	{
+		slug: 'html-formatter',
+		name: 'HTML Formatter & Minifier',
+		description: 'Beautify messy HTML or minify it for production',
+		category: 'code',
+		aliases: ['html beautify', 'html pretty', 'html minify', 'format html'],
+		keywords: ['html formatter', 'html beautifier', 'html minifier', 'format html online'],
+		related: ['css-formatter', 'js-formatter', 'xml-formatter', 'markdown-to-html', 'html-entities', 'string-escape']
+	},
+	{
+		slug: 'css-formatter',
+		name: 'CSS Formatter & Minifier',
+		description: 'Beautify CSS for reading or minify it for shipping',
+		category: 'code',
+		aliases: ['css beautify', 'css pretty', 'css minify', 'format css'],
+		keywords: ['css formatter', 'css beautifier', 'css minifier', 'format css online'],
+		related: ['html-formatter', 'js-formatter', 'color-converter', 'sql-formatter', 'xml-formatter', 'regex-tester']
+	},
+	{
+		slug: 'js-formatter',
+		name: 'JavaScript Formatter & Minifier',
+		description: 'Beautify JavaScript or minify it with real compression and mangling',
+		category: 'code',
+		aliases: ['js beautify', 'js pretty', 'js minify', 'javascript formatter', 'uglify'],
+		keywords: ['javascript formatter', 'js beautifier', 'js minifier', 'minify javascript online'],
+		related: ['html-formatter', 'css-formatter', 'json-formatter', 'json-to-typescript', 'regex-tester', 'string-escape']
+	},
+	{
+		slug: 'string-escape',
+		name: 'String Escaper / Unescaper',
+		description: 'Escape or unescape strings for JSON, JavaScript, Java, XML, SQL and CSV',
+		category: 'encoding',
+		aliases: ['escape', 'unescape', 'string escape', 'json escape', 'escape quotes'],
+		keywords: ['string escape', 'json escape', 'escape string online', 'unescape string', 'sql escape'],
+		related: ['html-entities', 'url-encode-decode', 'base64-decode', 'unicode-inspector', 'text-to-hex', 'json-formatter']
+	},
+	{
+		slug: 'number-base-converter',
+		name: 'Number Base Converter',
+		description: 'Convert numbers between binary, octal, decimal, hex and any base up to 36',
+		category: 'encoding',
+		aliases: ['base converter', 'hex to decimal', 'binary to decimal', 'radix', 'dec to hex'],
+		keywords: ['number base converter', 'hex to decimal', 'decimal to binary', 'base conversion online'],
+		related: ['text-to-hex', 'unicode-inspector', 'base64-decode', 'hash-generator', 'timestamp-converter', 'uuid-generator']
+	},
+	{
+		slug: 'text-to-hex',
+		name: 'Text ↔ Hex / Binary Converter',
+		description: 'Turn text into hex, binary or decimal bytes and decode byte dumps back',
+		category: 'encoding',
+		aliases: ['hex', 'text to hex', 'hex to text', 'text to binary', 'binary to text', 'hex dump'],
+		keywords: ['text to hex', 'hex to text', 'text to binary', 'binary to text', 'hex converter'],
+		related: ['number-base-converter', 'base64-decode', 'unicode-inspector', 'string-escape', 'hash-generator', 'url-encode-decode']
+	},
+	{
+		slug: 'json-schema-validator',
+		name: 'JSON Schema Validator & Generator',
+		description: 'Validate JSON against a schema, or infer a schema from sample data',
+		category: 'json',
+		aliases: ['json schema', 'schema validator', 'json validate schema', 'generate json schema'],
+		keywords: ['json schema validator', 'json schema generator', 'validate json schema online', 'infer json schema'],
+		related: ['json-formatter', 'json-to-typescript', 'jsonpath-tester', 'json-to-yaml', 'xml-to-json', 'csv-to-json']
+	},
+	{
+		slug: 'exif-viewer',
+		name: 'EXIF Viewer & Remover',
+		description: 'See what metadata your photos carry — and strip it without re-encoding',
+		category: 'privacy',
+		aliases: ['exif', 'metadata', 'remove exif', 'exif data', 'image metadata', 'gps location'],
+		keywords: ['exif viewer', 'remove exif data', 'image metadata viewer', 'strip exif online', 'photo gps data'],
+		related: ['image-converter', 'image-resizer', 'image-to-base64', 'favicon-generator', 'hash-generator', 'qr-code-generator']
 	},
 	{
 		slug: 'user-agent-parser',

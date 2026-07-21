@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { tt } from '$lib/i18n';
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
-	import { parseCron, nextRuns } from '$lib/tools/cron';
+	import Segmented from '../Segmented.svelte';
+	import { parseCron, nextRuns, buildCron, type CronBuilderState, type CronFieldSpec } from '$lib/tools/cron';
 	import { formatRelative } from '$lib/tools/timestamp';
 	import { initFromHash } from '$lib/state/hashstate.svelte';
 	import { currentResult } from '$lib/state/app.svelte';
@@ -11,6 +12,42 @@
 
 	initFromHash((s) => {
 		if (s.input) input = s.input;
+	});
+
+	/* ---------- builder ---------- */
+
+	interface FieldUi {
+		key: keyof CronBuilderState;
+		label: string;
+		mode: 'every' | 'step' | 'at';
+		step: number;
+		at: string;
+		hint: string;
+	}
+
+	let showBuilder = $state(false);
+	let fields = $state<FieldUi[]>([
+		{ key: 'minute', label: 'crMinute', mode: 'step', step: 15, at: '0', hint: '0–59' },
+		{ key: 'hour', label: 'crHour', mode: 'every', step: 2, at: '9', hint: '0–23' },
+		{ key: 'dom', label: 'crDom', mode: 'every', step: 2, at: '1', hint: '1–31' },
+		{ key: 'month', label: 'crMonth', mode: 'every', step: 2, at: '1', hint: '1–12' },
+		{ key: 'dow', label: 'crDow', mode: 'every', step: 2, at: '1,5', hint: '0–6 · 0 = Sun' }
+	]);
+
+	function toSpec(f: FieldUi): CronFieldSpec {
+		if (f.mode === 'every') return { mode: 'every' };
+		if (f.mode === 'step') return { mode: 'step', step: f.step };
+		const at = f.at
+			.split(/[\s,]+/)
+			.filter((s) => s !== '')
+			.map(Number);
+		return { mode: 'at', at };
+	}
+
+	const built = $derived.by(() => {
+		if (!showBuilder) return null;
+		const state = Object.fromEntries(fields.map((f) => [f.key, toSpec(f)])) as unknown as CronBuilderState;
+		return buildCron(state);
 	});
 
 	$effect(() => {
@@ -64,7 +101,7 @@
 		error={result && !result.ok ? { message: result.error } : null}
 		onsample={() => (input = '30 9 * * 1-5')}
 	/>
-	<div class="flex flex-wrap gap-1.5">
+	<div class="flex flex-wrap items-center gap-1.5">
 		{#each PRESETS as [expr, label] (expr)}
 			<button
 				type="button"
@@ -73,7 +110,70 @@
 				title={label}>{expr}</button
 			>
 		{/each}
+		<button
+			type="button"
+			class="rounded-md border px-2 py-1 text-xs transition-colors duration-120
+				{showBuilder ? 'border-accent text-accent' : 'border-line text-dim hover:border-accent/50 hover:text-fg'}"
+			onclick={() => (showBuilder = !showBuilder)}
+			aria-expanded={showBuilder}>{tt('crBuilder')}</button
+		>
 	</div>
+
+	{#if showBuilder}
+		<!-- Expression builder: pick a mode per field, the expression assembles live -->
+		<div class="space-y-3 rounded-lg border border-line bg-surface px-4 py-3">
+			{#each fields as f, i (f.key)}
+				<div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
+					<span class="w-28 shrink-0 text-xs font-medium tracking-wide text-dim uppercase">{tt(f.label as 'crMinute')}</span>
+					<Segmented
+						bind:value={fields[i].mode}
+						label={tt(f.label as 'crMinute')}
+						options={[
+							{ value: 'every', label: tt('crEvery') },
+							{ value: 'step', label: tt('crStep') },
+							{ value: 'at', label: tt('crAt') }
+						]}
+					/>
+					{#if f.mode === 'step'}
+						<label class="flex items-center gap-2 text-dim">
+							/
+							<input
+								type="number"
+								min="1"
+								bind:value={fields[i].step}
+								class="w-16 rounded-lg border border-line bg-surface-2 px-2 py-1 font-mono text-sm text-fg focus:border-accent"
+							/>
+						</label>
+					{:else if f.mode === 'at'}
+						<input
+							type="text"
+							bind:value={fields[i].at}
+							placeholder="0,30"
+							class="w-28 rounded-lg border border-line bg-surface-2 px-2 py-1 font-mono text-sm text-fg focus:border-accent"
+						/>
+						<span class="font-mono text-[11px] text-dim/70">{f.hint}</span>
+					{/if}
+				</div>
+			{/each}
+			{#if built}
+				{#if built.ok}
+					<div class="flex flex-wrap items-center gap-3 border-t border-line/60 pt-3">
+						<code class="rounded-md bg-surface-2 px-2.5 py-1 font-mono text-sm text-accent">{built.value.expression}</code>
+						<span class="text-xs text-dim">{built.value.parsed.description}</span>
+						<button
+							type="button"
+							class="ml-auto rounded-lg border border-line bg-surface-2 px-3 py-1.5 text-xs transition-colors duration-120 hover:border-accent"
+							onclick={() => {
+								if (built?.ok) input = built.value.expression;
+							}}>{tt('crUse')}</button
+						>
+					</div>
+				{:else}
+					<p class="border-t border-line/60 pt-3 text-xs text-err">{built.error}</p>
+				{/if}
+			{/if}
+		</div>
+	{/if}
 
 	{#if cron}
 		<p class="rounded-lg border border-line bg-surface px-4 py-3 text-sm">

@@ -2,7 +2,7 @@
 	import { tt } from '$lib/i18n';
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
-	import { parseTimestamp } from '$lib/tools/timestamp';
+	import { parseTimestamp, toRfc2822, dateDiff } from '$lib/tools/timestamp';
 	import { initFromHash } from '$lib/state/hashstate.svelte';
 	import { currentResult } from '$lib/state/app.svelte';
 
@@ -87,6 +87,7 @@
 		info
 			? ([
 					['ISO 8601', info.iso],
+					['RFC 2822', toRfc2822(info.epochMs)],
 					['UTC', info.utc],
 					[tt('tsRelative'), info.relative],
 					[tt('tsUnixS'), String(info.unixSeconds)],
@@ -94,6 +95,19 @@
 				] as Array<[string, string]>)
 			: []
 	);
+
+	/* ---------- difference between two dates ---------- */
+
+	let diffA = $state('');
+	let diffB = $state('');
+
+	const diff = $derived.by(() => {
+		if (diffA.trim() === '' || diffB.trim() === '') return null;
+		const a = parseTimestamp(diffA, now);
+		const b = parseTimestamp(diffB, now);
+		if (!a.ok || !b.ok) return { error: !a.ok ? `A: ${a.error}` : `B: ${(b as { error: string }).error}` };
+		return { value: dateDiff(a.value.epochMs, b.value.epochMs) };
+	});
 
 	const output = $derived(
 		info
@@ -181,6 +195,40 @@
 			</p>
 		</div>
 	{/if}
+
+	<!-- Difference between two dates -->
+	<div>
+		<span class="mb-1.5 block text-xs font-medium tracking-wide text-dim uppercase">{tt('tsDiff')}</span>
+		<div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+			<input
+				type="text"
+				bind:value={diffA}
+				placeholder="2026-01-01 · 1700000000"
+				aria-label="{tt('tsDiff')} A"
+				class="w-full rounded-lg border border-line bg-surface-2 px-3 py-2 font-mono text-sm text-fg placeholder:text-dim/60 focus:border-accent"
+			/>
+			<input
+				type="text"
+				bind:value={diffB}
+				placeholder="2026-07-20T12:00:00Z"
+				aria-label="{tt('tsDiff')} B"
+				class="w-full rounded-lg border border-line bg-surface-2 px-3 py-2 font-mono text-sm text-fg placeholder:text-dim/60 focus:border-accent"
+			/>
+		</div>
+		{#if diff}
+			{#if 'error' in diff}
+				<p class="mt-1.5 text-xs text-err">{diff.error}</p>
+			{:else}
+				<p class="mt-2 font-mono text-sm">
+					<span class={diff.value.negative ? 'text-warn' : 'text-ok'}>{diff.value.negative ? '−' : '+'}</span>
+					{diff.value.days}d {diff.value.hours}h {diff.value.minutes}m {diff.value.seconds}s
+					<span class="ml-2 text-xs text-dim">
+						= {diff.value.totalHours.toLocaleString()} h · {diff.value.totalMinutes.toLocaleString()} min · {diff.value.totalSeconds.toLocaleString()} s
+					</span>
+				</p>
+			{/if}
+		{/if}
+	</div>
 
 	<OutputPanel value={output} filename="timestamp.txt" shareState={input.trim() === '' ? null : { input }} />
 </div>

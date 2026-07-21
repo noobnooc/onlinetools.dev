@@ -5,6 +5,10 @@ import { isLikelyTimestamp } from '$lib/tools/timestamp';
 import { isUuid } from '$lib/tools/uuid';
 import { isLikelyColor } from '$lib/tools/color';
 import { isLikelyImageDataUrl } from '$lib/tools/image';
+import { isLikelyXml } from '$lib/tools/xml';
+import { isLikelyCsv } from '$lib/tools/dataconvert';
+import { isLikelyMarkdown } from '$lib/tools/markdown';
+import { isLikelyHexDump } from '$lib/tools/hexbin';
 
 export interface Detection {
 	/** Detector id, e.g. "jwt". */
@@ -144,6 +148,61 @@ export const DETECTORS: Detector[] = [
 				confidence: 0.97,
 				tool: 'image-to-base64',
 				actions: [{ label: 'Preview / download', tool: 'image-to-base64' }]
+			};
+		}
+	},
+	{
+		id: 'xml',
+		detect(input) {
+			if (!isLikelyXml(input)) return null;
+			return {
+				type: 'xml',
+				label: 'XML',
+				confidence: 0.93,
+				tool: 'xml-formatter',
+				actions: [
+					{ label: 'Format', tool: 'xml-formatter' },
+					{ label: 'Convert to JSON', tool: 'xml-to-json' }
+				]
+			};
+		}
+	},
+	{
+		id: 'csv',
+		detect(input) {
+			if (!isLikelyCsv(input)) return null;
+			return {
+				type: 'csv',
+				label: 'CSV',
+				confidence: 0.7,
+				tool: 'csv-to-json',
+				actions: [{ label: 'Convert to JSON', tool: 'csv-to-json' }]
+			};
+		}
+	},
+	{
+		id: 'markdown',
+		detect(input) {
+			if (!isLikelyMarkdown(input)) return null;
+			return {
+				type: 'markdown',
+				label: 'Markdown',
+				confidence: 0.72,
+				tool: 'markdown-to-html',
+				actions: [{ label: 'Preview / convert', tool: 'markdown-to-html' }]
+			};
+		}
+	},
+	{
+		id: 'hexdump',
+		detect(input) {
+			if (!isLikelyHexDump(input)) return null;
+			return {
+				type: 'hexdump',
+				label: 'Hex bytes',
+				confidence: 0.68,
+				tool: 'text-to-hex',
+				actions: [{ label: 'Decode to text', tool: 'text-to-hex' }]
 			};
 		}
 	},

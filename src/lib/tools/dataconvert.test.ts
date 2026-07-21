@@ -282,3 +282,67 @@ describe('queryJsonPath', () => {
 		expect(!r.ok && r.error).toMatch(/Input JSON/);
 	});
 });
+
+/* ---------- CSV → JSON ---------- */
+
+import { csvToJson, detectDelimiter, isLikelyCsv } from './dataconvert';
+
+describe('csvToJson', () => {
+	const OPTS = { delimiter: 'auto', header: true, typed: true } as const;
+
+	it('converts a headered CSV to typed objects', () => {
+		const r = csvToJson('name,age,active\nAda,36,true\nAlan,41,false', OPTS);
+		expect(r.ok).toBe(true);
+		if (r.ok) {
+			expect(JSON.parse(r.value.json)).toEqual([
+				{ name: 'Ada', age: 36, active: true },
+				{ name: 'Alan', age: 41, active: false }
+			]);
+			expect(r.value.rows).toBe(2);
+			expect(r.value.columns).toEqual(['name', 'age', 'active']);
+		}
+	});
+	it('keeps strings when typing is off', () => {
+		const r = csvToJson('a\n1', { ...OPTS, typed: false });
+		expect(r.ok).toBe(true);
+		if (r.ok) expect(JSON.parse(r.value.json)).toEqual([{ a: '1' }]);
+	});
+	it('produces arrays without a header row', () => {
+		const r = csvToJson('1,2\n3,4', { ...OPTS, header: false });
+		expect(r.ok).toBe(true);
+		if (r.ok) expect(JSON.parse(r.value.json)).toEqual([[1, 2], [3, 4]]);
+	});
+	it('handles quoted fields with embedded delimiters and newlines', () => {
+		const r = csvToJson('text,n\n"a,b",1\n"line\nbreak",2', OPTS);
+		expect(r.ok).toBe(true);
+		if (r.ok) {
+			const rows = JSON.parse(r.value.json);
+			expect(rows[0].text).toBe('a,b');
+			expect(rows[1].text).toBe('line\nbreak');
+		}
+	});
+	it('auto-detects semicolon and tab delimiters', () => {
+		expect(detectDelimiter('a;b;c\n1;2;3')).toBe(';');
+		expect(detectDelimiter('a\tb\n1\t2')).toBe('\t');
+	});
+	it('disambiguates duplicate headers', () => {
+		const r = csvToJson('id,id\n1,2', OPTS);
+		expect(r.ok).toBe(true);
+		if (r.ok) expect(JSON.parse(r.value.json)).toEqual([{ id: 1, id_2: 2 }]);
+	});
+	it('errors on empty input and header-only input', () => {
+		expect(csvToJson('', OPTS).ok).toBe(false);
+		expect(csvToJson('a,b', OPTS).ok).toBe(false);
+	});
+});
+
+describe('isLikelyCsv', () => {
+	it('accepts consistent tabular text', () => {
+		expect(isLikelyCsv('name,age\nAda,36\nAlan,41')).toBe(true);
+	});
+	it('rejects JSON, XML and prose', () => {
+		expect(isLikelyCsv('{"a": 1}\n{"b": 2}')).toBe(false);
+		expect(isLikelyCsv('<a>1</a>\n<b>2</b>')).toBe(false);
+		expect(isLikelyCsv('one line\nanother line here')).toBe(false);
+	});
+});
