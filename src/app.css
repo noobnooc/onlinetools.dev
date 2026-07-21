@@ -83,6 +83,23 @@ html:not(.dark) {
 }
 
 /*
+ * Form fields carry their own soft focus ring below — the hard outline on
+ * top of it reads as a thick double border, so skip it for them.
+ */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+	outline: none;
+}
+
+textarea:focus,
+select:focus {
+	border-color: var(--accent);
+	box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent);
+	outline: none;
+}
+
+/*
  * ---------- Form controls (one look everywhere) ----------
  * Unlayered on purpose: these outrank utility classes, so every native
  * control renders the same regardless of what a tool put on it.
@@ -134,7 +151,7 @@ input[type='url']:not(.bare):focus,
 input[type='search']:not(.bare):focus {
 	outline: none;
 	border-color: var(--accent);
-	box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+	box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent);
 }
 input[aria-invalid='true']:not(.bare) {
 	border-color: color-mix(in srgb, var(--err) 70%, var(--border));

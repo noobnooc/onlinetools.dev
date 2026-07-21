@@ -21,6 +21,16 @@
 	let query = $state('');
 	let selected = $state(0);
 	let inputEl = $state<HTMLInputElement | null>(null);
+	let listEl = $state<HTMLUListElement | null>(null);
+
+	/** Keep the keyboard selection visible inside the scrolling list. */
+	function scrollSelectedIntoView() {
+		requestAnimationFrame(() => {
+			listEl
+				?.querySelector('[aria-selected="true"]')
+				?.scrollIntoView({ block: 'nearest' });
+		});
+	}
 
 	$effect(() => {
 		if (palette.open) {
@@ -100,9 +110,11 @@
 		if (e.key === 'ArrowDown') {
 			e.preventDefault();
 			selected = Math.min(selected + 1, entries.length - 1);
+			scrollSelectedIntoView();
 		} else if (e.key === 'ArrowUp') {
 			e.preventDefault();
 			selected = Math.max(selected - 1, 0);
+			scrollSelectedIntoView();
 		} else if (e.key === 'Enter' && entries[selected]) {
 			e.preventDefault();
 			run(entries[selected]);
@@ -137,7 +149,7 @@
 					spellcheck="false"
 				/>
 			</div>
-			<ul class="max-h-[50vh] overflow-y-auto p-1.5" role="listbox" aria-label="Results">
+			<ul bind:this={listEl} class="max-h-[50vh] overflow-y-auto p-1.5" role="listbox" aria-label="Results">
 				{#each entries as entry, i (entry.kind + entry.tool.slug + (entry.payload ?? ''))}
 					{@const Icon = entry.kind === 'action' ? Zap : iconFor(entry.tool.slug)}
 					<li role="option" aria-selected={i === selected}>
