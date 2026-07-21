@@ -311,7 +311,115 @@ const it: Messages = {
 		wcLines: 'Righe',
 		wcSentences: 'Frasi',
 		wcParagraphs: 'Paragrafi',
-		wcAvg: 'Lunghezza media parola'
+		wcAvg: 'Lunghezza media parola',
+
+		// Shared formatter controls
+		fmtFormat: 'Formatta',
+		fmtMinify: 'Minifica',
+
+		// SQL formatter
+		sqlInput: 'Istruzioni SQL',
+		sqlDialect: 'Dialetto',
+		sqlKeywords: 'Parole chiave',
+		sqlKeep: 'Mantieni',
+
+		// XML formatter
+		xmlInput: 'Documento XML',
+
+		// XML ↔ JSON
+		xjInputXml: 'Documento XML',
+		xjInputJson: 'Oggetto JSON',
+		xjNote: 'Gli attributi diventano chiavi "@_nome" e il testo accanto agli attributi diventa "#text", così la conversione fa il viaggio di andata e ritorno. L’ordine degli elementi tra fratelli misti non è preservato — XML ammette le ripetizioni, gli oggetti JSON no.',
+
+		// CSV → JSON
+		cjInput: 'Dati CSV / TSV',
+		cjAuto: 'Auto',
+		cjPipe: 'Pipe',
+		cjHeader: 'La prima riga è l’intestazione',
+		cjTyped: 'Valori tipizzati',
+
+		// Markdown
+		mdPreview: 'Anteprima',
+		mdNote: 'L’anteprima viene sanificata prima del rendering, quindi script e gestori di eventi nel contenuto incollato o condiviso non possono essere eseguiti. La casella dell’output HTML contiene la conversione grezza.',
+
+		// Code formatters
+		htmlInput: 'Sorgente HTML',
+		cssInput: 'Sorgente CSS',
+		jsInput: 'Sorgente JavaScript',
+
+		// String escape
+		escEscape: 'Escape',
+		escUnescape: 'Unescape',
+		escDialect: 'Dialetto',
+		escInputEsc: 'Testo da fare escape',
+		escInputUnesc: 'Testo escapato',
+
+		// Number base
+		nbInput: 'Numero',
+		nbFrom: 'Da',
+		nbAutoT: 'Rileva dal prefisso 0x / 0o / 0b, altrimenti decimale',
+		nbGroup: 'Raggruppa le cifre',
+		nbBase: 'Base',
+		nbBin: 'Binario',
+		nbOct: 'Ottale',
+		nbDec: 'Decimale',
+		nbHex: 'Hex',
+		nbBits: 'bit',
+
+		// Text ↔ hex/binary
+		hbFormat: 'Byte come',
+		hbSep: 'Separatore',
+		hbSpace: 'Spazio',
+		hbNone: 'Nessuno',
+		hbColon: 'Due punti',
+		hbInputEnc: 'Testo da codificare',
+		hbInputDec: 'Byte da decodificare',
+
+		// JSON Schema
+		schInfer: 'Deduci schema',
+		schValidate: 'Valida',
+		schInferT: 'Genera uno schema da JSON di esempio',
+		schValidateT: 'Controlla il JSON contro uno schema',
+		schData: 'Dati JSON',
+		schSchema: 'JSON Schema',
+		schViolations: 'violazioni',
+		schValid: 'Valido — i dati sono conformi allo schema',
+		schResult: 'Risultato della validazione',
+
+		// EXIF
+		exTags: '{n} campi di metadati',
+		exNone: 'Nessun metadato trovato — questo file è già pulito',
+		exStrip: 'Scarica copia ripulita',
+		exGps: 'Posizione GPS incorporata',
+		exMap: 'Vedi sulla mappa',
+		exNote: 'Lettura e rimozione avvengono interamente nel tuo browser — la foto non viene mai caricata. La pulizia rimuove i segmenti di metadati byte per byte senza ricodificare, quindi pixel e qualità restano intatti.',
+
+		// Cron builder
+		crBuilder: 'Costruttore',
+		crMinute: 'Minuto',
+		crHour: 'Ora',
+		crDom: 'Giorno del mese',
+		crMonth: 'Mese',
+		crDow: 'Giorno della settimana',
+		crEvery: 'Ogni',
+		crStep: 'Ogni N',
+		crAt: 'Specifico',
+		crUse: 'Usa espressione',
+
+		// JWT sign & verify
+		jwtDecode: 'Decodifica',
+		jwtSign: 'Firma',
+		jwtVerify: 'Verifica',
+		jwtAlg: 'Algoritmo',
+		jwtPayloadLbl: 'Payload (oggetto JSON)',
+		jwtSecret: 'Segreto',
+		jwtPrivKey: 'Chiave privata (PEM PKCS#8)',
+		jwtPubKey: 'Segreto (HS) o chiave pubblica PEM (RS/ES)',
+		jwtSignNote: 'La firma gira su WebCrypto nel tuo browser — la chiave non lascia mai questa pagina. Per gli algoritmi HS usa un segreto lungo e casuale; quelli corti si trovano per forza bruta, ovunque tu firmi.',
+		jwtVerifyNote: 'La verifica controlla la firma contro la chiave che fornisci, in locale. Non scarica endpoint JWKS né valida claim come aud/iss — fallo lato server.',
+
+		// Timestamp extras
+		tsDiff: 'Differenza tra due date'
 	},
 	categories: {
 		encoding: 'Codifica',
@@ -321,7 +429,9 @@ const it: Messages = {
 		generators: 'Generatori',
 		crypto: 'Hash e crittografia',
 		web: 'Web',
-		image: 'Immagini'
+		image: 'Immagini',
+		code: 'Codice e markup',
+		privacy: 'Privacy'
 	},
 	tools: {
 		'json-formatter': {
@@ -447,6 +557,58 @@ const it: Messages = {
 		'favicon-generator': {
 			name: 'Generatore di favicon',
 			description: 'Trasforma qualsiasi immagine in favicon.ico più il set completo di icone PNG e manifest'
+		},
+		'sql-formatter': {
+			name: 'Formattatore SQL',
+			description: 'Formatta SQL con parole chiave consapevoli del dialetto, o minificalo su una sola riga'
+		},
+		'xml-formatter': {
+			name: 'Formattatore e validatore XML',
+			description: 'Formatta, minifica e valida XML con posizioni d’errore esatte'
+		},
+		'xml-to-json': {
+			name: 'Convertitore XML ↔ JSON',
+			description: 'Converti documenti XML in JSON e viceversa, attributi inclusi'
+		},
+		'csv-to-json': {
+			name: 'Convertitore CSV → JSON',
+			description: 'Trasforma CSV in oggetti JSON con rilevamento del delimitatore e valori tipizzati'
+		},
+		'markdown-to-html': {
+			name: 'Convertitore Markdown ↔ HTML',
+			description: 'Renderizza Markdown in HTML con anteprima live, o riconverti HTML in Markdown'
+		},
+		'html-formatter': {
+			name: 'Formattatore e minificatore HTML',
+			description: 'Abbellisci HTML disordinato o minificalo per la produzione'
+		},
+		'css-formatter': {
+			name: 'Formattatore e minificatore CSS',
+			description: 'Abbellisci il CSS per leggerlo o minificalo per la pubblicazione'
+		},
+		'js-formatter': {
+			name: 'Formattatore e minificatore JavaScript',
+			description: 'Abbellisci JavaScript o minificalo con compressione e mangling reali'
+		},
+		'string-escape': {
+			name: 'Escape / unescape di stringhe',
+			description: 'Fai escape o unescape di stringhe per JSON, JavaScript, Java, XML, SQL e CSV'
+		},
+		'number-base-converter': {
+			name: 'Convertitore di basi numeriche',
+			description: 'Converti numeri tra binario, ottale, decimale, hex e qualsiasi base fino a 36'
+		},
+		'text-to-hex': {
+			name: 'Convertitore testo ↔ hex / binario',
+			description: 'Trasforma testo in byte hex, binari o decimali e decodifica i dump di byte'
+		},
+		'json-schema-validator': {
+			name: 'Validatore e generatore di JSON Schema',
+			description: 'Valida JSON contro uno schema, o deduci uno schema da dati di esempio'
+		},
+		'exif-viewer': {
+			name: 'Visualizza e rimuovi EXIF',
+			description: 'Scopri quali metadati contengono le tue foto — e rimuovili senza ricodificare'
 		}
 	}
 };
