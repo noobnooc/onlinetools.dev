@@ -566,7 +566,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
 		about: [
 			'Paste an array of JSON objects and get a spreadsheet-ready CSV: nested objects are flattened into dotted column names (user.address.city), columns are unioned across all rows (missing values become empty cells), and quoting follows RFC 4180 so commas, quotes and line breaks inside values survive Excel and Google Sheets.',
 			'This is the fastest path from an API response to a spreadsheet someone can filter and pivot. The column union matters with real-world data where objects are heterogeneous — row 1 may lack fields that row 40 has, and the converter handles that instead of erroring or dropping data.',
-			'Arrays inside rows are serialized as JSON strings rather than exploded into columns — a deliberate choice that keeps one input row as one output row. A semicolon-delimiter option covers locales where Excel expects ; instead of ,.'
+			'The converter also runs in reverse: paste a CSV export and get a JSON array of objects keyed by the header row, with delimiter auto-detection (comma, semicolon, tab, pipe) and optional typed values — numbers, booleans and null become real JSON types. Both directions run entirely in your browser, so customer exports never leave your machine.'
 		],
 		faqs: [
 			{
@@ -584,6 +584,14 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
 			{
 				q: 'Does the converter handle a single object (not an array)?',
 				a: 'Yes — a lone object becomes a one-row CSV. Objects keyed by ID ({"a1":{...},"a2":{...}}) convert as one wide row, though; turn them into an array first if each value should be a row.'
+			},
+			{
+				q: 'How does CSV → JSON handle quoted fields and embedded newlines?',
+				a: 'Per RFC 4180: fields wrapped in double quotes may contain the delimiter, doubled quotes ("") for a literal quote, and line breaks. Excel and most databases export exactly this format, so real-world files parse correctly.'
+			},
+			{
+				q: 'Why are my zip codes losing their leading zeros in CSV → JSON?',
+				a: 'Typed conversion turns 02134 into the number 2134. Untick "Typed values" and every cell stays a string, exactly as written — the right choice for identifiers, phone numbers and anything with leading zeros.'
 			}
 		]
 	},
@@ -900,31 +908,6 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
 		]
 	},
 
-	'csv-to-json': {
-		about: [
-			'Paste a CSV export — from Excel, a database dump, an analytics download — and get a JSON array of objects keyed by the header row. The delimiter is auto-detected across comma, semicolon, tab and pipe (you can pin it manually), quoting follows RFC 4180, so embedded commas, quotes and even line breaks inside quoted fields parse correctly.',
-			'Typed conversion recognizes numbers, true/false and null and emits real JSON types instead of strings; switch it off when leading zeros or big identifiers must survive verbatim. Files without a header row convert to arrays of arrays, and duplicate header names get numeric suffixes instead of silently overwriting each other.',
-			'Spreadsheets tend to contain the most sensitive data of anything developers handle — customer lists, salaries, order histories. Conversion happens entirely in your browser; nothing is uploaded.'
-		],
-		faqs: [
-			{
-				q: 'Why did my semicolon-separated file parse as one column?',
-				a: 'Auto-detection samples the first rows and picks the delimiter that yields consistent column counts — a file of single-column rows can fool it. Pin the delimiter with the segmented control and the parse follows immediately.'
-			},
-			{
-				q: 'How do quoted fields and embedded newlines behave?',
-				a: 'Per RFC 4180: fields wrapped in double quotes may contain the delimiter, doubled quotes ("") for a literal quote, and line breaks. Excel and most databases export exactly this format.'
-			},
-			{
-				q: 'Why are my zip codes losing their leading zeros?',
-				a: 'Typed conversion turns 02134 into the number 2134. Untick "Typed values" and every cell stays a string, exactly as written.'
-			},
-			{
-				q: 'Can I convert TSV or pipe-delimited files?',
-				a: 'Yes — tab and pipe are first-class delimiters, auto-detected or pinned manually. The parser is the same; only the separator changes.'
-			}
-		]
-	},
 
 	'markdown-to-html': {
 		about: [

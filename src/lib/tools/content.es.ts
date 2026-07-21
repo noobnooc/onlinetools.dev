@@ -556,7 +556,7 @@ const TOOL_CONTENT_ES: Record<string, ToolContent> = {
 		about: [
 			'Pega un array de objetos JSON y obtén un CSV listo para hoja de cálculo: los objetos anidados se aplanan en nombres de columna con puntos (user.address.city), las columnas se unen a través de todas las filas (los valores faltantes se convierten en celdas vacías), y el entrecomillado sigue el RFC 4180 para que las comas, comillas y saltos de línea dentro de los valores sobrevivan a Excel y Google Sheets.',
 			'Este es el camino más rápido de una respuesta de API a una hoja de cálculo que alguien pueda filtrar y pivotar. La unión de columnas importa con datos del mundo real, donde los objetos son heterogéneos — la fila 1 puede carecer de campos que la fila 40 tiene, y el conversor lo maneja en lugar de fallar o descartar datos.',
-			'Los arrays dentro de las filas se serializan como cadenas JSON en lugar de explotarse en columnas — una elección deliberada que mantiene una fila de entrada como una fila de salida. Una opción de delimitador punto y coma cubre las regiones donde Excel espera ; en lugar de ,.'
+			'El conversor también funciona en sentido inverso: pega una exportación CSV y obtén un array JSON de objetos cuyas claves salen de la fila de cabecera, con detección automática de delimitador (coma, punto y coma, tabulador, barra vertical) y valores tipados opcionales — los números, los booleanos y null se convierten en tipos JSON reales. Ambas direcciones corren por completo en tu navegador, así que las exportaciones de clientes nunca salen de tu máquina.'
 		],
 		faqs: [
 			{
@@ -574,6 +574,14 @@ const TOOL_CONTENT_ES: Record<string, ToolContent> = {
 			{
 				q: '¿El conversor maneja un objeto individual (no un array)?',
 				a: 'Sí — un objeto solitario se convierte en un CSV de una fila. Eso sí, los objetos indexados por ID ({"a1":{...},"a2":{...}}) se convierten en una única fila ancha; conviértelos primero en un array si cada valor debe ser una fila.'
+			},
+			{
+				q: '¿Cómo maneja CSV → JSON los campos entrecomillados y los saltos de línea incrustados?',
+				a: 'Según el RFC 4180: los campos envueltos en comillas dobles pueden contener el delimitador, comillas duplicadas ("") para una comilla literal, y saltos de línea. Excel y la mayoría de bases de datos exportan exactamente este formato, así que los archivos del mundo real se analizan correctamente.'
+			},
+			{
+				q: '¿Por qué mis códigos postales pierden los ceros iniciales en CSV → JSON?',
+				a: 'La conversión tipada convierte 02134 en el número 2134. Desmarca «Valores tipados» y cada celda se queda como cadena, exactamente como está escrita — la elección correcta para identificadores, números de teléfono y cualquier cosa con ceros iniciales.'
 			}
 		]
 	},
@@ -886,32 +894,6 @@ const TOOL_CONTENT_ES: Record<string, ToolContent> = {
 			{
 				q: '¿Por qué JSON → XML rechaza mi array de nivel superior?',
 				a: 'Un documento XML debe tener exactamente un elemento raíz, y un array suelto no tiene ninguno. Envuelve el array en un objeto — {"items": {"item": [...]}} — y el conversor produce un documento bien formado.'
-			}
-		]
-	},
-
-	'csv-to-json': {
-		about: [
-			'Pega una exportación CSV — de Excel, un volcado de base de datos, una descarga de analítica — y obtén un array JSON de objetos cuyas claves salen de la fila de cabecera. El delimitador se detecta automáticamente entre coma, punto y coma, tabulador y barra vertical (puedes fijarlo a mano), y el entrecomillado sigue el RFC 4180, así que las comas incrustadas, las comillas e incluso los saltos de línea dentro de campos entrecomillados se analizan correctamente.',
-			'La conversión tipada reconoce números, true/false y null y emite tipos JSON reales en lugar de cadenas; desactívala cuando los ceros a la izquierda o los identificadores grandes deban sobrevivir tal cual. Los archivos sin fila de cabecera se convierten en arrays de arrays, y los nombres de cabecera duplicados reciben sufijos numéricos en lugar de sobrescribirse en silencio.',
-			'Las hojas de cálculo tienden a contener los datos más sensibles que maneja un desarrollador — listas de clientes, salarios, historiales de pedidos. La conversión ocurre por completo en tu navegador; no se sube nada.'
-		],
-		faqs: [
-			{
-				q: '¿Por qué mi archivo separado por punto y coma se analizó como una sola columna?',
-				a: 'La detección automática muestrea las primeras filas y elige el delimitador que produce recuentos de columnas consistentes — un archivo de filas de una sola columna puede engañarla. Fija el delimitador con el control segmentado y el análisis se corrige de inmediato.'
-			},
-			{
-				q: '¿Cómo se comportan los campos entrecomillados y los saltos de línea incrustados?',
-				a: 'Según el RFC 4180: los campos envueltos en comillas dobles pueden contener el delimitador, comillas duplicadas ("") para una comilla literal, y saltos de línea. Excel y la mayoría de bases de datos exportan exactamente este formato.'
-			},
-			{
-				q: '¿Por qué mis códigos postales pierden los ceros iniciales?',
-				a: 'La conversión tipada convierte 02134 en el número 2134. Desmarca «Valores tipados» y cada celda se queda como cadena, exactamente como está escrita.'
-			},
-			{
-				q: '¿Puedo convertir archivos TSV o delimitados por barra vertical?',
-				a: 'Sí — el tabulador y la barra vertical son delimitadores de primera clase, detectados automáticamente o fijados a mano. El parser es el mismo; solo cambia el separador.'
 			}
 		]
 	},

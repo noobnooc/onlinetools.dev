@@ -523,8 +523,8 @@ const it: Messages = {
 			description: 'Converti tra JSON, YAML e TOML con rilevamento automatico del formato'
 		},
 		'json-to-csv': {
-			name: 'Convertitore JSON → CSV',
-			description: 'Appiattisci array di oggetti JSON in CSV con l’escaping corretto'
+			name: 'Convertitore JSON ↔ CSV',
+			description: 'Appiattisci JSON in CSV o riconverti CSV in oggetti JSON tipizzati'
 		},
 		'json-to-typescript': {
 			name: 'JSON → tipi TypeScript',
@@ -569,10 +569,6 @@ const it: Messages = {
 		'xml-to-json': {
 			name: 'Convertitore XML ↔ JSON',
 			description: 'Converti documenti XML in JSON e viceversa, attributi inclusi'
-		},
-		'csv-to-json': {
-			name: 'Convertitore CSV → JSON',
-			description: 'Trasforma CSV in oggetti JSON con rilevamento del delimitatore e valori tipizzati'
 		},
 		'markdown-to-html': {
 			name: 'Convertitore Markdown ↔ HTML',

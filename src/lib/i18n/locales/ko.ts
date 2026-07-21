@@ -523,8 +523,8 @@ const ko: Messages = {
 			description: 'JSON, YAML, TOML 간 변환, 포맷 자동 감지'
 		},
 		'json-to-csv': {
-			name: 'JSON → CSV 변환기',
-			description: 'JSON 객체 배열을 올바른 이스케이프로 CSV로 변환'
+			name: 'JSON ↔ CSV 변환기',
+			description: 'JSON을 CSV로 평탄화하거나 CSV를 다시 타입 있는 JSON 객체로 파싱'
 		},
 		'json-to-typescript': {
 			name: 'JSON → TypeScript 타입',
@@ -569,10 +569,6 @@ const ko: Messages = {
 		'xml-to-json': {
 			name: 'XML ↔ JSON 변환기',
 			description: 'XML 문서와 JSON 상호 변환, 속성까지 보존'
-		},
-		'csv-to-json': {
-			name: 'CSV → JSON 변환기',
-			description: 'CSV를 구분자 자동 감지·타입 변환으로 JSON 객체로 파싱'
 		},
 		'markdown-to-html': {
 			name: 'Markdown ↔ HTML 변환기',

@@ -556,7 +556,7 @@ const TOOL_CONTENT_IT: Record<string, ToolContent> = {
 		about: [
 			'Incolla un array di oggetti JSON e ottieni un CSV pronto per il foglio di calcolo: gli oggetti annidati vengono appiattiti in nomi di colonna puntati (user.address.city), le colonne sono l’unione di tutte le righe (i valori mancanti diventano celle vuote) e il quoting segue la RFC 4180, così virgole, virgolette e a capo dentro i valori sopravvivono a Excel e Google Sheets.',
 			'È la strada più rapida da una risposta API a un foglio che qualcuno può filtrare e pivotare. L’unione delle colonne conta con i dati del mondo reale, dove gli oggetti sono eterogenei — la riga 1 può mancare di campi che la riga 40 ha, e il convertitore lo gestisce invece di andare in errore o perdere dati.',
-			'Gli array dentro le righe vengono serializzati come stringhe JSON invece di essere esplosi in colonne — una scelta deliberata che mantiene una riga di input come una riga di output. Un’opzione per il delimitatore punto e virgola copre le localizzazioni in cui Excel si aspetta ; invece di ,.'
+			'Il convertitore funziona anche al contrario: incolla un export CSV e ottieni un array JSON di oggetti con le chiavi prese dalla riga di intestazione, con rilevamento automatico del delimitatore (virgola, punto e virgola, tab, pipe) e valori tipizzati opzionali — numeri, booleani e null diventano veri tipi JSON. Entrambe le direzioni girano interamente nel tuo browser, quindi gli export dei clienti non lasciano mai la tua macchina.'
 		],
 		faqs: [
 			{
@@ -574,6 +574,14 @@ const TOOL_CONTENT_IT: Record<string, ToolContent> = {
 			{
 				q: 'Il convertitore gestisce un singolo oggetto (non un array)?',
 				a: 'Sì — un oggetto solitario diventa un CSV a una riga. Gli oggetti indicizzati per ID ({"a1":{...},"a2":{...}}) si convertono però come un’unica riga larga; trasformali prima in un array se ogni valore deve essere una riga.'
+			},
+			{
+				q: 'Come gestisce CSV → JSON i campi tra virgolette e gli a capo incorporati?',
+				a: 'Secondo la RFC 4180: i campi avvolti da virgolette doppie possono contenere il delimitatore, virgolette raddoppiate ("") per una virgoletta letterale e a capo. Excel e la maggior parte dei database esportano esattamente questo formato, quindi i file del mondo reale vengono parsati correttamente.'
+			},
+			{
+				q: 'Perché i miei CAP perdono gli zeri iniziali in CSV → JSON?',
+				a: 'La conversione tipizzata trasforma 02134 nel numero 2134. Togli la spunta a «Valori tipizzati» e ogni cella resta una stringa, esattamente com’è scritta — la scelta giusta per identificatori, numeri di telefono e tutto ciò che ha zeri iniziali.'
 			}
 		]
 	},
@@ -886,32 +894,6 @@ const TOOL_CONTENT_IT: Record<string, ToolContent> = {
 			{
 				q: 'Perché JSON → XML rifiuta il mio array al livello superiore?',
 				a: 'Un documento XML deve avere esattamente un elemento radice, e un array nudo non ne ha. Avvolgi l’array in un oggetto — {"items": {"item": [...]}} — e il convertitore produce un documento well-formed.'
-			}
-		]
-	},
-
-	'csv-to-json': {
-		about: [
-			'Incolla un export CSV — da Excel, da un dump di database, da un download di analytics — e ottieni un array JSON di oggetti con le chiavi prese dalla riga di intestazione. Il delimitatore viene rilevato automaticamente tra virgola, punto e virgola, tab e pipe (puoi fissarlo a mano) e il quoting segue la RFC 4180, quindi virgole incorporate, virgolette e perfino a capo dentro i campi tra virgolette vengono parsati correttamente.',
-			'La conversione tipizzata riconosce numeri, true/false e null ed emette veri tipi JSON invece di stringhe; disattivala quando zeri iniziali o identificatori grandi devono sopravvivere alla lettera. I file senza riga di intestazione si convertono in array di array, e i nomi di intestazione duplicati ricevono suffissi numerici invece di sovrascriversi in silenzio.',
-			'I fogli di calcolo tendono a contenere i dati più sensibili tra tutti quelli che gli sviluppatori maneggiano — liste clienti, stipendi, storici degli ordini. La conversione avviene interamente nel tuo browser; nulla viene caricato.'
-		],
-		faqs: [
-			{
-				q: 'Perché il mio file separato da punto e virgola è stato letto come una sola colonna?',
-				a: 'Il rilevamento automatico campiona le prime righe e sceglie il delimitatore che produce conteggi di colonne coerenti — un file di righe a colonna singola può ingannarlo. Fissa il delimitatore con il controllo a segmenti e il parsing si adegua all’istante.'
-			},
-			{
-				q: 'Come si comportano i campi tra virgolette e gli a capo incorporati?',
-				a: 'Secondo la RFC 4180: i campi avvolti da virgolette doppie possono contenere il delimitatore, virgolette raddoppiate ("") per una virgoletta letterale e a capo. Excel e la maggior parte dei database esportano esattamente questo formato.'
-			},
-			{
-				q: 'Perché i miei CAP perdono gli zeri iniziali?',
-				a: 'La conversione tipizzata trasforma 02134 nel numero 2134. Togli la spunta a «Valori tipizzati» e ogni cella resta una stringa, esattamente com’è scritta.'
-			},
-			{
-				q: 'Posso convertire file TSV o delimitati da pipe?',
-				a: 'Sì — tab e pipe sono delimitatori di prima classe, rilevati automaticamente o fissati a mano. Il parser è lo stesso; cambia solo il separatore.'
 			}
 		]
 	},

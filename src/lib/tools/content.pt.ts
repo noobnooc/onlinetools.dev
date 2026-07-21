@@ -556,7 +556,7 @@ const TOOL_CONTENT_PT: Record<string, ToolContent> = {
 		about: [
 			'Cole um array de objetos JSON e receba um CSV pronto para planilha: objetos aninhados são achatados em nomes de coluna com pontos (user.address.city), as colunas são unificadas entre todas as linhas (valores ausentes viram células vazias) e o uso de aspas segue o RFC 4180, então vírgulas, aspas e quebras de linha dentro dos valores sobrevivem ao Excel e ao Google Sheets.',
 			'Este é o caminho mais rápido de uma resposta de API até uma planilha que alguém possa filtrar e pivotar. A união de colunas importa com dados do mundo real, onde os objetos são heterogêneos — a linha 1 pode não ter campos que a linha 40 tem, e o conversor lida com isso em vez de dar erro ou descartar dados.',
-			'Arrays dentro das linhas são serializados como strings JSON em vez de explodidos em colunas — uma escolha deliberada que mantém uma linha de entrada como uma linha de saída. Uma opção de delimitador ponto-e-vírgula cobre localidades onde o Excel espera ; em vez de ,.'
+			'O conversor também roda no sentido inverso: cole uma exportação CSV e receba um array JSON de objetos com as chaves da linha de cabeçalho, com detecção automática de delimitador (vírgula, ponto e vírgula, tabulação, pipe) e valores tipados opcionais — números, booleanos e null viram tipos JSON de verdade. Os dois sentidos rodam inteiramente no seu navegador, então exportações de clientes nunca saem da sua máquina.'
 		],
 		faqs: [
 			{
@@ -574,6 +574,14 @@ const TOOL_CONTENT_PT: Record<string, ToolContent> = {
 			{
 				q: 'O conversor lida com um único objeto (não um array)?',
 				a: 'Sim — um objeto sozinho vira um CSV de uma linha. Objetos indexados por ID ({"a1":{...},"a2":{...}}) convertem como uma única linha larga, porém; transforme-os em array antes se cada valor deve ser uma linha.'
+			},
+			{
+				q: 'Como o CSV → JSON lida com campos entre aspas e quebras de linha embutidas?',
+				a: 'Conforme o RFC 4180: campos envoltos em aspas duplas podem conter o delimitador, aspas duplicadas ("") para uma aspa literal e quebras de linha. O Excel e a maioria dos bancos de dados exportam exatamente esse formato, então arquivos do mundo real parseiam corretamente.'
+			},
+			{
+				q: 'Por que meus CEPs estão perdendo os zeros à esquerda no CSV → JSON?',
+				a: 'A conversão tipada transforma 02134 no número 2134. Desmarque "Valores tipados" e toda célula continua string, exatamente como escrita — a escolha certa para identificadores, números de telefone e qualquer coisa com zeros à esquerda.'
 			}
 		]
 	},
@@ -886,32 +894,6 @@ const TOOL_CONTENT_PT: Record<string, ToolContent> = {
 			{
 				q: 'Por que JSON → XML rejeita meu array de nível superior?',
 				a: 'Um documento XML precisa ter exatamente um elemento raiz, e um array solto não tem nenhum. Embrulhe o array em um objeto — {"items": {"item": [...]}} — e o conversor produz um documento bem formado.'
-			}
-		]
-	},
-
-	'csv-to-json': {
-		about: [
-			'Cole uma exportação CSV — do Excel, de um dump de banco de dados, de um download de analytics — e receba um array JSON de objetos com as chaves da linha de cabeçalho. O delimitador é detectado automaticamente entre vírgula, ponto e vírgula, tabulação e pipe (você pode fixá-lo manualmente), e as aspas seguem o RFC 4180, então vírgulas, aspas e até quebras de linha dentro de campos entre aspas parseiam corretamente.',
-			'A conversão tipada reconhece números, true/false e null e emite tipos JSON de verdade em vez de strings; desligue-a quando zeros à esquerda ou identificadores grandes precisarem sobreviver ao pé da letra. Arquivos sem linha de cabeçalho convertem para arrays de arrays, e nomes de cabeçalho duplicados recebem sufixos numéricos em vez de se sobrescreverem em silêncio.',
-			'Planilhas tendem a conter os dados mais sensíveis que desenvolvedores manipulam — listas de clientes, salários, históricos de pedidos. A conversão acontece inteiramente no seu navegador; nada é enviado.'
-		],
-		faqs: [
-			{
-				q: 'Por que meu arquivo separado por ponto e vírgula parseou como uma coluna só?',
-				a: 'A detecção automática amostra as primeiras linhas e escolhe o delimitador que produz contagens de coluna consistentes — um arquivo de linhas de coluna única pode enganá-la. Fixe o delimitador no controle segmentado e o parse acompanha imediatamente.'
-			},
-			{
-				q: 'Como se comportam campos entre aspas e quebras de linha embutidas?',
-				a: 'Conforme o RFC 4180: campos envoltos em aspas duplas podem conter o delimitador, aspas duplicadas ("") para uma aspa literal e quebras de linha. O Excel e a maioria dos bancos de dados exportam exatamente esse formato.'
-			},
-			{
-				q: 'Por que meus CEPs estão perdendo os zeros à esquerda?',
-				a: 'A conversão tipada transforma 02134 no número 2134. Desmarque "Valores tipados" e toda célula continua string, exatamente como escrita.'
-			},
-			{
-				q: 'Posso converter arquivos TSV ou delimitados por pipe?',
-				a: 'Sim — tabulação e pipe são delimitadores de primeira classe, detectados automaticamente ou fixados manualmente. O parser é o mesmo; só o separador muda.'
 			}
 		]
 	},
