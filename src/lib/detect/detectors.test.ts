@@ -66,6 +66,30 @@ describe('smart paste detection', () => {
 		expect(r[0]?.type).toBe('image-data-url');
 		expect(r[0]?.tool).toBe('image-to-base64');
 	});
+	it('detects HTML documents and fragments', () => {
+		expect(detect('<!doctype html><html><body>hi</body></html>')[0]?.type).toBe('html');
+		expect(detect('<div class="a"><p>hello</p></div>')[0]?.type).toBe('html');
+	});
+	it('detects SQL statements', () => {
+		expect(detect('SELECT id, name FROM users WHERE active = 1')[0]?.type).toBe('sql');
+	});
+	it('detects cron expressions but not plain number rows', () => {
+		expect(detect('*/5 0 * * 1-5')[0]?.type).toBe('cron');
+		expect(detect('1 2 3 4 5').some((d) => d.type === 'cron')).toBe(false);
+	});
+	it('detects user-agent strings', () => {
+		const ua =
+			'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36';
+		expect(detect(ua)[0]?.type).toBe('useragent');
+	});
+	it('detects YAML documents', () => {
+		expect(detect('name: demo\nversion: 2\nitems:\n  - a\n  - b')[0]?.type).toBe('yaml');
+	});
+	it('every detection carries a data format', () => {
+		for (const input of ['{"a":1}', '<a><b/></a>', 'SELECT * FROM t WHERE x', '#fff']) {
+			for (const d of detect(input)) expect(d.format.length).toBeGreaterThan(0);
+		}
+	});
 	it('returns nothing for plain prose', () => {
 		expect(detect('just some ordinary words here')).toHaveLength(0);
 	});

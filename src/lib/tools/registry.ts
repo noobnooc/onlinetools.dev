@@ -1,3 +1,5 @@
+import type { DataFormat } from '$lib/detect/formats';
+
 export type ToolCategory =
 	| 'encoding'
 	| 'json'
@@ -29,6 +31,11 @@ export interface ToolMeta {
 	/** Short imperative description used in cards, palette and meta description. */
 	description: string;
 	category: ToolCategory;
+	/**
+	 * Input formats this tool consumes, best-first. Drives content-aware
+	 * ranking in "Continue with" and Smart Paste. Omitted for pure generators.
+	 */
+	accepts?: DataFormat[];
 	/** Palette aliases and common misspellings. */
 	aliases: string[];
 	keywords: string[];
@@ -38,6 +45,7 @@ export interface ToolMeta {
 export const TOOLS: ToolMeta[] = [
 	{
 		slug: 'json-formatter',
+		accepts: ['json'],
 		name: 'JSON Formatter & Validator',
 		description: 'Format, validate and minify JSON with precise error positions',
 		category: 'json',
@@ -47,6 +55,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'base64-decode',
+		accepts: ['base64', 'text'],
 		name: 'Base64 Encode / Decode',
 		description: 'Encode text to Base64 or decode Base64 to text, URL-safe included',
 		category: 'encoding',
@@ -56,6 +65,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'image-to-base64',
+		accepts: ['image', 'image-data-url', 'base64'],
 		name: 'Image ↔ Base64 Converter',
 		description: 'Turn images into Base64 data URLs and back — with CSS and HTML snippets',
 		category: 'image',
@@ -65,6 +75,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'image-converter',
+		accepts: ['image'],
 		name: 'Image Format Converter',
 		description: 'Convert images between PNG, JPEG and WebP with a quality dial',
 		category: 'image',
@@ -74,6 +85,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'image-resizer',
+		accepts: ['image'],
 		name: 'Image Resizer',
 		description: 'Resize images by width, height or percentage — sharp and entirely offline',
 		category: 'image',
@@ -83,6 +95,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'favicon-generator',
+		accepts: ['image'],
 		name: 'Favicon Generator',
 		description: 'Turn any image into favicon.ico plus the full PNG and manifest icon set',
 		category: 'image',
@@ -92,6 +105,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'timestamp-converter',
+		accepts: ['timestamp'],
 		name: 'Unix Timestamp Converter',
 		description: 'Convert unix timestamps to human dates and back, with relative time',
 		category: 'time',
@@ -101,6 +115,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'jwt-decoder',
+		accepts: ['jwt'],
 		name: 'JWT Decoder',
 		description: 'Decode JWT header and payload, check expiry — fully offline',
 		category: 'encoding',
@@ -110,6 +125,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'regex-tester',
+		accepts: ['text'],
 		name: 'Regex Tester',
 		description: 'Test regular expressions with live match highlighting and groups',
 		category: 'web',
@@ -119,6 +135,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'diff-checker',
+		accepts: ['text'],
 		name: 'Text Diff Checker',
 		description: 'Compare two texts line by line and see additions and deletions',
 		category: 'text',
@@ -128,6 +145,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'url-encode-decode',
+		accepts: ['url-encoded', 'url', 'text'],
 		name: 'URL Encode / Decode',
 		description: 'Percent-encode or decode URL components and query strings',
 		category: 'encoding',
@@ -137,6 +155,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'url-parser',
+		accepts: ['url'],
 		name: 'URL Parser',
 		description: 'Break a URL into protocol, host, path and query parameters',
 		category: 'web',
@@ -146,6 +165,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'uuid-generator',
+		accepts: ['uuid'],
 		name: 'UUID Generator',
 		description: 'Generate UUID v4/v7, ULID and Nano ID — single or in bulk',
 		category: 'generators',
@@ -155,6 +175,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'hash-generator',
+		accepts: ['text'],
 		name: 'Hash Generator',
 		description: 'MD5, SHA-1, SHA-256, SHA-512 and HMAC — computed in your browser',
 		category: 'crypto',
@@ -164,6 +185,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'color-converter',
+		accepts: ['color'],
 		name: 'Color Converter',
 		description: 'Convert colors between HEX, RGB, HSL and OKLCH with live preview',
 		category: 'web',
@@ -173,6 +195,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'case-converter',
+		accepts: ['text'],
 		name: 'Case Converter',
 		description: 'Switch between camelCase, snake_case, kebab-case, PascalCase and more',
 		category: 'text',
@@ -182,6 +205,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'word-counter',
+		accepts: ['text'],
 		name: 'Word Counter',
 		description: 'Count words, characters, sentences, bytes and reading time as you type',
 		category: 'text',
@@ -200,6 +224,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'slug-generator',
+		accepts: ['text'],
 		name: 'Slug Generator',
 		description: 'Turn titles into clean URL slugs with separator and length options',
 		category: 'text',
@@ -209,6 +234,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'sort-lines',
+		accepts: ['text', 'csv'],
 		name: 'Sort & Dedupe Lines',
 		description: 'Sort lines alphabetically or naturally, remove duplicates and empties',
 		category: 'text',
@@ -218,6 +244,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'html-entities',
+		accepts: ['html', 'text'],
 		name: 'HTML Entities Encode / Decode',
 		description: 'Escape text for HTML or decode &amp;-style entities back to characters',
 		category: 'encoding',
@@ -227,6 +254,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'unicode-inspector',
+		accepts: ['text'],
 		name: 'Unicode Character Inspector',
 		description: 'See code points, UTF-8/UTF-16 bytes and escapes for every character',
 		category: 'encoding',
@@ -236,6 +264,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'cron-parser',
+		accepts: ['cron'],
 		name: 'Cron Expression Parser',
 		description: 'Explain any cron schedule in plain English with the next run times',
 		category: 'time',
@@ -254,6 +283,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'qr-code-generator',
+		accepts: ['url', 'text'],
 		name: 'QR Code Generator',
 		description: 'Generate crisp QR codes as SVG or PNG — no watermark, no upload',
 		category: 'generators',
@@ -263,6 +293,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'json-to-yaml',
+		accepts: ['json', 'yaml', 'toml'],
 		name: 'JSON ↔ YAML ↔ TOML Converter',
 		description: 'Convert between JSON, YAML and TOML with format auto-detection',
 		category: 'json',
@@ -272,6 +303,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'json-to-csv',
+		accepts: ['json', 'csv'],
 		name: 'JSON ↔ CSV Converter',
 		description: 'Flatten JSON to CSV, or parse CSV back into typed JSON objects',
 		category: 'json',
@@ -281,6 +313,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'json-to-typescript',
+		accepts: ['json'],
 		name: 'JSON → TypeScript Types',
 		description: 'Infer TypeScript interfaces from a JSON sample instantly',
 		category: 'json',
@@ -290,6 +323,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'jsonpath-tester',
+		accepts: ['json'],
 		name: 'JSONPath Tester',
 		description: 'Query JSON with JSONPath expressions and see every match with its path',
 		category: 'json',
@@ -299,6 +333,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'bcrypt-generator',
+		accepts: ['text'],
 		name: 'Bcrypt Hash & Verify',
 		description: 'Hash passwords with bcrypt and check hashes against plaintext',
 		category: 'crypto',
@@ -308,6 +343,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'sql-formatter',
+		accepts: ['sql'],
 		name: 'SQL Formatter',
 		description: 'Format SQL with dialect-aware keywords, or minify it to one line',
 		category: 'code',
@@ -317,6 +353,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'xml-formatter',
+		accepts: ['xml'],
 		name: 'XML Formatter & Validator',
 		description: 'Pretty-print, minify and validate XML with exact error positions',
 		category: 'code',
@@ -326,6 +363,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'xml-to-json',
+		accepts: ['xml', 'json'],
 		name: 'XML ↔ JSON Converter',
 		description: 'Convert XML documents to JSON and back, attributes included',
 		category: 'json',
@@ -335,6 +373,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'markdown-to-html',
+		accepts: ['markdown', 'html'],
 		name: 'Markdown ↔ HTML Converter',
 		description: 'Render Markdown to HTML with live preview, or turn HTML back into Markdown',
 		category: 'code',
@@ -344,6 +383,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'html-formatter',
+		accepts: ['html'],
 		name: 'HTML Formatter & Minifier',
 		description: 'Beautify messy HTML or minify it for production',
 		category: 'code',
@@ -353,6 +393,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'css-formatter',
+		accepts: ['css'],
 		name: 'CSS Formatter & Minifier',
 		description: 'Beautify CSS for reading or minify it for shipping',
 		category: 'code',
@@ -362,6 +403,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'js-formatter',
+		accepts: ['js'],
 		name: 'JavaScript Formatter & Minifier',
 		description: 'Beautify JavaScript or minify it with real compression and mangling',
 		category: 'code',
@@ -371,6 +413,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'string-escape',
+		accepts: ['text'],
 		name: 'String Escaper / Unescaper',
 		description: 'Escape or unescape strings for JSON, JavaScript, Java, XML, SQL and CSV',
 		category: 'encoding',
@@ -380,6 +423,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'number-base-converter',
+		accepts: ['number', 'hex'],
 		name: 'Number Base Converter',
 		description: 'Convert numbers between binary, octal, decimal, hex and any base up to 36',
 		category: 'encoding',
@@ -389,6 +433,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'text-to-hex',
+		accepts: ['hex', 'text'],
 		name: 'Text ↔ Hex / Binary Converter',
 		description: 'Turn text into hex, binary or decimal bytes and decode byte dumps back',
 		category: 'encoding',
@@ -398,6 +443,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'json-schema-validator',
+		accepts: ['json'],
 		name: 'JSON Schema Validator & Generator',
 		description: 'Validate JSON against a schema, or infer a schema from sample data',
 		category: 'json',
@@ -407,6 +453,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'exif-viewer',
+		accepts: ['image'],
 		name: 'EXIF Viewer & Remover',
 		description: 'See what metadata your photos carry — and strip it without re-encoding',
 		category: 'privacy',
@@ -416,6 +463,7 @@ export const TOOLS: ToolMeta[] = [
 	},
 	{
 		slug: 'user-agent-parser',
+		accepts: ['useragent'],
 		name: 'User-Agent Parser',
 		description: 'Identify browser, engine, OS and device from a User-Agent string',
 		category: 'web',
