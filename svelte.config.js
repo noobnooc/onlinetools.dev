@@ -7,7 +7,16 @@ const config = {
 	kit: {
 		adapter: adapter(),
 		prerender: {
-			handleHttpError: 'fail'
+			handleHttpError: 'fail',
+			// Every page route sits behind the optional [[lang]] param, so
+			// seed each locale root; the crawler follows localized links from
+			// there (tool pages also declare explicit entries).
+			entries: [
+				'/',
+				'/sitemap.xml',
+				'/robots.txt',
+				...['zh', 'ja', 'ko', 'es', 'fr', 'de', 'pt', 'ru', 'it'].map((l) => `/${l}`)
+			]
 		}
 	}
 };

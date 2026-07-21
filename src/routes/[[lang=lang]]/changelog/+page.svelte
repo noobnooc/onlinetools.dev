@@ -1,14 +1,40 @@
-<svelte:head>
-	<title>Changelog — onlinetools.dev</title>
-	<meta name="description" content="What's new on onlinetools.dev — new tools, features and fixes." />
-	<link rel="canonical" href="https://onlinetools.dev/changelog" />
-</svelte:head>
+<script lang="ts">
+	import SeoHead from '$lib/components/SeoHead.svelte';
+</script>
+
+<SeoHead
+	path="/changelog"
+	title="Changelog — onlinetools.dev"
+	description="What's new on onlinetools.dev — new tools, features and fixes."
+/>
 
 <div class="mx-auto max-w-3xl px-6 py-8">
 	<h1 class="mb-8 text-xl font-semibold tracking-tight">Changelog</h1>
 
 	<section class="relative border-l border-line pb-8 pl-6">
 		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full bg-accent" aria-hidden="true"></span>
+		<h2 class="text-sm font-medium">Ten languages</h2>
+		<p class="mt-0.5 font-mono text-xs text-dim">v2026.07.21b</p>
+		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
+			<li>
+				The whole site now speaks ten languages — English, 中文, 日本語, 한국어, Español,
+				Français, Deutsch, Português, Русский and Italiano — with a switcher in the footer.
+			</li>
+			<li>
+				English URLs are unchanged; every other language lives under its own prefix
+				(/zh/t/json-formatter). Each page declares hreflang alternates for all ten locales,
+				a localized title, description and JSON-LD, and the sitemap lists every variant.
+			</li>
+			<li>
+				Tool names and descriptions are translated everywhere they appear — sidebar, catalog,
+				command palette (which now also matches queries in your language), Smart Paste and the
+				"Continue with" chain, which keeps you in your language as results flow between tools.
+			</li>
+		</ul>
+	</section>
+
+	<section class="relative border-l border-line pb-8 pl-6">
+		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
 		<h2 class="text-sm font-medium">Floating workspace & unified controls</h2>
 		<p class="mt-0.5 font-mono text-xs text-dim">v2026.07.21 — versions are dates from here on</p>
 		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">

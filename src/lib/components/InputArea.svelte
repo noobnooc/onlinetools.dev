@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { t } from '$lib/i18n';
+
 	/**
 	 * The "live input" — the site-wide signature element. A small badge on the
 	 * input's top edge reports the detected content type, size and validity in
@@ -49,7 +51,7 @@
 			<button
 				type="button"
 				class="text-xs text-dim transition-colors duration-120 hover:text-fg"
-				onclick={onsample}>Sample</button
+				onclick={onsample}>{t('sample')}</button
 			>
 		{/if}
 	</div>
@@ -80,7 +82,7 @@
 	{#if error}
 		<p class="mt-1.5 font-mono text-xs text-err" role="alert">
 			{#if error.line !== undefined}
-				<span class="opacity-70">line {error.line}{error.column !== undefined ? `:${error.column}` : ''} —</span>
+				<span class="opacity-70">{t('line')} {error.line}{error.column !== undefined ? `:${error.column}` : ''} —</span>
 			{/if}
 			{error.message}
 		</p>

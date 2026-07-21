@@ -2,6 +2,7 @@
 	import { Dialog } from 'bits-ui';
 	import { openPalette } from '$lib/state/app.svelte';
 	import Sidebar from './Sidebar.svelte';
+	import { t, lp } from '$lib/i18n';
 	import { Search, Menu } from 'lucide-svelte';
 
 	let drawerOpen = $state(false);
@@ -12,11 +13,11 @@
 		type="button"
 		class="flex items-center gap-2 rounded-md p-2 text-dim transition-colors duration-120 hover:text-fg"
 		onclick={() => (drawerOpen = true)}
-		aria-label="Open navigation"
+		aria-label={t('openNav')}
 	>
 		<Menu size={17} />
 	</button>
-	<a href="/" class="flex items-center gap-2 text-sm font-semibold tracking-tight">
+	<a href={lp('/')} class="flex items-center gap-2 text-sm font-semibold tracking-tight">
 		<span class="inline-block h-2 w-2 rounded-full bg-accent" aria-hidden="true"></span>
 		onlinetools<span class="font-normal text-dim">.dev</span>
 	</a>
@@ -24,7 +25,7 @@
 		type="button"
 		class="rounded-md p-2 text-dim transition-colors duration-120 hover:text-fg"
 		onclick={() => openPalette()}
-		aria-label="Search tools"
+		aria-label={t('searchTools')}
 	>
 		<Search size={17} />
 	</button>

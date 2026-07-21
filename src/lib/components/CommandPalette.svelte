@@ -5,6 +5,7 @@
 	import { searchTools, TOOLS, TOOL_BY_SLUG, type ToolMeta } from '$lib/tools/registry';
 	import { detect, type Detection } from '$lib/detect/detectors';
 	import { encodeState, MAX_SHARED_INPUT } from '$lib/state/urlstate';
+	import { t, lt, lp, locale } from '$lib/i18n';
 	import { iconFor } from '$lib/tools/icons';
 	import Kbd from './Kbd.svelte';
 	import { Search, CornerDownLeft, Zap } from 'lucide-svelte';
@@ -85,11 +86,21 @@
 			// If the query looks like pure content (no tool matched), still show all-tool fallback.
 			if (tools.length === 0 && actions.length === 0) tools = [];
 		}
-		const toolEntries: Entry[] = tools.map((t) => ({
+		// Localized names also match: merge tools whose translated name
+		// contains the query (searchTools only knows the English fields).
+		if (locale() !== 'en' && query.trim() !== '') {
+			const q = query.trim().toLowerCase();
+			for (const candidate of TOOLS) {
+				if (!tools.includes(candidate) && lt(candidate).name.toLowerCase().includes(q)) {
+					tools = [...tools, candidate];
+				}
+			}
+		}
+		const toolEntries: Entry[] = tools.map((tool) => ({
 			kind: 'tool',
-			tool: t,
-			label: t.name,
-			hint: t.description
+			tool,
+			label: lt(tool).name,
+			hint: lt(tool).description
 		}));
 		return [...actions, ...toolEntries].slice(0, 12);
 	});
@@ -103,7 +114,7 @@
 		palette.open = false;
 		pushRecentTool(entry.tool.slug);
 		const hash = entry.payload ? '#s=' + encodeState({ input: entry.payload }) : '';
-		void goto(`/t/${entry.tool.slug}${hash}`);
+		void goto(`${lp(`/t/${entry.tool.slug}`)}${hash}`);
 	}
 
 	function onkeydown(e: KeyboardEvent) {
@@ -143,7 +154,7 @@
 					bind:value={query}
 					{onkeydown}
 					type="text"
-					placeholder="Search tools, or paste content to act on it…"
+					placeholder={t('palettePlaceholder')}
 					class="bare w-full bg-transparent py-3 font-mono text-sm outline-none placeholder:text-dim/60"
 					autocomplete="off"
 					spellcheck="false"
@@ -182,13 +193,13 @@
 						</button>
 					</li>
 				{:else}
-					<li class="px-2.5 py-6 text-center text-sm text-dim">No matching tool</li>
+					<li class="px-2.5 py-6 text-center text-sm text-dim">{t('noMatch')}</li>
 				{/each}
 			</ul>
 			<div class="flex items-center gap-4 border-t border-line px-3 py-2 font-mono text-[11px] text-dim/70">
-				<span class="flex items-center gap-1.5"><Kbd keys="↑↓" /> navigate</span>
-				<span class="flex items-center gap-1.5"><Kbd keys="↵" /> open</span>
-				<span class="flex items-center gap-1.5"><Kbd keys="esc" /> close</span>
+				<span class="flex items-center gap-1.5"><Kbd keys="↑↓" /> {t('navigate')}</span>
+				<span class="flex items-center gap-1.5"><Kbd keys="↵" /> {t('open')}</span>
+				<span class="flex items-center gap-1.5"><Kbd keys="esc" /> {t('close')}</span>
 			</div>
 		</Dialog.Content>
 	</Dialog.Portal>

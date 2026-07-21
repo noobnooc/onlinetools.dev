@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { openPalette } from '$lib/state/app.svelte';
-	import { TOOLS, CATEGORY_LABELS, type ToolCategory } from '$lib/tools/registry';
+	import { TOOLS, type ToolCategory } from '$lib/tools/registry';
 	import { iconFor } from '$lib/tools/icons';
+	import { t, lt, ltCategory, lp, locale } from '$lib/i18n';
 	import Kbd from './Kbd.svelte';
 	import ThemeToggle from './ThemeToggle.svelte';
 	import { Search, House } from 'lucide-svelte';
@@ -18,9 +19,11 @@
 
 	/**
 	 * Compact rail label: drop subtitles and generic suffixes so rows never
-	 * truncate. The full name stays available via the title tooltip.
+	 * truncate. English-specific; localized names pass through untouched
+	 * (they are written compact already).
 	 */
 	function shortName(name: string): string {
+		if (locale() !== 'en') return name;
 		return name
 			.replace(/ [—-] .*$/, '')
 			.replace(/ Encode \/ Decode$/, '')
@@ -43,7 +46,7 @@
 <div class="flex h-full flex-col">
 	<!-- Brand + theme -->
 	<div class="flex shrink-0 items-center justify-between gap-2 px-4 pt-4 pb-3">
-		<a href="/" onclick={onnavigate} class="flex min-w-0 items-center gap-2.5">
+		<a href={lp('/')} onclick={onnavigate} class="flex min-w-0 items-center gap-2.5">
 			<span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#0B0D10]" aria-hidden="true">
 				<span class="block h-3 w-3 rounded-full border-2 border-accent"></span>
 			</span>
@@ -66,7 +69,7 @@
 			class="flex w-full items-center gap-2 rounded-lg bg-fg/[0.05] px-2.5 py-2 text-left text-[13px] text-dim transition-colors duration-120 hover:bg-fg/[0.08] hover:text-fg"
 		>
 			<Search size={14} class="shrink-0" />
-			<span class="grow">Search</span>
+			<span class="grow">{t('search')}</span>
 			<Kbd keys="⌘K" />
 		</button>
 	</div>
@@ -74,38 +77,39 @@
 	<!-- Navigation — masked top and bottom so the list fades out, not clips -->
 	<nav
 		class="grow overflow-y-auto px-3 pt-3 pb-5"
-		aria-label="Tools"
+		aria-label={t('searchTools')}
 		style="mask-image: linear-gradient(to bottom, transparent, black 18px, black calc(100% - 22px), transparent); -webkit-mask-image: linear-gradient(to bottom, transparent, black 18px, black calc(100% - 22px), transparent)"
 	>
 		<a
-			href="/"
-			aria-current={current === '/' ? 'page' : undefined}
+			href={lp('/')}
+			aria-current={current === lp('/') ? 'page' : undefined}
 			onclick={onnavigate}
-			class={rowClass(current === '/')}
+			class={rowClass(current === lp('/'))}
 		>
-			<House size={14} class="shrink-0 {current === '/' ? 'text-accent' : 'text-dim/70'}" />
-			Overview
+			<House size={14} class="shrink-0 {current === lp('/') ? 'text-accent' : 'text-dim/70'}" />
+			{t('overview')}
 		</a>
 
 		{#each categories as cat (cat)}
 			<div class="mt-5">
 				<span class="block px-2.5 pb-1.5 text-[10px] font-semibold tracking-[0.1em] text-dim/60 uppercase">
-					{CATEGORY_LABELS[cat]}
+					{ltCategory(cat)}
 				</span>
 				<ul class="space-y-px">
 					{#each TOOLS.filter((t) => t.category === cat) as tool (tool.slug)}
 						{@const Icon = iconFor(tool.slug)}
-						{@const active = current === `/t/${tool.slug}`}
+						{@const href = lp(`/t/${tool.slug}`)}
+						{@const active = current === href}
 						<li>
 							<a
-								href="/t/{tool.slug}"
+								{href}
 								aria-current={active ? 'page' : undefined}
 								onclick={onnavigate}
-								title={tool.name}
+								title={lt(tool).name}
 								class={rowClass(active)}
 							>
 								<Icon size={14} class="shrink-0 {active ? 'text-accent' : 'text-dim/70'}" />
-								<span class="truncate">{shortName(tool.name)}</span>
+								<span class="truncate">{shortName(lt(tool).name)}</span>
 							</a>
 						</li>
 					{/each}

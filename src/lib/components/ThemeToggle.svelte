@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { getThemePref, setThemePref, type ThemePref } from '$lib/state/app.svelte';
+	import { t } from '$lib/i18n';
 	import { Sun, Moon, Monitor } from 'lucide-svelte';
 
 	/**
@@ -22,11 +23,7 @@
 	});
 
 	const ORDER: ThemePref[] = ['system', 'dark', 'light'];
-	const LABELS: Record<ThemePref, string> = {
-		system: 'Follow system',
-		dark: 'Dark',
-		light: 'Light'
-	};
+	const LABEL_KEYS = { system: 'themeSystem', dark: 'themeDark', light: 'themeLight' } as const;
 
 	function cycle() {
 		pref = ORDER[(ORDER.indexOf(pref) + 1) % ORDER.length];
@@ -38,7 +35,7 @@
 	type="button"
 	onclick={cycle}
 	aria-label="Toggle color theme"
-	title="Theme: {LABELS[pref]} — click to switch"
+	title={t('themeTitle', { mode: t(LABEL_KEYS[pref]) })}
 	class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-dim transition-colors duration-120 hover:bg-fg/[0.05] hover:text-fg"
 >
 	{#if pref === 'dark'}

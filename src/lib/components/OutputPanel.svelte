@@ -4,6 +4,7 @@
 	import { detect } from '$lib/detect/detectors';
 	import { TOOLS, TOOL_BY_SLUG } from '$lib/tools/registry';
 	import { pushRecentTool } from '$lib/state/app.svelte';
+	import { t, lt, lp } from '$lib/i18n';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import { Copy, Check, Download, Link, ArrowRight } from 'lucide-svelte';
@@ -23,14 +24,7 @@
 		emptyHint?: string;
 	}
 
-	let {
-		value,
-		label = 'Output',
-		filename = 'output.txt',
-		shareState = null,
-		children,
-		emptyHint = 'Output appears here as you type'
-	}: Props = $props();
+	let { value, label, filename = 'output.txt', shareState = null, children, emptyHint }: Props = $props();
 
 	let copied = $state(false);
 	let linkCopied = $state(false);
@@ -41,23 +35,27 @@
 	/** Pipeline seed: send this output into another tool, detections first. */
 	const chainTargets = $derived.by(() => {
 		if (value === '' || value.length > MAX_SHARED_INPUT) return [];
-		const current = page.url.pathname.replace(/^\/t\//, '');
+		// The pathname may carry a locale prefix (/zh/t/…) — take what follows /t/.
+		const current = page.url.pathname.split('/t/')[1] ?? '';
 		const detected = detect(value)
 			.flatMap((d) => d.actions.map((a) => a.tool))
 			.filter((slug, i, arr) => arr.indexOf(slug) === i && slug !== current)
 			.slice(0, 3);
 		const rest = TOOLS.map((t) => t.slug).filter((s) => s !== current && !detected.includes(s));
-		return [...detected, ...rest].map((slug) => ({
-			slug,
-			name: TOOL_BY_SLUG.get(slug)?.name ?? slug,
-			suggested: detected.includes(slug)
-		}));
+		return [...detected, ...rest].map((slug) => {
+			const tool = TOOL_BY_SLUG.get(slug);
+			return {
+				slug,
+				name: tool ? lt(tool).name : slug,
+				suggested: detected.includes(slug)
+			};
+		});
 	});
 
 	function continueWith(slug: string) {
 		chainOpen = false;
 		pushRecentTool(slug);
-		void goto(`/t/${slug}#s=${encodeState({ input: value })}`);
+		void goto(`${lp(`/t/${slug}`)}#s=${encodeState({ input: value })}`);
 	}
 
 	// One short highlight when the result changes — the "updated" cue.
@@ -65,8 +63,8 @@
 		void value;
 		if (value === '') return;
 		flash = true;
-		const t = setTimeout(() => (flash = false), 450);
-		return () => clearTimeout(t);
+		const timer = setTimeout(() => (flash = false), 450);
+		return () => clearTimeout(timer);
 	});
 
 	async function onCopy() {
@@ -98,7 +96,7 @@
 
 <div>
 	<div class="mb-1.5 flex items-baseline justify-between gap-2">
-		<span class="text-xs font-medium tracking-wide text-dim uppercase">{label}</span>
+		<span class="text-xs font-medium tracking-wide text-dim uppercase">{label ?? t('output')}</span>
 		{#if value !== ''}
 			<div class="flex items-center gap-1">
 				<span class="mr-1 font-mono text-[11px] text-dim/70">{formatBytes(byteLength(value))}</span>
@@ -108,8 +106,8 @@
 					onclick={onCopy}
 					title="Copy result (⌘⇧C)"
 				>
-					{#if copied}<Check size={13} class="text-ok" /><span class="text-ok">Copied</span>
-					{:else}<Copy size={13} /><span>Copy</span>{/if}
+					{#if copied}<Check size={13} class="text-ok" /><span class="text-ok">{t('copied')}</span>
+					{:else}<Copy size={13} /><span>{t('copy')}</span>{/if}
 				</button>
 				<button
 					type="button"
@@ -117,7 +115,7 @@
 					onclick={() => downloadText(value, filename)}
 					title="Download result"
 				>
-					<Download size={13} /><span>Download</span>
+					<Download size={13} /><span>{t('download')}</span>
 				</button>
 				{#if shareState}
 					<button
@@ -126,8 +124,8 @@
 						onclick={onShare}
 						title="Copy a link that restores this state"
 					>
-						{#if linkCopied}<Check size={13} class="text-ok" /><span class="text-ok">Link copied</span>
-						{:else}<Link size={13} /><span>Share</span>{/if}
+						{#if linkCopied}<Check size={13} class="text-ok" /><span class="text-ok">{t('linkCopied')}</span>
+						{:else}<Link size={13} /><span>{t('share')}</span>{/if}
 					</button>
 				{/if}
 				{#if chainTargets.length > 0}
@@ -140,7 +138,7 @@
 							aria-expanded={chainOpen}
 							title="Send this result into another tool"
 						>
-							<ArrowRight size={13} /><span>Continue with</span>
+							<ArrowRight size={13} /><span>{t('continueWith')}</span>
 						</button>
 						{#if chainOpen}
 							<!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
@@ -159,7 +157,7 @@
 											onclick={() => continueWith(target.slug)}
 										>
 											{target.name}
-											{#if target.suggested}<span class="ml-1 text-[10px] text-dim">suggested</span>{/if}
+											{#if target.suggested}<span class="ml-1 text-[10px] text-dim">{t('suggested')}</span>{/if}
 										</button>
 									</li>
 								{/each}
@@ -172,8 +170,7 @@
 	</div>
 	{#if shareTooLarge}
 		<p class="mb-1.5 text-xs text-warn">
-			Input too large for a URL — share links are capped so they stay portable. Content never leaves
-			this machine.
+			{t('shareTooLarge')}
 		</p>
 	{/if}
 	<div
