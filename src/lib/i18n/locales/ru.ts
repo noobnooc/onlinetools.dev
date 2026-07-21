@@ -311,7 +311,115 @@ const ru: Messages = {
 		wcLines: 'Строки',
 		wcSentences: 'Предложения',
 		wcParagraphs: 'Абзацы',
-		wcAvg: 'Средняя длина слова'
+		wcAvg: 'Средняя длина слова',
+
+		// Shared formatter controls
+		fmtFormat: 'Форматировать',
+		fmtMinify: 'Минифицировать',
+
+		// SQL formatter
+		sqlInput: 'SQL-запрос(ы)',
+		sqlDialect: 'Диалект',
+		sqlKeywords: 'Ключевые слова',
+		sqlKeep: 'Как есть',
+
+		// XML formatter
+		xmlInput: 'XML-документ',
+
+		// XML ↔ JSON
+		xjInputXml: 'XML-документ',
+		xjInputJson: 'JSON-объект',
+		xjNote: 'Атрибуты становятся ключами "@_name", а текст рядом с атрибутами — "#text", поэтому конвертация обратима. Порядок элементов среди смешанных соседей не сохраняется — XML допускает повторы, а объекты JSON нет.',
+
+		// CSV → JSON
+		cjInput: 'Данные CSV / TSV',
+		cjAuto: 'Авто',
+		cjPipe: 'Вертикальная черта',
+		cjHeader: 'Первая строка — заголовок',
+		cjTyped: 'Типизированные значения',
+
+		// Markdown
+		mdPreview: 'Предпросмотр',
+		mdNote: 'Предпросмотр санитизируется перед отрисовкой, поэтому скрипты и обработчики событий во вставленном или полученном по ссылке содержимом не выполняются. В поле HTML-вывода — сырой результат конвертации.',
+
+		// Code formatters
+		htmlInput: 'Исходный HTML',
+		cssInput: 'Исходный CSS',
+		jsInput: 'Исходный JavaScript',
+
+		// String escape
+		escEscape: 'Экранировать',
+		escUnescape: 'Снять экранирование',
+		escDialect: 'Диалект',
+		escInputEsc: 'Текст для экранирования',
+		escInputUnesc: 'Экранированный текст',
+
+		// Number base
+		nbInput: 'Число',
+		nbFrom: 'Из',
+		nbAutoT: 'Определять по префиксу 0x / 0o / 0b, иначе десятичное',
+		nbGroup: 'Группировать цифры',
+		nbBase: 'Основание',
+		nbBin: 'Двоичное',
+		nbOct: 'Восьмеричное',
+		nbDec: 'Десятичное',
+		nbHex: 'Шестнадцатеричное',
+		nbBits: 'бит',
+
+		// Text ↔ hex/binary
+		hbFormat: 'Байты как',
+		hbSep: 'Разделитель',
+		hbSpace: 'Пробел',
+		hbNone: 'Нет',
+		hbColon: 'Двоеточие',
+		hbInputEnc: 'Текст для кодирования',
+		hbInputDec: 'Байты для декодирования',
+
+		// JSON Schema
+		schInfer: 'Вывести схему',
+		schValidate: 'Проверить',
+		schInferT: 'Сгенерировать схему из примера JSON',
+		schValidateT: 'Проверить JSON по схеме',
+		schData: 'JSON-данные',
+		schSchema: 'JSON Schema',
+		schViolations: 'нарушений',
+		schValid: 'Корректно — данные соответствуют схеме',
+		schResult: 'Результат проверки',
+
+		// EXIF
+		exTags: 'Полей метаданных: {n}',
+		exNone: 'Метаданные не найдены — этот файл уже чист',
+		exStrip: 'Скачать очищенную копию',
+		exGps: 'Встроены GPS-координаты',
+		exMap: 'Показать на карте',
+		exNote: 'Чтение и удаление выполняются целиком в вашем браузере — фото никуда не загружается. Очистка удаляет сегменты метаданных байт в байт без перекодирования, поэтому пиксели и качество не затрагиваются.',
+
+		// Cron builder
+		crBuilder: 'Конструктор',
+		crMinute: 'Минута',
+		crHour: 'Час',
+		crDom: 'День месяца',
+		crMonth: 'Месяц',
+		crDow: 'День недели',
+		crEvery: 'Все',
+		crStep: 'Каждые N',
+		crAt: 'Конкретные',
+		crUse: 'Использовать выражение',
+
+		// JWT sign & verify
+		jwtDecode: 'Декодировать',
+		jwtSign: 'Подписать',
+		jwtVerify: 'Проверить',
+		jwtAlg: 'Алгоритм',
+		jwtPayloadLbl: 'Полезная нагрузка (JSON-объект)',
+		jwtSecret: 'Секрет',
+		jwtPrivKey: 'Приватный ключ (PKCS#8 PEM)',
+		jwtPubKey: 'Секрет (HS) или публичный ключ PEM (RS/ES)',
+		jwtSignNote: 'Подпись выполняется через WebCrypto в вашем браузере — ключ не покидает эту страницу. Для HS-алгоритмов используйте длинный случайный секрет: короткие перебираются, где бы вы ни подписывали.',
+		jwtVerifyNote: 'Проверка сверяет подпись с предоставленным ключом, локально. Она не запрашивает JWKS-эндпоинты и не проверяет клеймы вроде aud/iss — делайте это на сервере.',
+
+		// Timestamp extras
+		tsDiff: 'Разница между двумя датами'
 	},
 	categories: {
 		encoding: 'Кодирование',
@@ -321,7 +429,9 @@ const ru: Messages = {
 		generators: 'Генераторы',
 		crypto: 'Хеши и криптография',
 		web: 'Веб',
-		image: 'Изображения'
+		image: 'Изображения',
+		code: 'Код и разметка',
+		privacy: 'Приватность'
 	},
 	tools: {
 		'json-formatter': {
@@ -447,6 +557,58 @@ const ru: Messages = {
 		'favicon-generator': {
 			name: 'Генератор favicon',
 			description: 'Превратите любое изображение в favicon.ico и полный набор PNG- и manifest-иконок'
+		},
+		'sql-formatter': {
+			name: 'Форматирование SQL',
+			description: 'Форматируйте SQL с ключевыми словами под нужный диалект или минифицируйте в одну строку'
+		},
+		'xml-formatter': {
+			name: 'Форматирование и проверка XML',
+			description: 'Форматируйте, минифицируйте и проверяйте XML с точными позициями ошибок'
+		},
+		'xml-to-json': {
+			name: 'Конвертер XML ↔ JSON',
+			description: 'Конвертируйте XML-документы в JSON и обратно, включая атрибуты'
+		},
+		'csv-to-json': {
+			name: 'Конвертер CSV → JSON',
+			description: 'Разбирайте CSV в JSON-объекты с автоопределением разделителя и типизацией значений'
+		},
+		'markdown-to-html': {
+			name: 'Конвертер Markdown ↔ HTML',
+			description: 'Рендерьте Markdown в HTML с живым предпросмотром или превращайте HTML обратно в Markdown'
+		},
+		'html-formatter': {
+			name: 'HTML: форматирование и минификация',
+			description: 'Приводите запутанный HTML в читаемый вид или минифицируйте его для продакшена'
+		},
+		'css-formatter': {
+			name: 'CSS: форматирование и минификация',
+			description: 'Форматируйте CSS для чтения или минифицируйте для продакшена'
+		},
+		'js-formatter': {
+			name: 'JavaScript: форматирование и минификация',
+			description: 'Форматируйте JavaScript или минифицируйте его с настоящим сжатием и переименованием переменных'
+		},
+		'string-escape': {
+			name: 'Экранирование строк',
+			description: 'Экранируйте строки и снимайте экранирование для JSON, JavaScript, Java, XML, SQL и CSV'
+		},
+		'number-base-converter': {
+			name: 'Конвертер систем счисления',
+			description: 'Переводите числа между двоичной, восьмеричной, десятичной, шестнадцатеричной и любой системой до основания 36'
+		},
+		'text-to-hex': {
+			name: 'Конвертер текст ↔ hex / двоичный код',
+			description: 'Превращайте текст в hex-, двоичные или десятичные байты и декодируйте байтовые дампы обратно'
+		},
+		'json-schema-validator': {
+			name: 'JSON Schema: проверка и генерация',
+			description: 'Проверяйте JSON по схеме или выводите схему из примера данных'
+		},
+		'exif-viewer': {
+			name: 'Просмотр и удаление EXIF',
+			description: 'Смотрите, какие метаданные несут ваши фото, и удаляйте их без перекодирования'
 		}
 	}
 };

@@ -311,7 +311,115 @@ const ko: Messages = {
 		wcLines: '줄',
 		wcSentences: '문장',
 		wcParagraphs: '문단',
-		wcAvg: '평균 단어 길이'
+		wcAvg: '평균 단어 길이',
+
+		// Shared formatter controls
+		fmtFormat: '포맷',
+		fmtMinify: '압축',
+
+		// SQL formatter
+		sqlInput: 'SQL 문',
+		sqlDialect: '방언',
+		sqlKeywords: '키워드',
+		sqlKeep: '유지',
+
+		// XML formatter
+		xmlInput: 'XML 문서',
+
+		// XML ↔ JSON
+		xjInputXml: 'XML 문서',
+		xjInputJson: 'JSON 객체',
+		xjNote: '속성은 "@_name" 키가 되고 속성과 함께 있는 텍스트는 "#text"가 되어 변환이 왕복 가능합니다. 서로 다른 형제 요소가 섞인 순서는 보존되지 않습니다 — XML은 반복을 허용하지만 JSON 객체는 그렇지 않습니다.',
+
+		// CSV → JSON
+		cjInput: 'CSV / TSV 데이터',
+		cjAuto: '자동',
+		cjPipe: '파이프',
+		cjHeader: '첫 행은 헤더',
+		cjTyped: '타입 변환',
+
+		// Markdown
+		mdPreview: '미리보기',
+		mdNote: '미리보기는 렌더링 전에 정화(sanitize)되므로, 붙여넣거나 공유된 내용 속 스크립트와 이벤트 핸들러는 실행되지 않습니다. HTML 출력 상자에는 원본 변환 결과가 담깁니다.',
+
+		// Code formatters
+		htmlInput: 'HTML 소스',
+		cssInput: 'CSS 소스',
+		jsInput: 'JavaScript 소스',
+
+		// String escape
+		escEscape: '이스케이프',
+		escUnescape: '언이스케이프',
+		escDialect: '방언',
+		escInputEsc: '이스케이프할 텍스트',
+		escInputUnesc: '이스케이프된 텍스트',
+
+		// Number base
+		nbInput: '숫자',
+		nbFrom: '원본 진법',
+		nbAutoT: '0x / 0o / 0b 접두사로 감지, 그 외는 십진수',
+		nbGroup: '자릿수 묶기',
+		nbBase: '진법',
+		nbBin: '2진수',
+		nbOct: '8진수',
+		nbDec: '10진수',
+		nbHex: '16진수',
+		nbBits: '비트',
+
+		// Text ↔ hex/binary
+		hbFormat: '바이트 표기',
+		hbSep: '구분자',
+		hbSpace: '공백',
+		hbNone: '없음',
+		hbColon: '콜론',
+		hbInputEnc: '인코딩할 텍스트',
+		hbInputDec: '디코딩할 바이트',
+
+		// JSON Schema
+		schInfer: '스키마 추론',
+		schValidate: '검증',
+		schInferT: '샘플 JSON에서 스키마 생성',
+		schValidateT: 'JSON을 스키마와 대조',
+		schData: 'JSON 데이터',
+		schSchema: 'JSON Schema',
+		schViolations: '위반',
+		schValid: '유효 — 데이터가 스키마를 만족합니다',
+		schResult: '검증 결과',
+
+		// EXIF
+		exTags: '메타데이터 필드 {n}개',
+		exNone: '메타데이터가 없습니다 — 이미 깨끗한 파일입니다',
+		exStrip: '정리된 사본 다운로드',
+		exGps: 'GPS 위치 포함됨',
+		exMap: '지도에서 보기',
+		exNote: '읽기와 제거는 전부 브라우저 안에서 이루어지며 사진은 업로드되지 않습니다. 정리는 재인코딩 없이 메타데이터 구간만 바이트 단위로 제거하므로 픽셀과 품질은 그대로입니다.',
+
+		// Cron builder
+		crBuilder: '빌더',
+		crMinute: '분',
+		crHour: '시',
+		crDom: '일',
+		crMonth: '월',
+		crDow: '요일',
+		crEvery: '매번',
+		crStep: 'N마다',
+		crAt: '지정',
+		crUse: '표현식 사용',
+
+		// JWT sign & verify
+		jwtDecode: '디코딩',
+		jwtSign: '서명',
+		jwtVerify: '검증',
+		jwtAlg: '알고리즘',
+		jwtPayloadLbl: '페이로드 (JSON 객체)',
+		jwtSecret: '비밀 키',
+		jwtPrivKey: '개인 키 (PKCS#8 PEM)',
+		jwtPubKey: '비밀 키(HS) 또는 공개 키 PEM(RS/ES)',
+		jwtSignNote: '서명은 브라우저의 WebCrypto에서 실행됩니다 — 키는 이 페이지를 벗어나지 않습니다. HS 알고리즘에는 길고 무작위한 비밀 키를 쓰세요. 짧은 키는 어디서 서명하든 무차별 대입으로 뚫립니다.',
+		jwtVerifyNote: '검증은 입력한 키로 서명을 로컬에서 확인합니다. JWKS 엔드포인트를 가져오거나 aud/iss 같은 클레임을 검사하지는 않습니다 — 그것은 서버에서 하세요.',
+
+		// Timestamp extras
+		tsDiff: '두 날짜 사이의 차이'
 	},
 	categories: {
 		encoding: '인코딩',
@@ -321,7 +429,9 @@ const ko: Messages = {
 		generators: '생성기',
 		crypto: '해시 & 암호화',
 		web: '웹',
-		image: '이미지'
+		image: '이미지',
+		code: '코드 & 마크업',
+		privacy: '프라이버시'
 	},
 	tools: {
 		'json-formatter': {
@@ -447,6 +557,58 @@ const ko: Messages = {
 		'favicon-generator': {
 			name: '파비콘 생성기',
 			description: '이미지 하나로 favicon.ico와 PNG·manifest 아이콘 세트 전체 생성'
+		},
+		'sql-formatter': {
+			name: 'SQL 포맷터',
+			description: '방언별 키워드 인식으로 SQL 포맷 또는 한 줄로 압축'
+		},
+		'xml-formatter': {
+			name: 'XML 포맷터 & 검증기',
+			description: 'XML 정리·압축·검증, 오류 위치를 정확히 표시'
+		},
+		'xml-to-json': {
+			name: 'XML ↔ JSON 변환기',
+			description: 'XML 문서와 JSON 상호 변환, 속성까지 보존'
+		},
+		'csv-to-json': {
+			name: 'CSV → JSON 변환기',
+			description: 'CSV를 구분자 자동 감지·타입 변환으로 JSON 객체로 파싱'
+		},
+		'markdown-to-html': {
+			name: 'Markdown ↔ HTML 변환기',
+			description: 'Markdown을 실시간 미리보기로 HTML 렌더링, HTML을 Markdown으로 역변환'
+		},
+		'html-formatter': {
+			name: 'HTML 포맷터 & 압축기',
+			description: '지저분한 HTML 정리 또는 프로덕션용 압축'
+		},
+		'css-formatter': {
+			name: 'CSS 포맷터 & 압축기',
+			description: '읽기 좋게 CSS 정리 또는 배포용 압축'
+		},
+		'js-formatter': {
+			name: 'JavaScript 포맷터 & 압축기',
+			description: 'JavaScript 정리 또는 실제 압축·이름 축약으로 최소화'
+		},
+		'string-escape': {
+			name: '문자열 이스케이프 / 언이스케이프',
+			description: 'JSON, JavaScript, Java, XML, SQL, CSV용 문자열 이스케이프와 복원'
+		},
+		'number-base-converter': {
+			name: '진법 변환기',
+			description: '2·8·10·16진수와 최대 36진법 사이의 숫자 변환'
+		},
+		'text-to-hex': {
+			name: '텍스트 ↔ Hex / 바이너리 변환기',
+			description: '텍스트를 16진·2진·10진 바이트로 변환하고 바이트 덤프를 다시 디코딩'
+		},
+		'json-schema-validator': {
+			name: 'JSON Schema 검증기 & 생성기',
+			description: 'JSON을 스키마와 대조 검증하거나 샘플 데이터에서 스키마 추론'
+		},
+		'exif-viewer': {
+			name: 'EXIF 뷰어 & 제거기',
+			description: '사진에 담긴 메타데이터 확인과 재인코딩 없는 제거'
 		}
 	}
 };
