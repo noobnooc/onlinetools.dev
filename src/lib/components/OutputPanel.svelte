@@ -2,8 +2,10 @@
 	import { copyText, downloadText, byteLength, formatBytes } from '$lib/utils/format';
 	import { shareUrl, encodeState, MAX_SHARED_INPUT } from '$lib/state/urlstate';
 	import { detect } from '$lib/detect/detectors';
-	import { TOOLS, TOOL_BY_SLUG } from '$lib/tools/registry';
+	import { rankTools } from '$lib/detect/recommend';
+	import { TOOL_BY_SLUG } from '$lib/tools/registry';
 	import { pushRecentTool } from '$lib/state/app.svelte';
+	import { setPendingState } from '$lib/state/handoff';
 	import { t, lt, lp } from '$lib/i18n';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
@@ -32,22 +34,21 @@
 	let flash = $state(false);
 	let chainOpen = $state(false);
 
-	/** Pipeline seed: send this output into another tool, detections first. */
+	/**
+	 * Pipeline seed: send this output into another tool. Ranked by format
+	 * relevance — tools accepting the detected format first, then tools
+	 * accepting plain text, generators last.
+	 */
 	const chainTargets = $derived.by(() => {
-		if (value === '' || value.length > MAX_SHARED_INPUT) return [];
+		if (value === '' || value.length > 500_000) return [];
 		// The pathname may carry a locale prefix (/zh/t/…) — take what follows /t/.
 		const current = page.url.pathname.split('/t/')[1] ?? '';
-		const detected = detect(value)
-			.flatMap((d) => d.actions.map((a) => a.tool))
-			.filter((slug, i, arr) => arr.indexOf(slug) === i && slug !== current)
-			.slice(0, 3);
-		const rest = TOOLS.map((t) => t.slug).filter((s) => s !== current && !detected.includes(s));
-		return [...detected, ...rest].map((slug) => {
-			const tool = TOOL_BY_SLUG.get(slug);
+		return rankTools(detect(value), { exclude: current }).map((r) => {
+			const tool = TOOL_BY_SLUG.get(r.slug);
 			return {
-				slug,
-				name: tool ? lt(tool).name : slug,
-				suggested: detected.includes(slug)
+				slug: r.slug,
+				name: tool ? lt(tool).name : r.slug,
+				suggested: r.suggested
 			};
 		});
 	});
@@ -55,7 +56,13 @@
 	function continueWith(slug: string) {
 		chainOpen = false;
 		pushRecentTool(slug);
-		void goto(`${lp(`/t/${slug}`)}#s=${encodeState({ input: value })}`);
+		if (value.length <= MAX_SHARED_INPUT) {
+			void goto(`${lp(`/t/${slug}`)}#s=${encodeState({ input: value })}`);
+		} else {
+			// Too large for the URL fragment — hand off in memory instead.
+			setPendingState({ input: value });
+			void goto(lp(`/t/${slug}`));
+		}
 	}
 
 	// One short highlight when the result changes — the "updated" cue.

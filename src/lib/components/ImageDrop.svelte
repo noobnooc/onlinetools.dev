@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { tt } from '$lib/i18n';
+	import { takePendingFile } from '$lib/state/handoff';
 	import { ImageUp } from 'lucide-svelte';
 
 	/**
@@ -18,6 +19,13 @@
 
 	let input: HTMLInputElement | undefined = $state();
 	let dragging = $state(false);
+
+	// A file pasted/dropped elsewhere (Smart Paste) arrives via the one-shot
+	// handoff store when the user picks an image tool.
+	$effect(() => {
+		const pending = takePendingFile();
+		if (pending) onfile(pending);
+	});
 
 	function pick(files: FileList | null | undefined) {
 		const file = files?.[0];
