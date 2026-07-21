@@ -16,7 +16,15 @@ export const entries: EntryGenerator = () =>
  * dynamically so a locale's content is only fetched on its own pages.
  */
 const CONTENT_L10N: Record<string, () => Promise<{ default: Record<string, ToolContent> }>> = {
-	zh: () => import('$lib/tools/content.zh')
+	zh: () => import('$lib/tools/content.zh'),
+	ja: () => import('$lib/tools/content.ja'),
+	ko: () => import('$lib/tools/content.ko'),
+	es: () => import('$lib/tools/content.es'),
+	fr: () => import('$lib/tools/content.fr'),
+	de: () => import('$lib/tools/content.de'),
+	pt: () => import('$lib/tools/content.pt'),
+	ru: () => import('$lib/tools/content.ru'),
+	it: () => import('$lib/tools/content.it')
 };
 
 export const load: PageLoad = async ({ params }) => {
