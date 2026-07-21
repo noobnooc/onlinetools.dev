@@ -10,6 +10,7 @@
 	import GlobalShortcuts from '$lib/components/GlobalShortcuts.svelte';
 	import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
 	import { t, lp } from '$lib/i18n';
+	import { initFavorites } from '$lib/state/favorites.svelte';
 	import { SITE_VERSION } from '$lib/version';
 	import type { Snippet } from 'svelte';
 
@@ -22,6 +23,11 @@
 	// navigation ourselves (SvelteKit only manages window scroll).
 	afterNavigate(() => {
 		scroller?.scrollTo(0, 0);
+	});
+
+	// Favorites hydrate after mount so the client's first render matches SSR.
+	$effect(() => {
+		initFavorites();
 	});
 
 	// Register the service worker: cached pages and assets keep every visited

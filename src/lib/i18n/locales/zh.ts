@@ -20,6 +20,11 @@ const zh: Messages = {
 		language: '语言',
 		openNav: '打开导航',
 		searchTools: '搜索工具',
+
+		// Favorites (stored locally in this browser)
+		favorites: '收藏',
+		favoriteAdd: '添加到收藏',
+		favoriteRemove: '取消收藏',
 		homeTitle: 'onlinetools.dev — 在浏览器中运行的开发者工具',
 		homeMetaDescription:
 			'快速、键盘优先的开发者工具,全部在浏览器本地运行。格式化 JSON、解码 JWT 与 Base64、转换时间戳、测试正则 — 无需上传、无需注册、支持离线。',
