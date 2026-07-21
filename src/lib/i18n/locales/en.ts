@@ -27,6 +27,11 @@ const en = {
 		openNav: 'Open navigation',
 		searchTools: 'Search tools',
 
+		// Favorites (stored locally in this browser)
+		favorites: 'Favorites',
+		favoriteAdd: 'Add to favorites',
+		favoriteRemove: 'Remove from favorites',
+
 		// Home
 		homeTitle: 'onlinetools.dev — Developer tools that run in your browser',
 		homeMetaDescription:

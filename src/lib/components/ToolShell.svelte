@@ -7,6 +7,7 @@
 	import { pushRecentTool } from '$lib/state/app.svelte';
 	import { t, lt, ltCategory, lp, canonical, locale } from '$lib/i18n';
 	import ToolCard from './ToolCard.svelte';
+	import FavoriteButton from './FavoriteButton.svelte';
 	import PlusCorners from './PlusCorners.svelte';
 	import Eyebrow from './Eyebrow.svelte';
 	import SeoHead from './SeoHead.svelte';
@@ -112,13 +113,20 @@
 				<p class="mt-1 text-sm text-dim">{l10n.description}</p>
 			</div>
 		</div>
-		<span
-			class="flex items-center gap-1.5 rounded-md border border-line bg-surface px-2 py-1 font-mono text-[11px] text-dim"
-			title={t('runsLocallyTitle')}
-		>
-			<span class="inline-block h-1.5 w-1.5 rounded-full bg-ok" aria-hidden="true"></span>
-			{t('runsLocally')}
-		</span>
+		<div class="flex items-center gap-2">
+			<FavoriteButton
+				slug={tool.slug}
+				size={14}
+				class="h-[26px] w-[26px] rounded-md border border-line bg-surface hover:border-accent/50"
+			/>
+			<span
+				class="flex items-center gap-1.5 rounded-md border border-line bg-surface px-2 py-1 font-mono text-[11px] text-dim"
+				title={t('runsLocallyTitle')}
+			>
+				<span class="inline-block h-1.5 w-1.5 rounded-full bg-ok" aria-hidden="true"></span>
+				{t('runsLocally')}
+			</span>
+		</div>
 	</header>
 
 	<!-- The tool itself sits in a framed panel, lifted off the page background. -->

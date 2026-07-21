@@ -2,13 +2,14 @@
 	import { Dialog } from 'bits-ui';
 	import { goto } from '$app/navigation';
 	import { palette, getRecentTools, pushRecentTool } from '$lib/state/app.svelte';
+	import { favorites, isFavorite } from '$lib/state/favorites.svelte';
 	import { searchTools, TOOLS, TOOL_BY_SLUG, type ToolMeta } from '$lib/tools/registry';
 	import { detect, type Detection } from '$lib/detect/detectors';
 	import { encodeState, MAX_SHARED_INPUT } from '$lib/state/urlstate';
 	import { t, lt, lp, locale } from '$lib/i18n';
 	import { iconFor } from '$lib/tools/icons';
 	import Kbd from './Kbd.svelte';
-	import { Search, CornerDownLeft, Zap } from 'lucide-svelte';
+	import { Search, CornerDownLeft, Star, Zap } from 'lucide-svelte';
 
 	interface Entry {
 		kind: 'tool' | 'action';
@@ -76,11 +77,14 @@
 		const actions = detectionEntries(query);
 		let tools: ToolMeta[];
 		if (query.trim() === '') {
-			const recent = getRecentTools()
+			const favs = favorites.slugs
 				.map((s) => TOOL_BY_SLUG.get(s))
 				.filter((t): t is ToolMeta => t !== undefined);
-			const rest = TOOLS.filter((t) => !recent.includes(t));
-			tools = [...recent, ...rest];
+			const recent = getRecentTools()
+				.map((s) => TOOL_BY_SLUG.get(s))
+				.filter((t): t is ToolMeta => t !== undefined && !favs.includes(t));
+			const rest = TOOLS.filter((t) => !favs.includes(t) && !recent.includes(t));
+			tools = [...favs, ...recent, ...rest];
 		} else {
 			tools = searchTools(query.trim().replace(VERBS, '').length > 0 ? query : query);
 			// If the query looks like pure content (no tool matched), still show all-tool fallback.
@@ -179,8 +183,13 @@
 									<Icon size={13} />
 								</span>
 								<span class="flex min-w-0 flex-col">
-									<span class="truncate text-sm {entry.kind === 'action' ? 'text-accent' : ''}">
-										{entry.label}
+									<span class="flex min-w-0 items-center gap-1.5">
+										<span class="truncate text-sm {entry.kind === 'action' ? 'text-accent' : ''}">
+											{entry.label}
+										</span>
+										{#if entry.kind === 'tool' && isFavorite(entry.tool.slug)}
+											<Star size={10} class="shrink-0 fill-current text-accent" aria-hidden="true" />
+										{/if}
 									</span>
 									{#if entry.hint}
 										<span class="truncate font-mono text-xs text-dim">{entry.hint}</span>

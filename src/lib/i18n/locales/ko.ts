@@ -20,6 +20,11 @@ const ko: Messages = {
 		language: '언어',
 		openNav: '내비게이션 열기',
 		searchTools: '도구 검색',
+
+		// Favorites (stored locally in this browser)
+		favorites: '즐겨찾기',
+		favoriteAdd: '즐겨찾기에 추가',
+		favoriteRemove: '즐겨찾기에서 제거',
 		homeTitle: 'onlinetools.dev — 브라우저에서 실행되는 개발자 도구',
 		homeMetaDescription:
 			'빠르고 키보드 중심의 개발자 도구. 모두 브라우저 안에서 실행됩니다. JSON 포맷, JWT·Base64 디코딩, 타임스탬프 변환, 정규식 테스트 — 업로드 없음, 가입 없음, 오프라인 지원.',

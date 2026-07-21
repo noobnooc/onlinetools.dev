@@ -20,6 +20,11 @@ const ja: Messages = {
 		language: '言語',
 		openNav: 'ナビゲーションを開く',
 		searchTools: 'ツールを検索',
+
+		// Favorites (stored locally in this browser)
+		favorites: 'お気に入り',
+		favoriteAdd: 'お気に入りに追加',
+		favoriteRemove: 'お気に入りから削除',
 		homeTitle: 'onlinetools.dev — ブラウザで動く開発者ツール',
 		homeMetaDescription:
 			'高速でキーボード主体の開発者ツール。すべてブラウザ内で完結します。JSON 整形、JWT や Base64 のデコード、タイムスタンプ変換、正規表現テスト — アップロード不要、登録不要、オフライン対応。',

@@ -20,6 +20,11 @@ const es: Messages = {
 		language: 'Idioma',
 		openNav: 'Abrir navegación',
 		searchTools: 'Buscar herramientas',
+
+		// Favorites (stored locally in this browser)
+		favorites: 'Favoritos',
+		favoriteAdd: 'Añadir a favoritos',
+		favoriteRemove: 'Quitar de favoritos',
 		homeTitle: 'onlinetools.dev — Herramientas de desarrollo que corren en tu navegador',
 		homeMetaDescription:
 			'Herramientas de desarrollo rápidas y orientadas al teclado que se ejecutan por completo en tu navegador. Formatea JSON, decodifica JWT y Base64, convierte timestamps, prueba regex — sin subir nada, sin registro, funciona sin conexión.',

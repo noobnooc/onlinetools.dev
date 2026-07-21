@@ -20,6 +20,11 @@ const de: Messages = {
 		language: 'Sprache',
 		openNav: 'Navigation öffnen',
 		searchTools: 'Tools suchen',
+
+		// Favorites (stored locally in this browser)
+		favorites: 'Favoriten',
+		favoriteAdd: 'Zu Favoriten hinzufügen',
+		favoriteRemove: 'Aus Favoriten entfernen',
 		homeTitle: 'onlinetools.dev — Entwickler-Tools, die im Browser laufen',
 		homeMetaDescription:
 			'Schnelle, tastaturorientierte Entwickler-Tools, die vollständig im Browser laufen. JSON formatieren, JWT und Base64 dekodieren, Timestamps umrechnen, Regex testen — kein Upload, keine Anmeldung, funktioniert offline.',

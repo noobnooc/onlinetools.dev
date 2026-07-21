@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { openPalette } from '$lib/state/app.svelte';
-	import { TOOLS, TOOL_BY_SLUG, type ToolCategory } from '$lib/tools/registry';
+	import { favorites } from '$lib/state/favorites.svelte';
+	import { TOOLS, TOOL_BY_SLUG, type ToolCategory, type ToolMeta } from '$lib/tools/registry';
 	import { iconFor } from '$lib/tools/icons';
 	import { t, lt, ltCategory, lp, locale, canonical } from '$lib/i18n';
 	import ToolCard from '$lib/components/ToolCard.svelte';
@@ -17,6 +18,12 @@
 		.filter(Boolean);
 
 	const jsonTool = TOOL_BY_SLUG.get('json-formatter')!;
+
+	const favoriteTools = $derived(
+		favorites.slugs
+			.map((s) => TOOL_BY_SLUG.get(s))
+			.filter((t): t is ToolMeta => t !== undefined)
+	);
 
 	const jsonLd = $derived(
 		JSON.stringify({
@@ -78,6 +85,21 @@
 				<Kbd keys="⌘K" />
 			</button>
 		</div>
+
+		<!-- Favorites: local-only, rendered when the visitor has starred tools. -->
+		{#if favoriteTools.length > 0}
+			<section class="mb-12" aria-labelledby="favorites-heading">
+				<div class="mb-4 flex items-center gap-3">
+					<Eyebrow id="favorites-heading" text="{t('favorites')} · {favoriteTools.length}" />
+					<span class="h-px grow bg-line" aria-hidden="true"></span>
+				</div>
+				<div class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+					{#each favoriteTools as tool (tool.slug)}
+						<ToolCard {tool} />
+					{/each}
+				</div>
+			</section>
+		{/if}
 
 		<!-- Featured bento: two large cards with live-looking vignettes, four compact. -->
 		<section class="relative mb-12" aria-labelledby="featured-heading">
