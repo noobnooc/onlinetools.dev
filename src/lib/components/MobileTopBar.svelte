@@ -7,7 +7,7 @@
 	let drawerOpen = $state(false);
 </script>
 
-<header class="sticky top-0 z-30 flex h-13 items-center justify-between border-b border-line bg-bg/90 px-3 backdrop-blur lg:hidden">
+<header class="sticky top-0 z-30 flex h-13 items-center justify-between bg-canvas/90 px-3 backdrop-blur lg:hidden">
 	<button
 		type="button"
 		class="flex items-center gap-2 rounded-md p-2 text-dim transition-colors duration-120 hover:text-fg"
@@ -34,7 +34,7 @@
 	<Dialog.Portal>
 		<Dialog.Overlay class="fixed inset-0 z-40 bg-black/50 lg:hidden" />
 		<Dialog.Content
-			class="fixed inset-y-0 left-0 z-50 w-72 border-r border-line bg-bg shadow-xl shadow-black/20 lg:hidden"
+			class="fixed inset-y-0 left-0 z-50 w-72 bg-canvas shadow-xl shadow-black/20 lg:hidden"
 		>
 			<Dialog.Title class="sr-only">Navigation</Dialog.Title>
 			<Sidebar onnavigate={() => (drawerOpen = false)} />

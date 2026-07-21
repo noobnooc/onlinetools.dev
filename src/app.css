@@ -15,6 +15,8 @@
 	--ok: #3ecf8e;
 	--warn: #f5a623;
 	--err: #f0565a;
+	/* Recessed canvas the app shell sits on; the content card floats above it. */
+	--canvas: #060709;
 }
 
 :root:not(.dark) {
@@ -29,12 +31,14 @@
 	--ok: #16a06b;
 	--warn: #b97509;
 	--err: #d92d34;
+	--canvas: #eceef2;
 }
 
 @theme inline {
 	--color-bg: var(--bg);
 	--color-surface: var(--surface);
 	--color-surface-2: var(--surface-2);
+	--color-canvas: var(--canvas);
 	--color-line: var(--border);
 	--color-fg: var(--text);
 	--color-dim: var(--text-dim);
@@ -53,7 +57,7 @@
 }
 
 html {
-	background: var(--bg);
+	background: var(--canvas);
 	color: var(--text);
 	font-family: var(--font-sans);
 	color-scheme: dark;
