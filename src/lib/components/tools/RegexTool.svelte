@@ -75,7 +75,7 @@
 				spellcheck="false"
 				autocomplete="off"
 				placeholder="(?&lt;year&gt;\d{4})-(\d{2})-(\d{2})"
-				class="w-full bg-transparent px-1 py-2.5 font-mono text-sm outline-none placeholder:text-dim/50"
+				class="bare w-full bg-transparent px-1 py-2.5 font-mono text-sm outline-none placeholder:text-dim/50"
 			/>
 			<span class="pr-3 font-mono text-sm text-dim select-none">/{flags}</span>
 		</div>

@@ -132,7 +132,7 @@
 					{onkeydown}
 					type="text"
 					placeholder="Search tools, or paste content to act on it…"
-					class="w-full bg-transparent py-3 font-mono text-sm outline-none placeholder:text-dim/60"
+					class="bare w-full bg-transparent py-3 font-mono text-sm outline-none placeholder:text-dim/60"
 					autocomplete="off"
 					spellcheck="false"
 				/>

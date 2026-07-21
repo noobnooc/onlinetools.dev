@@ -1,5 +1,6 @@
 <script lang="ts">
 	import OutputPanel from '../OutputPanel.svelte';
+	import Segmented from '../Segmented.svelte';
 	import { bcryptHash, bcryptVerify, bcryptInfo } from '$lib/tools/bcrypt';
 	import { currentResult } from '$lib/state/app.svelte';
 	import { ShieldCheck, ShieldX, LoaderCircle } from 'lucide-svelte';
@@ -54,18 +55,14 @@
 </script>
 
 <div class="space-y-4">
-	<div class="flex rounded-md border border-line p-0.5" role="radiogroup" aria-label="Mode">
-		{#each [['hash', 'Hash a password'], ['verify', 'Verify against a hash']] as [m, label] (m)}
-			<button
-				type="button"
-				role="radio"
-				aria-checked={mode === m}
-				class="rounded-[5px] px-3 py-1 text-sm transition-colors duration-120
-					{mode === m ? 'bg-surface-2 text-fg' : 'text-dim hover:text-fg'}"
-				onclick={() => (mode = m as typeof mode)}>{label}</button
-			>
-		{/each}
-	</div>
+	<Segmented
+		bind:value={mode}
+		label="Mode"
+		options={[
+			{ value: 'hash', label: 'Hash', title: 'Hash a password' },
+			{ value: 'verify', label: 'Verify', title: 'Verify a password against a hash' }
+		]}
+	/>
 
 	{#if mode === 'hash'}
 		<label class="block">

@@ -3,6 +3,7 @@
 	import OutputPanel from '../OutputPanel.svelte';
 	import EmptyState from '../EmptyState.svelte';
 	import JsonTree from '../JsonTree.svelte';
+	import Segmented from '../Segmented.svelte';
 	import { formatJson, validateJson } from '$lib/tools/json';
 	import { initFromHash } from '$lib/state/hashstate.svelte';
 	import { formatBytes, byteLength } from '$lib/utils/format';
@@ -63,34 +64,31 @@
 		onsample={() => (input = SAMPLE)}
 	/>
 	<div class="flex flex-wrap items-center gap-4 text-sm">
-		<label class="flex items-center gap-2 text-dim">
+		<div class="flex items-center gap-2 text-dim">
 			Indent
-			<select
+			<Segmented
 				bind:value={indent}
-				class="rounded-md border border-line bg-surface-2 px-2 py-1 text-sm text-fg"
-			>
-				<option value="2">2 spaces</option>
-				<option value="4">4 spaces</option>
-				<option value="tab">Tabs</option>
-				<option value="min">Minified</option>
-			</select>
-		</label>
+				label="Indentation"
+				options={[
+					{ value: '2', label: '··', title: '2 spaces', mono: true },
+					{ value: '4', label: '····', title: '4 spaces', mono: true },
+					{ value: 'tab', label: '⇥', title: 'Tabs', mono: true },
+					{ value: 'min', label: '{}', title: 'Minified — no whitespace', mono: true }
+				]}
+			/>
+		</div>
 		<label class="flex items-center gap-2 text-dim">
-			<input type="checkbox" bind:checked={sortKeys} class="accent-(--accent)" />
+			<input type="checkbox" bind:checked={sortKeys} />
 			Sort keys
 		</label>
-		<div class="flex rounded-md border border-line p-0.5" role="radiogroup" aria-label="Output view">
-			{#each [['text', 'Text'], ['tree', 'Tree']] as [v, label] (v)}
-				<button
-					type="button"
-					role="radio"
-					aria-checked={view === v}
-					class="rounded-[5px] px-3 py-1 text-sm transition-colors duration-120
-						{view === v ? 'bg-surface-2 text-fg' : 'text-dim hover:text-fg'}"
-					onclick={() => (view = v as typeof view)}>{label}</button
-				>
-			{/each}
-		</div>
+		<Segmented
+			bind:value={view}
+			label="Output view"
+			options={[
+				{ value: 'text', label: 'Text' },
+				{ value: 'tree', label: 'Tree' }
+			]}
+		/>
 	</div>
 	<OutputPanel
 		value={output}

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
+	import Segmented from '../Segmented.svelte';
 	import { slugify } from '$lib/tools/text';
 	import { initFromHash } from '$lib/state/hashstate.svelte';
 	import { currentResult } from '$lib/state/app.svelte';
@@ -46,18 +47,16 @@
 		onsample={() => (input = "10 Things I Learned Building a Design System\nCrème brûlée à Paris — A Récipe")}
 	/>
 	<div class="flex flex-wrap items-center gap-4 text-sm">
-		<div class="flex rounded-md border border-line p-0.5" role="radiogroup" aria-label="Separator">
-			{#each [['-', 'hyphen'], ['_', 'underscore']] as [sep, name] (sep)}
-				<button
-					type="button"
-					role="radio"
-					aria-checked={separator === sep}
-					class="rounded-[5px] px-3 py-1 font-mono text-sm transition-colors duration-120
-						{separator === sep ? 'bg-surface-2 text-fg' : 'text-dim hover:text-fg'}"
-					onclick={() => (separator = sep as typeof separator)}
-					title={name}>{sep}</button
-				>
-			{/each}
+		<div class="flex items-center gap-2 text-dim">
+			Separator
+			<Segmented
+				bind:value={separator}
+				label="Separator"
+				options={[
+					{ value: '-', label: '-', title: 'Hyphen', mono: true },
+					{ value: '_', label: '_', title: 'Underscore', mono: true }
+				]}
+			/>
 		</div>
 		<label class="flex items-center gap-2 text-dim">
 			<input type="checkbox" bind:checked={lowercase} class="accent-(--accent)" />

@@ -53,7 +53,8 @@
 			spellcheck="false"
 			autocomplete="off"
 			placeholder="$.store.book[*].title"
-			class="w-full rounded-lg border {result && !result.ok && jsonValid ? 'border-err/60' : 'border-line'} bg-surface-2 px-3 py-2.5 font-mono text-sm outline-none placeholder:text-dim/50 focus:border-accent"
+			aria-invalid={result && !result.ok && jsonValid ? 'true' : undefined}
+			class="w-full"
 		/>
 		{#if result && !result.ok && jsonValid}
 			<p class="mt-1.5 font-mono text-xs text-err" role="alert">{result.error}</p>

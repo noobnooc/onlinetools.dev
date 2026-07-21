@@ -1,5 +1,6 @@
 <script lang="ts">
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
+	import Segmented from '../Segmented.svelte';
 	import { generateQr, type EcLevel } from '$lib/tools/qr';
 	import { initFromHash } from '$lib/state/hashstate.svelte';
 	import { currentResult } from '$lib/state/app.svelte';
@@ -75,19 +76,16 @@
 	/>
 	<div class="flex flex-wrap items-center gap-4 text-sm">
 		<span class="text-dim">Error correction</span>
-		<div class="flex rounded-md border border-line p-0.5" role="radiogroup" aria-label="Error correction level">
-			{#each EC_LEVELS as [level, pct] (level)}
-				<button
-					type="button"
-					role="radio"
-					aria-checked={ecLevel === level}
-					class="rounded-[5px] px-3 py-1 font-mono text-sm transition-colors duration-120
-						{ecLevel === level ? 'bg-surface-2 text-fg' : 'text-dim hover:text-fg'}"
-					onclick={() => (ecLevel = level)}
-					title="survives {pct} damage">{level}</button
-				>
-			{/each}
-		</div>
+		<Segmented
+			bind:value={ecLevel}
+			label="Error correction level"
+			options={EC_LEVELS.map(([level, pct]) => ({
+				value: level,
+				label: level,
+				title: `Survives ${pct} damage`,
+				mono: true
+			}))}
+		/>
 	</div>
 
 	{#if qr}

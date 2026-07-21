@@ -1,6 +1,7 @@
 <script lang="ts">
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
+	import Segmented from '../Segmented.svelte';
 	import { processLines, type LineToolOptions } from '$lib/tools/text';
 	import { initFromHash } from '$lib/state/hashstate.svelte';
 	import { currentResult } from '$lib/state/app.svelte';
@@ -27,15 +28,6 @@
 		currentResult.text = output;
 	});
 
-	const SORTS: Array<[NonNullable<LineToolOptions['sort']>, string]> = [
-		['none', 'Keep order'],
-		['asc', 'A → Z'],
-		['desc', 'Z → A'],
-		['natural', 'Natural'],
-		['length', 'By length'],
-		['shuffle', 'Shuffle']
-	];
-
 	const badge = $derived.by((): BadgeSegment[] =>
 		result === null
 			? []
@@ -57,12 +49,21 @@
 		onsample={() => (input = 'banana\napple\nitem10\nitem2\nApple\nbanana\n\n  cherry  ')}
 	/>
 	<div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
-		<label class="flex items-center gap-2 text-dim">
+		<div class="flex items-center gap-2 text-dim">
 			Sort
-			<select bind:value={sort} class="rounded-md border border-line bg-surface-2 px-2 py-1 text-sm text-fg">
-				{#each SORTS as [id, label] (id)}<option value={id}>{label}</option>{/each}
-			</select>
-		</label>
+			<Segmented
+				bind:value={sort}
+				label="Sort order"
+				options={[
+					{ value: 'none', label: '=', title: 'Keep order', mono: true },
+					{ value: 'asc', label: 'A→Z', title: 'Ascending', mono: true },
+					{ value: 'desc', label: 'Z→A', title: 'Descending', mono: true },
+					{ value: 'natural', label: '1,2,10', title: 'Natural — numbers in order', mono: true },
+					{ value: 'length', label: '≡', title: 'By line length', mono: true },
+					{ value: 'shuffle', label: '⤨', title: 'Shuffle', mono: true }
+				]}
+			/>
+		</div>
 		<label class="flex items-center gap-2 text-dim">
 			<input type="checkbox" bind:checked={dedupe} class="accent-(--accent)" /> Dedupe
 		</label>

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import OutputPanel from '../OutputPanel.svelte';
+	import Segmented from '../Segmented.svelte';
 	import { generateIds, type UuidBatchOptions } from '$lib/tools/uuid';
 	import { currentResult } from '$lib/state/app.svelte';
 	import { RefreshCw } from 'lucide-svelte';
@@ -44,19 +45,11 @@
 
 <div class="space-y-4">
 	<div class="flex flex-wrap items-center gap-4 text-sm">
-		<div class="flex flex-wrap rounded-md border border-line p-0.5" role="radiogroup" aria-label="ID format">
-			{#each KINDS as [k, label, hint] (k)}
-				<button
-					type="button"
-					role="radio"
-					aria-checked={kind === k}
-					title={hint}
-					class="rounded-[5px] px-3 py-1 text-sm transition-colors duration-120
-						{kind === k ? 'bg-surface-2 text-fg' : 'text-dim hover:text-fg'}"
-					onclick={() => (kind = k)}>{label}</button
-				>
-			{/each}
-		</div>
+		<Segmented
+			bind:value={kind}
+			label="ID format"
+			options={KINDS.map(([k, label, hint]) => ({ value: k, label, title: hint }))}
+		/>
 		<label class="flex items-center gap-2 text-dim">
 			Count
 			<input

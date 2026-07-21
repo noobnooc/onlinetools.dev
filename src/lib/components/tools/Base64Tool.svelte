@@ -1,6 +1,7 @@
 <script lang="ts">
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
+	import Segmented from '../Segmented.svelte';
 	import { encodeBase64, decodeBase64, isLikelyBase64Text } from '$lib/tools/base64';
 	import { initFromHash } from '$lib/state/hashstate.svelte';
 	import { formatBytes, byteLength } from '$lib/utils/format';
@@ -42,21 +43,17 @@
 
 <div class="space-y-4">
 	<div class="flex flex-wrap items-center gap-4 text-sm">
-		<div class="flex rounded-md border border-line p-0.5" role="radiogroup" aria-label="Direction">
-			{#each ['encode', 'decode'] as m (m)}
-				<button
-					type="button"
-					role="radio"
-					aria-checked={mode === m}
-					class="rounded-[5px] px-3 py-1 text-sm capitalize transition-colors duration-120
-						{mode === m ? 'bg-surface-2 text-fg' : 'text-dim hover:text-fg'}"
-					onclick={() => (mode = m as typeof mode)}>{m}</button
-				>
-			{/each}
-		</div>
+		<Segmented
+			bind:value={mode}
+			label="Direction"
+			options={[
+				{ value: 'encode', label: 'Encode' },
+				{ value: 'decode', label: 'Decode' }
+			]}
+		/>
 		{#if mode === 'encode'}
 			<label class="flex items-center gap-2 text-dim">
-				<input type="checkbox" bind:checked={urlSafe} class="accent-(--accent)" />
+				<input type="checkbox" bind:checked={urlSafe} />
 				URL-safe (no padding)
 			</label>
 		{/if}

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
+	import Segmented from '../Segmented.svelte';
 	import { convertData, detectFormat, type DataFormat } from '$lib/tools/dataconvert';
 	import { initFromHash } from '$lib/state/hashstate.svelte';
 	import { currentResult } from '$lib/state/app.svelte';
@@ -42,26 +43,27 @@
 
 <div class="space-y-4">
 	<div class="flex flex-wrap items-center gap-4 text-sm">
-		<label class="flex items-center gap-2 text-dim">
+		<div class="flex items-center gap-2 text-dim">
 			From
-			<select bind:value={from} class="rounded-md border border-line bg-surface-2 px-2 py-1 font-mono text-sm text-fg">
-				<option value="auto">auto{detected ? ` (${detected})` : ''}</option>
-				{#each FORMATS as f (f)}<option value={f}>{f}</option>{/each}
-			</select>
-		</label>
-		<span class="font-mono text-dim">→</span>
-		<div class="flex rounded-md border border-line p-0.5" role="radiogroup" aria-label="Target format">
-			{#each FORMATS as f (f)}
-				<button
-					type="button"
-					role="radio"
-					aria-checked={to === f}
-					class="rounded-[5px] px-3 py-1 font-mono text-sm transition-colors duration-120
-						{to === f ? 'bg-surface-2 text-fg' : 'text-dim hover:text-fg'}"
-					onclick={() => (to = f)}>{f}</button
-				>
-			{/each}
+			<Segmented
+				bind:value={from}
+				label="Source format"
+				options={[
+					{
+						value: 'auto',
+						label: detected ? `Auto · ${detected.toUpperCase()}` : 'Auto',
+						title: 'Detect the source format from the content'
+					},
+					...FORMATS.map((f) => ({ value: f, label: f.toUpperCase() }))
+				]}
+			/>
 		</div>
+		<span class="font-mono text-dim">→</span>
+		<Segmented
+			bind:value={to}
+			label="Target format"
+			options={FORMATS.map((f) => ({ value: f, label: f.toUpperCase() }))}
+		/>
 	</div>
 	<InputArea
 		bind:value={input}

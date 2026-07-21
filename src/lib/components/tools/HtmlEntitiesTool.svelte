@@ -1,6 +1,7 @@
 <script lang="ts">
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
+	import Segmented from '../Segmented.svelte';
 	import { encodeEntities, decodeEntities } from '$lib/tools/htmlentities';
 	import { initFromHash } from '$lib/state/hashstate.svelte';
 	import { currentResult } from '$lib/state/app.svelte';
@@ -41,18 +42,14 @@
 
 <div class="space-y-4">
 	<div class="flex flex-wrap items-center gap-4 text-sm">
-		<div class="flex rounded-md border border-line p-0.5" role="radiogroup" aria-label="Direction">
-			{#each ['encode', 'decode'] as m (m)}
-				<button
-					type="button"
-					role="radio"
-					aria-checked={mode === m}
-					class="rounded-[5px] px-3 py-1 text-sm capitalize transition-colors duration-120
-						{mode === m ? 'bg-surface-2 text-fg' : 'text-dim hover:text-fg'}"
-					onclick={() => (mode = m as typeof mode)}>{m}</button
-				>
-			{/each}
-		</div>
+		<Segmented
+			bind:value={mode}
+			label="Direction"
+			options={[
+				{ value: 'encode', label: 'Encode' },
+				{ value: 'decode', label: 'Decode' }
+			]}
+		/>
 		{#if mode === 'encode'}
 			<label class="flex items-center gap-2 text-dim">
 				<input type="checkbox" bind:checked={all} class="accent-(--accent)" />

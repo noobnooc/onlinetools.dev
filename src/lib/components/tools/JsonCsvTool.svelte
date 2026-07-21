@@ -1,6 +1,7 @@
 <script lang="ts">
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
+	import Segmented from '../Segmented.svelte';
 	import { jsonToCsv } from '$lib/tools/dataconvert';
 	import { initFromHash } from '$lib/state/hashstate.svelte';
 	import { currentResult } from '$lib/state/app.svelte';
@@ -46,14 +47,18 @@
 				'[\n  {"name": "Ada", "role": "admin", "contact": {"email": "ada@example.com"}},\n  {"name": "Alan", "role": "user", "tags": ["ml", "crypto"]},\n  {"name": "Grace", "contact": {"email": "grace@example.com", "phone": "555-0199"}}\n]')}
 	/>
 	<div class="flex flex-wrap items-center gap-4 text-sm">
-		<label class="flex items-center gap-2 text-dim">
+		<div class="flex items-center gap-2 text-dim">
 			Delimiter
-			<select bind:value={delimiter} class="rounded-md border border-line bg-surface-2 px-2 py-1 font-mono text-sm text-fg">
-				<option value=",">, comma</option>
-				<option value=";">; semicolon (EU Excel)</option>
-				<option value="	">⇥ tab</option>
-			</select>
-		</label>
+			<Segmented
+				bind:value={delimiter}
+				label="CSV delimiter"
+				options={[
+					{ value: ',', label: ',', title: 'Comma', mono: true },
+					{ value: ';', label: ';', title: 'Semicolon (EU Excel)', mono: true },
+					{ value: '\t', label: '⇥', title: 'Tab', mono: true }
+				]}
+			/>
+		</div>
 	</div>
 
 	{#if preview && preview.length > 1}

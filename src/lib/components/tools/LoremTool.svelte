@@ -1,5 +1,6 @@
 <script lang="ts">
 	import OutputPanel from '../OutputPanel.svelte';
+	import Segmented from '../Segmented.svelte';
 	import { loremIpsum, type LoremOptions } from '$lib/tools/text';
 	import { currentResult } from '$lib/state/app.svelte';
 	import { RefreshCw } from 'lucide-svelte';
@@ -34,18 +35,15 @@
 
 <div class="space-y-4">
 	<div class="flex flex-wrap items-center gap-4 text-sm">
-		<div class="flex rounded-md border border-line p-0.5" role="radiogroup" aria-label="Unit">
-			{#each ['words', 'sentences', 'paragraphs'] as u (u)}
-				<button
-					type="button"
-					role="radio"
-					aria-checked={unit === u}
-					class="rounded-[5px] px-3 py-1 text-sm capitalize transition-colors duration-120
-						{unit === u ? 'bg-surface-2 text-fg' : 'text-dim hover:text-fg'}"
-					onclick={() => (unit = u as typeof unit)}>{u}</button
-				>
-			{/each}
-		</div>
+		<Segmented
+			bind:value={unit}
+			label="Unit"
+			options={[
+				{ value: 'words', label: 'Words' },
+				{ value: 'sentences', label: 'Sentences' },
+				{ value: 'paragraphs', label: 'Paragraphs' }
+			]}
+		/>
 		<label class="flex items-center gap-2 text-dim">
 			Count
 			<input
