@@ -14,6 +14,8 @@ const es: Messages = {
 		footerPrivacy: 'Se ejecuta en tu navegador — nada de lo que pegas se sube',
 		allTools: 'Todas las herramientas',
 		changelog: 'Novedades',
+		changelogMetaDescription:
+			'Novedades de onlinetools.dev: nuevas herramientas, funciones y correcciones, todo ejecutándose localmente en tu navegador.',
 		releaseDate: 'Fecha de versión',
 		language: 'Idioma',
 		openNav: 'Abrir navegación',

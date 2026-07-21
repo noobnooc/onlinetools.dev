@@ -14,6 +14,8 @@ const ko: Messages = {
 		footerPrivacy: '모두 브라우저에서 실행 — 붙여넣은 내용은 업로드되지 않습니다',
 		allTools: '모든 도구',
 		changelog: '변경 이력',
+		changelogMetaDescription:
+			'onlinetools.dev의 새로운 소식 — 새 도구, 기능 및 수정 사항. 모두 브라우저에서 로컬로 실행됩니다.',
 		releaseDate: '릴리스 날짜',
 		language: '언어',
 		openNav: '내비게이션 열기',

@@ -47,11 +47,28 @@
 				inLanguage: locale(),
 				applicationCategory: 'DeveloperApplication',
 				operatingSystem: 'Any',
+				browserRequirements: 'Requires JavaScript. Works in any modern browser.',
+				isAccessibleForFree: true,
 				offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
 			},
 			{
 				'@context': 'https://schema.org',
+				'@type': 'BreadcrumbList',
+				itemListElement: [
+					{ '@type': 'ListItem', position: 1, name: 'onlinetools.dev', item: canonical('/') },
+					{
+						'@type': 'ListItem',
+						position: 2,
+						name: t('allTools'),
+						item: canonical('/tools')
+					},
+					{ '@type': 'ListItem', position: 3, name: l10n.name, item: canonical(path) }
+				]
+			},
+			{
+				'@context': 'https://schema.org',
 				'@type': 'FAQPage',
+				inLanguage: contentLocale,
 				mainEntity: content.faqs.map((f) => ({
 					'@type': 'Question',
 					name: f.q,
@@ -76,7 +93,9 @@
 	<nav class="mb-4 flex items-center gap-1.5 font-mono text-[11px] text-dim/80" aria-label="Breadcrumb">
 		<a href={lp('/tools')} class="hover:text-fg">{t('breadcrumbTools')}</a>
 		<span aria-hidden="true">/</span>
-		<span>{ltCategory(tool.category).toLowerCase()}</span>
+		<a href="{lp('/tools')}#cat-{tool.category}" class="hover:text-fg"
+			>{ltCategory(tool.category).toLowerCase()}</a
+		>
 		<span aria-hidden="true">/</span>
 		<span class="text-dim">{tool.slug}</span>
 	</nav>

@@ -14,6 +14,8 @@ const it: Messages = {
 		footerPrivacy: 'Gira nel tuo browser — niente di ciò che incolli viene caricato',
 		allTools: 'Tutti gli strumenti',
 		changelog: 'Novità',
+		changelogMetaDescription:
+			'Novità su onlinetools.dev — nuovi strumenti, funzionalità e correzioni, tutto eseguito localmente nel tuo browser.',
 		releaseDate: 'Data di rilascio',
 		language: 'Lingua',
 		openNav: 'Apri la navigazione',

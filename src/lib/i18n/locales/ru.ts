@@ -14,6 +14,8 @@ const ru: Messages = {
 		footerPrivacy: 'Работает в вашем браузере — вставленное никуда не отправляется',
 		allTools: 'Все инструменты',
 		changelog: 'История изменений',
+		changelogMetaDescription:
+			'Что нового на onlinetools.dev — новые инструменты, функции и исправления. Всё работает локально в вашем браузере.',
 		releaseDate: 'Дата версии',
 		language: 'Язык',
 		openNav: 'Открыть навигацию',

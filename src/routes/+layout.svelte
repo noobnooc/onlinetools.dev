@@ -10,6 +10,7 @@
 	import GlobalShortcuts from '$lib/components/GlobalShortcuts.svelte';
 	import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
 	import { t, lp } from '$lib/i18n';
+	import { SITE_VERSION } from '$lib/version';
 	import type { Snippet } from 'svelte';
 
 	let { children }: { children: Snippet } = $props();
@@ -63,7 +64,7 @@
 						<nav class="flex flex-wrap items-center gap-4" aria-label="Footer">
 							<a href={lp('/tools')} class="transition-colors duration-120 hover:text-fg">{t('allTools')}</a>
 							<a href={lp('/changelog')} class="transition-colors duration-120 hover:text-fg">{t('changelog')}</a>
-							<a href={lp('/changelog')} class="text-dim/50 transition-colors duration-120 hover:text-fg" title={t('releaseDate')}>v2026.07.21</a>
+							<a href={lp('/changelog')} class="text-dim/50 transition-colors duration-120 hover:text-fg" title={t('releaseDate')}>v{SITE_VERSION}</a>
 							<LanguageSwitcher path={page.url.pathname} />
 						</nav>
 					</div>

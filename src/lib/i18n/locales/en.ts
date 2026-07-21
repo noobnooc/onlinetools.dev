@@ -20,6 +20,8 @@ const en = {
 		footerPrivacy: 'Runs in your browser — nothing you paste is uploaded',
 		allTools: 'All tools',
 		changelog: 'Changelog',
+		changelogMetaDescription:
+			"What's new on onlinetools.dev — new tools, features and fixes, all running locally in your browser.",
 		releaseDate: 'Release date',
 		language: 'Language',
 		openNav: 'Open navigation',

@@ -14,6 +14,8 @@ const de: Messages = {
 		footerPrivacy: 'Läuft in deinem Browser — nichts, was du einfügst, wird hochgeladen',
 		allTools: 'Alle Tools',
 		changelog: 'Änderungsprotokoll',
+		changelogMetaDescription:
+			'Neuigkeiten auf onlinetools.dev — neue Tools, Funktionen und Fehlerbehebungen, alles läuft lokal in Ihrem Browser.',
 		releaseDate: 'Versionsdatum',
 		language: 'Sprache',
 		openNav: 'Navigation öffnen',

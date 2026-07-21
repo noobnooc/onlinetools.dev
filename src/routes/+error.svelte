@@ -5,6 +5,7 @@
 
 <svelte:head>
 	<title>{page.status} — onlinetools.dev</title>
+	<meta name="robots" content="noindex" />
 </svelte:head>
 
 <div class="mx-auto max-w-2xl px-4 py-24 text-center">
