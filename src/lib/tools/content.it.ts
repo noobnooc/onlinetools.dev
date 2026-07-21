@@ -810,6 +810,344 @@ const TOOL_CONTENT_IT: Record<string, ToolContent> = {
 				a: 'iOS non rende la trasparenza nelle icone della schermata home — l’alfa del tuo PNG viene composto su nero. Appiattire in anticipo su un colore scelto mantiene il risultato intenzionale. Scegli lo sfondo adatto alla tua icona e ricorda che iOS arrotonda gli angoli da sé: fornisci un quadrato a tutta area.'
 			}
 		]
+	},
+
+	'sql-formatter': {
+		about: [
+			'Incolla una query appena uscita da un file di log, dal debug di un ORM o dal one-liner di un collega, e questo formatter la spezza in clausole leggibili con indentazione coerente. Sono supportati sei dialetti — SQL standard, PostgreSQL, MySQL, SQLite, SQL Server e BigQuery — così la sintassi specifica di dialetto come TOP, gli identificatori tra backtick o i tipi array si formatta correttamente invece di far inciampare il parser.',
+			'Il case delle parole chiave è configurabile: MAIUSCOLO per il look classico, minuscolo se il tuo team lo preferisce, oppure lascia intatto l’originale. La modalità minify fa il contrario — comprime una query formattata su una sola riga, eliminando i commenti ma lasciando i letterali stringa intatti byte per byte, che è ciò che vuoi prima di incollare SQL in un config JSON o in un flag da CLI.',
+			'Le query contengono spesso nomi di tabelle, dati dei clienti nei letterali o indizi sull’infrastruttura. La formattazione gira interamente nel tuo browser, quindi nulla di tutto ciò raggiunge un server.'
+		],
+		faqs: [
+			{
+				q: 'Quale dialetto SQL dovrei scegliere?',
+				a: 'Quello che parla il tuo database — cambia il modo in cui vengono interpretati identificatori, quoting delle stringhe e parole chiave di dialetto. Se ti serve solo una pulizia generica, l’SQL standard copre il nucleo comune. Un errore di parsing su sintassi valida per il tuo database è di solito il segnale che devi cambiare dialetto.'
+			},
+			{
+				q: 'La formattazione cambia ciò che fa la query?',
+				a: 'No. La formattazione sposta solo gli spazi bianchi e, se abilitato, cambia il case delle parole chiave — identificatori e letterali mantengono esattamente i loro byte. Le parole chiave SQL sono insensibili alle maiuscole in tutti i dialetti supportati, quindi SELECT e select sono la stessa istruzione.'
+			},
+			{
+				q: 'Posso formattare più istruzioni in una volta?',
+				a: 'Sì — incolla un intero script e ogni istruzione terminata da ; viene formattata in sequenza, con una riga vuota tra l’una e l’altra.'
+			},
+			{
+				q: 'Cosa rimuove esattamente il minify?',
+				a: 'I commenti di riga (--) e i commenti a blocco (/* */) vengono eliminati, le sequenze di spazi collassano in spazi singoli e gli spazi attorno a virgole e parentesi vengono rimossi. Il testo dentro apici singoli, apici doppi e backtick non viene mai toccato, incluse le virgolette raddoppiate di escape.'
+			}
+		]
+	},
+
+	'xml-formatter': {
+		about: [
+			'Questo strumento formatta l’XML con il rientro che preferisci, segnala gli errori di well-formedness con riga e colonna esatte e può minificare un documento su una sola riga. Commenti, sezioni CDATA e prologo XML sopravvivono alla formattazione — un numero sorprendente di formatter li divora in silenzio.',
+			'Qui validare significa well-formedness: tag annidati correttamente, attributi tra virgolette, caratteri leciti. Questo intercetta la stragrande maggioranza degli incidenti da modifica manuale — uno slash mancante, un elemento non chiuso, una e commerciale vagante. La validazione contro uno schema XSD è deliberatamente fuori scopo; quella appartiene alla tua pipeline di build, con il file dello schema a disposizione.',
+			'File di configurazione, payload SOAP, feed RSS e manifest Android contengono di routine hostname interni e chiavi. Tutto qui viene parsato in locale — nulla viene trasmesso.'
+		],
+		faqs: [
+			{
+				q: 'Perché il mio XML fallisce con "char … is not expected"?',
+				a: 'I soliti sospetti sono una & nuda che dovrebbe essere &amp;, un valore di attributo senza virgolette o tag che si chiudono nell’ordine sbagliato. Il messaggio d’errore riporta riga e colonna del primo carattere problematico, e la casella di input lo evidenzia.'
+			},
+			{
+				q: 'Il formatter riordina o normalizza il mio documento?',
+				a: 'No. Elementi, attributi e il loro ordine sono preservati esattamente; cambiano solo gli spazi tra gli elementi. Il testo che condivide la riga con il markup viene rifilato e le sequenze interne di spazi collassano — se dipendi da spazi significativi (xml:space="preserve"), tieni quelle sezioni minificate.'
+			},
+			{
+				q: 'Cosa rimuove il minify?',
+				a: 'Indentazione e a capo tra gli elementi, più i commenti. Sezioni CDATA, processing instruction e prologo restano. Il risultato viene parsato in modo identico da qualsiasi consumatore che non dipenda da nodi di testo fatti solo di spazi.'
+			},
+			{
+				q: 'Può validare contro un XSD o una DTD?',
+				a: 'No — qui si controlla solo la well-formedness. La validazione di schema richiede il file dello schema e un motore XSD, ed è meglio farla nella tua toolchain (xmllint --schema, o la libreria XML del tuo linguaggio).'
+			}
+		]
+	},
+
+	'xml-to-json': {
+		about: [
+			'Converti XML in JSON per dare in pasto risposte SOAP legacy, feed RSS o POM di Maven a JavaScript, jq o un’API nativa JSON — o vai nell’altra direzione e produci XML da dati JSON. Gli attributi vengono conservati: diventano chiavi "@_nome", e il contenuto testuale che convive con gli attributi finisce sotto "#text", così nessuna informazione scompare in silenzio.',
+			'I due formati sono in disaccordo sui fondamentali, e questo convertitore fa le scelte pragmatiche standard: gli elementi fratelli ripetuti collassano in un array JSON, i valori dall’aspetto numerico diventano numeri e i namespace viaggiano come parte del nome dell’elemento. Il viaggio di andata e ritorno XML → JSON → XML preserva struttura e contenuto per i documenti tipici.',
+			'Entrambe le direzioni girano in locale nel tuo browser. Incolla un feed di fatture o una risposta API senza che vada da nessuna parte.'
+		],
+		faqs: [
+			{
+				q: 'Perché alcuni valori tornano come numeri invece che stringhe?',
+				a: 'Il parser riconosce il testo numerico e lo converte, che è ciò che la maggior parte dei consumatori vuole. Attenzione agli identificatori con zeri iniziali (codici prodotto, numeri di telefono) — se per i tuoi dati conta, rimetti le virgolette dopo la conversione o tratta l’output come punto di partenza.'
+			},
+			{
+				q: 'Come vengono gestiti gli elementi ripetuti?',
+				a: 'Due o più fratelli con lo stesso nome diventano un array JSON sotto quella chiave. Un’occorrenza singola resta un oggetto semplice — l’asimmetria è insita nella mappatura, quindi il codice che consuma il JSON dovrebbe tollerare entrambe le forme o normalizzare prima.'
+			},
+			{
+				q: 'Cosa significano le chiavi @_ e #text?',
+				a: '@_ marca ciò che era un attributo XML, #text trasporta il testo dell’elemento quando sono presenti anche attributi. Ripassando la stessa convenzione nella direzione JSON → XML si ricostruisce il markup originale.'
+			},
+			{
+				q: 'Perché JSON → XML rifiuta il mio array al livello superiore?',
+				a: 'Un documento XML deve avere esattamente un elemento radice, e un array nudo non ne ha. Avvolgi l’array in un oggetto — {"items": {"item": [...]}} — e il convertitore produce un documento well-formed.'
+			}
+		]
+	},
+
+	'csv-to-json': {
+		about: [
+			'Incolla un export CSV — da Excel, da un dump di database, da un download di analytics — e ottieni un array JSON di oggetti con le chiavi prese dalla riga di intestazione. Il delimitatore viene rilevato automaticamente tra virgola, punto e virgola, tab e pipe (puoi fissarlo a mano) e il quoting segue la RFC 4180, quindi virgole incorporate, virgolette e perfino a capo dentro i campi tra virgolette vengono parsati correttamente.',
+			'La conversione tipizzata riconosce numeri, true/false e null ed emette veri tipi JSON invece di stringhe; disattivala quando zeri iniziali o identificatori grandi devono sopravvivere alla lettera. I file senza riga di intestazione si convertono in array di array, e i nomi di intestazione duplicati ricevono suffissi numerici invece di sovrascriversi in silenzio.',
+			'I fogli di calcolo tendono a contenere i dati più sensibili tra tutti quelli che gli sviluppatori maneggiano — liste clienti, stipendi, storici degli ordini. La conversione avviene interamente nel tuo browser; nulla viene caricato.'
+		],
+		faqs: [
+			{
+				q: 'Perché il mio file separato da punto e virgola è stato letto come una sola colonna?',
+				a: 'Il rilevamento automatico campiona le prime righe e sceglie il delimitatore che produce conteggi di colonne coerenti — un file di righe a colonna singola può ingannarlo. Fissa il delimitatore con il controllo a segmenti e il parsing si adegua all’istante.'
+			},
+			{
+				q: 'Come si comportano i campi tra virgolette e gli a capo incorporati?',
+				a: 'Secondo la RFC 4180: i campi avvolti da virgolette doppie possono contenere il delimitatore, virgolette raddoppiate ("") per una virgoletta letterale e a capo. Excel e la maggior parte dei database esportano esattamente questo formato.'
+			},
+			{
+				q: 'Perché i miei CAP perdono gli zeri iniziali?',
+				a: 'La conversione tipizzata trasforma 02134 nel numero 2134. Togli la spunta a «Valori tipizzati» e ogni cella resta una stringa, esattamente com’è scritta.'
+			},
+			{
+				q: 'Posso convertire file TSV o delimitati da pipe?',
+				a: 'Sì — tab e pipe sono delimitatori di prima classe, rilevati automaticamente o fissati a mano. Il parser è lo stesso; cambia solo il separatore.'
+			}
+		]
+	},
+
+	'markdown-to-html': {
+		about: [
+			'Scrivi o incolla Markdown e guarda fianco a fianco l’anteprima renderizzata e l’HTML generato — inclusi titoli, tabelle GFM, elenchi in stile task list, blocchi di codice recintati e barrato. La direzione inversa converte HTML esistente in Markdown pulito con titoli ATX, elenchi con trattino e codice recintato: il modo più rapido per migrare vecchi contenuti CMS in un repo di documentazione.',
+			'L’anteprima viene sanificata prima del rendering: script, iframe e attributi di gestione eventi vengono rimossi, così un link condiviso che trasporta markup ostile non può eseguire nulla nel tuo browser. La casella dell’output HTML mostra sempre la conversione grezza da copiare in template o email.',
+			'Conversione e anteprima girano in locale. Le bozze di note di rilascio con nomi di funzionalità non ancora annunciate restano sulla tua macchina.'
+		],
+		faqs: [
+			{
+				q: 'Quale flavor di Markdown è questo?',
+				a: 'CommonMark più le estensioni GitHub che le persone usano davvero: tabelle, barrato e URL autolinkati. I ritorni a capo morbidi restano morbidi — un singolo a capo non diventa <br>, in linea con il rendering dei documenti su GitHub.'
+			},
+			{
+				q: 'Perché l’anteprima differisce dall’output HTML grezzo?',
+				a: 'L’anteprima passa attraverso un sanitizzatore che rimuove tag script, gestori di eventi inline e URL javascript: prima del rendering. La casella di output salta la sanificazione perché è testo, non markup renderizzato — sanifica a valle se incorpori HTML fornito dagli utenti.'
+			},
+			{
+				q: 'Quanto è fedele HTML → Markdown?',
+				a: 'Gli elementi strutturali — titoli, elenchi, link, enfasi, codice, citazioni, immagini — si convertono in modo pulito. L’HTML senza un equivalente Markdown (tabelle annidate, div con classi, stili inline) passa come HTML grezzo o perde lo stile, quindi una rilettura veloce dopo la conversione vale la pena.'
+			},
+			{
+				q: 'Posso usare l’HTML generato in un’email?',
+				a: 'Sì — l’output è HTML semantico puro, senza classi né fogli di stile esterni, che è esattamente ciò che i client di posta tollerano meglio. Aggiungi inline l’eventuale stile che ti serve.'
+			}
+		]
+	},
+
+	'html-formatter': {
+		about: [
+			'Abbellisci HTML uscito da un bundler, da uno scraper o da un editor WYSIWYG: gli elementi vengono indentati alla larghezza scelta, gli attributi restano sulla loro riga e il contenuto di pre/textarea rimane intatto byte per byte. La modalità minify elimina i commenti e collassa gli spazi tra i tag — tipicamente un taglio del 10–25% sulle pagine scritte a mano.',
+			'La minificazione qui è volutamente conservativa: script e stili inline sono protetti, i commenti condizionali sopravvivono e gli spazi singoli tra elementi inline vengono preservati, così "clicca <a>qui</a> ora" non si fonde in "cliccaquiora". Ottieni un minify sicuro, non il più aggressivo possibile.',
+			'Entrambe le operazioni girano in locale nel tuo browser — le pagine non pubblicate e il markup degli admin interni non lasciano mai la tua macchina.'
+		],
+		faqs: [
+			{
+				q: 'Minificare romperà il mio JavaScript o CSS inline?',
+				a: 'No — i blocchi <script>, <style>, <pre> e <textarea> sono del tutto esclusi dal collasso degli spazi. Viene toccato solo il markup tra i tag. Per comprimere gli script stessi, passali separatamente dal minificatore JavaScript.'
+			},
+			{
+				q: 'Perché è sicuro rimuovere gli spazi tra i tag?',
+				a: 'Per lo più lo è: lo spazio tra elementi a blocco non ha effetto visivo. Tra elementi inline invece sì, ed è per questo che il minificatore collassa le sequenze in un singolo spazio invece di eliminarle. I layout che dipendono dai trucchi con gli spazi tra inline-block sono la rara eccezione da controllare a vista.'
+			},
+			{
+				q: 'Il formatter corregge l’HTML non valido?',
+				a: 'Formatta ciò che gli dai senza validare contro la specifica HTML — i tag non chiusi restano non chiusi. I browser perdonano il tag soup, quindi la formattazione ti aiuta comunque a vedere la struttura abbastanza bene da individuare il problema.'
+			},
+			{
+				q: 'Quale larghezza di rientro dovrei usare?',
+				a: '2 spazi è la convenzione prevalente nei codebase web e il default della maggior parte delle style guide dei framework. Scegli 4 se il tuo team si è standardizzato così — la scelta è puramente estetica.'
+			}
+		]
+	},
+
+	'css-formatter': {
+		about: [
+			'Espandi CSS minificato o copia-incollato in regole con una dichiarazione per riga, oppure comprimi un foglio di stile per la produzione. Il beautifier normalizza indentazione e posizione delle graffe; il minificatore elimina i commenti, collassa gli spazi e rimuove i punti e virgola finali, lasciando intatti stringhe, contenuti di url(...) ed espressioni calc().',
+			'Il minificatore è trasparente su ciò che non fa: non rinomina i selettori, non fonde le regole duplicate né riscrive i colori. Questo rende l’output prevedibile e sicuro per qualsiasi foglio di stile, compresi quelli con hack e prefissi vendor — incolla, minifica, pubblica.',
+			'Come ogni strumento qui, l’elaborazione è locale. Il codice di un design system non ancora rilasciato resta nel tuo browser.'
+		],
+		faqs: [
+			{
+				q: 'Quanto si riduce il CSS minificato?',
+				a: 'Tipicamente il 15–30% per CSS scritto a mano, soprattutto grazie a indentazione e commenti. Il gzip del tuo server rimuove gran parte della stessa ridondanza, quindi la differenza sul filo è più piccola di quanto suggerisca il conteggio dei byte grezzi — minifica comunque: riduce anche il tempo di parsing.'
+			},
+			{
+				q: 'È sicuro per calc(), custom property e media query?',
+				a: 'Sì. Gli spazi dentro calc() sono significativi e vengono preservati; le custom property e i loro riferimenti var() sono dichiarazioni normali e sopravvivono invariati; @media e le altre at-rule mantengono la loro struttura.'
+			},
+			{
+				q: 'Perché i selettori discendenti hanno mantenuto gli spazi?',
+				a: 'Perché "nav a" e "nava" selezionano cose diverse — quello spazio è un combinatore, non formattazione. Il minificatore rimuove solo gli spazi privi di significato sintattico.'
+			},
+			{
+				q: 'Può convertire tra LESS/SCSS e CSS?',
+				a: 'No — la sintassi dei preprocessori richiede compilazione, non formattazione. L’SCSS semplice che è anche CSS valido si formatta senza problemi; regole annidate e mixin no.'
+			}
+		]
+	},
+
+	'js-formatter': {
+		about: [
+			'Abbellisci JavaScript con indentazione e spaziatura coerenti — de-minifica un bundle vendorizzato per leggere cosa fa davvero, o ripulisci codice incollato da una console. Il minificatore è quello vero: Terser analizza il tuo codice in un AST, elimina il codice morto, accorcia i nomi delle variabili locali e rimuove i commenti — lo stesso motore che i bundler usano in produzione.',
+			'Poiché la minificazione è basata sull’AST, non rompe mai codice funzionante come possono fare i "compressori" a base di regex: stringhe, template literal, regex e i casi limite dell’ASI sono gestiti da un vero parser. Gli errori di sintassi vengono riportati con la posizione invece di produrre output corrotto.',
+			'Terser viene caricato solo alla prima minificazione, mantenendo la pagina leggera, e gira interamente nel tuo browser — il sorgente proprietario non lascia mai la tua macchina.'
+		],
+		faqs: [
+			{
+				q: 'Quanto diventerà più piccolo il mio codice?',
+				a: 'Il codice scritto a mano cala tipicamente del 30–60% prima del gzip: spazi, commenti e nomi locali lunghi pesano tanto. Il codice già passato da un bundler si riduce molto meno — ha già subito la stessa trasformazione una volta.'
+			},
+			{
+				q: 'La minificazione cambia il comportamento?',
+				a: 'Compressione e mangling preservano la semantica: vengono rinominati solo i nomi locali, e l’eliminazione del codice morto rimuove i rami che dimostrabilmente non possono girare. Il codice che si affida a Function.prototype.name o al toString() delle proprie funzioni è la classica eccezione.'
+			},
+			{
+				q: 'Posso de-minificare il codice di produzione di un sito?',
+				a: 'Il formatter ripristina spazi e struttura, il che rende leggibile il flusso di controllo — ma i nomi di variabile originali e i commenti sono persi per sempre; vedrai a, b, c. Per un debugging serio, preferisci le source map se il sito le pubblica.'
+			},
+			{
+				q: 'Supporta TypeScript o JSX?',
+				a: 'No — entrambi richiedono parser dedicati. Compila prima in JavaScript (tsc, esbuild), poi formatta o minifica qui l’output.'
+			}
+		]
+	},
+
+	'string-escape': {
+		about: [
+			'Trasforma una stringa multiriga con virgolette in qualcosa che puoi incollare dentro un valore JSON, un letterale JavaScript, una stringa Java, un nodo di testo XML, un letterale SQL o una cella CSV — e inverti il processo quando trovi testo escapato in un file di log e vuoi leggerlo. Sei dialetti, entrambe le direzioni.',
+			'Ogni dialetto segue la propria specifica reale invece di un minimo comune denominatore: JSON escapa i caratteri di controllo come \\uXXXX, JavaScript escapa in più apici singoli e backtick, Java codifica il non ASCII come sequenze UTF-16 \\u, SQL raddoppia gli apici singoli, CSV avvolge e raddoppia secondo la RFC 4180 e XML usa le sue cinque entità predefinite. L’unescaper capisce le forme \\x, \\u e \\u{…} e riporta le sequenze malformate con la loro posizione.',
+			'Le stringhe escapate sono spesso stringhe di connessione, token e frammenti di query. Tutto gira in locale — incolla liberamente.'
+		],
+		faqs: [
+			{
+				q: 'Quale dialetto mi serve per un file di configurazione JSON?',
+				a: 'JSON. Escapa virgolette doppie, backslash e caratteri di controllo esattamente come richiede la RFC 8259 e lascia leggibile l’unicode. L’output si inserisce in qualsiasi valore stringa JSON — senza le virgolette esterne, che lo strumento lascia a te.'
+			},
+			{
+				q: 'Qual è la differenza tra i dialetti JSON e JavaScript?',
+				a: 'JavaScript escapa in più apici singoli e backtick, così il risultato è sicuro in tutti e tre gli stili di quoting JS. A JSON serve solo la gestione delle virgolette doppie. L’unescape accetta entrambi, più le forme \\x e \\u{…} che JSON non definisce.'
+			},
+			{
+				q: 'L’escape SQL rende sicuro concatenare input utente?',
+				a: 'Produce un letterale stringa SQL corretto (apici raddoppiati), ma escapare-e-concatenare resta il pattern sbagliato per input non fidato — usa query parametrizzate. Questo strumento serve per fixture, migrazioni e debugging, non come difesa dalle injection.'
+			},
+			{
+				q: 'Perché l’unescape della mia stringa fallisce?',
+				a: 'Un backslash seguito da qualcosa che non è un escape definito (\\q, una \\u12 troncata) è malformato, e l’errore indica l’indice incriminato. Se il tuo testo contiene percorsi Windows letterali, prima escapalo — C:\\temp è un tab sotto mentite spoglie.'
+			}
+		]
+	},
+
+	'number-base-converter': {
+		about: [
+			'Digita un numero in qualsiasi base e leggilo simultaneamente in binario, ottale, decimale ed esadecimale — più qualsiasi base personalizzata fino a 36. I prefissi vengono capiti (0x, 0o, 0b), il raggruppamento delle cifre rende scandibili i valori lunghi (1111 1111 · 255 · ff) e un indicatore della lunghezza in bit ti dice a colpo d’occhio se un valore sta in 8, 32 o 64 bit.',
+			'L’aritmetica usa BigInt, quindi la precisione è esatta a qualsiasi dimensione: permessi dei file, colori ARGB, indirizzi IP, prefissi di hash e ID di database a 64 bit si convertono tutti senza l’arrotondamento silenzioso che colpisce i normali numeri JavaScript sopra 2⁵³.',
+			'I numeri negativi mantengono il segno in tutte le basi. Tutto viene calcolato in locale, all’istante, mentre digiti.'
+		],
+		faqs: [
+			{
+				q: 'Come decide la base il rilevamento automatico?',
+				a: 'Dal prefisso: 0x significa esadecimale, 0o ottale, 0b binario; tutto il resto viene letto come decimale. Cifre come "ff" senza prefisso sono ambigue, quindi seleziona HEX esplicitamente — il messaggio d’errore te lo ricorderà.'
+			},
+			{
+				q: 'I numeri enormi sono davvero esatti?',
+				a: 'Sì — la conversione gira su BigInt, che è a precisione arbitraria. 18446744073709551615 (2⁶⁴−1) fa il viaggio di andata e ritorno esatto; un convertitore basato su float lo corromperebbe in …551616.'
+			},
+			{
+				q: 'Come vengono mostrati i numeri negativi in binario?',
+				a: 'Con il segno meno (-1010), non in complemento a due, dato che il complemento a due richiede una larghezza fissa. Per vedere il pattern in complemento a due, somma 2ⁿ al tuo valore negativo per la larghezza che ti interessa e converti quello.'
+			},
+			{
+				q: 'A cosa può servire la base 36?',
+				a: 'ID compatti: 0-9 più a-z è l’alfabeto più denso che resta insensibile alle maiuscole e sicuro negli URL. Molti accorciatori di URL e sistemi di ticket codificano così gli ID numerici — incollane uno e leggi il numero sottostante.'
+			}
+		]
+	},
+
+	'text-to-hex': {
+		about: [
+			'Guarda esattamente di quali byte è fatto il tuo testo: questo strumento lo codifica in UTF-8 e lo mostra come valori di byte esadecimali, binari o decimali — con separatore, maiuscole e prefissi 0x a scelta. Il decoder va nella direzione opposta ed è volutamente tollerante: accetta sequenze continue (48656c6c6f), coppie separate da spazi, notazione in stile MAC con i due punti e sequenze di escape \\x.',
+			'Poiché la codifica è UTF-8 a livello di byte, i caratteri multibyte sono mostrati come esistono davvero in memoria e sul filo: é è c3 a9, 世 è e4 b8 96 e le emoji occupano quattro byte. Questo lo rende il modo più rapido per fare debugging di disallineamenti di encoding, misteri del BOM e problemi tipo "perché questa stringa è più lunga di quanto sembra".',
+			'Se i byte decodificati non sono UTF-8 valido, lo strumento lo dice invece di stampare mojibake — un forte indizio che stai guardando dati binari e non testo.'
+		],
+		faqs: [
+			{
+				q: 'Perché un carattere diventa più byte?',
+				a: 'UTF-8 è a larghezza variabile: l’ASCII resta un byte, la maggior parte delle lettere europee ne prende due, i CJK tre, le emoji quattro. Ciò che vedi qui è la sequenza di byte esatta che qualsiasi sistema UTF-8 — file, HTTP, database — memorizza per il tuo testo.'
+			},
+			{
+				q: 'Quali formati di input accetta il decoder?',
+				a: 'Esadecimale come sequenza continua, coppie separate da spazi, con prefissi 0x o \\x, o separato da due punti/virgole; binario in gruppi da 8 bit con o senza spazi; decimale come valori di byte separati. Separatori misti e spazi vaganti vengono ripuliti automaticamente.'
+			},
+			{
+				q: 'Perché la decodifica dice che i byte non sono UTF-8 valido?',
+				a: 'La sequenza di byte viola le regole di UTF-8 — per esempio un ff isolato, o un byte di continuazione senza byte iniziale. I dati potrebbero essere binari, in una codifica legacy come Latin-1 o troncati a metà carattere.'
+			},
+			{
+				q: 'È la stessa cosa di un hex dump di xxd?',
+				a: 'I valori dei byte sono identici; xxd aggiunge gli offset e una colonna ASCII. Incolla qui le colonne esadecimali di un dump xxd (senza la colonna degli offset) e la decodifica funziona.'
+			}
+		]
+	},
+
+	'json-schema-validator': {
+		about: [
+			'Due direzioni della stessa disciplina: incolla JSON di esempio e ottieni uno schema draft-07 dedotto da esso, oppure incolla dati più schema e vedi ogni violazione elencata con il suo percorso JSON. La validazione gira su Ajv — lo stesso motore usato dalla maggior parte dei servizi Node — quindi ciò che passa qui passa anche in CI.',
+			'L’inferenza è pensata per la produzione: le chiavi degli oggetti diventano proprietà tipizzate e voci required, gli array fondono le forme di tutti i loro membri, gli interi sono distinti dai float e le chiavi presenti solo in alcuni membri di un array sono correttamente lasciate fuori da required. Il risultato è un punto di partenza da irrigidire con formati, intervalli e pattern.',
+			'Risposte API e file di configurazione sono esattamente i dati che meno vorresti su un server di terzi. Sia l’inferenza sia la validazione girano interamente nel tuo browser.'
+		],
+		faqs: [
+			{
+				q: 'Quale draft di JSON Schema è supportato?',
+				a: 'L’inferenza emette draft-07, il draft più ampiamente supportato tra editor e validatori. La validazione accetta draft-07 e i draft precedenti che Ajv capisce in modalità non-strict; anche le keyword 2019-09/2020-12 per lo più funzionano, dato che le keyword sconosciute vengono ignorate invece di essere fatali.'
+			},
+			{
+				q: 'Cosa significa il $ nei percorsi delle violazioni?',
+				a: 'È la radice del documento, in stile JSONPath: $.age indica la proprietà age al livello superiore, $.items.2.name il name del terzo elemento dell’array. Un percorso vuoto ($) significa che la violazione riguarda la radice stessa del documento — tipo sbagliato, o una proprietà required mancante.'
+			},
+			{
+				q: 'Perché lo schema dedotto è più severo o più permissivo di quanto mi aspettassi?',
+				a: 'Descrive esattamente il campione che gli hai dato: i campi presenti ovunque diventano required e sono ammessi solo i tipi osservati. Dagli un campione più vario (un array di oggetti rappresentativi) per uno schema più generale, poi aggiusta a mano — l’inferenza non può conoscere le intenzioni.'
+			},
+			{
+				q: 'La validazione supporta format, pattern e le altre keyword di vincolo?',
+				a: 'Le keyword strutturali (type, required, properties, items, enum, minimum, pattern…) sono applicate pienamente. Le stringhe di format come "email" o "date-time" non vengono verificate — rispecchia la specifica JSON Schema, dove format è annotativo di default, ed evita false sicurezze.'
+			}
+		]
+	},
+
+	'exif-viewer': {
+		about: [
+			'Ogni foto scattata dal tuo telefono trasporta metadati nascosti: modello della fotocamera, ora dello scatto, software di editing — e, se non disattivate, le coordinate GPS del punto in cui ti trovavi. Questo strumento legge quei metadati dai file JPEG, PNG e WebP e li mostra raggruppati e decodificati: i valori di esposizione come f/2.8 e 1/250 s, l’orientamento a parole, il GPS come coordinate decimali con un link alla mappa.',
+			'Il pulitore produce una copia senza metadati — in modo lossless. Invece di ricodificare l’immagine (il che costa qualità), rimuove i segmenti di metadati byte per byte: blocchi EXIF e XMP nei JPEG, chunk di testo e data nei PNG, chunk EXIF/XMP nei WebP. Pixel, dimensioni e qualità restano intatti; i profili colore vengono conservati, così l’immagine si vede ancora identica.',
+			'È l’unica categoria di strumenti in cui "gira in locale" è tutto il punto: controllare una foto in cerca di dati GPS caricandola su un server vanificherebbe lo scopo. Il file non lascia mai il tuo browser — verificabile nella scheda Network.'
+		],
+		faqs: [
+			{
+				q: 'Rimuovere i metadati cambia la qualità dell’immagine?',
+				a: 'No. Il flusso dei dati immagine viene copiato bit per bit; vengono eliminati solo i segmenti di metadati. Il file ripulito è più piccolo esattamente della dimensione dei metadati e i pixel sono dimostrabilmente identici.'
+			},
+			{
+				q: 'Perché il mio screenshot non mostra metadati?',
+				a: 'Gli screenshot e la maggior parte delle immagini esportate per il web non hanno mai avuto EXIF — lo scrivono le fotocamere, gli strumenti di screenshot per lo più no. Anche i social network eliminano i metadati al caricamento, quindi una foto scaricata da lì è di solito già pulita.'
+			},
+			{
+				q: 'La posizione GPS è esatta?',
+				a: 'Il GPS del telefono nell’EXIF è tipicamente accurato a pochi metri — abbastanza per identificare un edificio. Lo strumento converte i gradi/minuti/secondi memorizzati in decimale e linka il punto esatto, così vedi con precisione cosa potrebbe vedere chi riceve il file.'
+			},
+			{
+				q: 'Perché il file ripulito conserva un profilo colore ICC?',
+				a: 'Il profilo ICC dice al software come interpretare i colori — rimuoverlo può alterarli visibilmente, e non contiene informazioni personali. Il pulitore rimuove i metadati identificativi (EXIF, XMP, IPTC, commenti, timestamp) e conserva ciò che serve all’immagine per essere resa correttamente.'
+			}
+		]
 	}
 };
 
