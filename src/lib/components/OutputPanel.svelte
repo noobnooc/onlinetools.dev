@@ -37,20 +37,23 @@
 	/**
 	 * Pipeline seed: send this output into another tool. Ranked by format
 	 * relevance — tools accepting the detected format first, then tools
-	 * accepting plain text, generators last.
+	 * accepting plain text. Tools that cannot consume this content at all
+	 * (image-only tools, pure generators) are omitted entirely.
 	 */
 	const chainTargets = $derived.by(() => {
 		if (value === '' || value.length > 500_000) return [];
 		// The pathname may carry a locale prefix (/zh/t/…) — take what follows /t/.
 		const current = page.url.pathname.split('/t/')[1] ?? '';
-		return rankTools(detect(value), { exclude: current }).map((r) => {
-			const tool = TOOL_BY_SLUG.get(r.slug);
-			return {
-				slug: r.slug,
-				name: tool ? lt(tool).name : r.slug,
-				suggested: r.suggested
-			};
-		});
+		return rankTools(detect(value), { exclude: current })
+			.filter((r) => r.score > 0)
+			.map((r) => {
+				const tool = TOOL_BY_SLUG.get(r.slug);
+				return {
+					slug: r.slug,
+					name: tool ? lt(tool).name : r.slug,
+					suggested: r.suggested
+				};
+			});
 	});
 
 	function continueWith(slug: string) {
@@ -102,14 +105,14 @@
 </script>
 
 <div>
-	<div class="mb-1.5 flex items-baseline justify-between gap-2">
+	<div class="mb-1.5 flex flex-wrap items-baseline justify-between gap-x-2 gap-y-1">
 		<span class="text-xs font-medium tracking-wide text-dim uppercase">{label ?? t('output')}</span>
 		{#if value !== ''}
-			<div class="flex items-center gap-1">
+			<div class="flex flex-wrap items-center justify-end gap-1">
 				<span class="mr-1 font-mono text-[11px] text-dim/70">{formatBytes(byteLength(value))}</span>
 				<button
 					type="button"
-					class="flex items-center gap-1 rounded-md px-1.5 py-1 text-xs text-dim transition-colors duration-120 hover:bg-surface-2 hover:text-fg"
+					class="flex items-center gap-1 rounded-md px-1.5 py-1 text-xs whitespace-nowrap text-dim transition-colors duration-120 hover:bg-surface-2 hover:text-fg"
 					onclick={onCopy}
 					title="Copy result (⌘⇧C)"
 				>
@@ -118,7 +121,7 @@
 				</button>
 				<button
 					type="button"
-					class="flex items-center gap-1 rounded-md px-1.5 py-1 text-xs text-dim transition-colors duration-120 hover:bg-surface-2 hover:text-fg"
+					class="flex items-center gap-1 rounded-md px-1.5 py-1 text-xs whitespace-nowrap text-dim transition-colors duration-120 hover:bg-surface-2 hover:text-fg"
 					onclick={() => downloadText(value, filename)}
 					title="Download result"
 				>
@@ -127,7 +130,7 @@
 				{#if shareState}
 					<button
 						type="button"
-						class="flex items-center gap-1 rounded-md px-1.5 py-1 text-xs text-dim transition-colors duration-120 hover:bg-surface-2 hover:text-fg"
+						class="flex items-center gap-1 rounded-md px-1.5 py-1 text-xs whitespace-nowrap text-dim transition-colors duration-120 hover:bg-surface-2 hover:text-fg"
 						onclick={onShare}
 						title="Copy a link that restores this state"
 					>
@@ -139,7 +142,7 @@
 					<div class="relative">
 						<button
 							type="button"
-							class="flex items-center gap-1 rounded-md px-1.5 py-1 text-xs transition-colors duration-120
+							class="flex items-center gap-1 rounded-md px-1.5 py-1 text-xs whitespace-nowrap transition-colors duration-120
 								{chainOpen ? 'bg-surface-2 text-fg' : 'text-dim hover:bg-surface-2 hover:text-fg'}"
 							onclick={() => (chainOpen = !chainOpen)}
 							aria-expanded={chainOpen}
@@ -149,9 +152,10 @@
 						</button>
 						{#if chainOpen}
 							<!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
-							<div class="fixed inset-0 z-10" onclick={() => (chainOpen = false)}></div>
+							<div class="fixed inset-0 z-10 bg-black/30 sm:bg-transparent" onclick={() => (chainOpen = false)}></div>
+							<!-- Bottom sheet on phones, anchored dropdown from sm: up. -->
 							<ul
-								class="absolute right-0 z-20 mt-1 max-h-64 w-56 overflow-y-auto rounded-lg border border-line bg-surface p-1 shadow-xl shadow-black/20"
+								class="fixed inset-x-4 bottom-4 z-20 max-h-[55vh] overflow-y-auto rounded-lg border border-line bg-surface p-1 shadow-xl shadow-black/20 sm:absolute sm:inset-x-auto sm:right-0 sm:bottom-auto sm:mt-1 sm:max-h-64 sm:w-56"
 								role="menu"
 							>
 								{#each chainTargets as target (target.slug)}
@@ -159,7 +163,7 @@
 										<button
 											type="button"
 											role="menuitem"
-											class="w-full rounded-md px-2.5 py-1.5 text-left text-xs transition-colors duration-120 hover:bg-surface-2
+											class="w-full rounded-md px-2.5 py-2 text-left text-sm transition-colors duration-120 hover:bg-surface-2 sm:py-1.5 sm:text-xs
 												{target.suggested ? 'text-accent' : 'text-fg'}"
 											onclick={() => continueWith(target.slug)}
 										>

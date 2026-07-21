@@ -68,6 +68,23 @@ describe('unified tool ranking', () => {
 		expect(ranked[0].suggested).toBe(true);
 	});
 
+	it('gives image-only tools and pure generators zero score for text content', () => {
+		// Callers (Continue-with) drop score-0 tools — content they can't consume.
+		const bySlug = new Map(rankTools(detect(JSON_SAMPLE)).map((r) => [r.slug, r]));
+		for (const slug of [
+			'image-converter',
+			'image-resizer',
+			'favicon-generator',
+			'exif-viewer',
+			'lorem-ipsum-generator',
+			'password-generator'
+		]) {
+			expect(bySlug.get(slug)?.score, slug).toBe(0);
+		}
+		// …while a generic-text consumer like the QR generator keeps a positive score.
+		expect(bySlug.get('qr-code-generator')!.score).toBeGreaterThan(0);
+	});
+
 	it('URL output suggests the QR code generator via accepts', () => {
 		const bySlug = new Map(rankTools(detect('https://example.dev/?q=1')).map((r) => [r.slug, r]));
 		expect(bySlug.get('qr-code-generator')?.suggested).toBe(true);
