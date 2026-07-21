@@ -313,7 +313,115 @@ const fr: Messages = {
 		wcLines: 'Lignes',
 		wcSentences: 'Phrases',
 		wcParagraphs: 'Paragraphes',
-		wcAvg: 'Longueur moyenne des mots'
+		wcAvg: 'Longueur moyenne des mots',
+
+		// Shared formatter controls
+		fmtFormat: 'Formater',
+		fmtMinify: 'Minifier',
+
+		// SQL formatter
+		sqlInput: 'Instruction(s) SQL',
+		sqlDialect: 'Dialecte',
+		sqlKeywords: 'Mots-clés',
+		sqlKeep: 'Conserver',
+
+		// XML formatter
+		xmlInput: 'Document XML',
+
+		// XML ↔ JSON
+		xjInputXml: 'Document XML',
+		xjInputJson: 'Objet JSON',
+		xjNote: 'Les attributs deviennent des clés "@_nom" et le texte qui accompagne des attributs devient "#text", ce qui rend la conversion réversible. L’ordre des éléments entre frères mélangés n’est pas préservé — XML autorise les répétitions, pas les objets JSON.',
+
+		// CSV → JSON
+		cjInput: 'Données CSV / TSV',
+		cjAuto: 'Auto',
+		cjPipe: 'Pipe',
+		cjHeader: 'La première ligne est l’en-tête',
+		cjTyped: 'Valeurs typées',
+
+		// Markdown
+		mdPreview: 'Aperçu',
+		mdNote: 'L’aperçu est assaini avant le rendu : les scripts et gestionnaires d’événements d’un contenu collé ou partagé ne peuvent donc pas s’exécuter. La zone de sortie HTML contient la conversion brute.',
+
+		// Code formatters
+		htmlInput: 'Source HTML',
+		cssInput: 'Source CSS',
+		jsInput: 'Source JavaScript',
+
+		// String escape
+		escEscape: 'Échapper',
+		escUnescape: 'Déséchapper',
+		escDialect: 'Dialecte',
+		escInputEsc: 'Texte à échapper',
+		escInputUnesc: 'Texte échappé',
+
+		// Number base
+		nbInput: 'Nombre',
+		nbFrom: 'De',
+		nbAutoT: 'Détecter d’après le préfixe 0x / 0o / 0b, décimal sinon',
+		nbGroup: 'Grouper les chiffres',
+		nbBase: 'Base',
+		nbBin: 'Binaire',
+		nbOct: 'Octal',
+		nbDec: 'Décimal',
+		nbHex: 'Hex',
+		nbBits: 'bits',
+
+		// Text ↔ hex/binary
+		hbFormat: 'Octets en',
+		hbSep: 'Séparateur',
+		hbSpace: 'Espace',
+		hbNone: 'Aucun',
+		hbColon: 'Deux-points',
+		hbInputEnc: 'Texte à encoder',
+		hbInputDec: 'Octets à décoder',
+
+		// JSON Schema
+		schInfer: 'Inférer le schéma',
+		schValidate: 'Valider',
+		schInferT: 'Générer un schéma à partir d’un exemple JSON',
+		schValidateT: 'Vérifier du JSON contre un schéma',
+		schData: 'Données JSON',
+		schSchema: 'Schéma JSON',
+		schViolations: 'violations',
+		schValid: 'Valide — les données sont conformes au schéma',
+		schResult: 'Résultat de la validation',
+
+		// EXIF
+		exTags: '{n} champs de métadonnées',
+		exNone: 'Aucune métadonnée trouvée — ce fichier est déjà propre',
+		exStrip: 'Télécharger la copie nettoyée',
+		exGps: 'Position GPS intégrée',
+		exMap: 'Voir sur la carte',
+		exNote: 'La lecture et la suppression se font entièrement dans votre navigateur — la photo n’est jamais envoyée. Le nettoyage retire les segments de métadonnées octet par octet, sans réencodage : pixels et qualité restent intacts.',
+
+		// Cron builder
+		crBuilder: 'Constructeur',
+		crMinute: 'Minute',
+		crHour: 'Heure',
+		crDom: 'Jour du mois',
+		crMonth: 'Mois',
+		crDow: 'Jour de la semaine',
+		crEvery: 'Chaque',
+		crStep: 'Tous les N',
+		crAt: 'Spécifique',
+		crUse: 'Utiliser l’expression',
+
+		// JWT sign & verify
+		jwtDecode: 'Décoder',
+		jwtSign: 'Signer',
+		jwtVerify: 'Vérifier',
+		jwtAlg: 'Algorithme',
+		jwtPayloadLbl: 'Payload (objet JSON)',
+		jwtSecret: 'Secret',
+		jwtPrivKey: 'Clé privée (PEM PKCS#8)',
+		jwtPubKey: 'Secret (HS) ou clé publique PEM (RS/ES)',
+		jwtSignNote: 'La signature s’exécute sur WebCrypto dans votre navigateur — la clé ne quitte jamais cette page. Pour les algorithmes HS, utilisez un long secret aléatoire ; les secrets courts se cassent par force brute, où que vous signiez.',
+		jwtVerifyNote: 'La vérification contrôle la signature contre la clé fournie, localement. Elle n’interroge pas de points de terminaison JWKS et ne valide pas les claims comme aud/iss — faites-le côté serveur.',
+
+		// Timestamp extras
+		tsDiff: 'Différence entre deux dates'
 	},
 	categories: {
 		encoding: 'Encodage',
@@ -323,7 +431,9 @@ const fr: Messages = {
 		generators: 'Générateurs',
 		crypto: 'Hachage et crypto',
 		web: 'Web',
-		image: 'Image'
+		image: 'Image',
+		code: 'Code et balisage',
+		privacy: 'Confidentialité'
 	},
 	tools: {
 		'json-formatter': {
@@ -449,6 +559,58 @@ const fr: Messages = {
 		'favicon-generator': {
 			name: 'Générateur de favicon',
 			description: 'Transforme n’importe quelle image en favicon.ico avec le set complet d’icônes PNG et manifest'
+		},
+		'sql-formatter': {
+			name: 'Formateur SQL',
+			description: 'Formatez du SQL avec des mots-clés adaptés au dialecte, ou minifiez-le en une ligne'
+		},
+		'xml-formatter': {
+			name: 'Formateur et validateur XML',
+			description: 'Formatez, minifiez et validez du XML avec la position exacte des erreurs'
+		},
+		'xml-to-json': {
+			name: 'Convertisseur XML ↔ JSON',
+			description: 'Convertissez des documents XML en JSON et inversement, attributs compris'
+		},
+		'csv-to-json': {
+			name: 'Convertisseur CSV → JSON',
+			description: 'Analysez du CSV en objets JSON avec détection du délimiteur et valeurs typées'
+		},
+		'markdown-to-html': {
+			name: 'Convertisseur Markdown ↔ HTML',
+			description: 'Rendez le Markdown en HTML avec aperçu en direct, ou reconvertissez du HTML en Markdown'
+		},
+		'html-formatter': {
+			name: 'Formateur et minificateur HTML',
+			description: 'Embellissez du HTML désordonné ou minifiez-le pour la production'
+		},
+		'css-formatter': {
+			name: 'Formateur et minificateur CSS',
+			description: 'Embellissez le CSS pour le lire ou minifiez-le pour le déployer'
+		},
+		'js-formatter': {
+			name: 'Formateur et minificateur JavaScript',
+			description: 'Embellissez du JavaScript ou minifiez-le avec vraie compression et renommage des variables'
+		},
+		'string-escape': {
+			name: 'Échappement de chaînes',
+			description: 'Échappez ou déséchappez des chaînes pour JSON, JavaScript, Java, XML, SQL et CSV'
+		},
+		'number-base-converter': {
+			name: 'Convertisseur de bases numériques',
+			description: 'Convertissez des nombres entre binaire, octal, décimal, hex et toute base jusqu’à 36'
+		},
+		'text-to-hex': {
+			name: 'Convertisseur texte ↔ hex / binaire',
+			description: 'Transformez du texte en octets hex, binaires ou décimaux et décodez les dumps d’octets'
+		},
+		'json-schema-validator': {
+			name: 'Validateur et générateur de JSON Schema',
+			description: 'Validez du JSON contre un schéma, ou inférez un schéma depuis des données d’exemple'
+		},
+		'exif-viewer': {
+			name: 'Visionneuse et suppression EXIF',
+			description: 'Voyez les métadonnées de vos photos — et retirez-les sans réencodage'
 		}
 	}
 };

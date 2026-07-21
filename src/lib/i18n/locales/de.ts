@@ -313,7 +313,120 @@ const de: Messages = {
 		wcLines: 'Zeilen',
 		wcSentences: 'Sätze',
 		wcParagraphs: 'Absätze',
-		wcAvg: 'Ø Wortlänge'
+		wcAvg: 'Ø Wortlänge',
+
+		// Shared formatter controls
+		fmtFormat: 'Formatieren',
+		fmtMinify: 'Minifizieren',
+
+		// SQL formatter
+		sqlInput: 'SQL-Statement(s)',
+		sqlDialect: 'Dialekt',
+		sqlKeywords: 'Schlüsselwörter',
+		sqlKeep: 'Beibehalten',
+
+		// XML formatter
+		xmlInput: 'XML-Dokument',
+
+		// XML ↔ JSON
+		xjInputXml: 'XML-Dokument',
+		xjInputJson: 'JSON-Objekt',
+		xjNote:
+			'Attribute werden zu "@_name"-Keys und Text neben Attributen zu "#text", damit die Konvertierung den Roundtrip übersteht. Die Reihenfolge gemischter Geschwisterelemente bleibt nicht erhalten — XML erlaubt Wiederholungen, JSON-Objekte nicht.',
+
+		// CSV → JSON
+		cjInput: 'CSV-/TSV-Daten',
+		cjAuto: 'Auto',
+		cjPipe: 'Pipe',
+		cjHeader: 'Erste Zeile ist Kopfzeile',
+		cjTyped: 'Typisierte Werte',
+
+		// Markdown
+		mdPreview: 'Vorschau',
+		mdNote:
+			'Die Vorschau wird vor dem Rendern bereinigt — Skripte und Event-Handler in eingefügten oder geteilten Inhalten können also nicht ausgeführt werden. Die HTML-Ausgabebox enthält die rohe Konvertierung.',
+
+		// Code formatters
+		htmlInput: 'HTML-Quelltext',
+		cssInput: 'CSS-Quelltext',
+		jsInput: 'JavaScript-Quelltext',
+
+		// String escape
+		escEscape: 'Escapen',
+		escUnescape: 'Unescapen',
+		escDialect: 'Dialekt',
+		escInputEsc: 'Zu escapender Text',
+		escInputUnesc: 'Escapter Text',
+
+		// Number base
+		nbInput: 'Zahl',
+		nbFrom: 'Von',
+		nbAutoT: 'Erkennung am Präfix 0x / 0o / 0b, sonst dezimal',
+		nbGroup: 'Ziffern gruppieren',
+		nbBase: 'Basis',
+		nbBin: 'Binär',
+		nbOct: 'Oktal',
+		nbDec: 'Dezimal',
+		nbHex: 'Hex',
+		nbBits: 'Bit',
+
+		// Text ↔ hex/binary
+		hbFormat: 'Bytes als',
+		hbSep: 'Trennzeichen',
+		hbSpace: 'Leerzeichen',
+		hbNone: 'Keins',
+		hbColon: 'Doppelpunkt',
+		hbInputEnc: 'Zu kodierender Text',
+		hbInputDec: 'Zu dekodierende Bytes',
+
+		// JSON Schema
+		schInfer: 'Schema ableiten',
+		schValidate: 'Validieren',
+		schInferT: 'Ein Schema aus Beispiel-JSON erzeugen',
+		schValidateT: 'JSON gegen ein Schema prüfen',
+		schData: 'JSON-Daten',
+		schSchema: 'JSON-Schema',
+		schViolations: 'Verstöße',
+		schValid: 'Gültig — die Daten entsprechen dem Schema',
+		schResult: 'Validierungsergebnis',
+
+		// EXIF
+		exTags: '{n} Metadaten-Felder',
+		exNone: 'Keine Metadaten gefunden — diese Datei ist bereits sauber',
+		exStrip: 'Bereinigte Kopie herunterladen',
+		exGps: 'GPS-Standort eingebettet',
+		exMap: 'Auf Karte anzeigen',
+		exNote:
+			'Lesen und Entfernen laufen vollständig in deinem Browser — das Foto wird nie hochgeladen. Die Bereinigung entfernt Metadaten-Segmente Byte für Byte ohne Re-Enkodierung; Pixel und Qualität bleiben unangetastet.',
+
+		// Cron builder
+		crBuilder: 'Baukasten',
+		crMinute: 'Minute',
+		crHour: 'Stunde',
+		crDom: 'Tag des Monats',
+		crMonth: 'Monat',
+		crDow: 'Wochentag',
+		crEvery: 'Jede(r)',
+		crStep: 'Alle N',
+		crAt: 'Bestimmte',
+		crUse: 'Ausdruck übernehmen',
+
+		// JWT sign & verify
+		jwtDecode: 'Dekodieren',
+		jwtSign: 'Signieren',
+		jwtVerify: 'Verifizieren',
+		jwtAlg: 'Algorithmus',
+		jwtPayloadLbl: 'Payload (JSON-Objekt)',
+		jwtSecret: 'Secret',
+		jwtPrivKey: 'Privater Schlüssel (PKCS#8-PEM)',
+		jwtPubKey: 'Secret (HS) oder Public-Key-PEM (RS/ES)',
+		jwtSignNote:
+			'Das Signieren läuft über WebCrypto in deinem Browser — der Schlüssel verlässt diese Seite nie. Nutze für HS-Algorithmen ein langes zufälliges Secret; kurze sind per Brute-Force knackbar, egal wo du signierst.',
+		jwtVerifyNote:
+			'Die Verifikation prüft die Signatur lokal gegen den von dir angegebenen Schlüssel. Sie ruft keine JWKS-Endpoints ab und validiert keine Claims wie aud/iss — erledige das serverseitig.',
+
+		// Timestamp extras
+		tsDiff: 'Differenz zwischen zwei Datumsangaben'
 	},
 	categories: {
 		encoding: 'Kodierung',
@@ -323,7 +436,9 @@ const de: Messages = {
 		generators: 'Generatoren',
 		crypto: 'Hashing & Krypto',
 		web: 'Web',
-		image: 'Bild'
+		image: 'Bild',
+		code: 'Code & Markup',
+		privacy: 'Privatsphäre'
 	},
 	tools: {
 		'json-formatter': {
@@ -449,6 +564,58 @@ const de: Messages = {
 		'favicon-generator': {
 			name: 'Favicon-Generator',
 			description: 'Macht aus jedem Bild favicon.ico plus das komplette PNG- und Manifest-Icon-Set'
+		},
+		'sql-formatter': {
+			name: 'SQL-Formatierer',
+			description: 'SQL mit dialektbewussten Schlüsselwörtern formatieren oder auf eine Zeile minifizieren'
+		},
+		'xml-formatter': {
+			name: 'XML-Formatierer & -Validator',
+			description: 'XML formatieren, minifizieren und validieren — Fehler mit exakter Position'
+		},
+		'xml-to-json': {
+			name: 'XML ↔ JSON-Konverter',
+			description: 'XML-Dokumente zu JSON konvertieren und zurück, Attribute inklusive'
+		},
+		'csv-to-json': {
+			name: 'CSV → JSON-Konverter',
+			description: 'CSV zu JSON-Objekten parsen, mit Trennzeichen-Erkennung und typisierten Werten'
+		},
+		'markdown-to-html': {
+			name: 'Markdown ↔ HTML-Konverter',
+			description: 'Markdown mit Live-Vorschau zu HTML rendern oder HTML zurück in Markdown wandeln'
+		},
+		'html-formatter': {
+			name: 'HTML-Formatierer & -Minifier',
+			description: 'Unordentliches HTML lesbar formatieren oder für die Produktion minifizieren'
+		},
+		'css-formatter': {
+			name: 'CSS-Formatierer & -Minifier',
+			description: 'CSS zum Lesen aufbereiten oder fürs Ausliefern minifizieren'
+		},
+		'js-formatter': {
+			name: 'JavaScript-Formatierer & -Minifier',
+			description: 'JavaScript lesbar formatieren oder mit echter Kompression und Mangling minifizieren'
+		},
+		'string-escape': {
+			name: 'String-Escaper / -Unescaper',
+			description: 'Strings für JSON, JavaScript, Java, XML, SQL und CSV escapen oder unescapen'
+		},
+		'number-base-converter': {
+			name: 'Zahlenbasis-Konverter',
+			description: 'Zahlen zwischen Binär, Oktal, Dezimal, Hex und jeder Basis bis 36 umrechnen'
+		},
+		'text-to-hex': {
+			name: 'Text ↔ Hex / Binär-Konverter',
+			description: 'Text in Hex-, Binär- oder Dezimal-Bytes wandeln und Byte-Dumps zurück dekodieren'
+		},
+		'json-schema-validator': {
+			name: 'JSON-Schema-Validator & -Generator',
+			description: 'JSON gegen ein Schema validieren oder ein Schema aus Beispieldaten ableiten'
+		},
+		'exif-viewer': {
+			name: 'EXIF-Viewer & -Entferner',
+			description: 'Sehen, welche Metadaten deine Fotos tragen — und sie ohne Re-Enkodierung entfernen'
 		}
 	}
 };

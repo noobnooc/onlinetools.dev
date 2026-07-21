@@ -313,7 +313,115 @@ const ja: Messages = {
 		wcLines: '行',
 		wcSentences: '文',
 		wcParagraphs: '段落',
-		wcAvg: '平均単語長'
+		wcAvg: '平均単語長',
+
+		// Shared formatter controls
+		fmtFormat: '整形',
+		fmtMinify: 'ミニファイ',
+
+		// SQL formatter
+		sqlInput: 'SQL 文(複数可)',
+		sqlDialect: '方言',
+		sqlKeywords: 'キーワード',
+		sqlKeep: 'そのまま',
+
+		// XML formatter
+		xmlInput: 'XML ドキュメント',
+
+		// XML ↔ JSON
+		xjInputXml: 'XML ドキュメント',
+		xjInputJson: 'JSON オブジェクト',
+		xjNote: '属性は "@_name" 形式のキーに、属性と共存するテキストは "#text" になるため、変換はラウンドトリップ可能です。混在する兄弟要素間の順序は保持されません — XML は同名要素の繰り返しを許しますが、JSON オブジェクトは許さないためです。',
+
+		// CSV → JSON
+		cjInput: 'CSV / TSV データ',
+		cjAuto: '自動',
+		cjPipe: 'パイプ',
+		cjHeader: '先頭行はヘッダー',
+		cjTyped: '型付きの値',
+
+		// Markdown
+		mdPreview: 'プレビュー',
+		mdNote: 'プレビューはレンダリング前にサニタイズされるため、貼り付けや共有された内容に含まれるスクリプトやイベントハンドラーは実行されません。HTML 出力欄には変換結果がそのまま入ります。',
+
+		// Code formatters
+		htmlInput: 'HTML ソース',
+		cssInput: 'CSS ソース',
+		jsInput: 'JavaScript ソース',
+
+		// String escape
+		escEscape: 'エスケープ',
+		escUnescape: 'アンエスケープ',
+		escDialect: '方言',
+		escInputEsc: 'エスケープするテキスト',
+		escInputUnesc: 'エスケープ済みテキスト',
+
+		// Number base
+		nbInput: '数値',
+		nbFrom: '変換元',
+		nbAutoT: '0x / 0o / 0b プレフィックスから判別、それ以外は 10 進数',
+		nbGroup: '桁区切り',
+		nbBase: '基数',
+		nbBin: '2 進数',
+		nbOct: '8 進数',
+		nbDec: '10 進数',
+		nbHex: '16 進数',
+		nbBits: 'ビット',
+
+		// Text ↔ hex/binary
+		hbFormat: 'バイトの表記',
+		hbSep: '区切り文字',
+		hbSpace: 'スペース',
+		hbNone: 'なし',
+		hbColon: 'コロン',
+		hbInputEnc: 'エンコードするテキスト',
+		hbInputDec: 'デコードするバイト列',
+
+		// JSON Schema
+		schInfer: 'スキーマ推論',
+		schValidate: '検証',
+		schInferT: 'サンプル JSON からスキーマを生成',
+		schValidateT: 'JSON をスキーマと照合',
+		schData: 'JSON データ',
+		schSchema: 'JSON Schema',
+		schViolations: '件の違反',
+		schValid: '有効 — データはスキーマに適合しています',
+		schResult: '検証結果',
+
+		// EXIF
+		exTags: '{n} 件のメタデータフィールド',
+		exNone: 'メタデータは見つかりませんでした — このファイルはすでにクリーンです',
+		exStrip: 'クリーンなコピーをダウンロード',
+		exGps: 'GPS 位置情報が埋め込まれています',
+		exMap: '地図で見る',
+		exNote: '読み取りと除去はすべてブラウザ内で行われ、写真がアップロードされることはありません。除去は再エンコードなしにメタデータセグメントをバイト単位で取り除くため、ピクセルと画質はそのままです。',
+
+		// Cron builder
+		crBuilder: 'ビルダー',
+		crMinute: '分',
+		crHour: '時',
+		crDom: '日',
+		crMonth: '月',
+		crDow: '曜日',
+		crEvery: 'すべて',
+		crStep: 'N ごと',
+		crAt: '指定',
+		crUse: 'この式を使う',
+
+		// JWT sign & verify
+		jwtDecode: 'デコード',
+		jwtSign: '署名',
+		jwtVerify: '検証',
+		jwtAlg: 'アルゴリズム',
+		jwtPayloadLbl: 'ペイロード(JSON オブジェクト)',
+		jwtSecret: 'シークレット',
+		jwtPrivKey: '秘密鍵(PKCS#8 PEM)',
+		jwtPubKey: 'シークレット(HS)または公開鍵 PEM(RS/ES)',
+		jwtSignNote: '署名はブラウザ内の WebCrypto で実行され、鍵がこのページの外に出ることはありません。HS 系アルゴリズムには長いランダムなシークレットを使ってください — 短いシークレットは、どこで署名しようとブルートフォースで破られます。',
+		jwtVerifyNote: '検証は、指定した鍵に対して署名をローカルで確認します。JWKS エンドポイントの取得や aud/iss などのクレームの検証は行いません — それらはサーバー側で行ってください。',
+
+		// Timestamp extras
+		tsDiff: '2 つの日付の差'
 	},
 	categories: {
 		encoding: 'エンコード',
@@ -323,7 +431,9 @@ const ja: Messages = {
 		generators: 'ジェネレーター',
 		crypto: 'ハッシュと暗号',
 		web: 'Web',
-		image: '画像'
+		image: '画像',
+		code: 'コードとマークアップ',
+		privacy: 'プライバシー'
 	},
 	tools: {
 		'json-formatter': {
@@ -449,6 +559,58 @@ const ja: Messages = {
 		'favicon-generator': {
 			name: 'Favicon ジェネレーター',
 			description: '任意の画像から favicon.ico と PNG・manifest アイコン一式を生成'
+		},
+		'sql-formatter': {
+			name: 'SQLフォーマッター',
+			description: 'SQL を方言に応じたキーワード処理で整形、または 1 行にミニファイ'
+		},
+		'xml-formatter': {
+			name: 'XML整形・検証',
+			description: 'XML の整形・ミニファイ・検証。エラーは行・列まで正確に表示'
+		},
+		'xml-to-json': {
+			name: 'XML ↔ JSON変換',
+			description: 'XML ドキュメントと JSON を相互変換。属性も含めて変換'
+		},
+		'csv-to-json': {
+			name: 'CSV → JSON変換',
+			description: 'CSV を区切り文字の自動判別と型付きの値で JSON オブジェクトに変換'
+		},
+		'markdown-to-html': {
+			name: 'Markdown ↔ HTML変換',
+			description: 'Markdown をライブプレビュー付きで HTML に変換、HTML から Markdown への逆変換も'
+		},
+		'html-formatter': {
+			name: 'HTML整形・ミニファイ',
+			description: '乱れた HTML を読みやすく整形、または本番用にミニファイ'
+		},
+		'css-formatter': {
+			name: 'CSS整形・ミニファイ',
+			description: 'CSS を読みやすく整形、または配布用にミニファイ'
+		},
+		'js-formatter': {
+			name: 'JavaScript整形・ミニファイ',
+			description: 'JavaScript を整形、または本物の圧縮と変数名短縮でミニファイ'
+		},
+		'string-escape': {
+			name: '文字列エスケープ / アンエスケープ',
+			description: 'JSON・JavaScript・Java・XML・SQL・CSV 向けに文字列をエスケープ / 復元'
+		},
+		'number-base-converter': {
+			name: '基数変換',
+			description: '2 進・8 進・10 進・16 進から基数 36 まで、数値を相互変換'
+		},
+		'text-to-hex': {
+			name: 'テキスト ↔ 16進 / 2進変換',
+			description: 'テキストを 16 進・2 進・10 進のバイト列に変換し、バイトダンプを復元'
+		},
+		'json-schema-validator': {
+			name: 'JSON Schema検証・生成',
+			description: 'JSON をスキーマで検証、またはサンプルデータからスキーマを推論'
+		},
+		'exif-viewer': {
+			name: 'EXIFビューアー・削除',
+			description: '写真に含まれるメタデータを表示し、再エンコードなしで除去'
 		}
 	}
 };

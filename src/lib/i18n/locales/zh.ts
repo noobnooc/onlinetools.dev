@@ -310,7 +310,120 @@ const zh: Messages = {
 		wcLines: '行数',
 		wcSentences: '句子',
 		wcParagraphs: '段落',
-		wcAvg: '平均词长'
+		wcAvg: '平均词长',
+
+		// Shared formatter controls
+		fmtFormat: '格式化',
+		fmtMinify: '压缩',
+
+		// SQL formatter
+		sqlInput: 'SQL 语句',
+		sqlDialect: '方言',
+		sqlKeywords: '关键字',
+		sqlKeep: '保持原样',
+
+		// XML formatter
+		xmlInput: 'XML 文档',
+
+		// XML ↔ JSON
+		xjInputXml: 'XML 文档',
+		xjInputJson: 'JSON 对象',
+		xjNote:
+			'属性会变成 "@_name" 键,与属性并存的文本会变成 "#text",因此转换可以往返还原。混合兄弟元素之间的顺序不会保留——XML 允许元素重复,JSON 对象则不允许。',
+
+		// CSV → JSON
+		cjInput: 'CSV / TSV 数据',
+		cjAuto: '自动',
+		cjPipe: '竖线',
+		cjHeader: '首行为表头',
+		cjTyped: '类型化值',
+
+		// Markdown
+		mdPreview: '预览',
+		mdNote:
+			'预览在渲染前会先净化,粘贴或分享内容中的脚本与事件处理器无法执行。HTML 输出框中始终是未净化的原始转换结果。',
+
+		// Code formatters
+		htmlInput: 'HTML 源码',
+		cssInput: 'CSS 源码',
+		jsInput: 'JavaScript 源码',
+
+		// String escape
+		escEscape: '转义',
+		escUnescape: '反转义',
+		escDialect: '方言',
+		escInputEsc: '待转义文本',
+		escInputUnesc: '已转义文本',
+
+		// Number base
+		nbInput: '数字',
+		nbFrom: '源进制',
+		nbAutoT: '根据 0x / 0o / 0b 前缀识别,否则按十进制',
+		nbGroup: '数位分组',
+		nbBase: '进制',
+		nbBin: '二进制',
+		nbOct: '八进制',
+		nbDec: '十进制',
+		nbHex: '十六进制',
+		nbBits: '位',
+
+		// Text ↔ hex/binary
+		hbFormat: '字节表示为',
+		hbSep: '分隔符',
+		hbSpace: '空格',
+		hbNone: '无',
+		hbColon: '冒号',
+		hbInputEnc: '待编码文本',
+		hbInputDec: '待解码字节',
+
+		// JSON Schema
+		schInfer: '推导 Schema',
+		schValidate: '校验',
+		schInferT: '从 JSON 样本生成 Schema',
+		schValidateT: '按 Schema 检查 JSON',
+		schData: 'JSON 数据',
+		schSchema: 'JSON Schema',
+		schViolations: '处违规',
+		schValid: '校验通过——数据符合 Schema',
+		schResult: '校验结果',
+
+		// EXIF
+		exTags: '{n} 个元数据字段',
+		exNone: '未发现元数据——这个文件已经很干净',
+		exStrip: '下载清理后的副本',
+		exGps: '嵌入了 GPS 位置',
+		exMap: '在地图上查看',
+		exNote:
+			'读取与清除都完全在你的浏览器中进行——照片不会被上传。清理按字节移除元数据段而不重新编码,像素和画质分毫不动。',
+
+		// Cron builder
+		crBuilder: '构建器',
+		crMinute: '分钟',
+		crHour: '小时',
+		crDom: '每月第几天',
+		crMonth: '月份',
+		crDow: '星期几',
+		crEvery: '每个',
+		crStep: '每 N 个',
+		crAt: '指定',
+		crUse: '使用该表达式',
+
+		// JWT sign & verify
+		jwtDecode: '解码',
+		jwtSign: '签名',
+		jwtVerify: '校验',
+		jwtAlg: '算法',
+		jwtPayloadLbl: '载荷(JSON 对象)',
+		jwtSecret: '密钥',
+		jwtPrivKey: '私钥(PKCS#8 PEM)',
+		jwtPubKey: '密钥 (HS) 或公钥 PEM (RS/ES)',
+		jwtSignNote:
+			'签名通过浏览器中的 WebCrypto 完成——密钥不会离开本页面。HS 系列算法请使用足够长的随机密钥;短密钥无论在哪里签名都能被暴力破解。',
+		jwtVerifyNote:
+			'校验只在本地用你提供的密钥核对签名,不会请求 JWKS 端点,也不校验 aud/iss 等声明——那些请在服务端完成。',
+
+		// Timestamp extras
+		tsDiff: '两个日期之间的差值'
 	},
 	categories: {
 		encoding: '编码转换',
@@ -320,7 +433,9 @@ const zh: Messages = {
 		generators: '生成器',
 		crypto: '哈希与加密',
 		web: 'Web',
-		image: '图片'
+		image: '图片',
+		code: '代码与标记',
+		privacy: '隐私'
 	},
 	tools: {
 		'json-formatter': {
@@ -446,6 +561,58 @@ const zh: Messages = {
 		'favicon-generator': {
 			name: 'Favicon 生成器',
 			description: '把任意图片变成 favicon.ico 及完整的 PNG 与 manifest 图标套件'
+		},
+		'sql-formatter': {
+			name: 'SQL 格式化',
+			description: '按数据库方言格式化 SQL 关键字,或压缩为单行'
+		},
+		'xml-formatter': {
+			name: 'XML 格式化与校验',
+			description: '美化、压缩并校验 XML,错误精确定位到行列'
+		},
+		'xml-to-json': {
+			name: 'XML ↔ JSON 转换',
+			description: 'XML 与 JSON 双向互转,属性也不丢失'
+		},
+		'csv-to-json': {
+			name: 'CSV → JSON 转换',
+			description: '把 CSV 解析成 JSON 对象,自动识别分隔符,支持类型化值'
+		},
+		'markdown-to-html': {
+			name: 'Markdown ↔ HTML 转换',
+			description: 'Markdown 渲染为 HTML 并实时预览,或把 HTML 转回 Markdown'
+		},
+		'html-formatter': {
+			name: 'HTML 格式化与压缩',
+			description: '美化凌乱的 HTML,或压缩后用于生产环境'
+		},
+		'css-formatter': {
+			name: 'CSS 格式化与压缩',
+			description: '美化 CSS 便于阅读,或压缩后直接上线'
+		},
+		'js-formatter': {
+			name: 'JavaScript 格式化与压缩',
+			description: '美化 JavaScript,或用真正的压缩与变量名混淆缩小体积'
+		},
+		'string-escape': {
+			name: '字符串转义 / 反转义',
+			description: '按 JSON、JavaScript、Java、XML、SQL 与 CSV 规则转义或还原字符串'
+		},
+		'number-base-converter': {
+			name: '进制转换器',
+			description: '在二、八、十、十六进制及至多 36 的任意进制之间转换数字'
+		},
+		'text-to-hex': {
+			name: '文本 ↔ 十六进制 / 二进制转换',
+			description: '把文本转成十六进制、二进制或十进制字节,也能反向解码字节串'
+		},
+		'json-schema-validator': {
+			name: 'JSON Schema 校验与生成',
+			description: '按 Schema 校验 JSON,或从样本数据推导 Schema'
+		},
+		'exif-viewer': {
+			name: 'EXIF 查看与清除',
+			description: '查看照片携带的元数据,并在不重新编码的前提下移除'
 		}
 	}
 };
