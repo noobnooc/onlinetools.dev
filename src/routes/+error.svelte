@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import Kbd from '$lib/components/Kbd.svelte';
 </script>
 
 <svelte:head>
@@ -12,7 +13,7 @@
 		{page.status === 404 ? 'No tool lives at this address' : 'Something went wrong'}
 	</h1>
 	<p class="mt-3 text-sm text-dim">
-		Press <kbd class="rounded border border-line bg-surface-2 px-1.5 py-0.5 font-mono text-xs">⌘K</kbd>
+		Press <Kbd keys="⌘K" size="md" />
 		to search every tool, or head back to the
 		<a href="/" class="text-accent hover:underline">tool grid</a>.
 	</p>

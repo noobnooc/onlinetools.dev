@@ -4,6 +4,7 @@
 	import { pushRecentTool } from '$lib/state/app.svelte';
 	import { encodeState, MAX_SHARED_INPUT } from '$lib/state/urlstate';
 	import { TOOL_BY_SLUG } from '$lib/tools/registry';
+	import { t, lt, lp } from '$lib/i18n';
 
 	/**
 	 * Smart Paste: paste or drop content anywhere (outside a form field) and a
@@ -48,7 +49,7 @@
 		const hash =
 			content.length <= MAX_SHARED_INPUT ? '#s=' + encodeState({ input: content }) : '';
 		dismiss();
-		void goto(`/t/${slug}${hash}`);
+		void goto(`${lp(`/t/${slug}`)}${hash}`);
 	}
 
 	function isEditable(target: EventTarget | null): boolean {
@@ -103,8 +104,8 @@
 	>
 		<div class="flex items-center justify-between border-b border-line px-3 py-2">
 			<span class="font-mono text-xs text-dim">
-				Detected <span class="text-accent">{suggestions[0].detection.label}</span>
-				<span class="text-dim/50">· {content.length.toLocaleString()} chars</span>
+				{t('detected')} <span class="text-accent">{suggestions[0].detection.label}</span>
+				<span class="text-dim/50">· {content.length.toLocaleString()} {t('chars')}</span>
 			</span>
 			<button type="button" class="text-xs text-dim hover:text-fg" onclick={dismiss}>esc</button>
 		</div>
@@ -120,7 +121,7 @@
 					>
 						<span>
 							{s.actionLabel}
-							<span class="text-dim">— {TOOL_BY_SLUG.get(s.tool)?.name}</span>
+							<span class="text-dim">— {(() => { const m = TOOL_BY_SLUG.get(s.tool); return m ? lt(m).name : s.tool; })()}</span>
 						</span>
 						{#if i === selected}<span class="font-mono text-[11px] text-dim">↵</span>{/if}
 					</button>

@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { tt } from '$lib/i18n';
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
+	import EmptyState from '../EmptyState.svelte';
 	import { parseUrl } from '$lib/tools/url';
 	import { initFromHash } from '$lib/state/hashstate.svelte';
 	import { currentResult } from '$lib/state/app.svelte';
@@ -17,20 +19,20 @@
 	const parts = $derived(
 		url
 			? ([
-					['Protocol', url.protocol],
-					['Host', url.host],
-					['Hostname', url.hostname],
-					['Port', url.port || '(default)'],
-					['Path', url.pathname],
-					['Fragment', url.hash || '(none)'],
-					['Origin', url.origin]
+					[tt('upProtocol'), url.protocol],
+					[tt('upHost'), url.host],
+					[tt('upHostname'), url.hostname],
+					[tt('upPort'), url.port || tt('upDefault')],
+					[tt('upPath'), url.pathname],
+					[tt('upFragment'), url.hash || tt('upNone')],
+					[tt('upOrigin'), url.origin]
 				] as Array<[string, string]>)
 			: []
 	);
 
 	const output = $derived(
 		url
-			? [...parts.map(([k, v]) => `${k}: ${v}`), '', 'Query parameters:', ...url.params.map((p) => `  ${p.key} = ${p.value}`)].join('\n')
+			? [...parts.map(([k, v]) => `${k}: ${v}`), '', tt('upQuery') + ':', ...url.params.map((p) => `  ${p.key} = ${p.value}`)].join('\n')
 			: ''
 	);
 
@@ -52,7 +54,7 @@
 <div class="space-y-4">
 	<InputArea
 		bind:value={input}
-		label="URL"
+		label={tt('upInput')}
 		placeholder="https://example.com/path?query=value#fragment"
 		{badge}
 		rows={3}
@@ -72,7 +74,7 @@
 						</tr>
 					{/each}
 					{#if url.params.length > 0}
-						<tr><td colspan="2" class="pt-3 pb-1 text-xs tracking-wide text-dim uppercase">Query parameters</td></tr>
+						<tr><td colspan="2" class="pt-3 pb-1 text-xs tracking-wide text-dim uppercase">{tt('upQuery')}</td></tr>
 						{#each url.params as p, i (i)}
 							<tr class="border-b border-line/50 last:border-0">
 								<th scope="row" class="py-1.5 pr-4 text-left font-normal break-all text-accent">{p.key}</th>
@@ -83,7 +85,7 @@
 				</tbody>
 			</table>
 		{:else}
-			<p class="font-mono text-sm text-dim/50">—</p>
+			<EmptyState hint={tt('upEmpty')} />
 		{/if}
 	</OutputPanel>
 </div>

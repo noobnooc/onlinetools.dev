@@ -33,10 +33,37 @@ describe('smart paste detection', () => {
 		const r = detect('aGVsbG8gd29ybGQsIHRoaXMgaXMgYSB0ZXN0');
 		expect(r.some((d) => d.type === 'base64')).toBe(true);
 	});
+	it('detects a JWT even with a Bearer prefix', () => {
+		expect(detect('Bearer ' + JWT)[0]?.type).toBe('jwt');
+	});
+	it('detects rgb()/hsl() colors, not just hex', () => {
+		expect(detect('rgb(76 141 255)')[0]?.type).toBe('color');
+		expect(detect('hsl(218 100% 65%)')[0]?.type).toBe('color');
+	});
+	it('millisecond timestamps also register', () => {
+		expect(detect('1700000000000')[0]?.type).toBe('timestamp');
+	});
+	it('orders multiple detections by confidence', () => {
+		// A JWT is also base64ish — JWT must win.
+		const r = detect(JWT);
+		const types = r.map((d) => d.type);
+		expect(types.indexOf('jwt')).toBe(0);
+	});
+	it('every detection points at a real tool slug and has actions', () => {
+		for (const input of [JWT, '{"a":1}', '1700000000', '#fff', 'https://x.dev/?a=1', 'hello%20world']) {
+			for (const d of detect(input)) {
+				expect(d.tool.length).toBeGreaterThan(0);
+				expect(d.actions.length).toBeGreaterThan(0);
+				expect(d.confidence).toBeGreaterThan(0);
+				expect(d.confidence).toBeLessThanOrEqual(1);
+			}
+		}
+	});
 	it('returns nothing for plain prose', () => {
 		expect(detect('just some ordinary words here')).toHaveLength(0);
 	});
-	it('returns nothing for empty input', () => {
+	it('returns nothing for empty or absurdly large input', () => {
 		expect(detect('  ')).toHaveLength(0);
+		expect(detect('x'.repeat(600_000))).toHaveLength(0);
 	});
 });

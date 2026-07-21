@@ -10,6 +10,14 @@
 		"binding": "ASSETS",
 		"directory": ".svelte-kit/cloudflare"
 	},
+	// Production serves on the custom domain only; workers.dev is disabled
+	// for the deployed version but preview URLs stay on for branch builds.
+	"routes": [
+		{ "pattern": "onlinetools.dev", "custom_domain": true },
+		{ "pattern": "www.onlinetools.dev", "custom_domain": true }
+	],
+	"workers_dev": false,
+	"preview_urls": true,
 	"observability": {
 		"enabled": true
 	}

@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { tt } from '$lib/i18n';
 	import InputArea from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
+	import EmptyState from '../EmptyState.svelte';
 	import { diffLines } from '$lib/tools/diff';
 	import { initFromHash } from '$lib/state/hashstate.svelte';
 	import { currentResult } from '$lib/state/app.svelte';
@@ -36,21 +38,31 @@
 
 <div class="space-y-4">
 	<div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
-		<InputArea bind:value={left} label="Original" rows={8} onsample={sample} />
-		<InputArea bind:value={right} label="Changed" rows={8} />
+		<InputArea bind:value={left} label={tt('diffOriginal')} rows={8} onsample={sample} />
+		<InputArea bind:value={right} label={tt('diffChanged')} rows={8} />
 	</div>
 
 	{#if diff}
-		<p class="font-mono text-xs">
-			<span class="text-ok">+{diff.stats.added}</span>
-			<span class="ml-2 text-err">−{diff.stats.removed}</span>
-			<span class="ml-2 text-dim">{diff.stats.unchanged} unchanged</span>
-		</p>
+		{@const total = diff.stats.added + diff.stats.removed + diff.stats.unchanged}
+		<div class="flex items-center gap-3">
+			<p class="shrink-0 font-mono text-xs">
+				<span class="text-ok">+{diff.stats.added}</span>
+				<span class="ml-2 text-err">−{diff.stats.removed}</span>
+				<span class="ml-2 text-dim">{diff.stats.unchanged} {tt('diffUnchanged')}</span>
+			</p>
+			{#if total > 0}
+				<div class="flex h-1.5 grow overflow-hidden rounded-full bg-surface-2" aria-hidden="true">
+					<div class="bg-ok/70" style="width: {(diff.stats.added / total) * 100}%"></div>
+					<div class="bg-err/70" style="width: {(diff.stats.removed / total) * 100}%"></div>
+					<div class="bg-line" style="width: {(diff.stats.unchanged / total) * 100}%"></div>
+				</div>
+			{/if}
+		</div>
 	{/if}
 
 	<OutputPanel
 		value={output}
-		label="Diff"
+		label={tt('diffLbl')}
 		filename="diff.txt"
 		shareState={left === '' && right === '' ? null : { left, right }}
 	>
@@ -70,7 +82,7 @@
 				{/each}
 			</div>
 		{:else}
-			<p class="font-mono text-sm text-dim/50">—</p>
+			<EmptyState hint={tt('diffEmpty')} />
 		{/if}
 	</OutputPanel>
 </div>

@@ -15,6 +15,8 @@
 	--ok: #3ecf8e;
 	--warn: #f5a623;
 	--err: #f0565a;
+	/* Recessed canvas the app shell sits on; the content card floats above it. */
+	--canvas: #060709;
 }
 
 :root:not(.dark) {
@@ -22,18 +24,21 @@
 	--surface: #ffffff;
 	--surface-2: #f2f4f7;
 	--border: #e4e7ec;
-	--text: #14171c;
+	--text: #101114;
 	--text-dim: #667085;
-	--accent: #4c8dff;
+	/* Slightly deeper blue on light backgrounds for contrast. */
+	--accent: #3672f0;
 	--ok: #16a06b;
 	--warn: #b97509;
 	--err: #d92d34;
+	--canvas: #eceef2;
 }
 
 @theme inline {
 	--color-bg: var(--bg);
 	--color-surface: var(--surface);
 	--color-surface-2: var(--surface-2);
+	--color-canvas: var(--canvas);
 	--color-line: var(--border);
 	--color-fg: var(--text);
 	--color-dim: var(--text-dim);
@@ -47,13 +52,23 @@
 		'JetBrains Mono', ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
 	--radius-md: 8px;
 	--radius-sm: 6px;
+	--radius-lg: 10px;
+	--radius-xl: 14px;
 }
 
 html {
-	background: var(--bg);
+	background: var(--canvas);
 	color: var(--text);
 	font-family: var(--font-sans);
 	color-scheme: dark;
+}
+
+/* Numbers in monospaced contexts always align in columns (Geist-style). */
+pre,
+code,
+kbd,
+.font-mono {
+	font-variant-numeric: tabular-nums;
 }
 
 html:not(.dark) {
@@ -65,6 +80,117 @@ html:not(.dark) {
 	outline: 2px solid var(--accent);
 	outline-offset: 1px;
 	border-radius: var(--radius-sm);
+}
+
+/*
+ * Form fields carry their own soft focus ring below — the hard outline on
+ * top of it reads as a thick double border, so skip it for them.
+ */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+	outline: none;
+}
+
+textarea:focus,
+select:focus {
+	border-color: var(--accent);
+	box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent);
+	outline: none;
+}
+
+/*
+ * ---------- Form controls (one look everywhere) ----------
+ * Unlayered on purpose: these outrank utility classes, so every native
+ * control renders the same regardless of what a tool put on it.
+ * Opt out of text-input styling with the `bare` class (compound fields).
+ */
+select {
+	appearance: none;
+	cursor: pointer;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-md);
+	background-color: var(--surface);
+	color: var(--text);
+	font-size: 13px;
+	line-height: 1.4;
+	padding: 5px 26px 5px 10px;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='m4.5 6.5 3.5 3.5 3.5-3.5' fill='none' stroke='%23848b98' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right 7px center;
+	background-size: 15px;
+	transition: border-color 120ms;
+}
+select:hover {
+	border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+}
+
+input[type='text']:not(.bare),
+input[type='number']:not(.bare),
+input[type='url']:not(.bare),
+input[type='search']:not(.bare) {
+	border: 1px solid var(--border);
+	border-radius: var(--radius-md);
+	background-color: var(--surface);
+	color: var(--text);
+	font-family: var(--font-mono);
+	font-size: 13px;
+	padding: 6px 10px;
+	transition: border-color 120ms;
+	outline: none;
+}
+input[type='text']:not(.bare):hover,
+input[type='number']:not(.bare):hover,
+input[type='url']:not(.bare):hover,
+input[type='search']:not(.bare):hover {
+	border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+}
+input[type='text']:not(.bare):focus,
+input[type='number']:not(.bare):focus,
+input[type='url']:not(.bare):focus,
+input[type='search']:not(.bare):focus {
+	outline: none;
+	border-color: var(--accent);
+	box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent);
+}
+input[aria-invalid='true']:not(.bare) {
+	border-color: color-mix(in srgb, var(--err) 70%, var(--border));
+}
+input:not(.bare)::placeholder,
+textarea::placeholder {
+	color: color-mix(in srgb, var(--text-dim) 65%, transparent);
+}
+
+input[type='checkbox'] {
+	appearance: none;
+	width: 16px;
+	height: 16px;
+	flex-shrink: 0;
+	cursor: pointer;
+	border: 1px solid var(--border);
+	border-radius: 5px;
+	background-color: var(--surface);
+	position: relative;
+	vertical-align: -3px;
+	transition: background-color 120ms, border-color 120ms;
+}
+input[type='checkbox']:hover {
+	border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+}
+input[type='checkbox']:checked {
+	background-color: var(--accent);
+	border-color: var(--accent);
+}
+input[type='checkbox']:checked::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.8 8.4 6.6 11 12.2 5.2' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+		center / 12px no-repeat;
+}
+
+input[type='range'] {
+	accent-color: var(--accent);
 }
 
 ::selection {

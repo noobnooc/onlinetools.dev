@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { tt } from '$lib/i18n';
 	import OutputPanel from '../OutputPanel.svelte';
+	import Segmented from '../Segmented.svelte';
 	import { generateIds, type UuidBatchOptions } from '$lib/tools/uuid';
 	import { currentResult } from '$lib/state/app.svelte';
 	import { RefreshCw } from 'lucide-svelte';
@@ -11,10 +13,10 @@
 	let error = $state('');
 
 	const KINDS: Array<[UuidBatchOptions['kind'], string, string]> = [
-		['uuid-v4', 'UUID v4', 'random'],
-		['uuid-v7', 'UUID v7', 'time-ordered'],
-		['ulid', 'ULID', 'time-ordered, base32'],
-		['nanoid', 'Nano ID', 'short, url-safe']
+		['uuid-v4', 'UUID v4', tt('uuidHintV4')],
+		['uuid-v7', 'UUID v7', tt('uuidHintV7')],
+		['ulid', 'ULID', tt('uuidHintUlid')],
+		['nanoid', 'Nano ID', tt('uuidHintNano')]
 	];
 
 	function generate() {
@@ -44,21 +46,13 @@
 
 <div class="space-y-4">
 	<div class="flex flex-wrap items-center gap-4 text-sm">
-		<div class="flex flex-wrap rounded-md border border-line p-0.5" role="radiogroup" aria-label="ID format">
-			{#each KINDS as [k, label, hint] (k)}
-				<button
-					type="button"
-					role="radio"
-					aria-checked={kind === k}
-					title={hint}
-					class="rounded-[5px] px-3 py-1 text-sm transition-colors duration-120
-						{kind === k ? 'bg-surface-2 text-fg' : 'text-dim hover:text-fg'}"
-					onclick={() => (kind = k)}>{label}</button
-				>
-			{/each}
-		</div>
+		<Segmented
+			bind:value={kind}
+			label={tt('uuidFormat')}
+			options={KINDS.map(([k, label, hint]) => ({ value: k, label, title: hint }))}
+		/>
 		<label class="flex items-center gap-2 text-dim">
-			Count
+			{tt('count')}
 			<input
 				type="number"
 				bind:value={count}
@@ -70,7 +64,7 @@
 		{#if kind !== 'nanoid'}
 			<label class="flex items-center gap-2 text-dim">
 				<input type="checkbox" bind:checked={uppercase} class="accent-(--accent)" />
-				Uppercase
+				{tt('uppercase')}
 			</label>
 		{/if}
 		<button
@@ -78,15 +72,14 @@
 			onclick={generate}
 			class="flex items-center gap-1.5 rounded-md bg-accent px-3 py-1.5 text-sm font-medium text-white transition-opacity duration-120 hover:opacity-90"
 		>
-			<RefreshCw size={13} /> Regenerate
+			<RefreshCw size={13} /> {tt('regenerate')}
 		</button>
 	</div>
 	{#if error}
 		<p class="font-mono text-xs text-err" role="alert">{error}</p>
 	{/if}
-	<OutputPanel value={output} filename="ids.txt" label="Generated {ids.length === 1 ? 'ID' : 'IDs'}" />
+	<OutputPanel value={output} filename="ids.txt" label={tt('uuidOut')} />
 	<p class="text-xs text-dim">
-		Generated with crypto.getRandomValues — cryptographically secure, created in your browser, never
-		logged anywhere.
+		{tt('uuidNote')}
 	</p>
 </div>

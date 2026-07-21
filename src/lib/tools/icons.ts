@@ -1,0 +1,78 @@
+import {
+	Braces,
+	Binary,
+	Clock,
+	Key,
+	Regex,
+	GitCompare,
+	Link2,
+	Globe,
+	FingerprintPattern,
+	Hash,
+	Palette,
+	CaseSensitive,
+	WholeWord,
+	Type,
+	Link,
+	ListFilter,
+	Code,
+	Languages,
+	CalendarClock,
+	Lock,
+	QrCode,
+	ArrowLeftRight,
+	Table,
+	FileCode,
+	Route,
+	ShieldCheck,
+	MonitorSmartphone,
+	Wrench
+} from 'lucide-svelte';
+import type { ToolCategory } from './registry';
+
+/** All lucide icons share one component type. */
+export type IconComponent = typeof Braces;
+
+export const TOOL_ICONS: Record<string, IconComponent> = {
+	'json-formatter': Braces,
+	'base64-decode': Binary,
+	'timestamp-converter': Clock,
+	'jwt-decoder': Key,
+	'regex-tester': Regex,
+	'diff-checker': GitCompare,
+	'url-encode-decode': Link2,
+	'url-parser': Globe,
+	'uuid-generator': FingerprintPattern,
+	'hash-generator': Hash,
+	'color-converter': Palette,
+	'case-converter': CaseSensitive,
+	'word-counter': WholeWord,
+	'lorem-ipsum-generator': Type,
+	'slug-generator': Link,
+	'sort-lines': ListFilter,
+	'html-entities': Code,
+	'unicode-inspector': Languages,
+	'cron-parser': CalendarClock,
+	'password-generator': Lock,
+	'qr-code-generator': QrCode,
+	'json-to-yaml': ArrowLeftRight,
+	'json-to-csv': Table,
+	'json-to-typescript': FileCode,
+	'jsonpath-tester': Route,
+	'bcrypt-generator': ShieldCheck,
+	'user-agent-parser': MonitorSmartphone
+};
+
+export function iconFor(slug: string): IconComponent {
+	return TOOL_ICONS[slug] ?? Wrench;
+}
+
+export const CATEGORY_ICONS: Record<ToolCategory, IconComponent> = {
+	encoding: Binary,
+	json: Braces,
+	text: WholeWord,
+	time: Clock,
+	generators: FingerprintPattern,
+	crypto: ShieldCheck,
+	web: Globe
+};

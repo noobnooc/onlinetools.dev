@@ -1,26 +1,35 @@
 import type { Component } from 'svelte';
-import JsonFormatterTool from './JsonFormatterTool.svelte';
-import Base64Tool from './Base64Tool.svelte';
-import TimestampTool from './TimestampTool.svelte';
-import JwtTool from './JwtTool.svelte';
-import RegexTool from './RegexTool.svelte';
-import DiffTool from './DiffTool.svelte';
-import UrlTool from './UrlTool.svelte';
-import UrlParserTool from './UrlParserTool.svelte';
-import UuidTool from './UuidTool.svelte';
-import HashTool from './HashTool.svelte';
-import ColorTool from './ColorTool.svelte';
 
-export const TOOL_COMPONENTS: Record<string, Component> = {
-	'json-formatter': JsonFormatterTool,
-	'base64-decode': Base64Tool,
-	'timestamp-converter': TimestampTool,
-	'jwt-decoder': JwtTool,
-	'regex-tester': RegexTool,
-	'diff-checker': DiffTool,
-	'url-encode-decode': UrlTool,
-	'url-parser': UrlParserTool,
-	'uuid-generator': UuidTool,
-	'hash-generator': HashTool,
-	'color-converter': ColorTool
+/**
+ * Lazy component map — each tool page only downloads its own component
+ * (plus whatever libraries that tool needs, e.g. yaml or bcrypt).
+ */
+export const TOOL_COMPONENTS: Record<string, () => Promise<{ default: Component }>> = {
+	'json-formatter': () => import('./JsonFormatterTool.svelte'),
+	'base64-decode': () => import('./Base64Tool.svelte'),
+	'timestamp-converter': () => import('./TimestampTool.svelte'),
+	'jwt-decoder': () => import('./JwtTool.svelte'),
+	'regex-tester': () => import('./RegexTool.svelte'),
+	'diff-checker': () => import('./DiffTool.svelte'),
+	'url-encode-decode': () => import('./UrlTool.svelte'),
+	'url-parser': () => import('./UrlParserTool.svelte'),
+	'uuid-generator': () => import('./UuidTool.svelte'),
+	'hash-generator': () => import('./HashTool.svelte'),
+	'color-converter': () => import('./ColorTool.svelte'),
+	'case-converter': () => import('./CaseConverterTool.svelte'),
+	'word-counter': () => import('./WordCounterTool.svelte'),
+	'lorem-ipsum-generator': () => import('./LoremTool.svelte'),
+	'slug-generator': () => import('./SlugTool.svelte'),
+	'sort-lines': () => import('./SortLinesTool.svelte'),
+	'html-entities': () => import('./HtmlEntitiesTool.svelte'),
+	'unicode-inspector': () => import('./UnicodeTool.svelte'),
+	'cron-parser': () => import('./CronTool.svelte'),
+	'password-generator': () => import('./PasswordTool.svelte'),
+	'qr-code-generator': () => import('./QrTool.svelte'),
+	'json-to-yaml': () => import('./JsonYamlTool.svelte'),
+	'json-to-csv': () => import('./JsonCsvTool.svelte'),
+	'json-to-typescript': () => import('./JsonTsTool.svelte'),
+	'jsonpath-tester': () => import('./JsonPathTool.svelte'),
+	'bcrypt-generator': () => import('./BcryptTool.svelte'),
+	'user-agent-parser': () => import('./UaTool.svelte')
 };

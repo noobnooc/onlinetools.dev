@@ -11,9 +11,11 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"test": "vitest run",
 		"test:watch": "vitest",
+		"brand:assets": "node scripts/generate-brand-assets.mjs",
 		"deploy": "pnpm build && wrangler deploy"
 	},
 	"devDependencies": {
+		"@resvg/resvg-js": "^2.6.2",
 		"@sveltejs/adapter-cloudflare": "^7.2.9",
 		"@sveltejs/kit": "^2.70.1",
 		"@sveltejs/vite-plugin-svelte": "^7.2.0",
@@ -27,5 +29,12 @@
 		"vite": "^8.1.5",
 		"vitest": "^4.1.10",
 		"wrangler": "^4.112.0"
+	},
+	"dependencies": {
+		"bcryptjs": "^3.0.3",
+		"qrcode-generator": "^2.0.4",
+		"smol-toml": "^1.7.0",
+		"ua-parser-js": "^2.0.10",
+		"yaml": "^2.9.0"
 	}
 }

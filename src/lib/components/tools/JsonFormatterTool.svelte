@@ -1,6 +1,10 @@
 <script lang="ts">
+	import { tt } from '$lib/i18n';
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
+	import EmptyState from '../EmptyState.svelte';
+	import JsonTree from '../JsonTree.svelte';
+	import Segmented from '../Segmented.svelte';
 	import { formatJson, validateJson } from '$lib/tools/json';
 	import { initFromHash } from '$lib/state/hashstate.svelte';
 	import { formatBytes, byteLength } from '$lib/utils/format';
@@ -11,6 +15,7 @@
 	let input = $state('');
 	let indent = $state<'2' | '4' | 'tab' | 'min'>('2');
 	let sortKeys = $state(false);
+	let view = $state<'text' | 'tree'>('text');
 
 	initFromHash((s) => {
 		if (s.input) input = s.input;
@@ -28,6 +33,14 @@
 				})
 	);
 	const output = $derived(result?.ok ? result.value : '');
+	const parsed = $derived.by((): unknown => {
+		if (!result?.ok) return undefined;
+		try {
+			return JSON.parse(input);
+		} catch {
+			return undefined;
+		}
+	});
 
 	$effect(() => {
 		currentResult.text = output;
@@ -44,7 +57,7 @@
 <div class="space-y-4">
 	<InputArea
 		bind:value={input}
-		label="JSON input"
+		label={tt('jfInput')}
 		placeholder={'Paste JSON here — {"like": "this"}'}
 		{badge}
 		rows={10}
@@ -52,26 +65,49 @@
 		onsample={() => (input = SAMPLE)}
 	/>
 	<div class="flex flex-wrap items-center gap-4 text-sm">
-		<label class="flex items-center gap-2 text-dim">
-			Indent
-			<select
+		<div class="flex items-center gap-2 text-dim">
+			{tt('jfIndent')}
+			<Segmented
 				bind:value={indent}
-				class="rounded-md border border-line bg-surface-2 px-2 py-1 text-sm text-fg"
-			>
-				<option value="2">2 spaces</option>
-				<option value="4">4 spaces</option>
-				<option value="tab">Tabs</option>
-				<option value="min">Minified</option>
-			</select>
-		</label>
+				label={tt('jfIndentation')}
+				options={[
+					{ value: '2', label: '··', title: tt('jfSp2'), mono: true },
+					{ value: '4', label: '····', title: tt('jfSp4'), mono: true },
+					{ value: 'tab', label: '⇥', title: tt('jfTabs'), mono: true },
+					{ value: 'min', label: '{}', title: tt('jfMin'), mono: true }
+				]}
+			/>
+		</div>
 		<label class="flex items-center gap-2 text-dim">
-			<input type="checkbox" bind:checked={sortKeys} class="accent-(--accent)" />
-			Sort keys
+			<input type="checkbox" bind:checked={sortKeys} />
+			{tt('jfSortKeys')}
 		</label>
+		<Segmented
+			bind:value={view}
+			label={tt('jfText')}
+			options={[
+				{ value: 'text', label: tt('jfText') },
+				{ value: 'tree', label: tt('jfTree') }
+			]}
+		/>
 	</div>
 	<OutputPanel
 		value={output}
 		filename="formatted.json"
 		shareState={input.trim() === '' ? null : { input, indent, ...(sortKeys ? { sort: '1' } : {}) }}
-	/>
+	>
+		{#if view === 'tree' && parsed !== undefined}
+			<div class="max-h-[32rem] overflow-auto">
+				<JsonTree value={parsed} />
+			</div>
+			<p class="mt-2 border-t border-line/50 pt-2 text-[11px] text-dim">
+				{tt('jfTreeHint')}
+				<a href="/t/jsonpath-tester" class="text-accent hover:underline">{tt('jfTreeLink')}</a>.
+			</p>
+		{:else if output !== ''}
+			<pre class="max-h-[32rem] overflow-auto font-mono text-sm leading-relaxed whitespace-pre-wrap break-all">{output}</pre>
+		{:else}
+			<EmptyState hint="Formatted JSON appears here — try the sample" />
+		{/if}
+	</OutputPanel>
 </div>

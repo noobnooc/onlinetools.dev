@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { t } from '$lib/i18n';
+
 	/**
 	 * The "live input" — the site-wide signature element. A small badge on the
 	 * input's top edge reports the detected content type, size and validity in
@@ -6,7 +8,7 @@
 	 */
 	export interface BadgeSegment {
 		text: string;
-		tone?: 'ok' | 'err' | 'dim' | 'accent';
+		tone?: 'ok' | 'err' | 'warn' | 'dim' | 'accent';
 	}
 
 	interface Props {
@@ -36,6 +38,7 @@
 	const toneClass: Record<string, string> = {
 		ok: 'text-ok',
 		err: 'text-err',
+		warn: 'text-warn',
 		dim: 'text-dim',
 		accent: 'text-accent'
 	};
@@ -48,7 +51,7 @@
 			<button
 				type="button"
 				class="text-xs text-dim transition-colors duration-120 hover:text-fg"
-				onclick={onsample}>Sample</button
+				onclick={onsample}>{t('sample')}</button
 			>
 		{/if}
 	</div>
@@ -66,6 +69,7 @@
 		></textarea>
 		{#if badge.length > 0}
 			<div
+				data-testid="input-badge"
 				class="pointer-events-none absolute -top-2.5 right-3 flex items-center gap-1.5 rounded-md border border-line bg-surface px-2 py-0.5 font-mono text-[11px] leading-4"
 			>
 				{#each badge as seg, i (i)}
@@ -78,7 +82,7 @@
 	{#if error}
 		<p class="mt-1.5 font-mono text-xs text-err" role="alert">
 			{#if error.line !== undefined}
-				<span class="opacity-70">line {error.line}{error.column !== undefined ? `:${error.column}` : ''} —</span>
+				<span class="opacity-70">{t('line')} {error.line}{error.column !== undefined ? `:${error.column}` : ''} —</span>
 			{/if}
 			{error.message}
 		</p>

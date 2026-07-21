@@ -5,7 +5,10 @@
 	import { searchTools, TOOLS, TOOL_BY_SLUG, type ToolMeta } from '$lib/tools/registry';
 	import { detect, type Detection } from '$lib/detect/detectors';
 	import { encodeState, MAX_SHARED_INPUT } from '$lib/state/urlstate';
-	import { Search, CornerDownLeft } from 'lucide-svelte';
+	import { t, lt, lp, locale } from '$lib/i18n';
+	import { iconFor } from '$lib/tools/icons';
+	import Kbd from './Kbd.svelte';
+	import { Search, CornerDownLeft, Zap } from 'lucide-svelte';
 
 	interface Entry {
 		kind: 'tool' | 'action';
@@ -19,6 +22,16 @@
 	let query = $state('');
 	let selected = $state(0);
 	let inputEl = $state<HTMLInputElement | null>(null);
+	let listEl = $state<HTMLUListElement | null>(null);
+
+	/** Keep the keyboard selection visible inside the scrolling list. */
+	function scrollSelectedIntoView() {
+		requestAnimationFrame(() => {
+			listEl
+				?.querySelector('[aria-selected="true"]')
+				?.scrollIntoView({ block: 'nearest' });
+		});
+	}
 
 	$effect(() => {
 		if (palette.open) {
@@ -73,11 +86,21 @@
 			// If the query looks like pure content (no tool matched), still show all-tool fallback.
 			if (tools.length === 0 && actions.length === 0) tools = [];
 		}
-		const toolEntries: Entry[] = tools.map((t) => ({
+		// Localized names also match: merge tools whose translated name
+		// contains the query (searchTools only knows the English fields).
+		if (locale() !== 'en' && query.trim() !== '') {
+			const q = query.trim().toLowerCase();
+			for (const candidate of TOOLS) {
+				if (!tools.includes(candidate) && lt(candidate).name.toLowerCase().includes(q)) {
+					tools = [...tools, candidate];
+				}
+			}
+		}
+		const toolEntries: Entry[] = tools.map((tool) => ({
 			kind: 'tool',
-			tool: t,
-			label: t.name,
-			hint: t.description
+			tool,
+			label: lt(tool).name,
+			hint: lt(tool).description
 		}));
 		return [...actions, ...toolEntries].slice(0, 12);
 	});
@@ -91,16 +114,18 @@
 		palette.open = false;
 		pushRecentTool(entry.tool.slug);
 		const hash = entry.payload ? '#s=' + encodeState({ input: entry.payload }) : '';
-		void goto(`/t/${entry.tool.slug}${hash}`);
+		void goto(`${lp(`/t/${entry.tool.slug}`)}${hash}`);
 	}
 
 	function onkeydown(e: KeyboardEvent) {
 		if (e.key === 'ArrowDown') {
 			e.preventDefault();
 			selected = Math.min(selected + 1, entries.length - 1);
+			scrollSelectedIntoView();
 		} else if (e.key === 'ArrowUp') {
 			e.preventDefault();
 			selected = Math.max(selected - 1, 0);
+			scrollSelectedIntoView();
 		} else if (e.key === 'Enter' && entries[selected]) {
 			e.preventDefault();
 			run(entries[selected]);
@@ -129,14 +154,15 @@
 					bind:value={query}
 					{onkeydown}
 					type="text"
-					placeholder="Search tools, or paste content to act on it…"
-					class="w-full bg-transparent py-3 font-mono text-sm outline-none placeholder:text-dim/60"
+					placeholder={t('palettePlaceholder')}
+					class="bare w-full bg-transparent py-3 font-mono text-sm outline-none placeholder:text-dim/60"
 					autocomplete="off"
 					spellcheck="false"
 				/>
 			</div>
-			<ul class="max-h-[50vh] overflow-y-auto p-1.5" role="listbox" aria-label="Results">
+			<ul bind:this={listEl} class="max-h-[50vh] overflow-y-auto p-1.5" role="listbox" aria-label="Results">
 				{#each entries as entry, i (entry.kind + entry.tool.slug + (entry.payload ?? ''))}
+					{@const Icon = entry.kind === 'action' ? Zap : iconFor(entry.tool.slug)}
 					<li role="option" aria-selected={i === selected}>
 						<button
 							type="button"
@@ -145,13 +171,21 @@
 							onclick={() => run(entry)}
 							onmousemove={() => (selected = i)}
 						>
-							<span class="flex min-w-0 flex-col">
-								<span class="truncate text-sm {entry.kind === 'action' ? 'text-accent' : ''}">
-									{entry.label}
+							<span class="flex min-w-0 items-center gap-2.5">
+								<span
+									class="flex h-6 w-6 shrink-0 items-center justify-center rounded-md border border-line text-dim
+										{entry.kind === 'action' ? 'border-accent/40 text-accent' : ''}"
+								>
+									<Icon size={13} />
 								</span>
-								{#if entry.hint}
-									<span class="truncate font-mono text-xs text-dim">{entry.hint}</span>
-								{/if}
+								<span class="flex min-w-0 flex-col">
+									<span class="truncate text-sm {entry.kind === 'action' ? 'text-accent' : ''}">
+										{entry.label}
+									</span>
+									{#if entry.hint}
+										<span class="truncate font-mono text-xs text-dim">{entry.hint}</span>
+									{/if}
+								</span>
 							</span>
 							{#if i === selected}
 								<CornerDownLeft size={13} class="shrink-0 text-dim" />
@@ -159,11 +193,13 @@
 						</button>
 					</li>
 				{:else}
-					<li class="px-2.5 py-6 text-center text-sm text-dim">No matching tool</li>
+					<li class="px-2.5 py-6 text-center text-sm text-dim">{t('noMatch')}</li>
 				{/each}
 			</ul>
-			<div class="flex items-center gap-3 border-t border-line px-3 py-2 font-mono text-[11px] text-dim/70">
-				<span>↑↓ navigate</span><span>↵ open</span><span>esc close</span>
+			<div class="flex items-center gap-4 border-t border-line px-3 py-2 font-mono text-[11px] text-dim/70">
+				<span class="flex items-center gap-1.5"><Kbd keys="↑↓" /> {t('navigate')}</span>
+				<span class="flex items-center gap-1.5"><Kbd keys="↵" /> {t('open')}</span>
+				<span class="flex items-center gap-1.5"><Kbd keys="esc" /> {t('close')}</span>
 			</div>
 		</Dialog.Content>
 	</Dialog.Portal>

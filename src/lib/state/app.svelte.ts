@@ -35,16 +35,30 @@ export function pushRecentTool(slug: string) {
 }
 
 export type Theme = 'dark' | 'light';
+/** User preference: an explicit theme, or follow the operating system. */
+export type ThemePref = Theme | 'system';
 
-export function getTheme(): Theme {
-	return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+/**
+ * Stored preference. "system" is represented by the absence of a stored
+ * value, which is exactly what the pre-paint script in app.html reads.
+ */
+export function getThemePref(): ThemePref {
+	try {
+		const t = localStorage.getItem('theme');
+		return t === 'dark' || t === 'light' ? t : 'system';
+	} catch {
+		return 'system';
+	}
 }
 
-export function setTheme(theme: Theme) {
-	document.documentElement.classList.toggle('dark', theme === 'dark');
+export function setThemePref(pref: ThemePref) {
 	try {
-		localStorage.setItem('theme', theme);
+		if (pref === 'system') localStorage.removeItem('theme');
+		else localStorage.setItem('theme', pref);
 	} catch {
 		// Best-effort persistence only.
 	}
+	const dark =
+		pref === 'system' ? matchMedia('(prefers-color-scheme: dark)').matches : pref === 'dark';
+	document.documentElement.classList.toggle('dark', dark);
 }

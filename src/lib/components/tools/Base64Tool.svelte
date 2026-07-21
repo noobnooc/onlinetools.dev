@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { tt } from '$lib/i18n';
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
+	import Segmented from '../Segmented.svelte';
 	import { encodeBase64, decodeBase64, isLikelyBase64Text } from '$lib/tools/base64';
 	import { initFromHash } from '$lib/state/hashstate.svelte';
 	import { formatBytes, byteLength } from '$lib/utils/format';
@@ -42,29 +44,25 @@
 
 <div class="space-y-4">
 	<div class="flex flex-wrap items-center gap-4 text-sm">
-		<div class="flex rounded-md border border-line p-0.5" role="radiogroup" aria-label="Direction">
-			{#each ['encode', 'decode'] as m (m)}
-				<button
-					type="button"
-					role="radio"
-					aria-checked={mode === m}
-					class="rounded-[5px] px-3 py-1 text-sm capitalize transition-colors duration-120
-						{mode === m ? 'bg-surface-2 text-fg' : 'text-dim hover:text-fg'}"
-					onclick={() => (mode = m as typeof mode)}>{m}</button
-				>
-			{/each}
-		</div>
+		<Segmented
+			bind:value={mode}
+			label={tt('direction')}
+			options={[
+				{ value: 'encode', label: tt('encode') },
+				{ value: 'decode', label: tt('decode') }
+			]}
+		/>
 		{#if mode === 'encode'}
 			<label class="flex items-center gap-2 text-dim">
-				<input type="checkbox" bind:checked={urlSafe} class="accent-(--accent)" />
-				URL-safe (no padding)
+				<input type="checkbox" bind:checked={urlSafe} />
+				{tt('b64UrlSafe')}
 			</label>
 		{/if}
 	</div>
 	<InputArea
 		bind:value={input}
-		label={mode === 'encode' ? 'Text to encode' : 'Base64 to decode'}
-		placeholder={mode === 'encode' ? 'Any text, unicode included' : 'aGVsbG8gd29ybGQ='}
+		label={mode === 'encode' ? tt('b64InputEnc') : tt('b64InputDec')}
+		placeholder={mode === 'encode' ? tt('b64PhEnc') : 'aGVsbG8gd29ybGQ='}
 		{badge}
 		rows={7}
 		error={result && !result.ok ? { message: result.error } : null}

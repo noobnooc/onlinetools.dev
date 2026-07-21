@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { tt } from '$lib/i18n';
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
+	import Segmented from '../Segmented.svelte';
 	import { encodeUrl, decodeUrl } from '$lib/tools/url';
 	import { initFromHash } from '$lib/state/hashstate.svelte';
 	import { currentResult } from '$lib/state/app.svelte';
@@ -39,28 +41,24 @@
 
 <div class="space-y-4">
 	<div class="flex flex-wrap items-center gap-4 text-sm">
-		<div class="flex rounded-md border border-line p-0.5" role="radiogroup" aria-label="Direction">
-			{#each ['encode', 'decode'] as m (m)}
-				<button
-					type="button"
-					role="radio"
-					aria-checked={mode === m}
-					class="rounded-[5px] px-3 py-1 text-sm capitalize transition-colors duration-120
-						{mode === m ? 'bg-surface-2 text-fg' : 'text-dim hover:text-fg'}"
-					onclick={() => (mode = m as typeof mode)}>{m}</button
-				>
-			{/each}
-		</div>
+		<Segmented
+			bind:value={mode}
+			label={tt('direction')}
+			options={[
+				{ value: 'encode', label: tt('encode') },
+				{ value: 'decode', label: tt('decode') }
+			]}
+		/>
 		{#if mode === 'encode'}
 			<label class="flex items-center gap-2 text-dim" title="Component mode escapes &, = and / — use it for values inside a query string">
 				<input type="checkbox" bind:checked={component} class="accent-(--accent)" />
-				Component mode (encodeURIComponent)
+				{tt('urlComponent')}
 			</label>
 		{/if}
 	</div>
 	<InputArea
 		bind:value={input}
-		label={mode === 'encode' ? 'Text to encode' : 'Encoded text to decode'}
+		label={mode === 'encode' ? tt('b64InputEnc') : tt('urlInputDec')}
 		placeholder={mode === 'encode' ? 'a param value with spaces & symbols' : 'hello%20world%21'}
 		{badge}
 		rows={5}
