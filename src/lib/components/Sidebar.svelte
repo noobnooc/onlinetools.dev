@@ -47,9 +47,11 @@
 	<!-- Brand + theme -->
 	<div class="flex shrink-0 items-center justify-between gap-2 px-4 pt-4 pb-3">
 		<a href={lp('/')} onclick={onnavigate} class="flex min-w-0 items-center gap-2.5">
-			<span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#0B0D10]" aria-hidden="true">
-				<span class="block h-3 w-3 rounded-full border-2 border-accent"></span>
-			</span>
+			<svg class="h-8 w-8 shrink-0" viewBox="0 0 64 64" aria-hidden="true">
+				<rect width="64" height="64" rx="14.5" fill="#0B0D10" />
+				<circle cx="30" cy="34" r="11.5" fill="none" stroke="#4C8DFF" stroke-width="6" />
+				<circle cx="48" cy="16" r="5.75" fill="#3ECF8E" />
+			</svg>
 			<span class="min-w-0 leading-tight">
 				<span class="block truncate text-sm font-semibold tracking-tight">onlinetools.dev</span>
 				<span class="block text-[11px] text-dim">Developer tools</span>

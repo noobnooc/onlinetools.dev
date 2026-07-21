@@ -80,7 +80,7 @@ export function unlp(pathname: string): string {
 	return pathname;
 }
 
-const BASE = 'https://onlinetools.dev';
+export const BASE = 'https://onlinetools.dev';
 
 /** hreflang alternates (absolute), plus x-default → English. */
 export function alternates(path: string): Array<{ hreflang: string; href: string }> {

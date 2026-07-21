@@ -18,7 +18,11 @@
 		<Menu size={17} />
 	</button>
 	<a href={lp('/')} class="flex items-center gap-2 text-sm font-semibold tracking-tight">
-		<span class="inline-block h-2 w-2 rounded-full bg-accent" aria-hidden="true"></span>
+		<svg class="h-5 w-5 shrink-0" viewBox="0 0 64 64" aria-hidden="true">
+			<rect width="64" height="64" rx="14.5" fill="#0B0D10" />
+			<circle cx="30" cy="34" r="11.5" fill="none" stroke="#4C8DFF" stroke-width="6" />
+			<circle cx="48" cy="16" r="5.75" fill="#3ECF8E" />
+		</svg>
 		onlinetools<span class="font-normal text-dim">.dev</span>
 	</a>
 	<button
