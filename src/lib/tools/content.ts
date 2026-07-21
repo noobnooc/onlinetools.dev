@@ -716,5 +716,83 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
 				a: 'CSS Color Module Level 4 standardized space-separated channels with an optional /alpha, and every modern browser supports it. The comma form still works, but the space form is what new specs (and this tool) use.'
 			}
 		]
+	},
+
+	'image-to-base64': {
+		about: [
+			'Drop, pick or paste an image and get its Base64 form in every flavor you might need: a ready-to-use data URL, a CSS background-image declaration, a complete <img> tag with intrinsic dimensions, and the raw Base64 payload. The reverse direction works too — paste a data URL or a bare Base64 blob and the image is decoded, previewed and downloadable as a file.',
+			'The format is identified from the magic bytes, not the file extension or the declared mime type, so a PNG renamed to .jpg (or a data URL with the wrong label) still converts correctly. The size panel is honest about the cost: Base64 inflates data by about a third, and the exact encoded size is shown next to the original so you can decide whether inlining is worth it.',
+			'Unlike most image-to-Base64 sites, nothing is uploaded — the file is read with the browser FileReader API and encoded in the page. That makes it safe for screenshots of internal dashboards, unreleased product shots, or anything else you would rather not hand to a stranger\'s server.'
+		],
+		faqs: [
+			{
+				q: 'When should I inline an image as Base64 instead of linking a file?',
+				a: 'When the image is small (roughly under 10 KB), rarely changes, and would otherwise cost an extra HTTP request — think icons, logos in emails, or single-file HTML documents. For anything larger, a separate file wins: it caches independently, loads in parallel, and does not bloat your HTML or CSS by 33%.'
+			},
+			{
+				q: 'Why is the Base64 version about a third larger than my file?',
+				a: 'Base64 represents every 3 bytes of binary as 4 ASCII characters, a structural +33% overhead (plus up to two padding characters). Gzip or Brotli on your server claws some of it back, but the inflation is inherent to the encoding — it trades size for the ability to embed binary in text.'
+			},
+			{
+				q: 'Can I decode a data URL I found in a stylesheet or HTML?',
+				a: 'Yes — switch to Base64 → image and paste the whole thing, data: prefix and all. Percent-encoded SVG data URLs (the kind without ;base64) decode too, and line breaks or whitespace inside the payload are stripped automatically. The result previews in the page and downloads with the correct extension.'
+			},
+			{
+				q: 'Does this work for SVG, GIF and ICO files, or only PNG and JPEG?',
+				a: 'Everything the sniffer recognizes converts to Base64: PNG, JPEG, WebP, GIF, SVG, BMP, ICO and AVIF. For SVG specifically, consider that the XML source is often smaller and more readable inlined directly — Base64-encoding SVG mostly makes sense when quoting or escaping becomes a problem.'
+			}
+		]
+	},
+
+	'image-converter': {
+		about: [
+			'Convert an image between PNG, JPEG and WebP without installing anything or uploading anywhere: drop the file, pick the target, adjust quality with a live slider, and watch the output size update in real time. The Δ tile shows exactly how much smaller (or larger) the converted file is, so choosing a quality setting stops being guesswork.',
+			'The three formats have distinct jobs. PNG is lossless with full transparency — right for screenshots, UI assets and anything with sharp edges or text. JPEG compresses photographs aggressively but has no alpha channel and blurs hard edges. WebP typically beats JPEG by 25–35% at comparable quality, supports transparency, and is universally supported in current browsers — for the web it is usually the answer.',
+			'Conversion happens on a canvas in your browser: the image is decoded, redrawn and re-encoded by the same codecs your browser uses to display pages. That is what makes the tool private — and also why exact byte counts differ slightly between Chrome, Firefox and Safari, which each ship their own encoders.'
+		],
+		faqs: [
+			{
+				q: 'Which quality setting should I use for JPEG and WebP?',
+				a: 'Between 75 and 90 covers almost every real use. At 85 most photos are visually indistinguishable from the source at a fraction of the size; below ~70 blocky artifacts creep into gradients and skin tones; above 90 file size climbs steeply for gains you cannot see. Drag the slider and watch the size tile — the sweet spot is usually obvious.'
+			},
+			{
+				q: 'Why did my PNG get larger when converted to JPEG?',
+				a: 'JPEG is built for photographic gradients, not flat color. Screenshots, diagrams and UI art compress superbly as PNG (long runs of identical pixels) but force JPEG to store noise around every sharp edge — larger files and visible ringing. Keep graphics as PNG or convert them to lossless-leaning WebP instead.'
+			},
+			{
+				q: 'What happens to transparency when I convert to JPEG?',
+				a: 'JPEG has no alpha channel, so transparent regions must be filled with something — this tool flattens them onto white, the convention for web images. If you need transparency to survive, choose PNG or WebP as the target instead.'
+			},
+			{
+				q: 'Why can\'t my browser export AVIF or HEIC here?',
+				a: 'The canvas toBlob API only encodes formats the browser ships an encoder for — PNG and JPEG everywhere, WebP in Chromium and Firefox. AVIF encoding is still rare and HEIC is patent-encumbered, so browsers decode but do not produce them. If you pick a format your browser cannot write, the tool says so rather than silently giving you a PNG.'
+			}
+		]
+	},
+
+	'image-resizer': {
+		about: [
+			'Resize an image to an exact width, an exact height, or a percentage of the original — the other dimension follows automatically so nothing gets stretched. Pick an output format (or keep the source format), set quality for lossy targets, preview the result, and download. Before/after tiles show dimensions and file size at a glance.',
+			'Scaling uses the browser\'s high-quality smoothing mode, which applies proper resampling rather than nearest-neighbor decimation — downscaled photos stay crisp instead of shimmering with aliasing. Resizing is also the honest way to shrink file size: halving both dimensions removes three quarters of the pixels, which no quality slider can match.',
+			'Files never leave the page: decoding, resampling and re-encoding all run on a local canvas. There is no upload progress bar because there is no upload — a 40-megapixel photo resizes as fast as your machine can redraw it, and works with the network cable unplugged.'
+		],
+		faqs: [
+			{
+				q: 'Will resizing down and back up restore my image?',
+				a: 'No — downscaling discards pixels permanently. Scaling a 3000px photo to 300px keeps 1% of the data; enlarging it back interpolates the missing 99% as blur. Keep the original file and export resized copies from it, rather than resizing the only copy you have.'
+			},
+			{
+				q: 'Why does my upscaled image look soft?',
+				a: 'Enlarging cannot create detail that was never captured — the browser interpolates between existing pixels, which reads as softness beyond about 2×. Genuine upscaling beyond that needs ML-based tools that hallucinate plausible detail; a canvas resampler deliberately does not invent anything.'
+			},
+			{
+				q: 'How do I hit a target file size, like "under 200 KB"?',
+				a: 'Work both levers: first resize to the largest dimensions you actually need (a 1200px-wide image is plenty for most web layouts), then choose WebP or JPEG and lower quality until the size tile reads under target. Dimension reduction does most of the work — quality tweaks fine-tune the rest.'
+			},
+			{
+				q: 'Does resizing strip EXIF metadata like GPS location?',
+				a: 'Yes. The canvas pipeline re-encodes pure pixels — camera model, timestamps, GPS coordinates and every other EXIF tag are gone from the output. That is usually a privacy win for images headed to the public web; if you need metadata preserved, keep the original alongside.'
+			}
+		]
 	}
 };

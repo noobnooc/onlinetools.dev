@@ -59,6 +59,13 @@ describe('smart paste detection', () => {
 			}
 		}
 	});
+	it('detects an image data URL ahead of plain base64', () => {
+		const r = detect(
+			'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=='
+		);
+		expect(r[0]?.type).toBe('image-data-url');
+		expect(r[0]?.tool).toBe('image-to-base64');
+	});
 	it('returns nothing for plain prose', () => {
 		expect(detect('just some ordinary words here')).toHaveLength(0);
 	});

@@ -172,6 +172,54 @@ const en = {
 		heInputEnc: 'Text to escape',
 		heInputDec: 'HTML with entities',
 
+		// Image tools (shared)
+		imgDrop: 'Drop an image, click to browse, or paste from the clipboard',
+		imgLocal: 'Stays in your browser — nothing is uploaded',
+		imgReplace: 'Drop, click or paste to replace',
+		imgSource: 'Source image',
+		imgOriginal: 'Original',
+		imgDimensions: 'Dimensions',
+		imgDownload: 'Download {fmt}',
+		imgErrNotImage: 'Not a recognized image format (PNG, JPEG, WebP, GIF, SVG, BMP, ICO, AVIF)',
+		imgErrDecode: 'The browser could not decode this image',
+		imgErrEncode: 'The browser could not encode this image',
+		imgErrFormat: 'This browser cannot encode {fmt} — try PNG or JPEG',
+
+		// Image ↔ Base64
+		i2bToB64: 'Image → Base64',
+		i2bFromB64: 'Base64 → image',
+		i2bInput: 'Data URL or raw Base64',
+		i2bDataUrl: 'Data URL',
+		i2bRawB64: 'Raw Base64',
+		i2bCss: 'CSS background',
+		i2bHtml: 'HTML <img>',
+		i2bEncodedSize: 'Base64 size',
+		i2bOverhead: '+{pct}% vs binary',
+		i2bNote:
+			'Inlining saves a request but bloats the document and defeats caching — best for icons and other assets under ~10 KB.',
+
+		// Image converter
+		icTarget: 'Convert to',
+		icQuality: 'Quality',
+		icConverted: 'Converted',
+		icSmaller: 'smaller than original',
+		icLarger: 'larger than original',
+		icBgNote: 'JPEG has no transparency — transparent areas are flattened onto white.',
+		icNote:
+			"Conversion uses your browser's canvas encoder, so exact file sizes vary slightly between browsers.",
+
+		// Image resizer
+		irBy: 'Resize by',
+		irWidth: 'Width',
+		irHeight: 'Height',
+		irPercent: 'Percent',
+		irFormat: 'Format',
+		irKeep: 'Keep',
+		irResized: 'Resized',
+		irScale: 'Scale',
+		irNote:
+			'Downscaling uses high-quality smoothing. Upscaling cannot invent detail — expect softness beyond 2×.',
+
 		// JSON → CSV
 		jcInput: 'JSON array of objects',
 		jcDelimiter: 'Delimiter',

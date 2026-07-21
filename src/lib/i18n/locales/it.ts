@@ -132,6 +132,43 @@ const it: Messages = {
 		heNumeric: 'Solo numeriche',
 		heInputEnc: 'Testo da fare escape',
 		heInputDec: 'HTML con entità',
+		imgDrop: 'Trascina un’immagine, clicca per sceglierla o incollala dagli appunti',
+		imgLocal: 'Resta nel tuo browser — non viene caricato nulla',
+		imgReplace: 'Trascina, clicca o incolla per sostituire',
+		imgSource: 'Immagine sorgente',
+		imgOriginal: 'Originale',
+		imgDimensions: 'Dimensioni',
+		imgDownload: 'Scarica {fmt}',
+		imgErrNotImage: 'Formato immagine non riconosciuto (PNG, JPEG, WebP, GIF, SVG, BMP, ICO, AVIF)',
+		imgErrDecode: 'Il browser non è riuscito a decodificare questa immagine',
+		imgErrEncode: 'Il browser non è riuscito a codificare questa immagine',
+		imgErrFormat: 'Questo browser non sa codificare {fmt} — prova PNG o JPEG',
+		i2bToB64: 'Immagine → Base64',
+		i2bFromB64: 'Base64 → immagine',
+		i2bInput: 'Data URL o Base64 grezzo',
+		i2bDataUrl: 'Data URL',
+		i2bRawB64: 'Base64 grezzo',
+		i2bCss: 'Sfondo CSS',
+		i2bHtml: 'HTML <img>',
+		i2bEncodedSize: 'Dimensione Base64',
+		i2bOverhead: '+{pct}% vs binario',
+		i2bNote: 'L’inlining risparmia una richiesta ma gonfia il documento e vanifica la cache — ideale per icone e risorse sotto ~10 KB.',
+		icTarget: 'Converti in',
+		icQuality: 'Qualità',
+		icConverted: 'Convertita',
+		icSmaller: 'più piccola dell’originale',
+		icLarger: 'più grande dell’originale',
+		icBgNote: 'JPEG non supporta la trasparenza — le aree trasparenti vengono appiattite su bianco.',
+		icNote: 'La conversione usa l’encoder canvas del browser: le dimensioni esatte variano leggermente tra browser.',
+		irBy: 'Ridimensiona per',
+		irWidth: 'Larghezza',
+		irHeight: 'Altezza',
+		irPercent: 'Percentuale',
+		irFormat: 'Formato',
+		irKeep: 'Mantieni',
+		irResized: 'Ridimensionata',
+		irScale: 'Scala',
+		irNote: 'La riduzione usa uno smoothing di alta qualità. L’ingrandimento non inventa dettagli — oltre 2× aspettati sfocatura.',
 		jcInput: 'Array JSON di oggetti',
 		jcDelimiter: 'Delimitatore',
 		jcComma: 'Virgola',
@@ -278,7 +315,8 @@ const it: Messages = {
 		time: 'Data e ora',
 		generators: 'Generatori',
 		crypto: 'Hash e crittografia',
-		web: 'Web'
+		web: 'Web',
+		image: 'Immagini'
 	},
 	tools: {
 		'json-formatter': {
@@ -388,6 +426,18 @@ const it: Messages = {
 		'user-agent-parser': {
 			name: 'Parser di User-Agent',
 			description: 'Identifica browser, engine, SO e dispositivo da una stringa User-Agent'
+		},
+		'image-to-base64': {
+			name: 'Convertitore immagine ↔ Base64',
+			description: 'Converti immagini in data URL Base64 e viceversa — con snippet CSS e HTML'
+		},
+		'image-converter': {
+			name: 'Convertitore di formato immagine',
+			description: 'Converti immagini tra PNG, JPEG e WebP con controllo qualità'
+		},
+		'image-resizer': {
+			name: 'Ridimensiona immagini',
+			description: 'Ridimensiona per larghezza, altezza o percentuale — nitido e completamente offline'
 		}
 	}
 };

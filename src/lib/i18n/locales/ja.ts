@@ -132,6 +132,43 @@ const ja: Messages = {
 		heNumeric: '数値実体のみ',
 		heInputEnc: 'エスケープするテキスト',
 		heInputDec: '実体参照を含む HTML',
+		imgDrop: '画像をドロップ、クリックで選択、またはクリップボードから貼り付け',
+		imgLocal: 'ブラウザ内で完結 — 何もアップロードされません',
+		imgReplace: 'ドロップ・クリック・貼り付けで差し替え',
+		imgSource: '元画像',
+		imgOriginal: '元',
+		imgDimensions: '寸法',
+		imgDownload: '{fmt} をダウンロード',
+		imgErrNotImage: '認識できない画像形式です(PNG、JPEG、WebP、GIF、SVG、BMP、ICO、AVIF に対応)',
+		imgErrDecode: 'ブラウザがこの画像をデコードできません',
+		imgErrEncode: 'ブラウザがこの画像をエンコードできません',
+		imgErrFormat: 'このブラウザは {fmt} をエンコードできません — PNG か JPEG をお試しください',
+		i2bToB64: '画像 → Base64',
+		i2bFromB64: 'Base64 → 画像',
+		i2bInput: 'Data URL または生の Base64',
+		i2bDataUrl: 'Data URL',
+		i2bRawB64: '生の Base64',
+		i2bCss: 'CSS 背景',
+		i2bHtml: 'HTML <img>',
+		i2bEncodedSize: 'Base64 サイズ',
+		i2bOverhead: 'バイナリ比 +{pct}%',
+		i2bNote: 'インライン化はリクエストを1つ減らせますが、文書が肥大化しキャッシュも効かなくなります — アイコンなど 10 KB 以下の小さな素材向きです。',
+		icTarget: '変換先',
+		icQuality: '品質',
+		icConverted: '変換後',
+		icSmaller: '元より小さい',
+		icLarger: '元より大きい',
+		icBgNote: 'JPEG は透過をサポートしません — 透明部分は白に合成されます。',
+		icNote: '変換にはブラウザの canvas エンコーダを使うため、ファイルサイズはブラウザにより多少異なります。',
+		irBy: 'リサイズ基準',
+		irWidth: '幅',
+		irHeight: '高さ',
+		irPercent: 'パーセント',
+		irFormat: '形式',
+		irKeep: 'そのまま',
+		irResized: 'リサイズ後',
+		irScale: '倍率',
+		irNote: '縮小は高品質スムージングを使用。拡大でディテールは増えません — 2× を超えるとぼやけます。',
 		jcInput: 'JSON オブジェクトの配列',
 		jcDelimiter: '区切り文字',
 		jcComma: 'カンマ',
@@ -278,7 +315,8 @@ const ja: Messages = {
 		time: '日付と時刻',
 		generators: 'ジェネレーター',
 		crypto: 'ハッシュと暗号',
-		web: 'Web'
+		web: 'Web',
+		image: '画像'
 	},
 	tools: {
 		'json-formatter': {
@@ -388,6 +426,18 @@ const ja: Messages = {
 		'user-agent-parser': {
 			name: 'User-Agentパーサー',
 			description: 'UA 文字列からブラウザ・エンジン・OS・デバイスを判定'
+		},
+		'image-to-base64': {
+			name: '画像 ↔ Base64 変換',
+			description: '画像と Base64 Data URL を相互変換 — CSS・HTML スニペット付き'
+		},
+		'image-converter': {
+			name: '画像形式変換',
+			description: 'PNG・JPEG・WebP 間で画像を変換、品質調整付き'
+		},
+		'image-resizer': {
+			name: '画像リサイズ',
+			description: '幅・高さ・パーセント指定で画像をリサイズ — 完全オフライン'
 		}
 	}
 };

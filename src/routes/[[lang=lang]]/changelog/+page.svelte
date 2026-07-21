@@ -13,6 +13,27 @@
 
 	<section class="relative border-l border-line pb-8 pl-6">
 		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full bg-accent" aria-hidden="true"></span>
+		<h2 class="text-sm font-medium">Image tools</h2>
+		<p class="mt-0.5 font-mono text-xs text-dim">v2026.07.21c</p>
+		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
+			<li>
+				New Image category (30 tools total): Image ↔ Base64 converter with data URL, CSS and
+				HTML snippets in both directions; image format converter between PNG, JPEG and WebP
+				with a live quality dial; and an image resizer by width, height or percentage.
+			</li>
+			<li>
+				Like everything else here, images are processed entirely in your browser on a local
+				canvas — files are never uploaded, and formats are detected from magic bytes, not
+				file extensions.
+			</li>
+			<li>
+				Smart Paste now recognizes image data URLs and offers to preview and download them.
+			</li>
+		</ul>
+	</section>
+
+	<section class="relative border-l border-line pb-8 pl-6">
+		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
 		<h2 class="text-sm font-medium">Ten languages</h2>
 		<p class="mt-0.5 font-mono text-xs text-dim">v2026.07.21b</p>
 		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">

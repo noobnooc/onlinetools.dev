@@ -31,5 +31,8 @@ export const TOOL_COMPONENTS: Record<string, () => Promise<{ default: Component 
 	'json-to-typescript': () => import('./JsonTsTool.svelte'),
 	'jsonpath-tester': () => import('./JsonPathTool.svelte'),
 	'bcrypt-generator': () => import('./BcryptTool.svelte'),
-	'user-agent-parser': () => import('./UaTool.svelte')
+	'user-agent-parser': () => import('./UaTool.svelte'),
+	'image-to-base64': () => import('./ImageBase64Tool.svelte'),
+	'image-converter': () => import('./ImageConvertTool.svelte'),
+	'image-resizer': () => import('./ImageResizeTool.svelte')
 };
