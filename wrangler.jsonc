@@ -8,12 +8,7 @@
 	"compatibility_flags": ["nodejs_compat"],
 	"assets": {
 		"binding": "ASSETS",
-		"directory": ".svelte-kit/cloudflare",
-		// The site is fully prerendered; without this, the assets layer
-		// answers page requests before the Worker and the www → apex
-		// redirect (scripts/wrap-worker.mjs) never runs. Hashed immutable
-		// assets skip the Worker to stay fast and free.
-		"run_worker_first": ["/*", "!/_app/immutable/*"]
+		"directory": ".svelte-kit/cloudflare"
 	},
 	// Production serves on the custom domain only; workers.dev is disabled
 	// for the deployed version but preview URLs stay on for branch builds.
