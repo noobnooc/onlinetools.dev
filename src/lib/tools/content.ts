@@ -820,5 +820,343 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
 				a: 'iOS does not render transparency in home-screen icons — whatever alpha your PNG has gets composited onto black. Pre-flattening onto a color you chose keeps the result intentional. Pick the background that matches your icon, and remember iOS rounds the corners itself, so supply a full-bleed square.'
 			}
 		]
+	},
+
+	'sql-formatter': {
+		about: [
+			'Paste a query fresh out of a log file, an ORM debug dump or a colleague\'s one-liner, and this formatter breaks it into readable clauses with consistent indentation. Six dialects are supported — standard SQL, PostgreSQL, MySQL, SQLite, SQL Server and BigQuery — so dialect-specific syntax like TOP, backtick identifiers or array types formats correctly instead of tripping the parser.',
+			'Keyword casing is configurable: UPPERCASE for the classic look, lowercase if your team prefers it, or leave the original untouched. The minify mode does the reverse — it collapses a formatted query to a single line, stripping comments while leaving string literals byte-for-byte intact, which is what you want before pasting SQL into a JSON config or a CLI flag.',
+			'Queries often contain table names, customer data in literals, or infrastructure hints. Formatting runs entirely in your browser, so none of that reaches a server.'
+		],
+		faqs: [
+			{
+				q: 'Which SQL dialect should I pick?',
+				a: 'The one your database speaks — it changes how identifiers, string quoting and dialect keywords are parsed. If you just need generic tidying, standard SQL handles the common core. A parse error on valid-for-your-database syntax is usually a sign to switch dialects.'
+			},
+			{
+				q: 'Does formatting change what the query does?',
+				a: 'No. Formatting only moves whitespace and, if enabled, changes keyword casing — identifiers and literals keep their exact bytes. SQL keywords are case-insensitive in every supported dialect, so SELECT and select are the same statement.'
+			},
+			{
+				q: 'Can I format multiple statements at once?',
+				a: 'Yes — paste a whole script and each ;-terminated statement is formatted in sequence with a blank line between them.'
+			},
+			{
+				q: 'What exactly does minify remove?',
+				a: 'Line comments (--) and block comments (/* */) are dropped, runs of whitespace collapse to single spaces, and spaces around commas and parentheses are removed. Text inside single quotes, double quotes and backticks is never touched, including doubled-quote escapes.'
+			}
+		]
+	},
+
+	'xml-formatter': {
+		about: [
+			'This tool pretty-prints XML with your choice of indentation, flags well-formedness errors with the exact line and column, and can minify a document to a single line. Comments, CDATA sections and the XML prolog survive formatting — a surprising number of formatters silently eat them.',
+			'Validation here means well-formedness: properly nested tags, quoted attributes, legal characters. That catches the overwhelming majority of hand-editing accidents — a missing slash, an unclosed element, a stray ampersand. Schema validation against an XSD is deliberately out of scope; that belongs in your build pipeline with the schema file present.',
+			'Config files, SOAP payloads, RSS feeds and Android manifests routinely contain internal hostnames and keys. Everything here parses locally — nothing is transmitted.'
+		],
+		faqs: [
+			{
+				q: 'Why does my XML fail with "char … is not expected"?',
+				a: 'The usual suspects are a raw & that should be &amp;, an unquoted attribute value, or tags that close in the wrong order. The error message carries the line and column of the first offending character, and the input box marks it.'
+			},
+			{
+				q: 'Does the formatter reorder or normalize my document?',
+				a: 'No. Elements, attributes and their order are preserved exactly; only inter-element whitespace changes. Text content that shares a line with markup is trimmed and internal runs of whitespace collapse — if you rely on significant whitespace (xml:space="preserve"), keep those sections minified.'
+			},
+			{
+				q: 'What does minify remove?',
+				a: 'Indentation and line breaks between elements, plus comments. CDATA sections, processing instructions and the prolog stay. The result parses identically for any consumer that does not depend on whitespace-only text nodes.'
+			},
+			{
+				q: 'Can it validate against an XSD or DTD?',
+				a: 'No — this checks well-formedness only. Schema validation needs the schema file and an XSD engine, which is better done in your toolchain (xmllint --schema, or your language\'s XML library).'
+			}
+		]
+	},
+
+	'xml-to-json': {
+		about: [
+			'Convert XML to JSON to feed legacy SOAP responses, RSS feeds or Maven POMs into JavaScript, jq or a JSON-native API — or go the other way and produce XML from JSON data. Attributes are kept: they become "@_name" keys, and text content that coexists with attributes lands under "#text", so no information silently disappears.',
+			'The two formats disagree on fundamentals, and this converter makes the standard pragmatic choices: repeated sibling elements collapse into a JSON array, numeric-looking values become numbers, and namespaces travel as part of the element name. Round-tripping XML → JSON → XML preserves structure and content for typical documents.',
+			'Both directions run locally in your browser. Paste an invoice feed or an API response without it going anywhere.'
+		],
+		faqs: [
+			{
+				q: 'Why do some values come back as numbers instead of strings?',
+				a: 'The parser recognizes numeric text and converts it, which is what most consumers want. Beware of identifiers with leading zeros (product codes, phone numbers) — if that matters for your data, quote them post-conversion or treat the output as a starting point.'
+			},
+			{
+				q: 'How are repeated elements handled?',
+				a: 'Two or more siblings with the same name become a JSON array under that key. A single occurrence stays a plain object — that asymmetry is inherent to the mapping, so code consuming the JSON should tolerate both shapes or normalize first.'
+			},
+			{
+				q: 'What do the @_ and #text keys mean?',
+				a: '@_ marks what was an XML attribute, #text carries element text when attributes are also present. Feeding the same convention back into the JSON → XML direction reconstructs the original markup.'
+			},
+			{
+				q: 'Why does JSON → XML reject my top-level array?',
+				a: 'An XML document must have exactly one root element, and a bare array has none. Wrap the array in an object — {"items": {"item": [...]}} — and the converter produces a well-formed document.'
+			}
+		]
+	},
+
+	'csv-to-json': {
+		about: [
+			'Paste a CSV export — from Excel, a database dump, an analytics download — and get a JSON array of objects keyed by the header row. The delimiter is auto-detected across comma, semicolon, tab and pipe (you can pin it manually), quoting follows RFC 4180, so embedded commas, quotes and even line breaks inside quoted fields parse correctly.',
+			'Typed conversion recognizes numbers, true/false and null and emits real JSON types instead of strings; switch it off when leading zeros or big identifiers must survive verbatim. Files without a header row convert to arrays of arrays, and duplicate header names get numeric suffixes instead of silently overwriting each other.',
+			'Spreadsheets tend to contain the most sensitive data of anything developers handle — customer lists, salaries, order histories. Conversion happens entirely in your browser; nothing is uploaded.'
+		],
+		faqs: [
+			{
+				q: 'Why did my semicolon-separated file parse as one column?',
+				a: 'Auto-detection samples the first rows and picks the delimiter that yields consistent column counts — a file of single-column rows can fool it. Pin the delimiter with the segmented control and the parse follows immediately.'
+			},
+			{
+				q: 'How do quoted fields and embedded newlines behave?',
+				a: 'Per RFC 4180: fields wrapped in double quotes may contain the delimiter, doubled quotes ("") for a literal quote, and line breaks. Excel and most databases export exactly this format.'
+			},
+			{
+				q: 'Why are my zip codes losing their leading zeros?',
+				a: 'Typed conversion turns 02134 into the number 2134. Untick "Typed values" and every cell stays a string, exactly as written.'
+			},
+			{
+				q: 'Can I convert TSV or pipe-delimited files?',
+				a: 'Yes — tab and pipe are first-class delimiters, auto-detected or pinned manually. The parser is the same; only the separator changes.'
+			}
+		]
+	},
+
+	'markdown-to-html': {
+		about: [
+			'Write or paste Markdown and see both the rendered preview and the generated HTML side by side — headings, GFM tables, task-list-style bullets, fenced code blocks and strikethrough included. The reverse direction converts existing HTML into clean Markdown with ATX headings, dash bullets and fenced code, which is the fastest way to migrate old CMS content into a docs repo.',
+			'The preview is sanitized before rendering: scripts, iframes and event-handler attributes are stripped, so a shared link carrying hostile markup cannot execute anything in your browser. The HTML output box always shows the raw conversion for copying into templates or emails.',
+			'Conversion and preview run locally. Draft release notes with unannounced feature names stay on your machine.'
+		],
+		faqs: [
+			{
+				q: 'Which Markdown flavor is this?',
+				a: 'CommonMark plus the GitHub extensions people actually use: tables, strikethrough and autolinked URLs. Soft line breaks stay soft — a single newline does not become <br>, matching GitHub\'s rendering of documents.'
+			},
+			{
+				q: 'Why does the preview differ from the raw HTML output?',
+				a: 'The preview passes through a sanitizer that removes script tags, inline event handlers and javascript: URLs before rendering. The output box bypasses sanitization because it is text, not rendered markup — sanitize downstream if you embed user-supplied HTML.'
+			},
+			{
+				q: 'How faithful is HTML → Markdown?',
+				a: 'Structural elements — headings, lists, links, emphasis, code, blockquotes, images — convert cleanly. HTML with no Markdown equivalent (nested tables, divs with classes, inline styles) passes through as raw HTML or loses its styling, so a quick read-through afterward is worth it.'
+			},
+			{
+				q: 'Can I use the generated HTML in an email?',
+				a: 'Yes — the output is plain semantic HTML with no classes or external stylesheets, which is exactly what email clients tolerate best. Inline any styling you need on top.'
+			}
+		]
+	},
+
+	'html-formatter': {
+		about: [
+			'Beautify HTML that came out of a bundler, a scraper or a WYSIWYG editor: elements are indented to your chosen width, attributes stay on their line, and pre/textarea contents are left byte-for-byte intact. The minify mode strips comments and collapses the whitespace between tags — typically a 10–25% size cut on handwritten pages.',
+			'Minification here is deliberately conservative: inline scripts and styles are protected, conditional comments survive, and single spaces between inline elements are preserved so "click <a>here</a> now" does not fuse into "clickherenow". You get a safe minify, not a maximally aggressive one.',
+			'Both operations run locally in your browser — unpublished pages and internal admin markup never leave your machine.'
+		],
+		faqs: [
+			{
+				q: 'Will minifying break my inline JavaScript or CSS?',
+				a: 'No — <script>, <style>, <pre> and <textarea> blocks are excluded from whitespace collapsing entirely. Only markup between tags is touched. To compress the scripts themselves, run them through the JavaScript minifier separately.'
+			},
+			{
+				q: 'Why is whitespace between tags safe to remove?',
+				a: 'Mostly it is: whitespace between block-level elements has no visual effect. Between inline elements it does, which is why the minifier collapses runs to a single space rather than deleting them. Layouts that depend on inline-block whitespace hacks are the rare exception worth eyeballing.'
+			},
+			{
+				q: 'Does the formatter fix invalid HTML?',
+				a: 'It formats what you give it without validating against the HTML spec — unclosed tags stay unclosed. Browsers are forgiving of tag soup, so formatting still helps you see the structure well enough to spot the problem.'
+			},
+			{
+				q: 'What indent width should I use?',
+				a: '2 spaces is the prevailing convention in web codebases and what most framework style guides default to. Pick 4 if your team standardized on it — the choice is cosmetic.'
+			}
+		]
+	},
+
+	'css-formatter': {
+		about: [
+			'Expand minified or copy-pasted CSS into one-declaration-per-line rules, or squeeze a stylesheet down for production. The beautifier normalizes indentation and brace placement; the minifier strips comments, collapses whitespace and drops final semicolons while leaving strings, url(...) contents and calc() expressions untouched.',
+			'The minifier is transparent about what it does not do: it will not rename selectors, merge duplicate rules or rewrite colors. That makes the output predictable and safe for any stylesheet, including ones with hacks and vendor prefixes — paste, minify, ship.',
+			'Like every tool here, processing is local. Unreleased design-system code stays in your browser.'
+		],
+		faqs: [
+			{
+				q: 'How much smaller does minified CSS get?',
+				a: 'Typically 15–30% for handwritten CSS, mostly from indentation and comments. Gzip on your server removes much of the same redundancy, so the wire-size delta is smaller than the raw byte count suggests — minify anyway, it also cuts parse time.'
+			},
+			{
+				q: 'Is it safe for calc(), custom properties and media queries?',
+				a: 'Yes. Spaces inside calc() are significant and are preserved; custom properties and their var() references are plain declarations and survive unchanged; @media and other at-rules keep their structure.'
+			},
+			{
+				q: 'Why did descendant selectors keep their spaces?',
+				a: 'Because "nav a" and "nava" select different things — the space is a combinator, not formatting. The minifier only removes whitespace that has no syntactic meaning.'
+			},
+			{
+				q: 'Can it convert between LESS/SCSS and CSS?',
+				a: 'No — preprocessor syntax needs compilation, not formatting. Plain SCSS that is also valid CSS will format fine; nested rules and mixins will not.'
+			}
+		]
+	},
+
+	'js-formatter': {
+		about: [
+			'Beautify JavaScript with consistent indentation and spacing — deminify a vendored bundle to read what it actually does, or clean up code pasted from a console. The minifier is the real thing: Terser parses your code into an AST, drops dead code, shortens local variable names and strips comments, the same engine bundlers use in production.',
+			'Because minification is AST-based, it never breaks working code the way regex-based "compressors" can: strings, template literals, regexes and ASI edge cases are handled by an actual parser. Syntax errors are reported with position instead of producing corrupt output.',
+			'Terser loads only when you first minify, keeping the page light, and it runs entirely in your browser — proprietary source never leaves your machine.'
+		],
+		faqs: [
+			{
+				q: 'How much smaller will my code get?',
+				a: 'Handwritten code typically drops 30–60% before gzip: whitespace, comments and long local names carry that much weight. Code that is already bundled shrinks far less — it has been through the same transform once already.'
+			},
+			{
+				q: 'Does minification change behavior?',
+				a: 'Compression and mangling preserve semantics: only local names are renamed, and dead-code elimination removes branches that provably cannot run. Code that relies on Function.prototype.name or toString() of its own functions is the classic exception.'
+			},
+			{
+				q: 'Can this un-minify production code from a website?',
+				a: 'The formatter restores whitespace and structure, which makes control flow readable — but original variable names and comments are gone forever; you will see a, b, c. For serious debugging, prefer source maps if the site ships them.'
+			},
+			{
+				q: 'Does it support TypeScript or JSX?',
+				a: 'No — both need their own parsers. Compile to JavaScript first (tsc, esbuild), then format or minify the output here.'
+			}
+		]
+	},
+
+	'string-escape': {
+		about: [
+			'Turn a multi-line string with quotes into something you can paste inside a JSON value, a JavaScript literal, a Java string, an XML text node, a SQL literal or a CSV cell — and reverse the process when you find escaped text in a log file and want to read it. Six dialects, both directions.',
+			'Each dialect follows its actual specification rather than a lowest common denominator: JSON escapes control characters as \\uXXXX, JavaScript additionally escapes single quotes and backticks, Java encodes non-ASCII as UTF-16 \\u sequences, SQL doubles single quotes, CSV wraps and doubles per RFC 4180, and XML uses its five predefined entities. The unescaper understands \\x, \\u and \\u{…} forms and reports malformed sequences with their position.',
+			'Escaped strings are frequently connection strings, tokens and query fragments. This runs locally — paste freely.'
+		],
+		faqs: [
+			{
+				q: 'Which dialect do I need for a JSON config file?',
+				a: 'JSON. It escapes double quotes, backslashes and control characters exactly as RFC 8259 requires and leaves unicode readable. The output drops into any JSON string value — without the surrounding quotes, which the tool leaves to you.'
+			},
+			{
+				q: 'What is the difference between the JSON and JavaScript dialects?',
+				a: "JavaScript additionally escapes single quotes and backticks so the result is safe in any of the three JS quoting styles. JSON only needs double-quote handling. Unescaping accepts both, plus \\x and \\u{…} forms that JSON doesn't define."
+			},
+			{
+				q: 'Does SQL escaping make user input safe to concatenate?',
+				a: "It produces a correct SQL string literal (quotes doubled), but escaping-then-concatenating is still the wrong pattern for untrusted input — use parameterized queries. This tool is for fixtures, migrations and debugging, not injection defense."
+			},
+			{
+				q: 'Why does unescaping my string fail?',
+				a: 'A backslash followed by something that is not a defined escape (\\q, a truncated \\u12) is malformed, and the error names the offending index. If your text has literal Windows paths, escape it first — C:\\temp is a tab in disguise.'
+			}
+		]
+	},
+
+	'number-base-converter': {
+		about: [
+			'Type a number in any base and read it in binary, octal, decimal and hex simultaneously — plus any custom base up to 36. Prefixes are understood (0x, 0o, 0b), digit grouping makes long values scannable (1111 1111 · 255 · ff), and a bit-length readout tells you at a glance whether a value fits in 8, 32 or 64 bits.',
+			'Arithmetic uses BigInt, so precision is exact at any size: file permissions, ARGB colors, IP addresses, hash prefixes and 64-bit database IDs all convert without the silent rounding that hits ordinary JavaScript numbers above 2⁵³.',
+			'Negative numbers keep their sign across all bases. Everything computes locally, instantly, as you type.'
+		],
+		faqs: [
+			{
+				q: 'How does auto-detection decide the base?',
+				a: 'By prefix: 0x means hex, 0o octal, 0b binary; anything else parses as decimal. Digits like "ff" without a prefix are ambiguous, so select HEX explicitly — the error message will remind you.'
+			},
+			{
+				q: 'Are huge numbers really exact?',
+				a: 'Yes — conversion runs on BigInt, which is arbitrary-precision. 18446744073709551615 (2⁶⁴−1) round-trips exactly; a float-based converter would corrupt it to …551616.'
+			},
+			{
+				q: 'How are negative numbers shown in binary?',
+				a: "With a minus sign (-1010), not two's complement, since two's complement requires a fixed width. To see a two's-complement pattern, add 2ⁿ to your negative value for the width you care about and convert that."
+			},
+			{
+				q: 'What can base 36 be used for?',
+				a: 'Compact IDs: 0-9 plus a-z is the densest alphabet that stays case-insensitive and URL-safe. Many URL shorteners and ticket systems encode numeric IDs this way — paste one and read the underlying number.'
+			}
+		]
+	},
+
+	'text-to-hex': {
+		about: [
+			'See exactly which bytes your text is made of: this tool encodes text to UTF-8 and shows it as hex, binary or decimal byte values — with your choice of separator, casing and 0x prefixes. The decoder goes the other way and is deliberately tolerant: it accepts continuous runs (48656c6c6f), spaced pairs, colon-separated MAC-style notation and \\x escape sequences.',
+			'Because encoding is byte-level UTF-8, multibyte characters are shown as they actually exist in memory and on the wire: é is c3 a9, 世 is e4 b8 96, and emoji take four bytes. That makes this the quickest way to debug encoding mismatches, BOM mysteries and "why is this string longer than it looks" problems.',
+			'If decoded bytes are not valid UTF-8, the tool says so instead of printing mojibake — a strong hint you are looking at binary data rather than text.'
+		],
+		faqs: [
+			{
+				q: 'Why does one character become several bytes?',
+				a: 'UTF-8 is variable-width: ASCII stays one byte, most European letters take two, CJK three, emoji four. What you see here is the exact byte sequence any UTF-8 system — files, HTTP, databases — stores for your text.'
+			},
+			{
+				q: 'What input formats does the decoder accept?',
+				a: 'Hex as a continuous run, spaced pairs, with 0x or \\x prefixes, or colon/comma-separated; binary as 8-bit groups with or without spaces; decimal as separated byte values. Mixed separators and stray whitespace are cleaned up automatically.'
+			},
+			{
+				q: 'Why does decoding say the bytes are not valid UTF-8?',
+				a: 'The byte sequence violates UTF-8 rules — for example a lone ff, or a continuation byte with no lead byte. The data may be binary, in a legacy encoding like Latin-1, or truncated mid-character.'
+			},
+			{
+				q: 'Is this the same as a hex dump from xxd?',
+				a: 'The byte values are identical; xxd adds offsets and an ASCII column. Paste the hex columns of an xxd dump here (without the offset column) and it decodes fine.'
+			}
+		]
+	},
+
+	'json-schema-validator': {
+		about: [
+			'Two directions of the same discipline: paste sample JSON and get a draft-07 schema inferred from it, or paste data plus a schema and see every violation listed with its JSON path. Validation runs on Ajv — the same engine most Node services use — so what passes here passes in CI.',
+			'Inference is production-minded: object keys become typed properties and required entries, arrays merge the shapes of all their members, integers are distinguished from floats, and keys that appear in only some array members are correctly left out of required. The result is a starting point you tighten with formats, ranges and patterns.',
+			'API responses and config files are exactly the data you least want on a third-party server. Both inference and validation run entirely in your browser.'
+		],
+		faqs: [
+			{
+				q: 'Which JSON Schema draft is supported?',
+				a: 'Inference emits draft-07, the most widely supported draft across editors and validators. Validation accepts draft-07 and the earlier drafts Ajv understands in non-strict mode; 2019-09/2020-12 keywords mostly work too since unknown keywords are ignored rather than fatal.'
+			},
+			{
+				q: 'What does the $ in violation paths mean?',
+				a: 'It is the root of the document, JSONPath-style: $.age means the top-level age property, $.items.2.name the name of the third array element. An empty path ($) means the violation is about the document root itself — wrong type, or a missing required property.'
+			},
+			{
+				q: 'Why is the inferred schema stricter or looser than I expected?',
+				a: 'It describes exactly the sample you gave: fields present everywhere become required, and only observed types are allowed. Feed it a more varied sample (an array of representative objects) for a more general schema, then adjust by hand — inference cannot know intent.'
+			},
+			{
+				q: 'Does validation support format, pattern and other constraint keywords?',
+				a: 'Structural keywords (type, required, properties, items, enum, minimum, pattern…) are fully enforced. Format strings like "email" or "date-time" are not asserted — that mirrors the JSON Schema spec, where format is annotation by default, and avoids false confidence.'
+			}
+		]
+	},
+
+	'exif-viewer': {
+		about: [
+			'Every photo your phone takes carries hidden metadata: camera model, capture time, editing software — and, unless disabled, the GPS coordinates of where you stood. This tool reads that metadata from JPEG, PNG and WebP files and shows it grouped and decoded: exposure values as f/2.8 and 1/250 s, orientation as words, GPS as decimal coordinates with a map link.',
+			'The cleaner produces a copy with metadata removed — losslessly. Instead of re-encoding the image (which costs quality), it removes the metadata segments byte-for-byte: EXIF and XMP blocks in JPEG, text and time chunks in PNG, EXIF/XMP chunks in WebP. Pixels, dimensions and quality are untouched; color profiles are kept so the image still renders identically.',
+			'This is the one tool category where "runs locally" is the entire point: checking a photo for GPS data by uploading it to a server would defeat the purpose. The file never leaves your browser — verifiable in the network tab.'
+		],
+		faqs: [
+			{
+				q: 'Does removing metadata change image quality?',
+				a: 'No. The image data stream is copied bit-for-bit; only metadata segments are dropped. The cleaned file is smaller by exactly the metadata size, and pixels are provably identical.'
+			},
+			{
+				q: 'Why does my screenshot show no metadata?',
+				a: 'Screenshots and most exported-for-web images never had EXIF — cameras write it, screenshot tools mostly do not. Social media platforms also strip metadata on upload, so a photo downloaded from one is usually already clean.'
+			},
+			{
+				q: 'Is the GPS position exact?',
+				a: 'Phone GPS in EXIF is typically accurate to a few meters — enough to identify a building. The tool converts the stored degrees/minutes/seconds to decimal and links to the exact point, so you can see precisely what a recipient of the file could see.'
+			},
+			{
+				q: 'Why does the cleaned file keep an ICC color profile?',
+				a: 'The ICC profile tells software how to interpret the colors — stripping it can visibly shift them, and it contains no personal information. The cleaner removes identifying metadata (EXIF, XMP, IPTC, comments, timestamps) and keeps what the image needs to render correctly.'
+			}
+		]
 	}
 };

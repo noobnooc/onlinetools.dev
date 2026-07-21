@@ -31,7 +31,17 @@ import {
 	Images,
 	Scaling,
 	AppWindow,
-	Wrench
+	Wrench,
+	Database,
+	CodeXml,
+	Table2,
+	Calculator,
+	Quote,
+	Paintbrush,
+	FileText,
+	FileCheck,
+	EyeOff,
+	Shield
 } from 'lucide-svelte';
 import type { ToolCategory } from './registry';
 
@@ -69,7 +79,20 @@ export const TOOL_ICONS: Record<string, IconComponent> = {
 	'image-to-base64': FileImage,
 	'image-converter': Images,
 	'image-resizer': Scaling,
-	'favicon-generator': AppWindow
+	'favicon-generator': AppWindow,
+	'sql-formatter': Database,
+	'xml-formatter': CodeXml,
+	'xml-to-json': ArrowLeftRight,
+	'csv-to-json': Table2,
+	'markdown-to-html': FileText,
+	'html-formatter': Code,
+	'css-formatter': Paintbrush,
+	'js-formatter': Braces,
+	'string-escape': Quote,
+	'number-base-converter': Calculator,
+	'text-to-hex': Binary,
+	'json-schema-validator': FileCheck,
+	'exif-viewer': EyeOff
 };
 
 export function iconFor(slug: string): IconComponent {
@@ -84,5 +107,7 @@ export const CATEGORY_ICONS: Record<ToolCategory, IconComponent> = {
 	generators: FingerprintPattern,
 	crypto: ShieldCheck,
 	web: Globe,
-	image: Image
+	image: Image,
+	code: Code,
+	privacy: Shield
 };

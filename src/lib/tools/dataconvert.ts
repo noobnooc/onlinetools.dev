@@ -176,6 +176,107 @@ export function parseCsv(text: string, delimiter = ','): string[][] {
 	return rows;
 }
 
+/* ---------- CSV → JSON ---------- */
+
+export interface CsvToJsonOptions {
+	delimiter: ',' | ';' | '\t' | '|' | 'auto';
+	/** First row is a header row (columns become object keys). */
+	header: boolean;
+	/** Convert numeric / boolean / null-looking cells to typed values. */
+	typed: boolean;
+}
+
+export function detectDelimiter(text: string): ',' | ';' | '\t' | '|' {
+	const firstLines = text.split(/\r?\n/, 5).filter((l) => l.trim() !== '');
+	const candidates = [',', ';', '\t', '|'] as const;
+	let best: (typeof candidates)[number] = ',';
+	let bestScore = -1;
+	for (const d of candidates) {
+		const counts = firstLines.map((l) => parseCsv(l, d)[0].length);
+		if (counts.length === 0) continue;
+		const consistent = counts.every((c) => c === counts[0]);
+		const score = (consistent ? 1000 : 0) + counts[0];
+		if (counts[0] > 1 && score > bestScore) {
+			bestScore = score;
+			best = d;
+		}
+	}
+	return best;
+}
+
+function typedCell(s: string): unknown {
+	if (s === '') return '';
+	if (s === 'null') return null;
+	if (s === 'true') return true;
+	if (s === 'false') return false;
+	if (/^-?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?$/.test(s) && s.length < 16) {
+		const n = Number(s);
+		if (Number.isFinite(n) && String(n) === s) return n;
+	}
+	return s;
+}
+
+export interface CsvToJsonResult {
+	json: string;
+	rows: number;
+	columns: string[];
+	delimiter: string;
+}
+
+export function csvToJson(input: string, opts: CsvToJsonOptions): ToolResult<CsvToJsonResult> {
+	const text = input.replace(/^\uFEFF/, '');
+	if (text.trim() === '') return err('Input is empty');
+	const delimiter = opts.delimiter === 'auto' ? detectDelimiter(text) : opts.delimiter;
+	const rows = parseCsv(text, delimiter).filter(
+		(r, i, all) => !(i === all.length - 1 && r.length === 1 && r[0] === '')
+	);
+	if (rows.length === 0) return err('No rows found');
+	const width = Math.max(...rows.map((r) => r.length));
+	if (opts.header && rows.length === 1) return err('Only a header row — no data rows to convert');
+
+	let value: unknown;
+	let columns: string[];
+	if (opts.header) {
+		const header = rows[0];
+		columns = header.map((h, i) => (h.trim() === '' ? `column_${i + 1}` : h.trim()));
+		// Duplicate headers get numeric suffixes so no data is silently lost.
+		const seen = new Map<string, number>();
+		columns = columns.map((c) => {
+			const n = seen.get(c) ?? 0;
+			seen.set(c, n + 1);
+			return n === 0 ? c : `${c}_${n + 1}`;
+		});
+		value = rows.slice(1).map((r) => {
+			const obj: Record<string, unknown> = {};
+			columns.forEach((c, i) => {
+				const cell = r[i] ?? '';
+				obj[c] = opts.typed ? typedCell(cell) : cell;
+			});
+			return obj;
+		});
+	} else {
+		columns = Array.from({ length: width }, (_, i) => `column_${i + 1}`);
+		value = rows.map((r) => (opts.typed ? r.map(typedCell) : r));
+	}
+	return ok({
+		json: JSON.stringify(value, null, 2),
+		rows: opts.header ? rows.length - 1 : rows.length,
+		columns,
+		delimiter: delimiter === '\t' ? 'tab' : delimiter
+	});
+}
+
+/** Detector for Smart Paste: multi-line, consistent columns, at least 2×2. */
+export function isLikelyCsv(input: string): boolean {
+	const s = input.trim();
+	const lines = s.split(/\r?\n/);
+	if (lines.length < 2) return false;
+	if (/^[[{<]/.test(s)) return false;
+	const d = detectDelimiter(s);
+	const rows = lines.slice(0, 6).map((l) => parseCsv(l, d)[0].length);
+	return rows[0] >= 2 && rows.every((r) => r === rows[0]);
+}
+
 /* ---------- JSON → TypeScript ---------- */
 
 function tsTypeOf(value: unknown, indent: string, root: boolean): string {

@@ -399,6 +399,119 @@ const en = {
 		uuidNote:
 			'Generated with crypto.getRandomValues — cryptographically secure, created in your browser, never logged anywhere.',
 
+		// Shared formatter controls
+		fmtFormat: 'Format',
+		fmtMinify: 'Minify',
+
+		// SQL formatter
+		sqlInput: 'SQL statement(s)',
+		sqlDialect: 'Dialect',
+		sqlKeywords: 'Keywords',
+		sqlKeep: 'Keep',
+
+		// XML formatter
+		xmlInput: 'XML document',
+
+		// XML ↔ JSON
+		xjInputXml: 'XML document',
+		xjInputJson: 'JSON object',
+		xjNote:
+			'Attributes become "@_name" keys and text alongside attributes becomes "#text", so the conversion round-trips. Element order among mixed siblings is not preserved — XML allows repeats, JSON objects do not.',
+
+		// CSV → JSON
+		cjInput: 'CSV / TSV data',
+		cjAuto: 'Auto',
+		cjPipe: 'Pipe',
+		cjHeader: 'First row is header',
+		cjTyped: 'Typed values',
+
+		// Markdown
+		mdPreview: 'Preview',
+		mdNote:
+			'The preview is sanitized before rendering, so scripts and event handlers in pasted or shared content cannot run. The HTML output box carries the raw conversion.',
+
+		// Code formatters
+		htmlInput: 'HTML source',
+		cssInput: 'CSS source',
+		jsInput: 'JavaScript source',
+
+		// String escape
+		escEscape: 'Escape',
+		escUnescape: 'Unescape',
+		escDialect: 'Dialect',
+		escInputEsc: 'Text to escape',
+		escInputUnesc: 'Escaped text',
+
+		// Number base
+		nbInput: 'Number',
+		nbFrom: 'From',
+		nbAutoT: 'Detect from 0x / 0o / 0b prefix, decimal otherwise',
+		nbGroup: 'Group digits',
+		nbBase: 'Base',
+		nbBin: 'Binary',
+		nbOct: 'Octal',
+		nbDec: 'Decimal',
+		nbHex: 'Hex',
+		nbBits: 'bits',
+
+		// Text ↔ hex/binary
+		hbFormat: 'Bytes as',
+		hbSep: 'Separator',
+		hbSpace: 'Space',
+		hbNone: 'None',
+		hbColon: 'Colon',
+		hbInputEnc: 'Text to encode',
+		hbInputDec: 'Bytes to decode',
+
+		// JSON Schema
+		schInfer: 'Infer schema',
+		schValidate: 'Validate',
+		schInferT: 'Generate a schema from sample JSON',
+		schValidateT: 'Check JSON against a schema',
+		schData: 'JSON data',
+		schSchema: 'JSON Schema',
+		schViolations: 'violations',
+		schValid: 'Valid — the data conforms to the schema',
+		schResult: 'Validation result',
+
+		// EXIF
+		exTags: '{n} metadata fields',
+		exNone: 'No metadata found — this file is already clean',
+		exStrip: 'Download cleaned copy',
+		exGps: 'GPS location embedded',
+		exMap: 'View on map',
+		exNote:
+			'Reading and stripping happen entirely in your browser — the photo is never uploaded. Cleaning removes metadata segments byte-for-byte without re-encoding, so pixels and quality are untouched.',
+
+		// Cron builder
+		crBuilder: 'Builder',
+		crMinute: 'Minute',
+		crHour: 'Hour',
+		crDom: 'Day of month',
+		crMonth: 'Month',
+		crDow: 'Day of week',
+		crEvery: 'Every',
+		crStep: 'Every N',
+		crAt: 'Specific',
+		crUse: 'Use expression',
+
+		// JWT sign & verify
+		jwtDecode: 'Decode',
+		jwtSign: 'Sign',
+		jwtVerify: 'Verify',
+		jwtAlg: 'Algorithm',
+		jwtPayloadLbl: 'Payload (JSON object)',
+		jwtSecret: 'Secret',
+		jwtPrivKey: 'Private key (PKCS#8 PEM)',
+		jwtPubKey: 'Secret (HS) or public key PEM (RS/ES)',
+		jwtSignNote:
+			'Signing runs on WebCrypto in your browser — the key never leaves this page. For HS algorithms use a long random secret; short ones are brute-forceable no matter where you sign.',
+		jwtVerifyNote:
+			'Verification checks the signature against the key you supply, locally. It does not fetch JWKS endpoints or validate claims like aud/iss — do that server-side.',
+
+		// Timestamp extras
+		tsDiff: 'Difference between two dates',
+
 		// Word counter
 		wcWords: 'Words',
 		wcChars: 'Characters',

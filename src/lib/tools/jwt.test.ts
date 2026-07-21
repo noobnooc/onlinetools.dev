@@ -100,3 +100,98 @@ describe('isLikelyJwt', () => {
 		expect(isLikelyJwt('not a token at all')).toBe(false);
 	});
 });
+
+/* ---------- sign & verify ---------- */
+
+import { signJwt, verifyJwt } from './jwt';
+
+const PAYLOAD = '{"sub": "123", "name": "Ada"}';
+
+describe('signJwt / verifyJwt HS*', () => {
+	it('signs and verifies HS256', async () => {
+		const signed = await signJwt(PAYLOAD, 'HS256', 'secret');
+		expect(signed.ok).toBe(true);
+		if (signed.ok) {
+			const decoded = decodeJwt(signed.value);
+			expect(decoded.ok).toBe(true);
+			if (decoded.ok) {
+				expect(decoded.value.header).toEqual({ alg: 'HS256', typ: 'JWT' });
+				expect(decoded.value.payload.name).toBe('Ada');
+			}
+			const good = await verifyJwt(signed.value, 'secret');
+			expect(good).toEqual({
+				ok: true,
+				value: { valid: true, alg: 'HS256', detail: 'Signature is valid for the supplied key' }
+			});
+			const bad = await verifyJwt(signed.value, 'wrong');
+			expect(bad.ok && bad.value.valid === false).toBe(true);
+		}
+	});
+	it('signs HS384 and HS512', async () => {
+		for (const alg of ['HS384', 'HS512'] as const) {
+			const signed = await signJwt(PAYLOAD, alg, 's3cr3t');
+			expect(signed.ok).toBe(true);
+			if (signed.ok) {
+				const v = await verifyJwt(signed.value, 's3cr3t');
+				expect(v.ok && v.value.valid).toBe(true);
+			}
+		}
+	});
+	it('rejects invalid payload JSON and empty secret', async () => {
+		expect((await signJwt('{oops', 'HS256', 'x')).ok).toBe(false);
+		expect((await signJwt(PAYLOAD, 'HS256', '')).ok).toBe(false);
+		expect((await signJwt('[1,2]', 'HS256', 'x')).ok).toBe(false);
+	});
+});
+
+describe('signJwt / verifyJwt asymmetric', () => {
+	async function exportPem(key: CryptoKey, kind: 'pkcs8' | 'spki'): Promise<string> {
+		const der = new Uint8Array(await crypto.subtle.exportKey(kind, key));
+		let bin = '';
+		for (const b of der) bin += String.fromCharCode(b);
+		const b64 = btoa(bin).replace(/(.{64})/g, '$1\n');
+		const label = kind === 'pkcs8' ? 'PRIVATE KEY' : 'PUBLIC KEY';
+		return `-----BEGIN ${label}-----\n${b64}\n-----END ${label}-----`;
+	}
+
+	it('signs RS256 with PKCS8 and verifies with SPKI', async () => {
+		const pair = await crypto.subtle.generateKey(
+			{ name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256', modulusLength: 2048, publicExponent: new Uint8Array([1, 0, 1]) },
+			true,
+			['sign', 'verify']
+		);
+		const priv = await exportPem(pair.privateKey, 'pkcs8');
+		const pub = await exportPem(pair.publicKey, 'spki');
+		const signed = await signJwt(PAYLOAD, 'RS256', priv);
+		expect(signed.ok).toBe(true);
+		if (signed.ok) {
+			const v = await verifyJwt(signed.value, pub);
+			expect(v.ok && v.value.valid).toBe(true);
+		}
+	});
+	it('signs ES256 and verifies', async () => {
+		const pair = await crypto.subtle.generateKey({ name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign', 'verify']);
+		const priv = await exportPem(pair.privateKey, 'pkcs8');
+		const pub = await exportPem(pair.publicKey, 'spki');
+		const signed = await signJwt(PAYLOAD, 'ES256', priv);
+		expect(signed.ok).toBe(true);
+		if (signed.ok) {
+			const v = await verifyJwt(signed.value, pub);
+			expect(v.ok && v.value.valid).toBe(true);
+		}
+	});
+	it('gives a helpful error for PKCS1 PEM', async () => {
+		const r = await signJwt(PAYLOAD, 'RS256', '-----BEGIN RSA PRIVATE KEY-----\nAAAA\n-----END RSA PRIVATE KEY-----');
+		expect(r.ok).toBe(false);
+		if (!r.ok) expect(r.error).toContain('PKCS#8');
+	});
+	it('flags alg none as invalid rather than erroring', async () => {
+		const header = encodeBase64(JSON.stringify({ alg: 'none' }), true);
+		const payload = encodeBase64('{}', true);
+		expect(header.ok && payload.ok).toBe(true);
+		if (header.ok && payload.ok) {
+			const r = await verifyJwt(`${header.value}.${payload.value}.`, 'x');
+			expect(r.ok && r.value.valid === false && r.value.detail.includes('none')).toBe(true);
+		}
+	});
+});
