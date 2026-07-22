@@ -55,7 +55,7 @@
 		<MobileTopBar />
 		<!-- Floating content card (viewport-fixed on desktop) -->
 		<div
-			class="flex min-h-0 flex-1 flex-col overflow-hidden bg-surface lg:rounded-2xl lg:border lg:border-line/60 lg:shadow-[0_1px_2px_rgba(16,24,40,0.04),0_8px_24px_-12px_rgba(16,24,40,0.12)]"
+			class="flex min-h-0 flex-1 flex-col overflow-hidden bg-surface lg:rounded-2xl lg:border-[0.5px] lg:border-line lg:shadow-[0_1px_2px_rgba(16,24,40,0.04),0_8px_24px_-12px_rgba(16,24,40,0.12)]"
 		>
 			<div bind:this={scroller} class="flex min-h-0 flex-1 flex-col overflow-y-auto">
 				<main class="grow">

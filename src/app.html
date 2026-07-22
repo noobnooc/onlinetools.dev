@@ -6,11 +6,13 @@
 		<link rel="icon" href="%sveltekit.assets%/favicon.svg" type="image/svg+xml" />
 		<link rel="apple-touch-icon" href="%sveltekit.assets%/apple-touch-icon.png" />
 		<link rel="manifest" href="%sveltekit.assets%/manifest.webmanifest" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-title" content="onlinetools" />
-		<meta name="theme-color" media="(prefers-color-scheme: light)" content="#FAFBFC" />
-		<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0B0D10" />
+		<!-- Match the installed-PWA title bar to the app's canvas (the surface the
+		     shell sits on), so the window chrome blends with the page background. -->
+		<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ECEEF2" />
+		<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#060709" />
 		<script>
 			// Set theme before first paint to avoid flash. Light-first; a stored
 			// choice wins, otherwise the system preference decides.
