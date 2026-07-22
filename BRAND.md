@@ -9,11 +9,12 @@ or a live-status indicator: focused, precise, tool-like.
 
 The wider identity follows the product's design language:
 
-- **Themed surfaces adapt.** Anywhere the mark sits inside a live color
-  scheme — the in-app logo and the SVG favicon — the tile follows the
-  theme: light background in light mode, dark in dark. Fixed app-tile
-  surfaces with no color scheme (PWA/apple-touch raster icons) and the
-  OG/Twitter card keep the dark tile (`#0B0D10`).
+- **Backgrounds fit the context.** The SVG favicon is transparent (ring +
+  dot only) so it reads on any tab bar; its colors swap with the viewer's
+  scheme for contrast. The in-app mark (mobile top bar) is tile-less,
+  inheriting the active theme via `--accent`/`--ok`. Fixed app-tile rasters
+  (PWA/apple-touch icons) and the OG/Twitter card keep the dark tile
+  (`#0B0D10`). The desktop sidebar leads with the wordmark alone, no mark.
 - **One accent.** Blue (`#4C8DFF`) is the only brand color; green
   (`#3ECF8E`) appears solely as the status dot / "runs locally" signal.
 - **Borders separate, not shadows.** Cards are outlined (`#262B33`) on a
@@ -44,22 +45,25 @@ values in `scripts/generate-brand-assets.mjs` — keep them in sync.
 The wordmark is plain text: `onlinetools.dev`, Inter SemiBold, tight
 tracking, no ligature tricks. It is colored to echo the mark:
 `online` in `accent` blue (the ring), `tools` in the default `text`
-color, the `.` in `ok` green (the core), and `dev` in the `dim` token.
-The two brand colors land only on the two segments that map to the icon,
-so the wordmark stays legible rather than rainbow.
+color, the `.` in `ok` green (the core), and `dev` in a faded `dim`
+(≈60% opacity) so the suffix recedes. The two brand colors land only on
+the two segments that map to the icon, so the wordmark stays legible
+rather than rainbow.
 
 ## Mark geometry
 
 Defined on a 64-unit grid (`static/favicon.svg`):
 
-- Tile: 64×64, corner radius 14.5 (≈ 22.5%, iOS-like squircle feel)
 - Ring: center (32, 32), radius 13, stroke 6, `accent`
 - Dot: center (32, 32), radius 5.5, `ok`
+- Tile (raster app icons only): 64×64, corner radius 14.5 (≈ 22.5%,
+  iOS-like squircle feel), `bg`
 
 The ring and dot share a center so the green core reads as "online"
-inside the blue "o". `favicon.svg` carries a `prefers-color-scheme`
-`<style>` block that swaps the tile (and the light-tuned accent/ok) with
-the viewer's theme. In-app the mark is rendered tile-less with the
+inside the blue "o". `favicon.svg` is transparent and carries a
+`prefers-color-scheme` `<style>` block that swaps the light-tuned
+accent/ok with the viewer's theme; `favicon.ico` mirrors it (transparent,
+fixed brand colors). In-app the mark is rendered tile-less with the
 `--accent`/`--ok` CSS variables, so it inherits the active theme. The
 maskable variant (`static/icon-maskable.svg`) is full-bleed dark with the
 same concentric composition inside the 80% safe zone.

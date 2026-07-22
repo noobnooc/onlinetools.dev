@@ -23,7 +23,7 @@
 			<circle cx="32" cy="32" r="5.5" fill="var(--ok)" />
 		</svg>
 		<span class="text-accent">online</span><span class="text-fg">tools</span><span
-			class="text-ok">.</span><span class="text-dim">dev</span>
+			class="text-ok">.</span><span class="text-dim/60">dev</span>
 	</a>
 	<button
 		type="button"

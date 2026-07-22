@@ -210,9 +210,16 @@ function ogSvg({ eyebrow, line1, line2, sub, chips }) {
 /* favicon.svg (whose prefers-color-scheme CSS a rasterizer can't pick). */
 /* ------------------------------------------------------------------ */
 
-// Rounded dark tile — PWA "any" icons and the legacy favicon.ico.
+// Rounded dark tile — PWA "any" icons on the OS home screen.
 const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
 	<rect width="64" height="64" rx="14.5" fill="${C.bg}"/>
+	<circle cx="32" cy="32" r="13" fill="none" stroke="${C.accent}" stroke-width="6"/>
+	<circle cx="32" cy="32" r="5.5" fill="${C.ok}"/>
+</svg>`;
+
+// Transparent mark for the legacy favicon.ico — mirrors the transparent
+// favicon.svg so the tab icon sits cleanly on any tab bar.
+const faviconIcoSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
 	<circle cx="32" cy="32" r="13" fill="none" stroke="${C.accent}" stroke-width="6"/>
 	<circle cx="32" cy="32" r="5.5" fill="${C.ok}"/>
 </svg>`;
@@ -243,7 +250,7 @@ out('icon-maskable-512.png', renderPng(maskableSvg, 512));
 out('apple-touch-icon.png', renderPng(appleSvg, 180));
 out(
 	'favicon.ico',
-	packIco([16, 32, 48].map((size) => ({ size, png: renderPng(iconSvg, size) })))
+	packIco([16, 32, 48].map((size) => ({ size, png: renderPng(faviconIcoSvg, size) })))
 );
 
 out(
