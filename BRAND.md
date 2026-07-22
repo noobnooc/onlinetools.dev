@@ -2,15 +2,18 @@
 
 ## Concept
 
-The mark is an **"o" ring with an online-status dot** — the "o" of
-*onlinetools*, plus the green dot developers read instantly as "online /
-running". Both sit on the dark app tile (`#0B0D10`), composed along the 45°
-diagonal. It doubles as a lens/aperture: focused, precise, tool-like.
+The mark is a **green "online" core centered inside the blue "o" ring** —
+the "o" of *onlinetools* wrapped around the green dot developers read
+instantly as "online / running". Concentric, it doubles as a lens/aperture
+or a live-status indicator: focused, precise, tool-like.
 
 The wider identity follows the product's design language:
 
-- **Dark-first.** The tile is always dark, even in light-theme contexts —
-  it reads as an app icon, not a themed element.
+- **Themed surfaces adapt.** Anywhere the mark sits inside a live color
+  scheme — the in-app logo and the SVG favicon — the tile follows the
+  theme: light background in light mode, dark in dark. Fixed app-tile
+  surfaces with no color scheme (PWA/apple-touch raster icons) and the
+  OG/Twitter card keep the dark tile (`#0B0D10`).
 - **One accent.** Blue (`#4C8DFF`) is the only brand color; green
   (`#3ECF8E`) appears solely as the status dot / "runs locally" signal.
 - **Borders separate, not shadows.** Cards are outlined (`#262B33`) on a
@@ -39,23 +42,30 @@ values in `scripts/generate-brand-assets.mjs` — keep them in sync.
 - **JetBrains Mono** — code, chips, eyebrows, the "+" corner marks.
 
 The wordmark is plain text: `onlinetools.dev`, Inter SemiBold, tight
-tracking, no ligature tricks. On dark chrome the `.dev` suffix may be
-dimmed (`dim` token).
+tracking, no ligature tricks. It is colored to echo the mark:
+`online` in `accent` blue (the ring), `tools` in the default `text`
+color, the `.` in `ok` green (the core), and `dev` in the `dim` token.
+The two brand colors land only on the two segments that map to the icon,
+so the wordmark stays legible rather than rainbow.
 
 ## Mark geometry
 
 Defined on a 64-unit grid (`static/favicon.svg`):
 
 - Tile: 64×64, corner radius 14.5 (≈ 22.5%, iOS-like squircle feel)
-- Ring: center (30, 34), radius 11.5, stroke 6, `accent`
-- Dot: center (48, 16), radius 5.75, `ok`
+- Ring: center (32, 32), radius 13, stroke 6, `accent`
+- Dot: center (32, 32), radius 5.5, `ok`
 
-The ring is offset down-left and the dot up-right so the pair balances on
-the diagonal. The maskable variant (`static/icon-maskable.svg`) is
-full-bleed with the same composition scaled into the 80% safe zone.
+The ring and dot share a center so the green core reads as "online"
+inside the blue "o". `favicon.svg` carries a `prefers-color-scheme`
+`<style>` block that swaps the tile (and the light-tuned accent/ok) with
+the viewer's theme. In-app the mark is rendered tile-less with the
+`--accent`/`--ok` CSS variables, so it inherits the active theme. The
+maskable variant (`static/icon-maskable.svg`) is full-bleed dark with the
+same concentric composition inside the 80% safe zone.
 
-Don'ts: no gradients, no recoloring, no rotating the dot to another
-corner, no placing the ring on light tiles.
+Don'ts: no gradients, no recoloring the ring/dot, no de-centering the
+core, no placing the OG or raster app-tile marks on a light tile.
 
 ## Asset inventory
 

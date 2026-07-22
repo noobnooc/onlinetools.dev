@@ -125,8 +125,8 @@ function mark(x, y, size, radius = 14.5) {
 	const s = size / 64;
 	return `<g transform="translate(${x} ${y}) scale(${s})">
 		<rect width="64" height="64" rx="${radius}" fill="${C.bg}"/>
-		<circle cx="30" cy="34" r="11.5" fill="none" stroke="${C.accent}" stroke-width="6"/>
-		<circle cx="48" cy="16" r="5.75" fill="${C.ok}"/>
+		<circle cx="32" cy="32" r="13" fill="none" stroke="${C.accent}" stroke-width="6"/>
+		<circle cx="32" cy="32" r="5.5" fill="${C.ok}"/>
 	</g>`;
 }
 
@@ -204,12 +204,24 @@ function ogSvg({ eyebrow, line1, line2, sub, chips }) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Full-bleed source for the apple-touch-icon (iOS masks it itself).   */
+/* Raster app-icon sources. These stay on the dark tile — like the OG   */
+/* image, they are fixed app-tile surfaces with no live color scheme,   */
+/* so they are rendered here rather than from the theme-adaptive         */
+/* favicon.svg (whose prefers-color-scheme CSS a rasterizer can't pick). */
 /* ------------------------------------------------------------------ */
+
+// Rounded dark tile — PWA "any" icons and the legacy favicon.ico.
+const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+	<rect width="64" height="64" rx="14.5" fill="${C.bg}"/>
+	<circle cx="32" cy="32" r="13" fill="none" stroke="${C.accent}" stroke-width="6"/>
+	<circle cx="32" cy="32" r="5.5" fill="${C.ok}"/>
+</svg>`;
+
+// Full-bleed dark tile for the apple-touch-icon (iOS masks it itself).
 const appleSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
 	<rect width="64" height="64" fill="${C.bg}"/>
-	<circle cx="30" cy="34" r="11.5" fill="none" stroke="${C.accent}" stroke-width="6"/>
-	<circle cx="48" cy="16" r="5.75" fill="${C.ok}"/>
+	<circle cx="32" cy="32" r="13" fill="none" stroke="${C.accent}" stroke-width="6"/>
+	<circle cx="32" cy="32" r="5.5" fill="${C.ok}"/>
 </svg>`;
 
 /* ------------------------------------------------------------------ */
@@ -218,7 +230,6 @@ const appleSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
 
 fontFiles = ensureFonts();
 
-const faviconSvg = readFileSync(join(STATIC, 'favicon.svg'), 'utf8');
 const maskableSvg = readFileSync(join(STATIC, 'icon-maskable.svg'), 'utf8');
 
 const out = (name, buf) => {
@@ -226,13 +237,13 @@ const out = (name, buf) => {
 	console.log(`static/${name}  ${(buf.length / 1024).toFixed(1)} kB`);
 };
 
-out('icon-192.png', renderPng(faviconSvg, 192));
-out('icon-512.png', renderPng(faviconSvg, 512));
+out('icon-192.png', renderPng(iconSvg, 192));
+out('icon-512.png', renderPng(iconSvg, 512));
 out('icon-maskable-512.png', renderPng(maskableSvg, 512));
 out('apple-touch-icon.png', renderPng(appleSvg, 180));
 out(
 	'favicon.ico',
-	packIco([16, 32, 48].map((size) => ({ size, png: renderPng(faviconSvg, size) })))
+	packIco([16, 32, 48].map((size) => ({ size, png: renderPng(iconSvg, size) })))
 );
 
 out(
