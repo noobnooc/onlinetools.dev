@@ -46,13 +46,13 @@
 
 <div class="flex h-full flex-col">
 	<!-- Brand + theme -->
-	<div class="flex shrink-0 items-center justify-between gap-2 px-4 pt-4 pb-3">
+	<div class="flex shrink-0 items-center justify-between gap-2 px-3 pt-4 pb-3">
 		<a href={lp('/')} onclick={onnavigate} class="min-w-0 leading-tight">
 			<span class="block truncate text-sm font-semibold tracking-tight">
 				<span class="text-accent">online</span><span class="text-fg">tools</span><span
 					class="text-ok">.</span><span class="text-dim/60">dev</span>
 			</span>
-			<span class="block text-[11px] text-dim">Developer tools</span>
+			<span class="block text-[11px] text-dim">developer tools</span>
 		</a>
 		<div class="flex shrink-0 items-center gap-1">
 			<LanguageToggle />
