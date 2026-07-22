@@ -36,7 +36,7 @@
 	onclick={cycle}
 	aria-label="Toggle color theme"
 	title={t('themeTitle', { mode: t(LABEL_KEYS[pref]) })}
-	class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-dim transition-colors duration-120 hover:bg-fg/[0.05] hover:text-fg"
+	class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-fg/[0.04] text-dim transition-colors duration-120 hover:bg-fg/[0.08] hover:text-fg"
 >
 	{#if pref === 'dark'}
 		<Moon size={14} />

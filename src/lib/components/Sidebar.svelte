@@ -6,6 +6,7 @@
 	import { t, lt, ltCategory, lp, locale } from '$lib/i18n';
 	import Kbd from './Kbd.svelte';
 	import ThemeToggle from './ThemeToggle.svelte';
+	import LanguageToggle from './LanguageToggle.svelte';
 	import { Search, House } from 'lucide-svelte';
 
 	/** Rendered inside both the desktop rail and the mobile drawer. */
@@ -53,7 +54,10 @@
 			</span>
 			<span class="block text-[11px] text-dim">Developer tools</span>
 		</a>
-		<ThemeToggle />
+		<div class="flex shrink-0 items-center gap-1">
+			<LanguageToggle />
+			<ThemeToggle />
+		</div>
 	</div>
 
 	<!-- Search -->
