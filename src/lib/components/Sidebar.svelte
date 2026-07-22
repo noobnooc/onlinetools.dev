@@ -48,12 +48,14 @@
 	<div class="flex shrink-0 items-center justify-between gap-2 px-4 pt-4 pb-3">
 		<a href={lp('/')} onclick={onnavigate} class="flex min-w-0 items-center gap-2.5">
 			<svg class="h-8 w-8 shrink-0" viewBox="0 0 64 64" aria-hidden="true">
-				<rect width="64" height="64" rx="14.5" fill="#0B0D10" />
-				<circle cx="30" cy="34" r="11.5" fill="none" stroke="#4C8DFF" stroke-width="6" />
-				<circle cx="48" cy="16" r="5.75" fill="#3ECF8E" />
+				<circle cx="32" cy="32" r="13" fill="none" stroke="var(--accent)" stroke-width="6" />
+				<circle cx="32" cy="32" r="5.5" fill="var(--ok)" />
 			</svg>
 			<span class="min-w-0 leading-tight">
-				<span class="block truncate text-sm font-semibold tracking-tight">onlinetools.dev</span>
+				<span class="block truncate text-sm font-semibold tracking-tight">
+					<span class="text-accent">online</span><span class="text-fg">tools</span><span
+						class="text-ok">.</span><span class="text-dim">dev</span>
+				</span>
 				<span class="block text-[11px] text-dim">Developer tools</span>
 			</span>
 		</a>
