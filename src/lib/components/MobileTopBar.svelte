@@ -17,7 +17,10 @@
 	>
 		<Menu size={17} />
 	</button>
-	<a href={lp('/')} class="flex items-center gap-2 text-sm font-semibold tracking-tight">
+	<a
+		href={lp('/')}
+		class="absolute left-1/2 flex -translate-x-1/2 items-center gap-2 text-sm font-semibold tracking-tight"
+	>
 		<svg class="h-5 w-5 shrink-0" viewBox="0 0 64 64" aria-hidden="true">
 			<circle cx="32" cy="32" r="13" fill="none" stroke="var(--accent)" stroke-width="6" />
 			<circle cx="32" cy="32" r="5.5" fill="var(--ok)" />
