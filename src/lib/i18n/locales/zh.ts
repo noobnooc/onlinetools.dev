@@ -58,6 +58,8 @@ const zh: Messages = {
 		// Pipeline (tool chains)
 		chainNavLabel: '管线',
 		chainNew: 'New',
+		chainSteps: '步骤',
+		chainMoreRecipes: '更多配方',
 		chainTitle: '工具管线 —— 在浏览器里串联开发者工具 | onlinetools.dev',
 		chainMetaDescription:
 			'把开发者工具串成一条管线 —— 解码、转换、提取一气呵成。每一步的输出喂给下一步，全部在浏览器里运行，整条配方就藏在一个可分享的链接里。',

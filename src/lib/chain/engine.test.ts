@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { runChain, encodeRecipe, decodeRecipe, recipeSize, PRESETS, type Recipe } from './engine';
+import { runChain, encodeRecipe, decodeRecipe, recipeSize, type Recipe } from './engine';
+import { CHAIN_PRESETS } from './presets';
 import { MAX_SHARED_INPUT, encodeState } from '$lib/state/urlstate';
 
 describe('runChain', () => {
@@ -14,13 +15,15 @@ describe('runChain', () => {
 	});
 
 	it('decodes a JWT to its payload', () => {
-		const run = runChain(PRESETS[0].recipe.input, PRESETS[0].recipe.steps);
+		const p = CHAIN_PRESETS.find((x) => x.slug === 'decode-jwt-payload')!;
+		const run = runChain(p.recipe.input, p.recipe.steps);
 		expect(run.failedAt).toBe(-1);
 		expect(JSON.parse(run.output).name).toBe('Ada Lovelace');
 	});
 
 	it('extracts a claim with a JSONPath argument', () => {
-		const run = runChain(PRESETS[1].recipe.input, PRESETS[1].recipe.steps);
+		const p = CHAIN_PRESETS.find((x) => x.slug === 'extract-jwt-claim')!;
+		const run = runChain(p.recipe.input, p.recipe.steps);
 		expect(run.failedAt).toBe(-1);
 		expect(run.output).toBe('Ada Lovelace');
 	});
@@ -77,9 +80,9 @@ describe('recipe share state', () => {
 
 describe('presets', () => {
 	it('every preset runs cleanly end to end', () => {
-		for (const p of PRESETS) {
+		for (const p of CHAIN_PRESETS) {
 			const run = runChain(p.recipe.input, p.recipe.steps);
-			expect(run.failedAt, `preset "${p.id}" failed`).toBe(-1);
+			expect(run.failedAt, `preset "${p.slug}" failed`).toBe(-1);
 			expect(run.output.length).toBeGreaterThan(0);
 		}
 	});

@@ -1,28 +1,22 @@
 import { PIPE_OP_BY_ID } from './ops';
 import { encodeState, decodeState, MAX_SHARED_INPUT } from '$lib/state/urlstate';
+import type { Step, Recipe } from './types';
 
 /**
  * Pipeline execution + share-state serialization. A recipe (initial input +
- * ordered steps) runs each step's pure function in turn, feeding every
- * success into the next step. The first failure stops the flow; later steps
- * are reported as skipped. The whole recipe round-trips through the URL
- * fragment (never the server), so a link reproduces the exact pipeline.
+ * ordered steps) runs each step's pure function in turn, feeding every success
+ * into the next step. The first failure stops the flow; later steps are
+ * reported as skipped. The whole recipe round-trips through the URL fragment
+ * (never the server), so a link reproduces the exact pipeline. Importing this
+ * module pulls in `ops.ts` (browser-only libraries) — keep it client-side.
  */
 
-export interface Step {
-	op: string;
-	arg?: string;
-}
-
-export interface Recipe {
-	input: string;
-	steps: Step[];
-}
+export type { Step, Recipe } from './types';
 
 export interface StepResult {
 	op: string;
 	arg?: string;
-	/** true = ran and produced output; false = failed; null = skipped. */
+	/** ok = ran and produced output; error = failed; skipped = after a failure. */
 	status: 'ok' | 'error' | 'skipped';
 	value?: string;
 	error?: string;
@@ -108,57 +102,3 @@ export function decodeRecipe(hash: string): Recipe | null {
 	}
 	return { input: state.input ?? '', steps };
 }
-
-/* ---------- presets ---------- */
-
-/**
- * Curated starter recipes. Each is a one-click demo of a real workflow and a
- * seed for a future dedicated, indexable preset page (the SEO angle: these
- * target workflow-intent queries the single-tool pages cannot).
- */
-export interface Preset {
-	id: string;
-	/** English title; localized presentation can come later. */
-	title: string;
-	recipe: Recipe;
-}
-
-const SAMPLE_JWT =
-	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkFkYSBMb3ZlbGFjZSIsImlhdCI6MTUxNjIzOTAyMn0.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
-
-export const PRESETS: Preset[] = [
-	{
-		id: 'jwt-payload',
-		title: 'Decode a JWT and read its payload',
-		recipe: { input: SAMPLE_JWT, steps: [{ op: 'jwt-payload' }] }
-	},
-	{
-		id: 'jwt-claim',
-		title: 'Extract one claim from a JWT',
-		recipe: { input: SAMPLE_JWT, steps: [{ op: 'jwt-payload' }, { op: 'jsonpath', arg: '$.name' }] }
-	},
-	{
-		id: 'base64-json',
-		title: 'Base64-decode, then prettify JSON',
-		recipe: {
-			input: 'eyJ1c2VyIjp7Im5hbWUiOiJBZGEiLCJyb2xlcyI6WyJhZG1pbiIsImRldiJdfX0=',
-			steps: [{ op: 'base64-decode' }, { op: 'json-pretty' }]
-		}
-	},
-	{
-		id: 'json-to-yaml',
-		title: 'Convert JSON to YAML',
-		recipe: {
-			input: '{"name":"Ada","roles":["admin","dev"],"active":true}',
-			steps: [{ op: 'json-to-yaml' }]
-		}
-	},
-	{
-		id: 'json-to-csv',
-		title: 'Flatten a JSON array into CSV',
-		recipe: {
-			input: '[{"id":1,"name":"Ada"},{"id":2,"name":"Alan"}]',
-			steps: [{ op: 'json-to-csv' }]
-		}
-	}
-];

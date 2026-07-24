@@ -1,4 +1,5 @@
 import { TOOLS } from '$lib/tools/registry';
+import { CHAIN_PRESETS } from '$lib/chain/presets';
 import { LOCALES } from '$lib/i18n/codes';
 import { SITE_UPDATED } from '$lib/version';
 
@@ -11,7 +12,14 @@ const loc = (path: string, lang: string) =>
 	lang === 'en' ? `${BASE}${path}` : `${BASE}/${lang}${path === '/' ? '' : path}`;
 
 export function GET(): Response {
-	const pages = ['/', '/tools', '/changelog', ...TOOLS.map((t) => `/t/${t.slug}`)];
+	const pages = [
+		'/',
+		'/tools',
+		'/changelog',
+		'/chain',
+		...CHAIN_PRESETS.map((p) => `/chain/${p.slug}`),
+		...TOOLS.map((t) => `/t/${t.slug}`)
+	];
 	const urls = pages.flatMap((page) => {
 		const alternates = [
 			...LOCALES.map(
