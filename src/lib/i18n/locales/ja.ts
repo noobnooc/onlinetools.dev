@@ -45,6 +45,16 @@ const ja: Messages = {
 		kbdCopyResult: '結果をコピー',
 		kbdConfirm: '確定',
 		kbdAllShortcuts: 'すべてのショートカット',
+
+		// Paste hero (homepage)
+		pasteHeroHeading: '何でも貼り付け — 最適なツールが即座に見つかる',
+		pasteHeroPlaceholder: 'JWT、JSON、UNIX タイムスタンプ、色、URL、画像などを貼り付け…',
+		tryLabel: 'お試し',
+		plainText: 'プレーンテキスト',
+		noMatchHint: '完全一致なし — 下のテキストツールを選ぶか、全体を検索',
+		runHint: '実行',
+		newlineHint: '改行',
+		clearHint: 'クリア',
 		toolsTitle: 'すべての開発者ツール — onlinetools.dev',
 		toolsMetaDescription:
 			'onlinetools.dev の全ツール一覧:JSON、YAML、Base64、JWT、タイムスタンプ、Cron、正規表現、差分、UUID、ハッシュ、QR コードなど — すべてブラウザ内で動作。',

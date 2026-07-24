@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { openPalette } from '$lib/state/app.svelte';
+	import PasteHero from '$lib/components/PasteHero.svelte';
 	import { favorites } from '$lib/state/favorites.svelte';
 	import { TOOLS, TOOL_BY_SLUG, type ToolCategory, type ToolMeta } from '$lib/tools/registry';
 	import { iconFor } from '$lib/tools/icons';
@@ -9,7 +9,7 @@
 	import Eyebrow from '$lib/components/Eyebrow.svelte';
 	import PlusCorners from '$lib/components/PlusCorners.svelte';
 	import SeoHead from '$lib/components/SeoHead.svelte';
-	import { Search, ClipboardPaste, WifiOff, ArrowRight } from 'lucide-svelte';
+	import { ClipboardPaste, WifiOff, ArrowRight } from 'lucide-svelte';
 
 	const categories = [...new Set(TOOLS.map((t) => t.category))] as ToolCategory[];
 
@@ -63,7 +63,7 @@
 			<div>
 				<div class="mb-2"><Eyebrow text={t('homeEyebrow', { n: TOOLS.length })} /></div>
 				<h1 class="text-xl font-semibold tracking-tight sm:text-2xl">
-					{t('homeHeading')}
+					{t('pasteHeroHeading')}
 				</h1>
 				<p class="mt-1 text-sm text-dim">{t('homeSub')}</p>
 			</div>
@@ -75,15 +75,7 @@
 		</div>
 
 		<div class="mb-10">
-			<button
-				type="button"
-				onclick={() => openPalette()}
-				class="flex w-full items-center gap-3 rounded-(--radius-lg) border border-line bg-surface px-4 py-3 text-left shadow-lg shadow-black/5 transition-colors duration-120 hover:border-accent/50"
-			>
-				<Search size={16} class="shrink-0 text-dim" />
-				<span class="grow text-sm text-dim">{t('searchPlaceholder', { n: TOOLS.length })}</span>
-				<Kbd keys="⌘K" />
-			</button>
+			<PasteHero />
 		</div>
 
 		<!-- Favorites: local-only, rendered when the visitor has starred tools. -->
@@ -109,7 +101,7 @@
 					{t('allTools')} <ArrowRight size={12} />
 				</a>
 			</div>
-			<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+			<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
 				<!-- Large: JSON formatter with a mini tree vignette -->
 				<a
 					href={lp('/t/json-formatter')}
@@ -129,31 +121,6 @@
 					</div>
 					<p class="mt-3 text-xs text-dim">{lt(jsonTool).description}</p>
 				</a>
-
-				<!-- Large: Smart Paste explainer, opens the palette -->
-				<button
-					type="button"
-					onclick={() => openPalette()}
-					class="group relative rounded-(--radius-lg) border border-line bg-surface p-5 text-left transition-all duration-120 hover:-translate-y-px hover:border-accent/50 hover:shadow-md hover:shadow-black/5 sm:col-span-2"
-				>
-					<PlusCorners />
-					<div class="mb-4 flex items-center justify-between">
-						<span class="text-sm font-medium">{t('smartPaste')}</span>
-						<Kbd keys="⌘V" />
-					</div>
-					<div class="pointer-events-none space-y-2" aria-hidden="true">
-						<div class="flex items-center gap-2 rounded-md border border-line bg-surface-2/60 px-3 py-2 font-mono text-[11px] text-dim">
-							<span class="truncate">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIi…</span>
-							<span class="ml-auto inline-block h-3.5 w-px animate-pulse bg-accent"></span>
-						</div>
-						<div class="flex items-center gap-1.5 font-mono text-[11px]">
-							<span class="rounded-md border border-accent/50 bg-accent/10 px-1.5 py-0.5 text-accent">JWT · decode ↵</span>
-							<span class="rounded-md border border-line px-1.5 py-0.5 text-dim">Base64</span>
-							<span class="rounded-md border border-line px-1.5 py-0.5 text-dim">timestamp</span>
-						</div>
-					</div>
-					<p class="mt-3 text-xs text-dim">{t('smartPasteDesc')}</p>
-				</button>
 
 				<!-- Compact featured with tiny vignettes -->
 				{#each featuredSmall as tool (tool.slug)}

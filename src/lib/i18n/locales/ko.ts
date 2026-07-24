@@ -45,6 +45,16 @@ const ko: Messages = {
 		kbdCopyResult: '결과 복사',
 		kbdConfirm: '확인',
 		kbdAllShortcuts: '모든 단축키',
+
+		// Paste hero (homepage)
+		pasteHeroHeading: '무엇이든 붙여넣으세요 — 딱 맞는 도구를 바로 찾아드립니다',
+		pasteHeroPlaceholder: 'JWT, JSON, Unix 타임스탬프, 색상, URL, 이미지 등을 붙여넣기…',
+		tryLabel: '예시',
+		plainText: '일반 텍스트',
+		noMatchHint: '정확히 일치하는 항목 없음 — 아래 텍스트 도구를 선택하거나 전체 검색',
+		runHint: '실행',
+		newlineHint: '줄바꿈',
+		clearHint: '지우기',
 		toolsTitle: '모든 개발자 도구 — onlinetools.dev',
 		toolsMetaDescription:
 			'onlinetools.dev의 모든 도구: JSON, YAML, Base64, JWT, 타임스탬프, Cron, 정규식, Diff, UUID, 해시, QR 코드 등 — 모두 브라우저에서 로컬로 실행.',

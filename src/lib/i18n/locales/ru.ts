@@ -45,6 +45,16 @@ const ru: Messages = {
 		kbdCopyResult: 'скопировать результат',
 		kbdConfirm: 'подтвердить',
 		kbdAllShortcuts: 'все сочетания',
+
+		// Paste hero (homepage)
+		pasteHeroHeading: 'Вставьте что угодно — нужный инструмент найдётся мгновенно',
+		pasteHeroPlaceholder: 'Вставьте JWT, JSON, метку времени Unix, цвет, URL, изображение…',
+		tryLabel: 'Пример',
+		plainText: 'Обычный текст',
+		noMatchHint: 'Точных совпадений нет — выберите текстовый инструмент ниже или ищите по всем',
+		runHint: 'запустить',
+		newlineHint: 'новая строка',
+		clearHint: 'очистить',
 		toolsTitle: 'Все инструменты разработчика — onlinetools.dev',
 		toolsMetaDescription:
 			'Все инструменты onlinetools.dev: JSON, YAML, Base64, JWT, таймстампы, cron, регулярные выражения, diff, UUID, хеши, QR-коды и другое — всё работает локально в вашем браузере.',

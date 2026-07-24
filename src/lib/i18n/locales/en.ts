@@ -54,6 +54,16 @@ const en = {
 		kbdConfirm: 'confirm',
 		kbdAllShortcuts: 'all shortcuts',
 
+		// Paste hero (homepage)
+		pasteHeroHeading: 'Paste anything — get the right tool instantly',
+		pasteHeroPlaceholder: 'Paste a JWT, JSON, a Unix timestamp, a color, a URL, an image…',
+		tryLabel: 'Try',
+		plainText: 'Plain text',
+		noMatchHint: 'No exact match — pick a text tool below or search everything',
+		runHint: 'run',
+		newlineHint: 'newline',
+		clearHint: 'clear',
+
 		// Tools index page
 		toolsTitle: 'All developer tools — onlinetools.dev',
 		toolsMetaDescription:
