@@ -15,6 +15,7 @@ export function GET(): Response {
 	const pages = [
 		'/',
 		'/tools',
+		'/about',
 		'/changelog',
 		'/chain',
 		...CHAIN_PRESETS.map((p) => `/chain/${p.slug}`),

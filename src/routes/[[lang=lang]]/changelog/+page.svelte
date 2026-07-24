@@ -1,6 +1,6 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/SeoHead.svelte';
-	import { t } from '$lib/i18n';
+	import { t, lp } from '$lib/i18n';
 </script>
 
 <SeoHead
@@ -16,6 +16,31 @@
 	<div lang="en">
 	<section class="relative border-l border-line pb-8 pl-6">
 		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full bg-accent" aria-hidden="true"></span>
+		<h2 class="text-sm font-medium">A page about trust — and a way to check it</h2>
+		<p class="mt-0.5 font-mono text-xs text-dim">v2026.07.24</p>
+		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
+			<li>
+				New <a href={lp('/about')} class="text-accent hover:underline">About</a> page: why this thing
+				exists, in plain terms — every tool runs in your browser, nothing you paste is uploaded, no
+				ads, no trackers, no login. It has a voice, because a person made it.
+			</li>
+			<li>
+				A privacy indicator you can actually verify, not just trust: it watches your browser's own
+				network activity and counts the requests this site makes after it loads. The number is
+				zero — sit there typing and watch it stay zero, or open your DevTools Network tab and check
+				for yourself.
+			</li>
+			<li>
+				Source links throughout: the site is on GitHub, and the footer and About page both carry
+				“view source” and “edit this page.” If something looks wrong, you can read exactly how it
+				works — or send a fix.
+			</li>
+		</ul>
+		<p class="mt-3 text-sm text-dim">— Nooc</p>
+	</section>
+
+	<section class="relative border-l border-line pb-8 pl-6">
+		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
 		<h2 class="text-sm font-medium">Twelve new tools, two new categories</h2>
 		<p class="mt-0.5 font-mono text-xs text-dim">v2026.07.22</p>
 		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">

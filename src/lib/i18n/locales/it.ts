@@ -21,6 +21,27 @@ const it: Messages = {
 		openNav: 'Apri la navigazione',
 		searchTools: 'Cerca strumenti',
 
+		// About / Why page
+		about: 'Informazioni',
+		aboutTitle: 'Perché onlinetools.dev — prima il locale, senza tracciamento, verificabile | onlinetools.dev',
+		aboutMetaDescription:
+			'Perché esiste onlinetools.dev: ogni strumento gira nel tuo browser, nulla di ciò che incolli viene caricato, niente pubblicità, niente tracker, niente accesso — e un indicatore in tempo reale ti permette di verificarlo di persona.',
+		aboutEyebrow: 'perché esiste · fiducia',
+		aboutVerifyHeading: 'Non fidarti solo delle mie parole',
+		aboutVerifyHint:
+			'Scrivi o incolla qualsiasi cosa qui sotto. Il contatore resta a zero — ogni tasto viene elaborato qui, sulla tua macchina.',
+		aboutRequestsLabel: 'Richieste di rete da quando questa pagina è stata aperta',
+		aboutRequestsNote:
+			'L’unica cosa che può muovere questo numero è aprire un altro strumento, che carica codice del sito dallo stesso dominio. Ciò che incolli, mai.',
+		aboutVerifyPlaceholder: 'Scrivi o incolla qualsiasi cosa — niente esce dal tuo browser…',
+		aboutOfflineReady: 'Pronto offline',
+		aboutOfflineCaching: 'Memorizzazione in cache…',
+		aboutDevtools:
+			'Vuoi una prova più solida? Apri gli strumenti per sviluppatori del browser, vai alla scheda Network (Rete) e incolla. Vedrai che non succede nulla.',
+		aboutViewSource: 'Vedi il codice',
+		aboutEditPage: 'Modifica questa pagina',
+		aboutBuiltBy: 'Creato da',
+
 		// Favorites (stored locally in this browser)
 		favorites: 'Preferiti',
 		favoriteAdd: 'Aggiungi ai preferiti',

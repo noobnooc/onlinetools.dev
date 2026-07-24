@@ -21,6 +21,27 @@ const ja: Messages = {
 		openNav: 'ナビゲーションを開く',
 		searchTools: 'ツールを検索',
 
+		// About / Why page
+		about: '概要',
+		aboutTitle: 'onlinetools.dev の理念 — ローカル優先・追跡なし・検証可能 | onlinetools.dev',
+		aboutMetaDescription:
+			'onlinetools.dev が存在する理由:すべてのツールはブラウザー内で動作し、貼り付けた内容はアップロードされません。広告なし、追跡なし、ログインなし — しかもリアルタイム表示で自分で検証できます。',
+		aboutEyebrow: '存在する理由 · 信頼',
+		aboutVerifyHeading: '言葉より、確かめてください',
+		aboutVerifyHint:
+			'下に何でも入力または貼り付けてみてください。カウントはゼロのまま — すべての入力はあなたのマシン上で処理されます。',
+		aboutRequestsLabel: 'このページを開いてからのネットワークリクエスト',
+		aboutRequestsNote:
+			'この数字が動く唯一の要因は、別のツールを開くこと — その際に同じドメインからこのサイト自身のコードを読み込みます。貼り付けた内容が送られることはありません。',
+		aboutVerifyPlaceholder: '何でも入力・貼り付けを — 何一つブラウザーの外には出ません…',
+		aboutOfflineReady: 'オフライン対応',
+		aboutOfflineCaching: 'キャッシュ中…',
+		aboutDevtools:
+			'もっと確かな証拠が欲しいですか?ブラウザーの開発者ツールを開き、Network(ネットワーク)タブに切り替えて貼り付けてみてください。何も起きないのがわかります。',
+		aboutViewSource: 'ソースを見る',
+		aboutEditPage: 'このページを編集',
+		aboutBuiltBy: '制作者',
+
 		// Favorites (stored locally in this browser)
 		favorites: 'お気に入り',
 		favoriteAdd: 'お気に入りに追加',

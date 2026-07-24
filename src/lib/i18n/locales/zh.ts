@@ -21,6 +21,27 @@ const zh: Messages = {
 		openNav: '打开导航',
 		searchTools: '搜索工具',
 
+		// About / Why page
+		about: '关于',
+		aboutTitle: 'onlinetools.dev 的理念 — 本地优先、无追踪、可验证 | onlinetools.dev',
+		aboutMetaDescription:
+			'onlinetools.dev 为何存在:每个工具都在你的浏览器中运行,粘贴的内容不会上传,无广告、无追踪、无登录 — 还有一个实时指示器,让你亲自验证。',
+		aboutEyebrow: '为何存在 · 信任',
+		aboutVerifyHeading: '别只听我说',
+		aboutVerifyHint:
+			'在下面输入或粘贴任何内容。计数会一直停在零 — 每一次按键都在你的机器上处理。',
+		aboutRequestsLabel: '本页打开后发出的网络请求',
+		aboutRequestsNote:
+			'唯一会让这个数字变化的,是打开另一个工具 — 那会从同一域名加载本站自己的代码。你粘贴的内容永远不会。',
+		aboutVerifyPlaceholder: '输入或粘贴任何内容 — 什么都不会离开你的浏览器……',
+		aboutOfflineReady: '可离线',
+		aboutOfflineCaching: '缓存中…',
+		aboutDevtools:
+			'想要更硬的证据?打开浏览器开发者工具,切到 Network(网络)面板,然后粘贴。你会看到什么都没发生。',
+		aboutViewSource: '查看源码',
+		aboutEditPage: '编辑此页',
+		aboutBuiltBy: '作者',
+
 		// Favorites (stored locally in this browser)
 		favorites: '收藏',
 		favoriteAdd: '添加到收藏',
