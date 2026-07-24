@@ -11,30 +11,20 @@ import { slugify, processLines } from '$lib/tools/text';
 import { formatSql, minifySql } from '$lib/tools/sqlformat';
 import { beautifyCode } from '$lib/tools/codeformat';
 import { markdownToHtml, htmlToMarkdown } from '$lib/tools/markdown';
+import { PIPE_OP_META, type PipeOpMeta } from './op-meta';
 
 /**
- * Pipeline operations. Each op is a thin, pure wrapper over an already
- * unit-tested tool-logic function, normalized to a single `string → ToolResult`
- * shape so steps can be composed generically. Labels stay in English (technical
- * tokens developers recognize); the page chrome around them is localized.
+ * Runnable pipeline operations: the SSR-safe metadata in `op-meta.ts` paired
+ * with a run function. Each run is a thin, pure wrapper over an already
+ * unit-tested tool-logic function, normalized to `string → ToolResult` so steps
+ * compose generically. Importing this module pulls in the underlying tool
+ * libraries (some browser-only), so it must stay client-side.
  */
 
-export type PipeGroup = 'encoding' | 'json' | 'text' | 'code';
+export type PipeRun = (input: string, arg?: string) => ToolResult;
 
-export interface PipeArg {
-	/** Short technical label, e.g. "path". */
-	label: string;
-	placeholder: string;
-	default?: string;
-}
-
-export interface PipeOp {
-	id: string;
-	label: string;
-	group: PipeGroup;
-	/** Optional single free-text argument (e.g. a JSONPath). */
-	arg?: PipeArg;
-	run(input: string, arg?: string): ToolResult;
+export interface PipeOp extends PipeOpMeta {
+	run: PipeRun;
 }
 
 function jsonpathRun(input: string, arg?: string): ToolResult {
@@ -51,109 +41,52 @@ function jwtPayload(input: string): ToolResult {
 	return r.ok ? ok(JSON.stringify(r.value.payload, null, 2)) : r;
 }
 
-export const PIPE_OPS: PipeOp[] = [
-	// Encoding
-	{ id: 'base64-decode', label: 'Base64 decode', group: 'encoding', run: (i) => decodeBase64(i) },
-	{ id: 'base64-encode', label: 'Base64 encode', group: 'encoding', run: (i) => encodeBase64(i) },
-	{ id: 'url-decode', label: 'URL decode', group: 'encoding', run: (i) => decodeUrl(i) },
-	{ id: 'url-encode', label: 'URL encode', group: 'encoding', run: (i) => encodeUrl(i) },
-	{ id: 'hex-decode', label: 'Hex → text', group: 'encoding', run: (i) => decodeBytes(i, 'hex') },
-	{
-		id: 'hex-encode',
-		label: 'Text → hex',
-		group: 'encoding',
-		run: (i) => encodeBytes(i, { format: 'hex', separator: ' ', uppercase: false, prefix: false })
-	},
-	{
-		id: 'html-entities-decode',
-		label: 'HTML entities decode',
-		group: 'encoding',
-		run: (i) => decodeEntities(i)
-	},
-	{
-		id: 'html-entities-encode',
-		label: 'HTML entities encode',
-		group: 'encoding',
-		run: (i) => ok(encodeEntities(i))
-	},
+/** Run function per op id — kept in lockstep with PIPE_OP_META. */
+const RUNS: Record<string, PipeRun> = {
+	'base64-decode': (i) => decodeBase64(i),
+	'base64-encode': (i) => encodeBase64(i),
+	'url-decode': (i) => decodeUrl(i),
+	'url-encode': (i) => encodeUrl(i),
+	'hex-decode': (i) => decodeBytes(i, 'hex'),
+	'hex-encode': (i) => encodeBytes(i, { format: 'hex', separator: ' ', uppercase: false, prefix: false }),
+	'html-entities-decode': (i) => decodeEntities(i),
+	'html-entities-encode': (i) => ok(encodeEntities(i)),
 
-	// JSON & data
-	{
-		id: 'jwt-payload',
-		label: 'JWT → payload',
-		group: 'json',
-		run: jwtPayload
+	'jwt-payload': jwtPayload,
+	'json-pretty': (i) => formatJson(i, { indent: 2 }),
+	'json-minify': (i) => formatJson(i, { indent: 'min' }),
+	'json-sort-keys': (i) => formatJson(i, { indent: 2, sortKeys: true }),
+	jsonpath: jsonpathRun,
+	'json-to-yaml': (i) => convertData(i, 'json', 'yaml'),
+	'yaml-to-json': (i) => convertData(i, 'yaml', 'json'),
+	'json-to-csv': (i) => {
+		const r = jsonToCsv(i);
+		return r.ok ? ok(r.value.csv) : r;
 	},
-	{ id: 'json-pretty', label: 'JSON prettify', group: 'json', run: (i) => formatJson(i, { indent: 2 }) },
-	{ id: 'json-minify', label: 'JSON minify', group: 'json', run: (i) => formatJson(i, { indent: 'min' }) },
-	{
-		id: 'json-sort-keys',
-		label: 'JSON sort keys',
-		group: 'json',
-		run: (i) => formatJson(i, { indent: 2, sortKeys: true })
-	},
-	{
-		id: 'jsonpath',
-		label: 'JSONPath filter',
-		group: 'json',
-		arg: { label: 'path', placeholder: '$.user.name', default: '$' },
-		run: jsonpathRun
-	},
-	{ id: 'json-to-yaml', label: 'JSON → YAML', group: 'json', run: (i) => convertData(i, 'json', 'yaml') },
-	{ id: 'yaml-to-json', label: 'YAML → JSON', group: 'json', run: (i) => convertData(i, 'yaml', 'json') },
-	{
-		id: 'json-to-csv',
-		label: 'JSON → CSV',
-		group: 'json',
-		run: (i) => {
-			const r = jsonToCsv(i);
-			return r.ok ? ok(r.value.csv) : r;
-		}
-	},
-	{ id: 'json-to-ts', label: 'JSON → TypeScript', group: 'json', run: (i) => jsonToTypescript(i) },
-	{ id: 'json-schema', label: 'Infer JSON Schema', group: 'json', run: (i) => inferJsonSchema(i) },
+	'json-to-ts': (i) => jsonToTypescript(i),
+	'json-schema': (i) => inferJsonSchema(i),
 
-	// Text
-	{ id: 'uppercase', label: 'UPPERCASE', group: 'text', run: (i) => ok(i.toUpperCase()) },
-	{ id: 'lowercase', label: 'lowercase', group: 'text', run: (i) => ok(i.toLowerCase()) },
-	{ id: 'trim', label: 'Trim whitespace', group: 'text', run: (i) => ok(i.trim()) },
-	{ id: 'slugify', label: 'Slugify', group: 'text', run: (i) => ok(slugify(i)) },
-	{
-		id: 'sort-lines',
-		label: 'Sort lines',
-		group: 'text',
-		run: (i) => ok(processLines(i, { sort: 'asc' }).output)
-	},
-	{
-		id: 'dedupe-lines',
-		label: 'Dedupe lines',
-		group: 'text',
-		run: (i) => ok(processLines(i, { dedupe: true }).output)
-	},
+	uppercase: (i) => ok(i.toUpperCase()),
+	lowercase: (i) => ok(i.toLowerCase()),
+	trim: (i) => ok(i.trim()),
+	slugify: (i) => ok(slugify(i)),
+	'sort-lines': (i) => ok(processLines(i, { sort: 'asc' }).output),
+	'dedupe-lines': (i) => ok(processLines(i, { dedupe: true }).output),
 
-	// Code
-	{
-		id: 'sql-format',
-		label: 'SQL format',
-		group: 'code',
-		run: (i) => formatSql(i, { dialect: 'sql', keywordCase: 'upper', indent: 2 })
-	},
-	{ id: 'sql-minify', label: 'SQL minify', group: 'code', run: (i) => minifySql(i) },
-	{ id: 'css-format', label: 'CSS format', group: 'code', run: (i) => beautifyCode('css', i) },
-	{ id: 'js-format', label: 'JS format', group: 'code', run: (i) => beautifyCode('js', i) },
-	{ id: 'html-format', label: 'HTML format', group: 'code', run: (i) => beautifyCode('html', i) },
-	{ id: 'markdown-to-html', label: 'Markdown → HTML', group: 'code', run: (i) => markdownToHtml(i) },
-	{ id: 'html-to-markdown', label: 'HTML → Markdown', group: 'code', run: (i) => htmlToMarkdown(i) }
-];
+	'sql-format': (i) => formatSql(i, { dialect: 'sql', keywordCase: 'upper', indent: 2 }),
+	'sql-minify': (i) => minifySql(i),
+	'css-format': (i) => beautifyCode('css', i),
+	'js-format': (i) => beautifyCode('js', i),
+	'html-format': (i) => beautifyCode('html', i),
+	'markdown-to-html': (i) => markdownToHtml(i),
+	'html-to-markdown': (i) => htmlToMarkdown(i)
+};
+
+export const PIPE_OPS: PipeOp[] = PIPE_OP_META.map((meta) => ({
+	...meta,
+	run: RUNS[meta.id] ?? (() => err(`No implementation for "${meta.id}"`))
+}));
 
 export const PIPE_OP_BY_ID = new Map(PIPE_OPS.map((o) => [o.id, o]));
 
-export const PIPE_GROUPS: PipeGroup[] = ['encoding', 'json', 'text', 'code'];
-
-/** English group labels; the page localizes the surrounding chrome, not these. */
-export const PIPE_GROUP_LABELS: Record<PipeGroup, string> = {
-	encoding: 'Encoding',
-	json: 'JSON & Data',
-	text: 'Text',
-	code: 'Code & Markup'
-};
+export { PIPE_GROUPS, PIPE_GROUP_LABELS } from './op-meta';

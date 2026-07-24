@@ -59,6 +59,8 @@ const ja: Messages = {
 		// Pipeline (tool chains)
 		chainNavLabel: 'パイプライン',
 		chainNew: 'New',
+		chainSteps: 'ステップ',
+		chainMoreRecipes: '他のレシピ',
 		chainTitle: 'ツールパイプライン — ブラウザで開発ツールを連結 | onlinetools.dev',
 		chainMetaDescription:
 			'開発ツールをパイプラインに連結 — デコード・変換・抽出を一気に。各ステップの出力が次に渡り、すべてブラウザ内で動作し、レシピ全体が共有リンクに収まります。',

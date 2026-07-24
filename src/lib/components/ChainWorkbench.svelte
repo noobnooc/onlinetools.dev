@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import { t } from '$lib/i18n';
+	import { t, lp } from '$lib/i18n';
 	import PlusCorners from './PlusCorners.svelte';
 	import Eyebrow from './Eyebrow.svelte';
 	import {
@@ -10,7 +10,9 @@
 		PIPE_GROUP_LABELS,
 		type PipeOp
 	} from '$lib/chain/ops';
-	import { runChain, encodeRecipe, decodeRecipe, PRESETS, type Step } from '$lib/chain/engine';
+	import { runChain, encodeRecipe, decodeRecipe } from '$lib/chain/engine';
+	import type { Step, Recipe } from '$lib/chain/types';
+	import { CHAIN_PRESETS } from '$lib/chain/presets';
 	import {
 		Plus,
 		X,
@@ -29,13 +31,23 @@
 	 * prerender-safe. Initial state hydrates synchronously from the share
 	 * fragment before any effect runs, so a shared link reproduces the pipeline.
 	 */
+	// A preset page passes its recipe as `initial`; a shared link (hash) wins
+	// over it so an edited-then-shared preset URL still reproduces exactly.
+	let { initial }: { initial?: Recipe } = $props();
+
 	let input = $state('');
 	let steps = $state<Step[]>([]);
 	if (browser) {
-		const r = decodeRecipe(location.hash);
-		if (r && (r.input !== '' || r.steps.length > 0)) {
-			input = r.input;
-			steps = r.steps;
+		const hashRecipe = decodeRecipe(location.hash);
+		// A shared link (hash) wins; otherwise seed from the preset prop once.
+		// svelte-ignore state_referenced_locally
+		const seed =
+			hashRecipe && (hashRecipe.input !== '' || hashRecipe.steps.length > 0)
+				? hashRecipe
+				: (initial ?? null);
+		if (seed) {
+			input = seed.input;
+			steps = seed.steps.map((s) => ({ ...s }));
 		}
 	}
 
@@ -90,12 +102,6 @@
 		steps = steps.map((s, idx) => (idx === i ? { ...s, arg: value } : s));
 	}
 
-	function loadPreset(recipeInput: string, recipeSteps: Step[]) {
-		input = recipeInput;
-		steps = recipeSteps.map((s) => ({ ...s }));
-		addOpen = false;
-	}
-
 	function clearAll() {
 		input = '';
 		steps = [];
@@ -135,17 +141,16 @@
 	}
 </script>
 
-<!-- Starters -->
+<!-- Starters — each links to its own indexable preset page -->
 <div class="mb-6 flex flex-wrap items-center gap-x-2 gap-y-1.5">
 	<span class="font-mono text-[11px] text-dim">{t('chainStarters')}</span>
-	{#each PRESETS as p (p.id)}
-		<button
-			type="button"
-			onclick={() => loadPreset(p.recipe.input, p.recipe.steps)}
+	{#each CHAIN_PRESETS as p (p.slug)}
+		<a
+			href={lp('/chain/' + p.slug)}
 			class="rounded-md border border-line bg-surface px-2 py-0.5 text-[12px] text-dim transition-colors duration-120 hover:border-accent/50 hover:text-accent"
 		>
 			{p.title}
-		</button>
+		</a>
 	{/each}
 </div>
 

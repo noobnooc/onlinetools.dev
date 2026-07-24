@@ -59,6 +59,8 @@ const ko: Messages = {
 		// Pipeline (tool chains)
 		chainNavLabel: '파이프라인',
 		chainNew: 'New',
+		chainSteps: '단계',
+		chainMoreRecipes: '다른 레시피',
 		chainTitle: '도구 파이프라인 — 브라우저에서 개발 도구 연결 | onlinetools.dev',
 		chainMetaDescription:
 			'개발 도구를 파이프라인으로 연결 — 디코딩, 변환, 추출을 한 번에. 각 단계의 출력이 다음 단계로 이어지고, 모두 브라우저에서 실행되며, 전체 레시피가 공유 링크에 담깁니다.',

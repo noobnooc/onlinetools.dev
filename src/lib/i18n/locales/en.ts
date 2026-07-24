@@ -67,6 +67,8 @@ const en = {
 		// Pipeline (tool chains)
 		chainNavLabel: 'Pipeline',
 		chainNew: 'New',
+		chainSteps: 'Steps',
+		chainMoreRecipes: 'More recipes',
 		chainTitle: 'Tool Pipeline — chain developer tools in your browser | onlinetools.dev',
 		chainMetaDescription:
 			'Chain developer tools into a pipeline — decode, transform and extract in one flow. Each step feeds the next, everything runs in your browser, and the whole recipe lives in a shareable link.',

@@ -59,6 +59,8 @@ const fr: Messages = {
 		// Pipeline (tool chains)
 		chainNavLabel: 'Pipeline',
 		chainNew: 'Nouveau',
+		chainSteps: 'Étapes',
+		chainMoreRecipes: 'Plus de recettes',
 		chainTitle: 'Pipeline d’outils — enchaînez des outils pour développeurs dans votre navigateur | onlinetools.dev',
 		chainMetaDescription:
 			'Enchaînez des outils pour développeurs dans un pipeline : décodez, transformez et extrayez en un seul flux. Chaque étape alimente la suivante, tout s’exécute dans votre navigateur et la recette complète tient dans un lien partageable.',
