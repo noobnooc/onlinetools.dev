@@ -45,6 +45,16 @@ const it: Messages = {
 		kbdCopyResult: 'copia risultato',
 		kbdConfirm: 'conferma',
 		kbdAllShortcuts: 'tutte le scorciatoie',
+
+		// Paste hero (homepage)
+		pasteHeroHeading: 'Incolla qualsiasi cosa — ottieni subito lo strumento giusto',
+		pasteHeroPlaceholder: 'Incolla un JWT, JSON, un timestamp Unix, un colore, un’URL, un’immagine…',
+		tryLabel: 'Prova',
+		plainText: 'Testo semplice',
+		noMatchHint: 'Nessuna corrispondenza esatta — scegli uno strumento di testo qui sotto o cerca tutto',
+		runHint: 'esegui',
+		newlineHint: 'a capo',
+		clearHint: 'cancella',
 		toolsTitle: 'Tutti gli strumenti per sviluppatori — onlinetools.dev',
 		toolsMetaDescription:
 			'Sfoglia tutti gli strumenti di onlinetools.dev: JSON, YAML, Base64, JWT, timestamp, cron, regex, diff, UUID, hash, codici QR e altro — tutto in locale nel tuo browser.',

@@ -44,6 +44,16 @@ const zh: Messages = {
 		kbdCopyResult: '复制结果',
 		kbdConfirm: '确认',
 		kbdAllShortcuts: '全部快捷键',
+
+		// Paste hero (homepage)
+		pasteHeroHeading: '粘贴任何内容 —— 立刻找到对的工具',
+		pasteHeroPlaceholder: '粘贴 JWT、JSON、Unix 时间戳、颜色、URL、图片……',
+		tryLabel: '试试',
+		plainText: '纯文本',
+		noMatchHint: '没有精确匹配 —— 从下面挑个文本工具，或搜索全部',
+		runHint: '运行',
+		newlineHint: '换行',
+		clearHint: '清除',
 		toolsTitle: '全部开发者工具 — onlinetools.dev',
 		toolsMetaDescription:
 			'浏览 onlinetools.dev 的全部工具:JSON、YAML、Base64、JWT、时间戳、Cron、正则、Diff、UUID、哈希、二维码等 — 全部在浏览器本地运行。',
