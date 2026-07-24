@@ -64,6 +64,23 @@ const en = {
 		newlineHint: 'newline',
 		clearHint: 'clear',
 
+		// Pipeline (tool chains)
+		chainNavLabel: 'Pipeline',
+		chainNew: 'New',
+		chainTitle: 'Tool Pipeline — chain developer tools in your browser | onlinetools.dev',
+		chainMetaDescription:
+			'Chain developer tools into a pipeline — decode, transform and extract in one flow. Each step feeds the next, everything runs in your browser, and the whole recipe lives in a shareable link.',
+		chainEyebrow: 'workbench · local-first',
+		chainHeading: 'Pipeline',
+		chainSub: 'Chain tools into a recipe — each step feeds the next. Runs entirely in your browser.',
+		chainInputPlaceholder: 'Paste or type the starting input…',
+		chainAddStep: 'Add step',
+		chainSearchSteps: 'Search steps…',
+		chainStarters: 'Starters',
+		chainEmpty: 'Add a step — each step feeds the next.',
+		chainHomeCta: 'Chain tools into a pipeline',
+		chainHomeCtaSub: 'Pipe one tool into the next — decode, transform and extract in one flow.',
+
 		// Tools index page
 		toolsTitle: 'All developer tools — onlinetools.dev',
 		toolsMetaDescription:

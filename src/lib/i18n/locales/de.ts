@@ -55,6 +55,23 @@ const de: Messages = {
 		runHint: 'ausführen',
 		newlineHint: 'Zeilenumbruch',
 		clearHint: 'löschen',
+
+		// Pipeline (tool chains)
+		chainNavLabel: 'Pipeline',
+		chainNew: 'Neu',
+		chainTitle: 'Tool-Pipeline — Entwicklertools im Browser verketten | onlinetools.dev',
+		chainMetaDescription:
+			'Verkette Entwicklertools zu einer Pipeline – dekodieren, transformieren und extrahieren in einem Fluss. Jeder Schritt speist den nächsten, alles läuft im Browser, und das ganze Rezept steckt in einem teilbaren Link.',
+		chainEyebrow: 'Werkbank · local-first',
+		chainHeading: 'Pipeline',
+		chainSub: 'Verkette Tools zu einem Rezept – jeder Schritt speist den nächsten. Läuft vollständig im Browser.',
+		chainInputPlaceholder: 'Ausgangseingabe einfügen oder eintippen…',
+		chainAddStep: 'Schritt hinzufügen',
+		chainSearchSteps: 'Schritte suchen…',
+		chainStarters: 'Beispiele',
+		chainEmpty: 'Füge einen Schritt hinzu – jeder Schritt speist den nächsten.',
+		chainHomeCta: 'Tools zu einer Pipeline verketten',
+		chainHomeCtaSub: 'Leite die Ausgabe eines Tools ins nächste – dekodieren, transformieren und extrahieren in einem Fluss.',
 		toolsTitle: 'Alle Entwickler-Tools — onlinetools.dev',
 		toolsMetaDescription:
 			'Alle Tools auf onlinetools.dev: JSON, YAML, Base64, JWT, Timestamps, Cron, Regex, Diff, UUID, Hashing, QR-Codes und mehr — alles läuft lokal in deinem Browser.',

@@ -9,7 +9,7 @@
 	import Eyebrow from '$lib/components/Eyebrow.svelte';
 	import PlusCorners from '$lib/components/PlusCorners.svelte';
 	import SeoHead from '$lib/components/SeoHead.svelte';
-	import { ClipboardPaste, WifiOff, ArrowRight } from 'lucide-svelte';
+	import { ClipboardPaste, WifiOff, ArrowRight, Workflow } from 'lucide-svelte';
 
 	const categories = [...new Set(TOOLS.map((t) => t.category))] as ToolCategory[];
 
@@ -74,9 +74,27 @@
 			</div>
 		</div>
 
-		<div class="mb-10">
+		<div class="mb-3">
 			<PasteHero />
 		</div>
+
+		<!-- Pipeline entry: the workbench wedge, one hop from the hero. -->
+		<a
+			href={lp('/chain')}
+			class="group mb-10 flex items-center gap-3 rounded-(--radius-lg) border border-line bg-surface px-4 py-3 transition-colors duration-120 hover:border-accent/50"
+		>
+			<span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-line bg-surface-2 text-accent">
+				<Workflow size={15} />
+			</span>
+			<span class="min-w-0">
+				<span class="flex items-center gap-2 text-sm font-medium">
+					{t('chainHomeCta')}
+					<span class="rounded-sm border border-accent/40 bg-accent/10 px-1 font-mono text-[9px] tracking-wide text-accent uppercase">{t('chainNew')}</span>
+				</span>
+				<span class="mt-0.5 block text-xs text-dim">{t('chainHomeCtaSub')}</span>
+			</span>
+			<ArrowRight size={14} class="ml-auto shrink-0 text-dim transition-colors duration-120 group-hover:text-accent" />
+		</a>
 
 		<!-- Favorites: local-only, rendered when the visitor has starred tools. -->
 		{#if favoriteTools.length > 0}

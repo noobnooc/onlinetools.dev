@@ -54,6 +54,23 @@ const zh: Messages = {
 		runHint: '运行',
 		newlineHint: '换行',
 		clearHint: '清除',
+
+		// Pipeline (tool chains)
+		chainNavLabel: '管线',
+		chainNew: 'New',
+		chainTitle: '工具管线 —— 在浏览器里串联开发者工具 | onlinetools.dev',
+		chainMetaDescription:
+			'把开发者工具串成一条管线 —— 解码、转换、提取一气呵成。每一步的输出喂给下一步，全部在浏览器里运行，整条配方就藏在一个可分享的链接里。',
+		chainEyebrow: '工作台 · 本地优先',
+		chainHeading: '管线',
+		chainSub: '把工具串成配方 —— 每一步的输出喂给下一步。全部在你的浏览器里运行。',
+		chainInputPlaceholder: '粘贴或输入起始内容……',
+		chainAddStep: '添加步骤',
+		chainSearchSteps: '搜索步骤……',
+		chainStarters: '示例',
+		chainEmpty: '添加一个步骤 —— 每一步的输出喂给下一步。',
+		chainHomeCta: '把工具串成一条管线',
+		chainHomeCtaSub: '让一个工具的输出直接流进下一个 —— 解码、转换、提取一气呵成。',
 		toolsTitle: '全部开发者工具 — onlinetools.dev',
 		toolsMetaDescription:
 			'浏览 onlinetools.dev 的全部工具:JSON、YAML、Base64、JWT、时间戳、Cron、正则、Diff、UUID、哈希、二维码等 — 全部在浏览器本地运行。',

@@ -7,7 +7,7 @@
 	import Kbd from './Kbd.svelte';
 	import ThemeToggle from './ThemeToggle.svelte';
 	import LanguageToggle from './LanguageToggle.svelte';
-	import { Search, House } from 'lucide-svelte';
+	import { Search, House, Workflow } from 'lucide-svelte';
 
 	/** Rendered inside both the desktop rail and the mobile drawer. */
 	interface Props {
@@ -90,6 +90,19 @@
 		>
 			<House size={14} class="shrink-0 {current === lp('/') ? 'text-accent' : 'text-dim/70'}" />
 			{t('overview')}
+		</a>
+
+		<a
+			href={lp('/chain')}
+			aria-current={current === lp('/chain') ? 'page' : undefined}
+			onclick={onnavigate}
+			class={rowClass(current === lp('/chain'))}
+		>
+			<Workflow size={14} class="shrink-0 {current === lp('/chain') ? 'text-accent' : 'text-dim/70'}" />
+			<span class="truncate">{t('chainNavLabel')}</span>
+			<span class="ml-auto rounded-sm border border-accent/40 bg-accent/10 px-1 font-mono text-[9px] tracking-wide text-accent uppercase">
+				{t('chainNew')}
+			</span>
 		</a>
 
 		{#each categories as cat (cat)}

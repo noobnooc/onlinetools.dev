@@ -55,6 +55,23 @@ const ja: Messages = {
 		runHint: '実行',
 		newlineHint: '改行',
 		clearHint: 'クリア',
+
+		// Pipeline (tool chains)
+		chainNavLabel: 'パイプライン',
+		chainNew: 'New',
+		chainTitle: 'ツールパイプライン — ブラウザで開発ツールを連結 | onlinetools.dev',
+		chainMetaDescription:
+			'開発ツールをパイプラインに連結 — デコード・変換・抽出を一気に。各ステップの出力が次に渡り、すべてブラウザ内で動作し、レシピ全体が共有リンクに収まります。',
+		chainEyebrow: 'ワークベンチ · ローカルファースト',
+		chainHeading: 'パイプライン',
+		chainSub: 'ツールをレシピに連結 — 各ステップの出力が次に渡ります。すべてブラウザ内で動作。',
+		chainInputPlaceholder: '最初の入力を貼り付けまたは入力…',
+		chainAddStep: 'ステップを追加',
+		chainSearchSteps: 'ステップを検索…',
+		chainStarters: 'サンプル',
+		chainEmpty: 'ステップを追加 — 各ステップの出力が次に渡ります。',
+		chainHomeCta: 'ツールをパイプラインに連結',
+		chainHomeCtaSub: 'あるツールの出力を次へ — デコード・変換・抽出を一気に。',
 		toolsTitle: 'すべての開発者ツール — onlinetools.dev',
 		toolsMetaDescription:
 			'onlinetools.dev の全ツール一覧:JSON、YAML、Base64、JWT、タイムスタンプ、Cron、正規表現、差分、UUID、ハッシュ、QR コードなど — すべてブラウザ内で動作。',
