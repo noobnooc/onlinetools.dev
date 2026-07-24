@@ -42,6 +42,28 @@ const de: Messages = {
 		aboutEditPage: 'Diese Seite bearbeiten',
 		aboutBuiltBy: 'Erstellt von',
 
+		// About / Why page — the manifesto body (localized)
+		aboutH1: 'Ein Taschenrechner sollte nicht nach Hause telefonieren.',
+		aboutLead:
+			'Die meisten „Online-Tool“-Seiten sind eine Wand aus Werbung um ein Textfeld, das alles, was du einfügst, still an einen Server schickt, den du nie zu sehen bekommst. Ich hatte es satt, auf irgendeiner Seite ein JWT zu dekodieren und eine Sekunde zu spät zu merken, dass ich mein Token gerade einem Fremden gegeben hatte. onlinetools.dev ist meine Antwort: dieselben Werkzeuge wie jeden Tag, nur dass der Computer, der die Arbeit macht, der ist, der schon vor dir steht.',
+		aboutS1Head: 'Alles läuft auf deinem Rechner',
+		aboutS1Body:
+			'Jedes Werkzeug hier ist reine Berechnung in deinem Browser — kein Hin und Her, kein Server, nichts, wohin man etwas hochladen könnte. Dein JSON, deine Zugriffstokens, jene {env}, die du eigentlich erst säubern wolltest: Sie gehen von der Zwischenablage auf deinen Bildschirm und bleiben dort. Ich habe es so gebaut, nicht weil es billiger ist (das ist es), sondern weil deine Daten mich nichts angehen.',
+		aboutS2Head: 'Keine Werbung. Keine Tracker. Kein Konto.',
+		aboutS2Body:
+			'Kein Analyse-Skript zählt deine Tastenanschläge, kein Cookie-Banner (es gibt keine Cookies, denen man zustimmen müsste), kein „zum Fortfahren anmelden“, kein Upsell, das drei Schritte weiter lauert. Ich weiß wirklich nicht, wer du bist oder was du einfügst, und genau darum geht es: Ein Werkzeug soll seine Arbeit tun und dich in dem Moment vergessen, in dem du den Tab schließt.',
+		aboutS3Head: 'Es funktioniert, wenn das Netz nicht funktioniert',
+		aboutS3Body:
+			'Lade eine Seite einmal, und sie gehört dir. Die ganze Seite ist statisch und wird von einem Service Worker zwischengespeichert, also laufen die Werkzeuge im Flugzeug, in der U-Bahn oder hinter einem abgeriegelten Firmen-Proxy einfach weiter. Der Flugmodus ist ein völlig guter Ort, um JSON zu formatieren.',
+		aboutS4Head: 'Schnell, und aus dem Weg',
+		aboutS4Body:
+			'Kein Begrüßungsbildschirm, kein „akzeptiere unsere Bedingungen“, kein Dialog zwischen dir und der Arbeit. Drücke {kbd}, um zu jedem Werkzeug zu springen, füge etwas ein, und das passende taucht von selbst auf, und jedes Ergebnis ist einen Tastendruck von deiner Zwischenablage entfernt. Tastatur zuerst, durch und durch.',
+		aboutVerifyIntro:
+			'Datenschutzversprechen sind billig — jede Seite sagt, sie „schätzt deine Privatsphäre“, während sie dich verkauft. Hier also etwas zum Nachprüfen statt zum Glauben. Dieser Zähler beobachtet die Netzwerkaktivität deines eigenen Browsers, live:',
+		aboutBugLine:
+			'Sollte ein Werkzeug deine Daten je irgendwohin senden, wohin es nicht darf, ist das ein Bug, kein Geschäftsmodell — {issue}, und ich behebe es.',
+		aboutBugLink: 'melde ein Issue',
+
 		// Favorites (stored locally in this browser)
 		favorites: 'Favoriten',
 		favoriteAdd: 'Zu Favoriten hinzufügen',

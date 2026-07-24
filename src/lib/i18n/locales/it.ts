@@ -42,6 +42,28 @@ const it: Messages = {
 		aboutEditPage: 'Modifica questa pagina',
 		aboutBuiltBy: 'Creato da',
 
+		// About / Why page — the manifesto body (localized)
+		aboutH1: 'Una calcolatrice non dovrebbe telefonare a casa.',
+		aboutLead:
+			'La maggior parte dei siti di “strumenti online” è un muro di pubblicità attorno a una casella di testo che spedisce in silenzio ciò che incolli a un server che non vedrai mai. Mi sono stancato di decodificare un JWT su una pagina qualunque e accorgermi, un secondo troppo tardi, di aver appena consegnato il mio token a uno sconosciuto. onlinetools.dev è la mia risposta: gli stessi strumenti di ogni giorno, solo che il computer che fa il lavoro è quello che hai già davanti.',
+		aboutS1Head: 'Tutto gira sulla tua macchina',
+		aboutS1Body:
+			'Ogni strumento qui è puro calcolo nel tuo browser — nessun andata e ritorno, nessun server, nessun posto dove caricare alcunché. Il tuo JSON, i tuoi token di accesso, quel {env} che volevi ripulire prima: vanno dagli appunti al tuo schermo e si fermano lì. L’ho fatto così non perché costa meno (lo è), ma perché i tuoi dati non sono affar mio.',
+		aboutS2Head: 'Niente pubblicità. Niente tracker. Niente account.',
+		aboutS2Body:
+			'Non c’è nessuno script di analisi che conta i tuoi tasti, nessun banner dei cookie (non ci sono cookie da accettare), nessun “accedi per continuare”, nessun upsell in agguato tre passi più avanti. Davvero non so chi sei né cosa incolli, ed è proprio questo il punto: uno strumento deve fare il suo lavoro e dimenticarti nel momento in cui chiudi la scheda.',
+		aboutS3Head: 'Funziona quando la rete non funziona',
+		aboutS3Body:
+			'Carica una pagina una volta ed è tua. Tutto il sito è statico e messo in cache da un service worker, così su un aereo, in metropolitana o dietro un proxy aziendale blindato, gli strumenti continuano a funzionare. La modalità aereo è un posto perfetto per formattare JSON.',
+		aboutS4Head: 'Veloce, e senza intralciarti',
+		aboutS4Body:
+			'Nessuna schermata iniziale, nessun “accetta i termini”, nessuna finestra tra te e il lavoro. Premi {kbd} per saltare a qualsiasi strumento, incolla qualcosa e quello giusto compare da solo, e ogni risultato è a un tasto dai tuoi appunti. Prima la tastiera, dall’inizio alla fine.',
+		aboutVerifyIntro:
+			'Le promesse sulla privacy costano poco — ogni sito dice di “tenere alla tua privacy” mentre ti vende. Ecco allora qualcosa da verificare invece che da credere. Questo contatore sorveglia in tempo reale l’attività di rete del tuo stesso browser:',
+		aboutBugLine:
+			'Se uno strumento dovesse mai mandare i tuoi dati dove non deve, è un bug, non un modello di business — {issue} e lo sistemo.',
+		aboutBugLink: 'apri una issue',
+
 		// Favorites (stored locally in this browser)
 		favorites: 'Preferiti',
 		favoriteAdd: 'Aggiungi ai preferiti',

@@ -48,6 +48,28 @@ const en = {
 		aboutEditPage: 'Edit this page',
 		aboutBuiltBy: 'Built by',
 
+		// About / Why page — the manifesto body (localized)
+		aboutH1: 'A calculator shouldn’t phone home.',
+		aboutLead:
+			'Most “online tool” sites are a wall of ads wrapped around a text box that quietly ships whatever you paste to a server you’ll never see. I got tired of decoding a JWT on some random page and realizing, a second too late, that I’d just handed my token to a stranger. onlinetools.dev is my answer: the same tools you reach for every day, except the computer doing the work is the one already in front of you.',
+		aboutS1Head: 'Everything runs on your machine',
+		aboutS1Body:
+			'Every tool here is plain computation in your browser — no round trip, no server, nothing to upload to. Your JSON, your access tokens, that {env} you meant to scrub first: they go from your clipboard to your screen and stop there. I built it this way not because it’s cheaper to run (it is) but because your data is none of my business.',
+		aboutS2Head: 'No ads. No trackers. No account.',
+		aboutS2Body:
+			'There’s no analytics script counting your keystrokes, no cookie banner (there are no cookies to consent to), no “sign in to continue,” no upsell waiting three steps in. I genuinely do not know who you are or what you paste, and that’s the point — a tool should do its job and forget you the moment you close the tab.',
+		aboutS3Head: 'It works when the network doesn’t',
+		aboutS3Body:
+			'Load a page once and it’s yours to keep. The whole site is static and cached by a service worker, so on a plane, in a subway, or behind a locked-down corporate proxy, the tools keep running. Airplane mode is a perfectly good place to format JSON.',
+		aboutS4Head: 'Fast, and out of your way',
+		aboutS4Body:
+			'No splash screen, no “accept our terms,” no modal between you and the work. Press {kbd} to jump to any tool, paste anything and the right one surfaces itself, and every result is one keystroke from your clipboard. Keyboard-first, all the way down.',
+		aboutVerifyIntro:
+			'Privacy claims are cheap — every site says it “values your privacy” on the way to selling you. So here is something to check instead of believe. This counter watches your browser’s own network activity, live:',
+		aboutBugLine:
+			'If a tool ever sends your data somewhere it shouldn’t, that’s a bug, not a business model — {issue} and I’ll fix it.',
+		aboutBugLink: 'open an issue',
+
 		// Favorites (stored locally in this browser)
 		favorites: 'Favorites',
 		favoriteAdd: 'Add to favorites',

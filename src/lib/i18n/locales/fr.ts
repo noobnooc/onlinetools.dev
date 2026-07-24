@@ -42,6 +42,28 @@ const fr: Messages = {
 		aboutEditPage: 'Modifier cette page',
 		aboutBuiltBy: 'Créé par',
 
+		// About / Why page — the manifesto body (localized)
+		aboutH1: 'Une calculatrice ne devrait pas téléphoner à la maison.',
+		aboutLead:
+			'La plupart des sites d’« outils en ligne » sont un mur de publicités autour d’un champ de texte qui envoie discrètement ce que vous collez vers un serveur que vous ne verrez jamais. J’en ai eu assez de décoder un JWT sur une page quelconque et de réaliser, une seconde trop tard, que je venais de confier mon jeton à un inconnu. onlinetools.dev est ma réponse : les mêmes outils qu’au quotidien, sauf que l’ordinateur qui fait le travail est celui déjà devant vous.',
+		aboutS1Head: 'Tout s’exécute sur votre machine',
+		aboutS1Body:
+			'Chaque outil ici n’est que du calcul dans votre navigateur — aucun aller-retour, aucun serveur, nulle part où téléverser quoi que ce soit. Votre JSON, vos jetons d’accès, ce {env} que vous comptiez nettoyer d’abord : ils vont de votre presse-papiers à votre écran et s’arrêtent là. Je l’ai fait ainsi non parce que c’est moins cher (ça l’est) mais parce que vos données ne me regardent pas.',
+		aboutS2Head: 'Pas de pub. Pas de traqueurs. Pas de compte.',
+		aboutS2Body:
+			'Aucun script d’analyse ne compte vos frappes, aucun bandeau de cookies (il n’y a pas de cookies à accepter), aucun « connectez-vous pour continuer », aucune offre payante qui attend trois étapes plus loin. Je ne sais vraiment pas qui vous êtes ni ce que vous collez, et c’est tout l’intérêt : un outil doit faire son travail puis vous oublier dès que vous fermez l’onglet.',
+		aboutS3Head: 'Ça marche quand le réseau ne marche plus',
+		aboutS3Body:
+			'Chargez une page une fois et elle est à vous. Tout le site est statique et mis en cache par un service worker, donc dans un avion, dans le métro ou derrière un proxy d’entreprise verrouillé, les outils continuent de tourner. Le mode avion est un très bon endroit pour formater du JSON.',
+		aboutS4Head: 'Rapide, et sans vous gêner',
+		aboutS4Body:
+			'Pas d’écran d’accueil, pas d’« acceptez nos conditions », aucune fenêtre entre vous et le travail. Appuyez sur {kbd} pour rejoindre n’importe quel outil, collez quelque chose et le bon apparaît de lui-même, et chaque résultat est à une touche de votre presse-papiers. Le clavier d’abord, de bout en bout.',
+		aboutVerifyIntro:
+			'Les promesses de confidentialité ne coûtent rien — chaque site dit « respecter votre vie privée » en chemin pour vous vendre. Voici donc quelque chose à vérifier plutôt qu’à croire. Ce compteur surveille en direct l’activité réseau de votre propre navigateur :',
+		aboutBugLine:
+			'Si un outil envoyait un jour vos données là où il ne faut pas, c’est un bug, pas un modèle économique — {issue} et je corrige.',
+		aboutBugLink: 'ouvrez un ticket',
+
 		// Favorites (stored locally in this browser)
 		favorites: 'Favoris',
 		favoriteAdd: 'Ajouter aux favoris',

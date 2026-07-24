@@ -42,6 +42,28 @@ const es: Messages = {
 		aboutEditPage: 'Editar esta página',
 		aboutBuiltBy: 'Hecho por',
 
+		// About / Why page — the manifesto body (localized)
+		aboutH1: 'Una calculadora no debería llamar a casa.',
+		aboutLead:
+			'La mayoría de los sitios de “herramientas online” son un muro de anuncios alrededor de un cuadro de texto que envía en silencio lo que pegas a un servidor que nunca verás. Me cansé de decodificar un JWT en una página cualquiera y darme cuenta, un segundo tarde, de que acababa de entregar mi token a un desconocido. onlinetools.dev es mi respuesta: las mismas herramientas de siempre, salvo que el ordenador que hace el trabajo es el que ya tienes delante.',
+		aboutS1Head: 'Todo se ejecuta en tu máquina',
+		aboutS1Body:
+			'Cada herramienta aquí es puro cálculo en tu navegador — sin ida y vuelta, sin servidor, sin ningún sitio al que subir nada. Tu JSON, tus tokens de acceso, ese {env} que pensabas limpiar primero: van de tu portapapeles a tu pantalla y ahí se quedan. Lo hice así no porque salga más barato (que lo es), sino porque tus datos no son asunto mío.',
+		aboutS2Head: 'Sin anuncios. Sin rastreadores. Sin cuenta.',
+		aboutS2Body:
+			'No hay ningún script de analítica contando tus pulsaciones, ni banner de cookies (no hay cookies que consentir), ni “inicia sesión para continuar”, ni una venta adicional esperando tres pasos más allá. De verdad no sé quién eres ni qué pegas, y ese es el punto: una herramienta debe hacer su trabajo y olvidarte en cuanto cierras la pestaña.',
+		aboutS3Head: 'Funciona cuando la red no',
+		aboutS3Body:
+			'Carga una página una vez y es tuya para siempre. Todo el sitio es estático y un service worker lo guarda en caché, así que en un avión, en el metro o detrás de un proxy corporativo bien cerrado, las herramientas siguen funcionando. El modo avión es un sitio perfecto para formatear JSON.',
+		aboutS4Head: 'Rápido, y sin estorbar',
+		aboutS4Body:
+			'Sin pantalla de bienvenida, sin “acepta nuestros términos”, sin ningún modal entre tú y el trabajo. Pulsa {kbd} para saltar a cualquier herramienta, pega algo y la adecuada aparece sola, y cada resultado está a una tecla de tu portapapeles. Primero el teclado, de arriba abajo.',
+		aboutVerifyIntro:
+			'Las promesas de privacidad son baratas — todos los sitios dicen que “valoran tu privacidad” de camino a venderte. Así que aquí tienes algo para comprobar en vez de creer. Este contador vigila la propia actividad de red de tu navegador, en directo:',
+		aboutBugLine:
+			'Si alguna herramienta llegara a enviar tus datos a donde no debe, eso es un fallo, no un modelo de negocio — {issue} y lo arreglo.',
+		aboutBugLink: 'abre una incidencia',
+
 		// Favorites (stored locally in this browser)
 		favorites: 'Favoritos',
 		favoriteAdd: 'Añadir a favoritos',
