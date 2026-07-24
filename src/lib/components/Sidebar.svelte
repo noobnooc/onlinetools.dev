@@ -7,6 +7,7 @@
 	import Kbd from './Kbd.svelte';
 	import ThemeToggle from './ThemeToggle.svelte';
 	import LanguageToggle from './LanguageToggle.svelte';
+	import GitHubLink from './GitHubLink.svelte';
 	import { Search, House, Workflow } from 'lucide-svelte';
 
 	/** Rendered inside both the desktop rail and the mobile drawer. */
@@ -55,6 +56,7 @@
 			<span class="block text-[11px] text-dim">developer tools</span>
 		</a>
 		<div class="flex shrink-0 items-center gap-1">
+			<GitHubLink />
 			<LanguageToggle />
 			<ThemeToggle />
 		</div>
