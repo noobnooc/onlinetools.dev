@@ -21,6 +21,27 @@ const ko: Messages = {
 		openNav: '내비게이션 열기',
 		searchTools: '도구 검색',
 
+		// About / Why page
+		about: '소개',
+		aboutTitle: 'onlinetools.dev의 이유 — 로컬 우선, 추적 없음, 검증 가능 | onlinetools.dev',
+		aboutMetaDescription:
+			'onlinetools.dev가 존재하는 이유: 모든 도구가 브라우저에서 실행되고, 붙여넣은 내용은 업로드되지 않습니다. 광고 없음, 추적 없음, 로그인 없음 — 게다가 실시간 표시기로 직접 확인할 수 있습니다.',
+		aboutEyebrow: '존재하는 이유 · 신뢰',
+		aboutVerifyHeading: '제 말을 믿지 말고 직접 확인하세요',
+		aboutVerifyHint:
+			'아래에 무엇이든 입력하거나 붙여넣어 보세요. 카운트는 계속 0에 머뭅니다 — 모든 입력은 당신의 기기에서 처리됩니다.',
+		aboutRequestsLabel: '이 페이지를 연 뒤의 네트워크 요청',
+		aboutRequestsNote:
+			'이 숫자를 바꿀 수 있는 유일한 것은 다른 도구를 여는 것입니다 — 그때 같은 도메인에서 이 사이트 자체의 코드를 불러옵니다. 당신이 붙여넣은 내용은 절대 아닙니다.',
+		aboutVerifyPlaceholder: '무엇이든 입력하거나 붙여넣으세요 — 아무것도 브라우저를 벗어나지 않습니다…',
+		aboutOfflineReady: '오프라인 지원',
+		aboutOfflineCaching: '캐싱 중…',
+		aboutDevtools:
+			'더 확실한 증거를 원하세요? 브라우저 개발자 도구를 열고 Network(네트워크) 탭으로 전환한 뒤 붙여넣어 보세요. 아무 일도 일어나지 않는 것을 보게 됩니다.',
+		aboutViewSource: '소스 보기',
+		aboutEditPage: '이 페이지 편집',
+		aboutBuiltBy: '만든 사람',
+
 		// Favorites (stored locally in this browser)
 		favorites: '즐겨찾기',
 		favoriteAdd: '즐겨찾기에 추가',

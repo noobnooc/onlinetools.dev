@@ -27,6 +27,27 @@ const en = {
 		openNav: 'Open navigation',
 		searchTools: 'Search tools',
 
+		// About / Why page (chrome; the manifesto body itself is English-only)
+		about: 'About',
+		aboutTitle: 'Why onlinetools.dev — local-first, no tracking, verifiable | onlinetools.dev',
+		aboutMetaDescription:
+			'Why onlinetools.dev exists: every tool runs in your browser, nothing you paste is uploaded, no ads, no trackers, no login — and a live monitor lets you verify it yourself.',
+		aboutEyebrow: 'why this exists · trust',
+		aboutVerifyHeading: "Don't take my word for it",
+		aboutVerifyHint:
+			'Type or paste anything below. The counter stays at zero — every keystroke is handled here, on your machine.',
+		aboutRequestsLabel: 'Network requests since this page opened',
+		aboutRequestsNote:
+			'The only thing that can move this number is opening another tool, which loads first-party code from this same domain. What you paste never does.',
+		aboutVerifyPlaceholder: 'Type or paste anything — nothing leaves your browser…',
+		aboutOfflineReady: 'Offline-ready',
+		aboutOfflineCaching: 'Caching…',
+		aboutDevtools:
+			'Want harder proof? Open your browser DevTools, switch to the Network tab, then paste. You will watch nothing happen.',
+		aboutViewSource: 'View source',
+		aboutEditPage: 'Edit this page',
+		aboutBuiltBy: 'Built by',
+
 		// Favorites (stored locally in this browser)
 		favorites: 'Favorites',
 		favoriteAdd: 'Add to favorites',

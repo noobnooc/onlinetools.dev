@@ -3,5 +3,5 @@
  * bump on every deploy — the footer badge and the sitemap <lastmod>
  * both read from here.
  */
-export const SITE_VERSION = '2026.07.21';
-export const SITE_UPDATED = '2026-07-21';
+export const SITE_VERSION = '2026.07.24';
+export const SITE_UPDATED = '2026-07-24';

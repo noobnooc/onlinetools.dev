@@ -10,8 +10,10 @@
 	import GlobalShortcuts from '$lib/components/GlobalShortcuts.svelte';
 	import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
 	import { t, lp } from '$lib/i18n';
+	import { REPO_URL } from '$lib/links';
 	import { initFavorites } from '$lib/state/favorites.svelte';
 	import { SITE_VERSION } from '$lib/version';
+	import { CodeXml } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';
 
 	let { children }: { children: Snippet } = $props();
@@ -69,7 +71,17 @@
 						</span>
 						<nav class="flex flex-wrap items-center gap-4" aria-label="Footer">
 							<a href={lp('/tools')} class="transition-colors duration-120 hover:text-fg">{t('allTools')}</a>
+							<a href={lp('/about')} class="transition-colors duration-120 hover:text-fg">{t('about')}</a>
 							<a href={lp('/changelog')} class="transition-colors duration-120 hover:text-fg">{t('changelog')}</a>
+							<a
+								href={REPO_URL}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="flex items-center gap-1 transition-colors duration-120 hover:text-fg"
+							>
+								<CodeXml size={12} />
+								{t('aboutViewSource')}
+							</a>
 							<a href={lp('/changelog')} class="text-dim/50 transition-colors duration-120 hover:text-fg" title={t('releaseDate')}>v{SITE_VERSION}</a>
 							<LanguageSwitcher path={page.url.pathname} />
 						</nav>
