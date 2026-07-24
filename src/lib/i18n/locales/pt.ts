@@ -55,6 +55,23 @@ const pt: Messages = {
 		runHint: 'executar',
 		newlineHint: 'nova linha',
 		clearHint: 'limpar',
+
+		// Pipeline (tool chains)
+		chainNavLabel: 'Pipeline',
+		chainNew: 'Novo',
+		chainTitle: 'Pipeline de ferramentas — encadeie ferramentas para desenvolvedores no navegador | onlinetools.dev',
+		chainMetaDescription:
+			'Encadeie ferramentas para desenvolvedores em um pipeline: decodifique, transforme e extraia em um só fluxo. Cada etapa alimenta a seguinte, tudo roda no seu navegador e a receita inteira cabe em um link compartilhável.',
+		chainEyebrow: 'bancada · local-first',
+		chainHeading: 'Pipeline',
+		chainSub: 'Encadeie ferramentas em uma receita: cada etapa alimenta a seguinte. Roda inteiramente no seu navegador.',
+		chainInputPlaceholder: 'Cole ou digite a entrada inicial…',
+		chainAddStep: 'Adicionar etapa',
+		chainSearchSteps: 'Buscar etapas…',
+		chainStarters: 'Exemplos',
+		chainEmpty: 'Adicione uma etapa: cada etapa alimenta a seguinte.',
+		chainHomeCta: 'Encadeie ferramentas em um pipeline',
+		chainHomeCtaSub: 'Conecte a saída de uma ferramenta à seguinte: decodifique, transforme e extraia em um só fluxo.',
 		toolsTitle: 'Todas as ferramentas de desenvolvimento — onlinetools.dev',
 		toolsMetaDescription:
 			'Veja todas as ferramentas do onlinetools.dev: JSON, YAML, Base64, JWT, timestamps, cron, regex, diff, UUID, hashes, códigos QR e mais — tudo rodando localmente no seu navegador.',
