@@ -408,9 +408,9 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
 
 	'html-entities': {
 		about: [
-			'Escape text for safe inclusion in HTML — & becomes &amp;amp;, < becomes &amp;lt; — or decode entity-laden text back to readable characters, covering named entities (&amp;rarr;), decimal (&amp;#169;) and hexadecimal (&amp;#xA9;) numeric references.',
-			'Encoding offers two levels: the five essential characters that break HTML structure (&amp; &lt; &gt; " \'), which is all you need for correctness, or everything non-ASCII, useful when a toolchain mangles UTF-8 somewhere between you and the page. A numeric-only mode skips named entities for maximum compatibility with strict XML parsers, which only guarantee the five predefined ones.',
-			'The decoder is the everyday half: paste a scraped snippet or an API response full of &amp;#x27; and get clean text. Unknown entity names pass through untouched rather than being guessed.'
+			'Escape text for safe inclusion in HTML — & becomes &amp;, < becomes &lt; — or decode entity-laden text back to readable characters, covering named entities (&rarr;), decimal (&#169;) and hexadecimal (&#xA9;) numeric references.',
+			'Encoding offers two levels: the five essential characters that break HTML structure (& < > " \'), which is all you need for correctness, or everything non-ASCII, useful when a toolchain mangles UTF-8 somewhere between you and the page. A numeric-only mode skips named entities for maximum compatibility with strict XML parsers, which only guarantee the five predefined ones.',
+			'The decoder is the everyday half: paste a scraped snippet or an API response full of &#x27; and get clean text. Unknown entity names pass through untouched rather than being guessed.'
 		],
 		faqs: [
 			{
@@ -423,11 +423,11 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
 			},
 			{
 				q: 'Named or numeric entities — which should I emit?',
-				a: 'Numeric references (&amp;#xE9;) work in every HTML and XML parser. Named entities are more readable but XML only predefines five, so &amp;eacute; breaks a strict XML/XHTML pipeline. When in doubt, numeric.'
+				a: 'Numeric references (&#xE9;) work in every HTML and XML parser. Named entities are more readable but XML only predefines five, so &eacute; breaks a strict XML/XHTML pipeline. When in doubt, numeric.'
 			},
 			{
-				q: 'Why do I see &amp;amp;#39; (double-encoded) in my data?',
-				a: 'Two layers each encoded once: the &amp; of the first encoding was itself escaped by a second pass. Decode twice here to recover the text, then find and fix the layer that should not be encoding.'
+				q: 'Why do I see &amp;#39; (double-encoded) in my data?',
+				a: 'Two layers each encoded once: the & of the first encoding was itself escaped by a second pass. Decode twice here to recover the text, then find and fix the layer that should not be encoding.'
 			}
 		]
 	},

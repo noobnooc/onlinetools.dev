@@ -398,9 +398,9 @@ const TOOL_CONTENT_FR: Record<string, ToolContent> = {
 
 	'html-entities': {
 		about: [
-			'Échappez du texte pour l’inclure sans risque dans du HTML — & devient &amp;amp;, < devient &amp;lt; — ou décodez un texte truffé d’entités vers des caractères lisibles, en couvrant les entités nommées (&amp;rarr;), les références numériques décimales (&amp;#169;) et hexadécimales (&amp;#xA9;).',
-			'L’encodage offre deux niveaux : les cinq caractères essentiels qui cassent la structure HTML (&amp; &lt; &gt; " \'), tout ce qu’il faut pour la correction, ou tout le non-ASCII, utile quand une chaîne d’outils abîme l’UTF-8 quelque part entre vous et la page. Un mode numérique seul évite les entités nommées pour une compatibilité maximale avec les parseurs XML stricts, qui ne garantissent que les cinq prédéfinies.',
-			'Le décodeur est la moitié du quotidien : collez un extrait scrapé ou une réponse d’API pleine de &amp;#x27; et récupérez du texte propre. Les noms d’entités inconnus passent tels quels au lieu d’être devinés.'
+			'Échappez du texte pour l’inclure sans risque dans du HTML — & devient &amp;, < devient &lt; — ou décodez un texte truffé d’entités vers des caractères lisibles, en couvrant les entités nommées (&rarr;), les références numériques décimales (&#169;) et hexadécimales (&#xA9;).',
+			'L’encodage offre deux niveaux : les cinq caractères essentiels qui cassent la structure HTML (& < > " \'), tout ce qu’il faut pour la correction, ou tout le non-ASCII, utile quand une chaîne d’outils abîme l’UTF-8 quelque part entre vous et la page. Un mode numérique seul évite les entités nommées pour une compatibilité maximale avec les parseurs XML stricts, qui ne garantissent que les cinq prédéfinies.',
+			'Le décodeur est la moitié du quotidien : collez un extrait scrapé ou une réponse d’API pleine de &#x27; et récupérez du texte propre. Les noms d’entités inconnus passent tels quels au lieu d’être devinés.'
 		],
 		faqs: [
 			{
@@ -413,11 +413,11 @@ const TOOL_CONTENT_FR: Record<string, ToolContent> = {
 			},
 			{
 				q: 'Entités nommées ou numériques — lesquelles émettre ?',
-				a: 'Les références numériques (&amp;#xE9;) fonctionnent dans tout parseur HTML et XML. Les entités nommées sont plus lisibles, mais XML n’en prédéfinit que cinq : &amp;eacute; casse un pipeline XML/XHTML strict. Dans le doute, numérique.'
+				a: 'Les références numériques (&#xE9;) fonctionnent dans tout parseur HTML et XML. Les entités nommées sont plus lisibles, mais XML n’en prédéfinit que cinq : &eacute; casse un pipeline XML/XHTML strict. Dans le doute, numérique.'
 			},
 			{
-				q: 'Pourquoi vois-je &amp;amp;#39; (double encodage) dans mes données ?',
-				a: 'Deux couches ont encodé chacune une fois : le &amp; du premier encodage a lui-même été échappé par un second passage. Décodez deux fois ici pour récupérer le texte, puis trouvez et corrigez la couche qui ne devrait pas encoder.'
+				q: 'Pourquoi vois-je &amp;#39; (double encodage) dans mes données ?',
+				a: 'Deux couches ont encodé chacune une fois : le & du premier encodage a lui-même été échappé par un second passage. Décodez deux fois ici pour récupérer le texte, puis trouvez et corrigez la couche qui ne devrait pas encoder.'
 			}
 		]
 	},

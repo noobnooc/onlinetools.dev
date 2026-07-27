@@ -398,9 +398,9 @@ const TOOL_CONTENT_PT: Record<string, ToolContent> = {
 
 	'html-entities': {
 		about: [
-			'Escape texto para inclusão segura em HTML — & vira &amp;amp;, < vira &amp;lt; — ou decodifique texto cheio de entidades de volta para caracteres legíveis, cobrindo entidades nomeadas (&amp;rarr;), referências numéricas decimais (&amp;#169;) e hexadecimais (&amp;#xA9;).',
-			'A codificação oferece dois níveis: os cinco caracteres essenciais que quebram a estrutura do HTML (&amp; &lt; &gt; " \'), que é tudo que você precisa para correção, ou tudo que não for ASCII, útil quando alguma etapa da toolchain corrompe UTF-8 entre você e a página. Um modo somente numérico dispensa entidades nomeadas para máxima compatibilidade com parsers XML estritos, que só garantem as cinco predefinidas.',
-			'O decodificador é a metade do dia a dia: cole um trecho raspado ou uma resposta de API cheia de &amp;#x27; e receba texto limpo. Nomes de entidade desconhecidos passam intactos em vez de serem adivinhados.'
+			'Escape texto para inclusão segura em HTML — & vira &amp;, < vira &lt; — ou decodifique texto cheio de entidades de volta para caracteres legíveis, cobrindo entidades nomeadas (&rarr;), referências numéricas decimais (&#169;) e hexadecimais (&#xA9;).',
+			'A codificação oferece dois níveis: os cinco caracteres essenciais que quebram a estrutura do HTML (& < > " \'), que é tudo que você precisa para correção, ou tudo que não for ASCII, útil quando alguma etapa da toolchain corrompe UTF-8 entre você e a página. Um modo somente numérico dispensa entidades nomeadas para máxima compatibilidade com parsers XML estritos, que só garantem as cinco predefinidas.',
+			'O decodificador é a metade do dia a dia: cole um trecho raspado ou uma resposta de API cheia de &#x27; e receba texto limpo. Nomes de entidade desconhecidos passam intactos em vez de serem adivinhados.'
 		],
 		faqs: [
 			{
@@ -413,11 +413,11 @@ const TOOL_CONTENT_PT: Record<string, ToolContent> = {
 			},
 			{
 				q: 'Entidades nomeadas ou numéricas — quais devo emitir?',
-				a: 'Referências numéricas (&amp;#xE9;) funcionam em qualquer parser HTML e XML. Entidades nomeadas são mais legíveis, mas o XML só predefine cinco, então &amp;eacute; quebra um pipeline XML/XHTML estrito. Na dúvida, numéricas.'
+				a: 'Referências numéricas (&#xE9;) funcionam em qualquer parser HTML e XML. Entidades nomeadas são mais legíveis, mas o XML só predefine cinco, então &eacute; quebra um pipeline XML/XHTML estrito. Na dúvida, numéricas.'
 			},
 			{
-				q: 'Por que vejo &amp;amp;#39; (codificação dupla) nos meus dados?',
-				a: 'Duas camadas codificaram uma vez cada: o &amp; da primeira codificação foi escapado por uma segunda passada. Decodifique duas vezes aqui para recuperar o texto, depois encontre e corrija a camada que não deveria estar codificando.'
+				q: 'Por que vejo &amp;#39; (codificação dupla) nos meus dados?',
+				a: 'Duas camadas codificaram uma vez cada: o & da primeira codificação foi escapado por uma segunda passada. Decodifique duas vezes aqui para recuperar o texto, depois encontre e corrija a camada que não deveria estar codificando.'
 			}
 		]
 	},

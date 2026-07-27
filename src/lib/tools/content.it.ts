@@ -398,9 +398,9 @@ const TOOL_CONTENT_IT: Record<string, ToolContent> = {
 
 	'html-entities': {
 		about: [
-			'Escapa il testo per includerlo in sicurezza nell’HTML — & diventa &amp;amp;, < diventa &amp;lt; — o decodifica testo pieno di entità riportandolo a caratteri leggibili, coprendo entità con nome (&amp;rarr;), riferimenti numerici decimali (&amp;#169;) ed esadecimali (&amp;#xA9;).',
-			'La codifica offre due livelli: i cinque caratteri essenziali che rompono la struttura HTML (&amp; &lt; &gt; " \'), che è tutto ciò che serve per la correttezza, oppure tutto ciò che non è ASCII, utile quando una toolchain rovina l’UTF-8 da qualche parte tra te e la pagina. Una modalità solo numerica salta le entità con nome per la massima compatibilità con i parser XML rigorosi, che garantiscono solo le cinque predefinite.',
-			'Il decoder è la metà di uso quotidiano: incolla uno snippet raschiato o una risposta API piena di &amp;#x27; e ottieni testo pulito. I nomi di entità sconosciuti passano intatti invece di essere indovinati.'
+			'Escapa il testo per includerlo in sicurezza nell’HTML — & diventa &amp;, < diventa &lt; — o decodifica testo pieno di entità riportandolo a caratteri leggibili, coprendo entità con nome (&rarr;), riferimenti numerici decimali (&#169;) ed esadecimali (&#xA9;).',
+			'La codifica offre due livelli: i cinque caratteri essenziali che rompono la struttura HTML (& < > " \'), che è tutto ciò che serve per la correttezza, oppure tutto ciò che non è ASCII, utile quando una toolchain rovina l’UTF-8 da qualche parte tra te e la pagina. Una modalità solo numerica salta le entità con nome per la massima compatibilità con i parser XML rigorosi, che garantiscono solo le cinque predefinite.',
+			'Il decoder è la metà di uso quotidiano: incolla uno snippet raschiato o una risposta API piena di &#x27; e ottieni testo pulito. I nomi di entità sconosciuti passano intatti invece di essere indovinati.'
 		],
 		faqs: [
 			{
@@ -413,11 +413,11 @@ const TOOL_CONTENT_IT: Record<string, ToolContent> = {
 			},
 			{
 				q: 'Entità con nome o numeriche — quali dovrei emettere?',
-				a: 'I riferimenti numerici (&amp;#xE9;) funzionano in ogni parser HTML e XML. Le entità con nome sono più leggibili, ma XML ne predefinisce solo cinque, quindi &amp;eacute; rompe una pipeline XML/XHTML rigorosa. Nel dubbio, numeriche.'
+				a: 'I riferimenti numerici (&#xE9;) funzionano in ogni parser HTML e XML. Le entità con nome sono più leggibili, ma XML ne predefinisce solo cinque, quindi &eacute; rompe una pipeline XML/XHTML rigorosa. Nel dubbio, numeriche.'
 			},
 			{
-				q: 'Perché vedo &amp;amp;#39; (doppia codifica) nei miei dati?',
-				a: 'Due livelli hanno codificato una volta ciascuno: la &amp; della prima codifica è stata a sua volta escapata da un secondo passaggio. Decodifica due volte qui per recuperare il testo, poi trova e sistema il livello che non dovrebbe codificare.'
+				q: 'Perché vedo &amp;#39; (doppia codifica) nei miei dati?',
+				a: 'Due livelli hanno codificato una volta ciascuno: la & della prima codifica è stata a sua volta escapata da un secondo passaggio. Decodifica due volte qui per recuperare il testo, poi trova e sistema il livello che non dovrebbe codificare.'
 			}
 		]
 	},
