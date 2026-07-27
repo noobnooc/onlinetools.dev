@@ -41,7 +41,8 @@
 	);
 </script>
 
-<SeoHead {path} {title} description={preset.description} />
+<!-- Preset copy (heading/description/intro) is English-only; see presets.ts. -->
+<SeoHead {path} {title} description={preset.description} untranslated />
 
 <svelte:head>
 	{@html `<script type="application/ld+json">${jsonLd}</${'script'}>`}

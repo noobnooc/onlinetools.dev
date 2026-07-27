@@ -23,9 +23,20 @@
 	});
 	const output = $derived(result?.ok ? result.value : '');
 
-	/** Preview HTML is always sanitized — share links can carry hostile markup. */
+	/**
+	 * Preview HTML is always sanitized — share links can carry hostile markup.
+	 * DOMPurify's defaults stop scripts but still allow forms, inputs and inline
+	 * styles, which is enough to render a convincing credential-harvesting page
+	 * from a `#s=` link. Markdown never legitimately produces any of them, so
+	 * they are dropped outright.
+	 */
 	const previewHtml = $derived(
-		direction === 'to-html' && result?.ok ? DOMPurify.sanitize(result.value) : ''
+		direction === 'to-html' && result?.ok
+			? DOMPurify.sanitize(result.value, {
+					FORBID_TAGS: ['form', 'input', 'button', 'select', 'textarea', 'style'],
+					FORBID_ATTR: ['style', 'action', 'formaction', 'target', 'ping']
+				})
+			: ''
 	);
 
 	const stats = $derived(direction === 'to-html' && input.trim() !== '' ? markdownStats(input) : null);
