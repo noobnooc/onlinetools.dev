@@ -1,5 +1,555 @@
 import type { ToolContent } from './content';
 
-const TOOL_CONTENT_PL: Record<string, ToolContent> = {};
+/**
+ * Polish long-form tool copy (About + FAQ). Written entry by entry against
+ * the English content.ts; anything missing falls back to English.
+ */
+const TOOL_CONTENT_PL: Record<string, ToolContent> = {
+	'json-formatter': {
+		about: [
+			'Wklej dowolny JSON — odpowiedź API, plik konfiguracyjny, wiersz z logu — a ten formater wypisze go czytelnie z wybranym przez Ciebie wcięciem albo zminifikuje do osadzenia w kodzie. Parsowanie korzysta z natywnego silnika JSON w przeglądarce, więc to, co przechodzi walidację tutaj, zaakceptuje też JavaScript i każdy parser zgodny ze standardem.',
+			'Gdy wejście jest niepoprawne, błąd zostaje opisany dokładnym wierszem i kolumną, w których parsowanie się wywróciło, zamiast mglistego „unexpected token” gdzieś w dokumencie. W połączeniu z edytorem o stałej szerokości znaku szukanie brakującego przecinka w 500-wierszowym ładunku staje się kwestią dziesięciu sekund. Możesz też posortować klucze obiektów alfabetycznie, co bardzo pomaga przed porównywaniem dwóch ładunków.',
+			'Formatowanie działa w całości w Twojej przeglądarce. Ładunki z tokenami, danymi klientów czy wewnętrznymi adresami nigdy nie opuszczają Twojej maszyny — nie ma serwera, który mógłby je zapisać.'
+		],
+		faqs: [
+			{
+				q: 'Dlaczego mój JSON zwraca „Unexpected token”, choć wygląda poprawnie?',
+				a: 'Zwykle winne są: przecinek po ostatnim elemencie, apostrofy zamiast cudzysłowów, klucze bez cudzysłowów albo komentarze. Wszystko to jest w porządku w literałach obiektów JavaScriptu (czy w JSON5), ale nie w ścisłym JSON-ie. Znacznik wiersza i kolumny wskazuje pierwszy problematyczny znak.'
+			},
+			{
+				q: 'Czy istnieje limit rozmiaru?',
+				a: 'Nie ma twardego limitu — parsowanie jest lokalne, więc wszystko zależy od Twojej maszyny. Dokumenty do kilkudziesięciu megabajtów formatują się w nowoczesnej przeglądarce bez problemu; powyżej tego karta może zwolnić, bo cały dokument trzymany jest w pamięci.'
+			},
+			{
+				q: 'Czy formatowanie zmienia moje dane?',
+				a: 'Tylko białe znaki, chyba że włączysz sortowanie kluczy. Liczby są ponownie serializowane przez silnik JavaScriptu, więc 1e2 staje się 100, a liczby całkowite spoza precyzji IEEE-754 są normalizowane — dokładnie tak, jak zrobiłby dowolny konsument Twojego JSON-a napisany w JS.'
+			},
+			{
+				q: 'Czy mogę zwalidować JSON bez przeformatowania go?',
+				a: 'Tak — plakietka nad polem wejściowym aktualizuje się w trakcie pisania i pokazuje, czy dokument się parsuje, jaki ma rozmiar i gdzie jest pierwszy błąd. Akcja formatowania jest potrzebna dopiero wtedy, gdy chcesz przepisanego wyniku.'
+			}
+		]
+	},
+
+	'base64-decode': {
+		about: [
+			'Base64 zamienia dowolne bajty w 64-znakowy alfabet, który bez szwanku przechodzi przez JSON, adresy URL, nagłówki HTTP i pocztę. To narzędzie działa w obie strony: wpisz lub wklej tekst, aby go zakodować, albo wklej zakodowany blok, aby odzyskać oryginał. UTF-8 obsługiwane jest poprawnie w obu kierunkach, więc emoji i pisma niełacińskie wracają bez zniekształceń.',
+			'Dekoder jest wyrozumiały z rozmysłem: przyjmuje alfabet URL-safe (- i _ zamiast + i /), usuwa białe znaki oraz łamania wierszy i uzupełnia brakujące dopełnienie przed dekodowaniem — czyli trzy rzeczy, przez które surowsze dekodery najczęściej odrzucają dane w pełni możliwe do odzyskania. Jeśli zdekodowane bajty nie są poprawnym tekstem UTF-8, narzędzie mówi to wprost zamiast wypisywać krzaki; zwykle znaczy to, że ładunek był danymi binarnymi, na przykład obrazem.',
+			'Wszystko dzieje się na stronie. Zdekodowanie tutaj tokenu albo danych logowania nie wysyła ich nigdzie.'
+		],
+		faqs: [
+			{
+				q: 'Dlaczego mój ciąg Base64 kończy się znakami =?',
+				a: 'Base64 koduje 3 bajty na 4 znaki, więc gdy długość wejścia nie jest wielokrotnością trójki, wynik zostaje dopełniony znakami =, aby grupy się zgadzały. Dopełnienie nie niesie danych; ten dekoder odtwarza je automatycznie, jeśli zostało obcięte.'
+			},
+			{
+				q: 'Czym różni się standardowy Base64 od wariantu URL-safe?',
+				a: 'Standardowy Base64 używa + i /, które mają w adresach URL specjalne znaczenie i same wymagają escapowania. Wariant URL-safe (RFC 4648 §5) zamienia je na - i _ i zwykle pomija dopełnienie. Tej postaci używają na przykład tokeny JWT. Koder oferuje tu obie odmiany, a dekoder przyjmuje każdą z nich automatycznie.'
+			},
+			{
+				q: 'Czy Base64 to szyfrowanie?',
+				a: 'Nie. Base64 to odwracalne kodowanie bez klucza — każdy może je zdekodować. Chroni dane przed uszkodzeniem w transporcie, a nie przed odczytaniem. Jeśli potrzebujesz poufności, najpierw zaszyfruj, a dopiero potem zakoduj szyfrogram.'
+			},
+			{
+				q: 'Dlaczego dekodowanie mówi, że wynik nie jest poprawnym UTF-8?',
+				a: 'Ciąg zdekodował się bez błędu, ale otrzymane bajty nie są tekstem — najczęściej to PNG, PDF albo dane skompresowane lub zaszyfrowane. Wypisanie takiej treści do pola tekstowego dałoby krzaki, więc narzędzie zamiast tego to sygnalizuje.'
+			}
+		]
+	},
+
+	'timestamp-converter': {
+		about: [
+			'Czas uniksowy liczy sekundy od 1970-01-01T00:00:00 UTC i pojawia się dosłownie wszędzie: w wierszach bazy danych, w polach tokenów JWT, w logach, w odpowiedziach API. Ten konwerter przyjmuje znacznik w sekundach albo milisekundach — jednostkę rozpoznaje po rzędzie wielkości — a także ciągi ISO 8601 i większość dat zapisanych po ludzku, po czym pokazuje wszystkie reprezentacje naraz: ISO, UTC, Twój czas lokalny, czas względny i obie precyzje uniksowe.',
+			'Klasyczną pułapką jest niejednoznaczność jednostki: 1700000000 to listopad 2023 w sekundach, ale styczeń 1970 w milisekundach. Wykryta jednostka jest wypisana wprost, a gdy domysł okaże się zły, zmienisz ją jednym kliknięciem — koniec z liczeniem cyfr w głowie.',
+			'Konwersja jest natychmiastowa i lokalna, a wskazanie bieżącego czasu wciąż tyka, więc podczas pracy strona pełni też funkcję zegara epoki uniksowej.'
+		],
+		faqs: [
+			{
+				q: 'Jak narzędzie rozstrzyga między sekundami a milisekundami?',
+				a: 'Po rzędzie wielkości: wartości mające 11 cyfr lub więcej traktowane są jako milisekundy, krótsze jako sekundy. To odwzorowuje sekundy do około roku 5138, a milisekundy od mniej więcej 1973 roku, co jednoznacznie rozstrzyga każdy realny współczesny znacznik czasu. W przypadkach brzegowych jednostkę możesz przełączyć ręcznie.'
+			},
+			{
+				q: 'Co się stanie po roku 2038?',
+				a: 'Problem roku 2038 dotyczy systemów przechowujących czas uniksowy w 32-bitowej liczbie całkowitej ze znakiem. Liczby w JavaScripcie to 64-bitowe zmiennoprzecinkowe, więc ten konwerter obsługuje daty daleko poza 2038 — aż do roku 275760, czyli granicy typu Date w JavaScripcie.'
+			},
+			{
+				q: 'Czy mogę zamienić datę z powrotem na znacznik czasu?',
+				a: 'Tak. Wklej ciąg ISO 8601, na przykład 2026-07-20T12:00:00Z, albo większość zwyczajnych formatów daty, a obok pozostałych reprezentacji pojawią się sekundy i milisekundy uniksowe.'
+			},
+			{
+				q: 'Której strefy czasowej dotyczy wiersz z czasem lokalnym?',
+				a: 'Strefy skonfigurowanej w Twojej przeglądarce, odczytanej przez API Intl — nic nie jest sprawdzane zdalnie. Nazwa strefy wypisywana jest obok wartości, dzięki czemu zrzuty ekranu pozostają jednoznaczne.'
+			}
+		]
+	},
+
+	'jwt-decoder': {
+		about: [
+			'JSON Web Token to trzy segmenty Base64URL — nagłówek, ładunek, podpis — połączone kropkami. Ten dekoder rozdziela token i pokazuje nagłówek oraz ładunek jako sformatowany JSON, zamienia zarejestrowane pola czasowe (iat, exp, nbf) na czytelne daty i od razu mówi, czy token już wygasł.',
+			'Dekodowanie to nie weryfikacja: ładunek dowolnego JWT może odczytać każdy, kto go ma, bo Base64URL jest kodowaniem, a nie szyfrowaniem. To także powód, dla którego wklejanie tokenu na przypadkową stronę jest zwykle złym pomysłem — ta strona stanowi wyjątek, bo dekodowanie odbywa się w całości w Twojej przeglądarce, a token nie jest nigdzie wysyłany. Weryfikacja podpisu kluczem tajnym lub publicznym celowo pozostaje poza zakresem dekodera offline.',
+			'Wiodący przedrostek „Bearer ” jest usuwany automatycznie, więc możesz wkleić token prosto z nagłówka Authorization.'
+		],
+		faqs: [
+			{
+				q: 'Czy wklejanie tu produkcyjnego tokenu jest bezpieczne?',
+				a: 'Token zostaje w Twojej przeglądarce — ta strona nie wykonuje z Twoimi danymi żadnych żądań sieciowych, co potwierdzisz w zakładce Network w narzędziach deweloperskich. Mimo to przyzwyczaj się traktować żywe tokeny jak hasła: do zrzutów ekranu używaj tokenów wygasłych albo testowych.'
+			},
+			{
+				q: 'Dlaczego mój token się nie dekoduje?',
+				a: 'Sprawdź, czy ma dokładnie trzy segmenty rozdzielone kropkami i czy przy kopiowaniu nie wpadły w niego łamania wierszy. Nieprzezroczyste tokeny dostępu (na przykład wiele tokenów GitHuba czy Google) w ogóle nie są JWT — żadne dekodowanie nie otworzy losowego ciągu, który nigdy nie zawierał JSON-a.'
+			},
+			{
+				q: 'Co oznaczają iat, exp i nbf?',
+				a: 'To zarejestrowane pola z RFC 7519, wszystkie w sekundach uniksowych: iat to moment wystawienia tokenu, exp moment, w którym przestaje być ważny, a nbf („not before”) najwcześniejsza chwila, w której wolno go przyjąć. To narzędzie zamienia każde z nich na czytelną datę i porównuje exp z Twoim zegarem.'
+			},
+			{
+				q: 'Czy to narzędzie może zweryfikować podpis?',
+				a: 'Nie — a zielonemu znaczkowi z narzędzia online i tak nie należy ufać przy decyzjach dotyczących bezpieczeństwa. Podpisy weryfikuj w swoim backendzie za pomocą utrzymywanej biblioteki (jose, jsonwebtoken, PyJWT) i rzeczywistych kluczy wystawcy.'
+			}
+		]
+	},
+
+	'regex-tester': {
+		about: [
+			'Napisz wzorzec, wklej przykładowy tekst, a każde dopasowanie zostanie podświetlone w trakcie pisania — z grupami przechwytującymi, grupami nazwanymi i pozycjami dopasowań wypisanymi poniżej. Tester korzysta z silnika RegExp JavaScriptu, więc zachowanie odpowiada dokładnie temu, co zrobią Node.js i przeglądarki, łącznie z lookbehind, grupami nazwanymi i escape’ami właściwości Unicode.',
+			'Flagi przełącza się literami (g, i, m, s, u, y, d), a wzorzec kompilowany jest przy każdym naciśnięciu klawisza; błędy składni pojawiają się od razu, wraz z komunikatem samego silnika, a nie dopiero po kliknięciu przycisku. Wzorce dopuszczające puste dopasowanie, takie jak a*, obsługiwane są bezpiecznie, a liczba dopasowań ograniczona jest do 10 000, żeby zabłąkane .* nie zamroziło karty.',
+			'Odmiany wyrażeń regularnych różnią się między silnikami — wzorzec działający tutaj może wymagać poprawek dla PCRE, RE2 albo modułu re w Pythonie, głównie w kwestii obsługi lookbehind, kwantyfikatorów zaborczych i flag wbudowanych w wzorzec.'
+		],
+		faqs: [
+			{
+				q: 'Której odmiany wyrażeń regularnych używa ten tester?',
+				a: 'ECMAScript (JavaScript), w wydaniu Twojej własnej przeglądarki. Obsługuje lookahead, lookbehind, nazwane grupy przechwytujące, odwołania wsteczne oraz escape’y właściwości Unicode w rodzaju \\p{Letter} (z flagą u). Nie obsługuje składni wyłącznie PCRE, takiej jak kwantyfikatory zaborcze czy rekurencja.'
+			},
+			{
+				q: 'Dlaczego mój wzorzec dopasowuje wszystko albo nic?',
+				a: 'Dwie klasyczne przyczyny: nieuciekniony metaznak (. pasuje do dowolnego znaku — dla dosłownej kropki napisz \\.) albo zapomniana flaga g. Ten tester zawsze znajduje wszystkie dopasowania, ale Twój kod znajdzie tylko pierwsze, jeśli g nie zostanie ustawione.'
+			},
+			{
+				q: 'Czym są nazwane grupy przechwytujące?',
+				a: 'Składnia (?<nazwa>...) etykietuje grupę, dzięki czemu odczytujesz dopasowania po nazwie zamiast po pozycji: match.groups.nazwa w JavaScripcie. Panel grup pod dopasowaniami pokazuje dla każdego trafienia zarówno numerowane, jak i nazwane przechwycenia.'
+			},
+			{
+				q: 'Czy wyrażenie stąd zadziała bez zmian w Pythonie albo Go?',
+				a: 'Często tak, ale nie zawsze. Klasy znaków, kwantyfikatory i kotwice są przenośne; lookbehind, składnia grup nazwanych (Python używa (?P<nazwa>...)) i flagi wbudowane różnią się. Silnik RE2 w Go dodatkowo w ogóle odrzuca odwołania wsteczne i lookaround.'
+			}
+		]
+	},
+
+	'diff-checker': {
+		about: [
+			'Wklej oryginalny tekst po lewej, a zmienioną wersję po prawej, i otrzymaj spójne porównanie wiersz po wierszu: usunięcia na czerwono, dodania na zielono, zachowany kontekst pomiędzy i oryginalne numery wierszy po obu stronach. To najszybszy sposób, by odpowiedzieć na pytanie „co się właściwie zmieniło?” między dwiema konfiguracjami, dwiema odpowiedziami API albo dwiema wersjami fragmentu, który ktoś wkleił na czacie.',
+			'Porównanie korzysta z algorytmu najdłuższego wspólnego podciągu na wierszach — z tej samej rodziny co algorytm stojący za git diff — więc przestawione bloki i drobne poprawki dają czytelny wynik zamiast oznaczania wszystkiego jako zmienione. Wiersz podsumowania zlicza dodane i usunięte linie.',
+			'Ponieważ oba teksty zostają na stronie, porównywanie materiałów poufnych — umów, danych logowania w konfiguracjach, niewydanych treści — nie niesie żadnego z ryzyk wklejania ich do przypadkowego serwisu.'
+		],
+		faqs: [
+			{
+				q: 'Czy porównanie działa na słowach, czy na wierszach?',
+				a: 'Na wierszach. Każdy wiersz porównywany jest jako całość, co odpowiada temu, jak programiści czytają diffy kodu i konfiguracji. Zmieniony wiersz pokazuje się więc jako jedno usunięcie plus jedno dodanie; podświetlanie różnic na poziomie znaków jest w planach.'
+			},
+			{
+				q: 'Dlaczego mój diff pokazuje wszystko jako zmienione?',
+				a: 'Zwykle przez różnice niewidoczne gołym okiem: jedna strona używa tabulatorów, druga spacji, końce wierszy w stylu Windows CRLF kontra uniksowy LF albo spacje na końcach wierszy. Znormalizowanie białych znaków przed porównaniem (dla ładunków JSON pomaga formater JSON z sortowaniem kluczy) uwidacznia prawdziwe zmiany.'
+			},
+			{
+				q: 'Czy mogę sensownie porównać dwie odpowiedzi JSON?',
+				a: 'Tak — przepuść najpierw obie przez formater JSON z włączonym sortowaniem kluczy, żeby równoważne dokumenty serializowały się identycznie. Wtedy diff pokaże faktyczne zmiany wartości zamiast szumu z kolejności kluczy.'
+			},
+			{
+				q: 'Czy jest maksymalny rozmiar tekstu?',
+				a: 'Algorytm porównuje każdy wiersz jednego tekstu z każdym wierszem drugiego, więc naprawdę duże pliki (dziesiątki tysięcy wierszy po obu stronach) mogą zająć chwilę. Typowe pliki z kodem i ładunki API porównują się natychmiast.'
+			}
+		]
+	},
+
+	'url-encode-decode': {
+		about: [
+			'Znaki takie jak spacje, ampersandy czy litery spoza ASCII nie mogą wystąpić w adresie URL w surowej postaci, więc koduje się je procentowo: spacja staje się %20, a 你 zamienia się w %E4%BD%A0. To narzędzie koduje tekst tak, by bezpiecznie trafił do URL-a, i dekoduje ciągi z sekwencjami procentowymi z powrotem na czytelny tekst — łącznie z konwencją + oznaczającą spację w ciągach zapytań.',
+			'Dostępne są dwa tryby kodowania, bo sam JavaScript ma dwa: tryb komponentu (encodeURIComponent) escapuje wszystko, co mogłoby rozdzielić URL-a, czego chcesz dla pojedynczej wartości w query stringu; tryb pełnego URI (encodeURI) zachowuje znaki strukturalne takie jak /, ? i &, gdy kodujesz cały adres, który ma pozostać klikalny.',
+			'Dekodowanie jest surowe wobec uszkodzonych sekwencji % — samotny % albo %ZZ zgłaszany jest jako błąd zamiast być po cichu przepuszczonym, czyli dokładnie tak, jak potraktują go przeglądarki i serwery.'
+		],
+		faqs: [
+			{
+				q: 'Kiedy używać trybu komponentu, a kiedy pełnego URI?',
+				a: 'Kodujesz wartość, która trafi do wnętrza URL-a (zapytanie wyszukiwania, adres przekierowania, e-mail w parametrze) → tryb komponentu, żeby & i = wewnątrz wartości nie rozbiły ciągu zapytania. Kodujesz kompletny adres do wyświetlenia lub przesłania → tryb pełnego URI, żeby struktura adresu przetrwała.'
+			},
+			{
+				q: 'Dlaczego + czasem oznacza spację?',
+				a: 'Format application/x-www-form-urlencoded — używany przy wysyłce formularzy HTML i w ciągach zapytań — historycznie koduje spacje jako +. W ścieżkach URL + to po prostu plus. Tutejszy dekoder traktuje + jak spację, zgodnie z semantyką query stringów; %20 działa zawsze i wszędzie.'
+			},
+			{
+				q: 'Dlaczego mój ciąg jest zakodowany podwójnie (%2520)?',
+				a: '%25 to zakodowany znak %, więc %2520 znaczy, że tekst %20 zakodowano po raz drugi. Dzieje się tak, gdy dwie warstwy systemu kodują niezależnie od siebie. Uruchom tu dekodowanie dwa razy, żeby to rozwinąć, a potem napraw warstwę, która kodować nie powinna.'
+			},
+			{
+				q: 'Czy znaki Unicode są obsługiwane poprawnie?',
+				a: 'Tak — tekst jest najpierw kodowany do UTF-8, a następnie każdy bajt escapowany procentowo, zgodnie ze standardem URL organizacji WHATWG. Dlatego jeden znak CJK zamienia się w trzy grupy %XX.'
+			}
+		]
+	},
+
+	'url-parser': {
+		about: [
+			'Wklej adres URL i zobacz go rozłożonego na części: protokół, host, port, ścieżkę, fragment oraz każdy parametr zapytania w postaci zdekodowanej tabeli klucz–wartość. Narzędzie korzysta z tego samego parsera URL według WHATWG, którego Twoja przeglądarka używa przy nawigacji, więc interpretacja na ekranie jest tą, którą przeglądarka faktycznie zastosuje — łącznie z przypadkami brzegowymi, jak pomijanie domyślnych portów i normalizowanie ścieżek.',
+			'Tabela parametrów zapytania przyda się najczęściej: długie przekierowania OAuth, linki otagowane pod analitykę i wywołania API stają się czytelne na pierwszy rzut oka, a każda wartość jest już zdekodowana z zapisu procentowego. Same domeny bez schematu też są akceptowane; do parsowania przyjmowane jest https://.',
+			'Narzędzie tworzy naturalną parę z koderem URL — sparsuj tutaj adres, znajdź potrzebny parametr, popraw wartość, a potem zakoduj ją tam z powrotem.'
+		],
+		faqs: [
+			{
+				q: 'Dlaczego sparsowany URL różni się nieco od tego, co wkleiłem?',
+				a: 'Parser WHATWG normalizuje adres: zamienia schemat i host na małe litery, usuwa domyślne porty (:443 dla https), rozwiązuje segmenty ./ i ../ oraz koduje znaki, które tego wymagają. To, co widzisz, to postać kanoniczna, co do której serwery i przeglądarki są zgodne.'
+			},
+			{
+				q: 'Czy obsłuży adresy z powtórzonymi kluczami w zapytaniu?',
+				a: 'Tak — każde wystąpienie trafia do własnego wiersza, w kolejności występowania. Powtórzone klucze są legalne i częste: wiele API czyta je jako tablice (?tag=a&tag=b).'
+			},
+			{
+				q: 'Czym różni się host od hostname?',
+				a: 'hostname to sama domena (example.com); host zawiera dodatkowo jawnie podany, niedomyślny port (example.com:8080). Gdy port jest domyślny dla schematu, oba wyglądają tak samo, bo port zostaje pominięty.'
+			},
+			{
+				q: 'Czy fragment (#...) trafia na serwer?',
+				a: 'Nie. Wszystko po znaku # zostaje w przeglądarce — serwery nigdy tego nie widzą. Właśnie dlatego aplikacje jednostronicowe historycznie używały go do routingu po stronie klienta i dlatego parametry analityczne umieszczone po # są dla backendu niewidoczne.'
+			}
+		]
+	},
+
+	'uuid-generator': {
+		about: [
+			'Generuj uniwersalne identyfikatory w czterech odmianach: UUID v4 (w pełni losowy, codzienny domyślny wybór), UUID v7 (uporządkowany czasowo, nowoczesny wybór na klucze bazodanowe), ULID (uporządkowany czasowo, w zwartym zapisie Crockford Base32) oraz Nano ID (krótki, przyjazny adresom URL). Wygeneruj jeden albo nawet tysiąc naraz — po jednym w wierszu, gotowe do wklejenia w skrypt zasilający bazę.',
+			'Losowość pochodzi z Web Crypto API (crypto.getRandomValues), czyli źródła bezpiecznego kryptograficznie, a nie z Math.random. Generowanie jest lokalne, co oznacza, że identyfikatory nie są znane nikomu innemu, nigdzie nie trafiają do logów i działają offline.',
+			'Jeśli wybierasz format identyfikatora dla nowego systemu: v7 i ULID sortują się według czasu utworzenia, co sprzyja indeksom B-drzewa i sprawia, że identyfikatory w logach układają się mniej więcej chronologicznie; v4 nie zdradza nic o momencie powstania, co czasem jest dokładnie tym, czego chcesz.'
+		],
+		faqs: [
+			{
+				q: 'Czym różni się UUID v4 od v7?',
+				a: 'v4 to 122 losowe bity. v7 (RFC 9562) zaczyna się od 48-bitowego znacznika czasu w milisekundach uniksowych, po którym idą bity losowe, więc identyfikatory utworzone później sortują się później. Dla kluczy głównych w bazie v7 zwykle poprawia lokalność wstawień i rozmiar indeksu; v4 pozostaje w porządku tam, gdzie kolejność nie ma znaczenia albo moment utworzenia nie może wyciekać.'
+			},
+			{
+				q: 'Czy dwa wygenerowane UUID mogą się powtórzyć?',
+				a: 'Przy 122 losowych bitach prawdopodobieństwo jest tak małe, że nie warto się przed nim zabezpieczać: trzeba by generować miliardy identyfikatorów na sekundę przez dziesięciolecia, żeby w ogóle dojść do nikłej szansy. Kolizje w praktyce biorą się z błędów (użycie tego samego ziarna, kopiowanie wierszy), a nie z losowości.'
+			},
+			{
+				q: 'Kiedy wybrać ULID zamiast UUID v7?',
+				a: 'Rozwiązują ten sam problem. ULID to 26 znaków Crockford Base32 bez rozróżniania wielkości liter — krócej i czyściej w adresach i logach — a v7 zachowuje standardowy 36-znakowy kształt UUID, który każda baza i biblioteka już akceptuje. Wybierz to, co Twój ekosystem obsługuje bardziej natywnie.'
+			},
+			{
+				q: 'Czy takich identyfikatorów można używać jako sekretów lub tokenów?',
+				a: 'Losowość jest bezpieczna kryptograficznie, ale identyfikatory zwykle się wyświetla, loguje i indeksuje — traktuje jak dane jawne. Na tokeny sesji czy klucze API wygeneruj osobny sekret o co najmniej 128 losowych bitach i traktuj go jak hasło.'
+			}
+		]
+	},
+
+	'hash-generator': {
+		about: [
+			'Policz skróty MD5, SHA-1, SHA-256, SHA-384 i SHA-512 dowolnego tekstu, a także podpisy HMAC z kluczem, bezpośrednio w przeglądarce. Rodzina SHA oraz HMAC korzystają z Web Crypto API — tych samych audytowanych prymitywów, których Twoja przeglądarka używa do TLS — natomiast MD5 (celowo pominięty w Web Crypto) dostarczany jest jako niewielka lokalna implementacja na potrzeby starszych sum kontrolnych.',
+			'Skróty aktualizują się na żywo w trakcie pisania, a wszystkie algorytmy liczone są naraz, więc porównanie wartości z sumą kontrolną w algorytmie, który akurat wybrała strona pobierania, nie wymaga żadnej konfiguracji. Tryb HMAC dodaje pole klucza tajnego do weryfikowania podpisów webhooków — GitHub, Stripe i większość dostawców webhooków podpisuje ładunki za pomocą HMAC-SHA256.',
+			'Ponieważ dane wejściowe nigdy nie opuszczają strony, możesz spokojnie hashować rzeczy, których nie wkleiłbyś do usługi online: ładunki API, hasła sprawdzane wobec listy wykradzionych skrótów, dokumenty wewnętrzne.'
+		],
+		faqs: [
+			{
+				q: 'Którego algorytmu skrótu powinienem użyć?',
+				a: 'Do wszystkiego, co dziś dotyczy bezpieczeństwa: SHA-256 lub mocniejszy. MD5 i SHA-1 są złamane pod względem odporności na kolizje — da się spreparować dwa różne wejścia o tym samym skrócie — więc zostają wyłącznie do sum kontrolnych bez przeciwnika i zgodności ze starymi protokołami.'
+			},
+			{
+				q: 'Po co w ogóle wciąż udostępniać MD5?',
+				a: 'Bo nadal go spotykasz: nagłówki ETag, klucze cache’a, manifesty plików, stare kolumny w bazach. Weryfikacja takich wartości wymaga policzenia MD5 niezależnie od jego statusu kryptograficznego. Tylko nie projektuj wokół niego niczego nowego.'
+			},
+			{
+				q: 'Czym jest HMAC i czym różni się od zwykłego skrótu?',
+				a: 'HMAC wplata w hashowanie klucz tajny, więc tylko posiadacze klucza mogą wytworzyć lub zweryfikować skrót. Zwykły skrót dowodzi integralności („te dane się nie zmieniły”); HMAC dowodzi dodatkowo autentyczności („wytworzył to ktoś z kluczem”). Codzienne zastosowanie to weryfikacja podpisów webhooków.'
+			},
+			{
+				q: 'Czy hashowanie to to samo co szyfrowanie hasła?',
+				a: 'Nie, a szybkie skróty w rodzaju SHA-256 to złe narzędzie do przechowywania haseł — atakujący mogą sprawdzać miliardy na sekundę. Przechowywanie haseł wymaga algorytmu celowo wolnego i solonego: bcrypta, scrypta albo Argon2.'
+			}
+		]
+	},
+
+	'case-converter': {
+		about: [
+			'Identyfikatory nieustannie wędrują między konwencjami: API zwraca snake_case, Twój TypeScript chce camelCase, klasa CSS potrzebuje kebab-case, a zmienna środowiskowa domaga się CONSTANT_CASE. Ten konwerter bierze dowolne wymieszane wejście — spacje, podkreślniki, myślniki, istniejący camelCase — rozsądnie dzieli je na słowa i składa z powrotem od razu w dziewięciu docelowych stylach.',
+			'Dzielnik radzi sobie z trudnymi przypadkami: rozbija „getUserByID” na get/user/by/id (zachowując skrótowiec w całości aż do granicy), traktuje cyfry jako część swojego słowa i przetwarza każdy wiersz osobno, więc możesz wkleić całą kolumnę nazw pól z bazy i przekonwertować je za jednym razem.',
+			'Wszystkie style pokazywane są jednocześnie, każdy z własnym przyciskiem kopiowania — nie trzeba najpierw wybierać trybu, wystarczy wkleić i zabrać ten, którego potrzebujesz.'
+		],
+		faqs: [
+			{
+				q: 'Jak traktowane są skrótowce w rodzaju „HTTPResponse”?',
+				a: 'Ciąg wielkich liter, po którym następuje mała litera, dzielony jest przed ostatnią wielką literą: HTTPResponse → http + response. Odpowiada to temu, jak większość przewodników stylu oczekuje tokenizacji skrótowców, choć żaden dzielnik nie odgadnie intencji bezbłędnie — przypadki brzegowe jak „IOError” dają io + error.'
+			},
+			{
+				q: 'Czy mogę przekonwertować wiele identyfikatorów naraz?',
+				a: 'Tak — każdy wiersz konwertowany jest niezależnie. Wklej listę nazw kolumn, po jednej w wierszu, a wynik zachowa układ wierszy w nowym stylu.'
+			},
+			{
+				q: 'Czym różni się tutaj Title Case od Sentence case?',
+				a: 'Title Case zapisuje wielką literą każde słowo („User Account Id”); Sentence case tylko pierwsze („User account id”). Żaden z nich nie stosuje redakcyjnych reguł o przedimkach i przyimkach — przy identyfikatorach i tak prawie nigdy ich nie chcesz.'
+			},
+			{
+				q: 'Dlaczego konwersja tam i z powrotem nie zawsze odtwarza oryginał?',
+				a: 'Podział na słowa gubi informację — „user_ID_2” i „userId2” tokenizują się identycznie. Konwersje są deterministyczne w przód, ale pierwotnego zapisu granic między słowami nie zawsze da się odtworzyć wstecz.'
+			}
+		]
+	},
+
+	'word-counter': {
+		about: [
+			'Licznik słów i znaków działający na żywo, podający liczby, których programiści i piszący naprawdę potrzebują: słowa, znaki ze spacjami i bez, bajty UTF-8 (czyli to, co faktycznie mierzy kolumna w bazie albo limit API), wiersze, zdania, akapity oraz szacowany czas czytania przy typowych 220 słowach na minutę.',
+			'Znaki liczone są jako punkty kodowe Unicode, a nie jednostki UTF-16, więc emoji i tekst CJK liczą się tak, jak spodziewałby się człowiek — a osobna liczba bajtów uwidacznia różnicę: 日本語 to 3 znaki, ale 9 bajtów. Dokładnie to rozróżnienie boli, gdy kolumna VARCHAR(255) odrzuca ciąg mający 200 „znaków”.',
+			'Wszystko przelicza się w trakcie pisania i nic nigdzie nie jest wysyłane — bezpiecznie policzysz szkice ogłoszeń, umowy albo cokolwiek innego, co nie jest jeszcze gotowe na świat.'
+		],
+		faqs: [
+			{
+				q: 'Dlaczego liczba znaków różni się od liczby bajtów?',
+				a: 'Znaki to punkty kodowe Unicode; bajty to ich zapis w UTF-8. Litery ASCII zajmują po 1 bajcie, większość europejskich liter z akcentami 2, znaki CJK 3, a emoji 4 (lub więcej w sekwencjach). Limity baz danych, nagłówki HTTP i wiele API mierzą bajty, nie znaki.'
+			},
+			{
+				q: 'Jak liczone są słowa w językach bez spacji?',
+				a: 'Zliczanie słów dzieli tekst po białych znakach, co zaniża wynik dla niesegmentowanego tekstu chińskiego czy japońskiego. Dla tych języków sensowniejszą miarą jest liczba znaków — dlatego obie wartości są zawsze widoczne.'
+			},
+			{
+				q: 'Co liczy się jako zdanie?',
+				a: 'Ciąg tekstu zakończony znakiem ., !, ? albo …, po którym następuje biały znak lub koniec tekstu. Skróty w rodzaju „np.” mogą lekko zawyżyć wynik — liczenie zdań jest z natury heurystyczne.'
+			},
+			{
+				q: 'Jak dokładny jest czas czytania?',
+				a: 'Dzieli liczbę słów przez 220 słów na minutę, czyli częstą średnią dla cichego czytania prozy ogólnej przez osobę dorosłą. Materiał techniczny z kodem czyta się wolniej, listy do przeskanowania wzrokiem szybciej. Traktuj to jako szacunek co do rzędu wielkości.'
+			}
+		]
+	},
+
+	'lorem-ipsum-generator': {
+		about: [
+			'Tekst zastępczy do układów, makiet i danych testowych, generowany w Twojej przeglądarce: wybierz słowa, zdania albo akapity, ustaw liczbę i kopiuj. Wynik czerpie z klasycznego, pomieszanego słownictwa Cycerona, więc wygląda jak naturalna quasi-łacińska proza, nie tworząc przy tym rozpraszających, czytelnych zdań.',
+			'Domyślnie tekst zaczyna się tradycyjnym „Lorem ipsum dolor sit amet” — frazą, którą projektanci i recenzenci natychmiast rozpoznają jako wypełniacz — a gdy potrzebujesz kilku wyraźnie różnych bloków, możesz to wyłączyć i dostać wynik w pełni losowy.',
+			'Długości zdań i rozmiary akapitów zmieniają się losowo w realistycznych zakresach, więc powstały tekst ma wizualny rytm prawdziwej treści — co ma znaczenie, gdy oceniasz typografię albo łamanie wierszy, bo jednakowe zdania wyglądają sztucznie.'
+		],
+		faqs: [
+			{
+				q: 'Skąd wzięło się lorem ipsum?',
+				a: 'To pomieszane fragmenty dzieła Cycerona „De finibus bonorum et malorum” (45 r. p.n.e.), używane jako wypełniacz przez zecerów co najmniej od lat 60. XX wieku i spopularyzowane przez arkusze Letraset, a później oprogramowanie DTP.'
+			},
+			{
+				q: 'Po co używać lorem ipsum zamiast prawdziwego tekstu?',
+				a: 'Czytelna treść porywa uwagę — recenzenci zaczynają poprawiać słowa zamiast oceniać układ. Pseudołacina ma naturalne częstości liter i długości wyrazów, a przy tym nie daje się czytać, dzięki czemu uwaga zostaje przy projekcie.'
+			},
+			{
+				q: 'Czy generowany tekst jest zawsze taki sam?',
+				a: 'Nie — słowa dobierane są losowo za każdym razem, więc dwa wygenerowane bloki będą się różnić. Stała jest wyłącznie opcjonalna klasyczna fraza otwierająca.'
+			},
+			{
+				q: 'Czy mogę wygenerować konkretną liczbę słów pod limit pola w CMS-ie?',
+				a: 'Tak — ustaw jednostkę na słowa i podaj dokładnie tyle, ile potrzebujesz, do 1000 naraz. Połącz to z licznikiem słów, aby sprawdzić wynik względem limitów znaków lub bajtów.'
+			}
+		]
+	},
+
+	'slug-generator': {
+		about: [
+			'Zamień dowolny tytuł w slug gotowy do adresu URL: małe litery, rozdzielenie myślnikami, usunięta interpunkcja, znaki diakrytyczne przepisane na czyste ASCII — „Crème brûlée à Paris” zamienia się w „creme-brulee-a-paris”. Opcje pokrywają typowe warianty: separator w postaci podkreślnika, zachowanie wielkości liter oraz maksymalną długość ucinaną na granicy słowa, a nie w jego środku.',
+			'Slugi liczą się i dla ludzi, i dla wyszukiwarek: są czytelne w pasku adresu, przetrwają wklejenie na czat bez zapisu procentowego i dają wynikom wyszukiwania adres niosący słowa kluczowe. Krok transliteracji to właśnie to, co pomija większość domowych funkcji slugify — bez niego tytuły z diakrytykami albo psują adresy, albo znikają zupełnie.',
+			'Każdy wiersz przetwarzany jest osobno, więc wklejona lista tytułów artykułów zamienia się w odpowiadającą jej listę slugów w jednej operacji.'
+		],
+		faqs: [
+			{
+				q: 'Dlaczego myślniki zamiast podkreślników?',
+				a: 'Wyszukiwarki traktują myślniki jako separatory słów, a podkreślniki historycznie jako łączniki; do tego w podkreślonym tekście odnośnika myślnik jest po prostu czytelniejszy. Podkreślniki pozostają popularne w nazwach plików i identyfikatorach, więc dostępne są oba warianty.'
+			},
+			{
+				q: 'Co dzieje się z pismami niełacińskimi, jak chińskie czy cyrylica?',
+				a: 'Znaki mające odpowiedniki ASCII (łacińskie z diakrytykami, kilka liter specjalnych jak ß → ss) są transliterowane; pisma bez prostego odwzorowania na łacinkę są usuwane. Przy treściach niełacińskich zwyczajowo albo zostawia się rodzime pismo zakodowane procentowo w adresie, albo pisze ręczny slug w transkrypcji.'
+			},
+			{
+				q: 'Czy istnieje idealna długość sluga?',
+				a: 'Krótszy jest lepszy do udostępniania i wyświetlania, ale nie ma tu żadnego progu wpływającego na pozycję w wyszukiwarce. Opcja maksymalnej długości przycina na granicy słowa — przydaje się w CMS-ach ograniczających kolumnę sluga do 50–80 znaków.'
+			},
+			{
+				q: 'Czy slug powinien się zmieniać razem z tytułem?',
+				a: 'Po publikacji najlepiej nie — adres to miejsce, do którego inni już podlinkowali. Większość serwisów zachowuje pierwotny slug albo dodaje przekierowanie. Generuj slugi przy tworzeniu treści, a zmianę nazwy traktuj jako świadomą decyzję o przekierowaniu.'
+			}
+		]
+	},
+
+	'sort-lines': {
+		about: [
+			'Warsztat do obróbki wierszy: wklej dowolną listę i posortuj ją alfabetycznie, odwrotnie, naturalnie (item2 przed item10), według długości albo ją przetasuj — opcjonalnie przycinając białe znaki, usuwając puste wiersze i kasując duplikaty z zachowaniem kolejności. Liczba usuniętych wierszy jest raportowana, więc dokładnie widzisz, co zrobiło odsiewanie duplikatów.',
+			'Sortowanie naturalne to opcja, po którą sięgniesz najczęściej: zwykłe sortowanie alfabetyczne stawia „item10” przed „item2”, bo porównuje znak po znaku, a sortowanie naturalne porównuje osadzone liczby liczbowo — czyli w kolejności, jakiej ludzie oczekują dla nazw plików, wersji i identyfikatorów.',
+			'Odsiewanie duplikatów zachowuje pierwsze wystąpienie i pierwotną kolejność tych, które zostały, co ma znaczenie, gdy kolejność listy coś znaczy (importy, wiersze konfiguracji, playlisty). Tryb ignorujący wielkość liter traktuje „Apple” i „apple” jako ten sam wiersz.'
+		],
+		faqs: [
+			{
+				q: 'Czym różni się sortowanie alfabetyczne od naturalnego?',
+				a: 'Alfabetyczne porównuje kody znaków, więc „file10” < „file2” (bo na piątej pozycji „1” < „2”). Sortowanie naturalne rozpoznaje ciągi cyfr i porównuje je jako liczby, dając file2 < file10. Do wszystkiego, co zawiera liczby, używaj naturalnego.'
+			},
+			{
+				q: 'Czy odsiewanie duplikatów zostawia pierwsze czy ostatnie wystąpienie?',
+				a: 'Pierwsze. Wiersze przeglądane są z góry na dół, a wiersz zostaje usunięty tylko wtedy, gdy identyczny (lub równy z pominięciem wielkości liter, w odpowiednim trybie) pojawił się wcześniej — dzięki temu kolejność ocalałych odpowiada oryginalnej.'
+			},
+			{
+				q: 'Jak dużą listę to udźwignie?',
+				a: 'Setki tysięcy wierszy nie stanowią problemu — operacje to proste przebiegi plus jedno sortowanie. Wszystko zostaje w pamięci przeglądarki, więc praktyczną granicą jest Twoja maszyna, a nie limit serwera.'
+			},
+			{
+				q: 'Czy mogę łączyć operacje?',
+				a: 'Tak, i stosowane są w sensownej kolejności: najpierw przycinanie, potem usuwanie pustych, potem duplikatów, na końcu sortowanie — dzięki czemu przy włączonym przycinaniu „ apple ” i „apple” odsiewają się razem, a sortowanie zawsze widzi już oczyszczoną listę.'
+			}
+		]
+	},
+
+	'html-entities': {
+		about: [
+			'Zabezpiecz tekst do bezpiecznego wstawienia w HTML — & zamienia się w &amp;, < w &lt; — albo zdekoduj tekst pełen encji z powrotem na czytelne znaki, obsługując encje nazwane (&rarr;), dziesiętne (&#169;) i szesnastkowe (&#xA9;) odwołania liczbowe.',
+			'Kodowanie ma dwa poziomy: pięć kluczowych znaków rozbijających strukturę HTML (& < > " \'), co w zupełności wystarcza do poprawności, albo wszystko poza ASCII, co przydaje się, gdy któreś ogniwo łańcucha narzędzi po drodze psuje UTF-8. Tryb wyłącznie liczbowy pomija encje nazwane dla maksymalnej zgodności ze ścisłymi parserami XML, które gwarantują tylko pięć predefiniowanych.',
+			'Codziennie częściej używa się połowy dekodującej: wklej zeskrobany fragment albo odpowiedź API najeżoną &#x27; i odbierz czysty tekst. Nieznane nazwy encji przechodzą nietknięte, zamiast być zgadywane.'
+		],
+		faqs: [
+			{
+				q: 'Które znaki trzeba escapować w HTML?',
+				a: 'W treści tekstowej: & oraz <. W wartościach atrybutów: dodatkowo znak cudzysłowu ograniczający atrybut (" albo \'). Escapowanie > jest zwyczajowe, ale nie jest ściśle wymagane. Cała reszta może wystąpić dosłownie w dokumencie UTF-8.'
+			},
+			{
+				q: 'Czy kodowanie encji chroni przed XSS?',
+				a: 'Escapowanie pięciu znaków strukturalnych to trzon kodowania wyjścia w kontekście HTML, owszem — ale tylko dla tekstu HTML i wartości atrybutów. Adresy URL, łańcuchy JavaScriptu i CSS wymagają własnych kodowań właściwych dla swojego kontekstu; samo escapowanie encji nie czyni tam dowolnego wstrzyknięcia bezpiecznym.'
+			},
+			{
+				q: 'Encje nazwane czy liczbowe — które emitować?',
+				a: 'Odwołania liczbowe (&#xE9;) działają w każdym parserze HTML i XML. Encje nazwane są czytelniejsze, ale XML predefiniuje tylko pięć, więc &eacute; wywraca ścisły potok XML/XHTML. W razie wątpliwości: liczbowe.'
+			},
+			{
+				q: 'Dlaczego widzę w danych &amp;#39; (podwójnie zakodowane)?',
+				a: 'Dwie warstwy zakodowały po razie: znak & z pierwszego kodowania został sam zescapowany przy drugim przebiegu. Zdekoduj tutaj dwukrotnie, aby odzyskać tekst, a potem znajdź i napraw warstwę, która nie powinna kodować.'
+			}
+		]
+	},
+
+	'unicode-inspector': {
+		about: [
+			'Wklej dowolny tekst i zobacz każdy znak rozłożony na części: jego punkt kodowy (U+XXXX), bajty UTF-8, jednostki UTF-16, sekwencję ucieczki JavaScriptu, encję HTML i kategorię ogólną — plus sumy dla punktów kodowych, jednostek UTF-16, bajtów UTF-8 i znaków postrzeganych przez użytkownika (klastrów grafemowych).',
+			'To narzędzie na chwile „dlaczego ten napis jest dziwny?”: niewidoczne znaki (spacje zerowej szerokości, znaczniki BOM, znaki kierunku) pojawiają się jako widoczne wiersze; znaki-bliźniaki (cyrylickie а kontra łacińskie a) ujawniają różne punkty kodowe; a emoji, które „jest jednym znakiem”, okazuje się siedmioma punktami kodowymi połączonymi łącznikami zerowej szerokości.',
+			'Cztery różne sumy długości odpowiadają na odwieczne pytanie, dlaczego .length w JavaScripcie, limit bajtów w bazie danych i to, co widzi użytkownik, nigdy nie zgadzają się co do długości napisu.'
+		],
+		faqs: [
+			{
+				q: 'Dlaczego "🎉".length === 2 w JavaScripcie?',
+				a: 'Napisy w JavaScripcie liczą jednostki kodowe UTF-16. Znaki powyżej U+FFFF — w tym większość emoji — wymagają pary zastępczej, czyli dwóch jednostek. Inspektor pokazuje zarówno jednostki, jak i rzeczywisty punkt kodowy, a podsumowanie zlicza je osobno.'
+			},
+			{
+				q: 'Czym jest klaster grafemowy?',
+				a: 'Tym, co czytelnik postrzega jako jeden znak. é może być dwoma punktami kodowymi (e + akcent łączący), a emoji rodziny bywa złożone z siedmiu lub więcej połączonych łącznikami zerowej szerokości. Liczba grafemów pochodzi z Intl.Segmenter w przeglądarce — najbliższego odpowiednika „znaków tak, jak widzi je użytkownik”.'
+			},
+			{
+				q: 'Jak znaleźć niewidoczne znaki w napisie?',
+				a: 'Wklej go tutaj — każdy punkt kodowy dostaje własny wiersz, łącznie ze spacjami zerowej szerokości (U+200B), spacjami nierozdzielającymi (U+00A0), znacznikami BOM (U+FEFF) i znakami kierunku, każdy opisany kategorią. To klasyczni winowajcy „identycznych” napisów, które nie przechodzą porównania.'
+			},
+			{
+				q: 'Co mówią mi sekwencje bajtów UTF-8?',
+				a: 'Dokładnie to, co zostanie zapisane lub przesłane: ASCII to jeden bajt, większość rozszerzeń łacińskich dwa, CJK trzy, emoji cztery. Jeśli system utnie napis w środku sekwencji, dostaniesz znaki zastępcze (�) — widok bajtowy pokazuje, gdzie takie cięcia by wypadły.'
+			}
+		]
+	},
+
+	'cron-parser': {
+		about: [
+			'Wklej pięciopolowe wyrażenie cron i dostań je wyjaśnione zwykłym językiem, z rozbiciem pole po polu oraz — częścią, która wyłapuje prawdziwe pomyłki — pięcioma najbliższymi rzeczywistymi terminami uruchomienia policzonymi w Twojej strefie czasowej. „0 3 * * 1” czyta się jako „o 03:00, w poniedziałki”, a dalej idą konkretne daty, w których zadanie wystartuje.',
+			'Parser obsługuje pełną standardową składnię: listy (1,15), zakresy (9-17), kroki (*/15), nazwy miesięcy i dni tygodnia (jan, mon), 7 jako niedzielę oraz rodzinę makr @daily/@hourly. Realizuje też regułę, o której wszyscy zapominają: gdy ograniczone są jednocześnie dzień miesiąca i dzień tygodnia, zadanie uruchamia się, gdy pasuje którykolwiek z nich, a nie oba naraz.',
+			'Wyrażenia sześciopolowe (Quartz, z sekundami) są wykrywane i wyraźnie sygnalizowane, zamiast po cichu zostać źle zinterpretowane — to najczęstsze źródło zamieszania w stylu „mój cron chodzi nie wtedy, co trzeba” przy przenoszeniu zadań między harmonogramami Javy a uniksowym crontabem.'
+		],
+		faqs: [
+			{
+				q: 'Jakie jest pięć pól i w jakiej kolejności?',
+				a: 'Minuta (0–59), godzina (0–23), dzień miesiąca (1–31), miesiąc (1–12), dzień tygodnia (0–6, niedziela = 0, przy czym 7 też jest przyjmowane jako niedziela). Zapamiętanie kolejności to odwieczna udręka — panel rozbicia podpisuje każde pole Twojego wyrażenia.'
+			},
+			{
+				q: 'Dlaczego „0 0 1 * 1” uruchamia się częściej, niż się spodziewałem?',
+				a: 'Ponieważ ograniczone są zarówno dzień miesiąca (1.), jak i dzień tygodnia (poniedziałek), cron uruchamia zadanie, gdy pasuje KTÓRYKOLWIEK z nich — czyli każdego pierwszego dnia miesiąca ORAZ w każdy poniedziałek. Żeby uzyskać „1. tylko wtedy, gdy wypada w poniedziałek”, trzeba sprawdzić datę w samym skrypcie.'
+			},
+			{
+				q: 'W jakiej strefie czasowej podawane są kolejne uruchomienia?',
+				a: 'W lokalnej strefie Twojej przeglądarki, wypisanej obok wyników. Prawdziwe crontaby działają w strefie serwera (albo według linii TZ= w niektórych cronach) — zawsze sprawdź, czego używa maszyna docelowa, zwłaszcza przy zmianach czasu.'
+			},
+			{
+				q: 'Czy obsługiwane są sekundy albo lata?',
+				a: 'Nie — to rozszerzenia Quartza (Java) z 6 lub 7 polami. Standardowy uniksowy cron ma dokładnie pięć pól i rozdzielczość jednej minuty. Wejście sześciopolowe jest wykrywane i zgłaszane jako Quartz, a nie odczytywane błędnie.'
+			}
+		]
+	},
+
+	'password-generator': {
+		about: [
+			'Generuj losowe hasła o wybranej długości i z wybranych zestawów znaków, w razie potrzeby hurtowo, z uczciwym wyliczeniem entropii — bitami losowości, a nie ozdobnym kolorowym paskiem. Losowość pochodzi z crypto.getRandomValues z próbkowaniem odrzucającym, więc każdy znak losowany jest równomiernie, bez obciążenia wynikającego z reszty z dzielenia.',
+			'Z każdego włączonego zestawu znaków gwarantowany jest co najmniej jeden przedstawiciel (polityka wymuszana przez wiele serwisów), potem reszta hasła dopełniana jest równomiernie, a całość zostaje przetasowana — dzięki temu gwarantowane znaki nie skupiają się przewidywalnie na początku.',
+			'Filtr znaków niejednoznacznych usuwa bliźniaki (0/O, 1/l/I) z myślą o hasłach, które człowiek może kiedyś przeczytać na głos albo przepisać z kartki. Ponieważ generowanie jest lokalne, hasła istnieją wyłącznie na Twojej maszynie, dopóki gdzieś ich nie zapiszesz.'
+		],
+		faqs: [
+			{
+				q: 'Co oznaczają bity entropii?',
+				a: 'Entropia = długość × log2(rozmiar puli): liczba jednakowo prawdopodobnych możliwości, które musi przeszukać atakujący. 64 bity wytrzymują przypadkowy atak; 80 i więcej jest mocne wobec offline’owego łamania szybkich skrótów; 100 i więcej jest praktycznie nie do odgadnięcia. Szesnastoznakowe hasło z liter, cyfr i symboli to około 104 bity.'
+			},
+			{
+				q: 'Czy długie hasło z samych małych liter jest lepsze niż krótkie i skomplikowane?',
+				a: 'Często tak — długość mnoży entropię, a dodatkowe zestawy jedynie poszerzają podstawę logarytmu. 20 małych liter (~94 bity) bije 10 znaków w pełni wymieszanych (~65 bitów). Reguły złożoności istnieją głównie po to, by pokonać listy słów, a losowe generowanie i tak je pokonuje.'
+			},
+			{
+				q: 'Czy generowanie haseł w przeglądarce jest bezpieczne?',
+				a: 'Losowość (crypto.getRandomValues) to ten sam CSPRNG, którego używają natywne menedżery haseł, a ta strona nie wykonuje z Twoimi danymi żadnych żądań sieciowych. Realne ryzyka dotyczą tego, co dzieje się po wygenerowaniu: historii schowka, udostępniania ekranu i miejsca, w którym hasło przechowasz.'
+			},
+			{
+				q: 'Po co wykluczać znaki niejednoznaczne?',
+				a: 'Dla haseł, które przeczyta człowiek — wydrukowanych kodów odzyskiwania, dyktowanych przez telefon, przepisywanych z innego ekranu — 0/O oraz 1/l/I generują realne zgłoszenia do wsparcia. Przy hasłach tylko wklejanych zostaw je; strata entropii przy wykluczeniu jest tak czy inaczej niewielka.'
+			}
+		]
+	},
+
+	'qr-code-generator': {
+		about: [
+			'Wpisz lub wklej dowolny tekst — adres URL, dane WiFi, kontakt — i natychmiast otrzymaj kod QR, wyrenderowany jako ostry wektorowy SVG do pobrania albo wyeksportowany do PNG na czaty i slajdy. Bez znaku wodnego, bez wygasającego przekierowania z „darmowego planu”, a ponieważ generowanie jest lokalne, to, co kodujesz, nigdy nie dotyka serwera.',
+			'Ten ostatni punkt znaczy więcej, niż się wydaje: wiele darmowych usług QR przepuszcza Twój adres przez własną domenę przekierowującą (żeby móc potem pobierać opłaty albo liczyć skany), co oznacza, że kod przestaje działać razem z usługą. Kody generowane tutaj kodują treść bezpośrednio i działają na zawsze.',
+			'Cztery poziomy korekcji błędów wymieniają pojemność na odporność — L przetrwa drobne uszkodzenia, H przetrwa zasłonięcie 30% symbolu (przydaje się, gdy logo zakryje środek albo wydruk będzie mały i poobcierany).'
+		],
+		faqs: [
+			{
+				q: 'Który poziom korekcji błędów wybrać?',
+				a: 'M (15%) to rozsądne ustawienie domyślne. Wybierz H (30%) do małych kodów drukowanych, kodów za szybą lub w odblasku albo gdy nakładasz logo. Wyższa korekcja zagęszcza kod, więc przy bardzo długich adresach na ekranie poziom L zostawia moduły większe i łatwiejsze do zeskanowania.'
+			},
+			{
+				q: 'Dlaczego SVG jest lepszy do druku niż PNG?',
+				a: 'SVG jest niezależny od rozdzielczości — drukarka rasteryzuje go w swoim natywnym DPI, więc krawędzie modułów pozostają idealnie ostre w każdym rozmiarze. PNG trzeba wygenerować w konkretnym rozmiarze pikselowym i przy skalowaniu potrafi się rozmyć. SVG do druku i narzędzi projektowych, PNG na czat i slajdy.'
+			},
+			{
+				q: 'Ile danych mieści się w kodzie QR?',
+				a: 'Teoretycznie około 3 KB bajtów (wersja 40, poziom L), ale tak duże kody trudno zeskanować z ekranu. Poniżej 300 znaków skanuje się niezawodnie; długie adresy najpierw skróć — najlepiej skracaczem we własnej domenie, jeśli zależy Ci na trwałości.'
+			},
+			{
+				q: 'Czy te kody wygasają albo śledzą skany?',
+				a: 'Nie. Treść kodowana jest bezpośrednio we wzorze — nic nie przechodzi przez tę stronę, więc nie ma czemu wygasnąć i nikt (my również) nie widzi, kiedy ani gdzie kod został zeskanowany. Śledzenie skanów z definicji wymaga usługi przekierowującej.'
+			}
+		]
+	},
+
+	'json-to-yaml': {
+		about: [
+			'Konwertuj między JSON-em, YAML-em i TOML-em w dowolną stronę. Format źródłowy rozpoznawany jest automatycznie w trakcie wklejania — nawiasy sugerują JSON, dwukropki po kluczach YAML, [tabele] TOML — z możliwością ręcznego wskazania przy niejednoznacznym wejściu. Konwersja przechodzi przez prawdziwe parsowanie, więc wynik jest z definicji poprawny, a nie efektem przekształcania tekstu wiersz po wierszu.',
+			'Każdy format ma realne mocne strony: JSON do API i wymiany maszynowej, YAML do konfiguracji edytowanej przez ludzi (Kubernetes, potoki CI), TOML do dobrze otypowanych plików konfiguracyjnych (Cargo, pyproject). Ręczne przenoszenie danych między nimi zaprasza do błędów z wcięciami i cudzysłowami, które ta konwersja eliminuje.',
+			'Konwerter uczciwie mówi o ograniczeniach formatów: TOML nie ma tablic na najwyższym poziomie ani wartości null, więc przy konwersji takich dokumentów wyjaśnia dlaczego, zamiast po cichu gubić dane.'
+		],
+		faqs: [
+			{
+				q: 'Czy komentarze przetrwają konwersję?',
+				a: 'Nie — JSON nie ma składni komentarzy, a konwersja przechodzi przez sparsowaną strukturę danych, która komentarzy nie niesie. Zamiana YAML → JSON → YAML gubi je bezpowrotnie; gdy komentarze są ważne, zachowaj oryginalny plik.'
+			},
+			{
+				q: 'Dlaczego moje „no” w YAML-u zamieniło się w false?',
+				a: 'YAML 1.1 traktuje yes/no/on/off jako wartości logiczne, przez co kod kraju NO słynnie staje się false. Tutejszy parser trzyma się YAML-a 1.2 (tylko true/false), ale pliki pisane pod starsze parsery wciąż potrafią zaskoczyć. Napisy wyglądające jak wartości logiczne, liczby albo daty bierz w cudzysłów.'
+			},
+			{
+				q: 'Dlaczego mój JSON nie konwertuje się do TOML-a?',
+				a: 'TOML wymaga tabeli (obiektu) na najwyższym poziomie — tablica ani goły skalar nie mogą być dokumentem TOML — i nie zna wartości null. Przebuduj dane (zawiń tablicę pod klucz, usuń nulle albo daj im wartości domyślne), a konwersja się powiedzie.'
+			},
+			{
+				q: 'Czy YAML jest nadzbiorem JSON-a?',
+				a: 'Praktycznie tak — YAML 1.2 parsuje niemal wszystkie dokumenty JSON, dlatego wklejenie JSON-a do konfiguracji YAML zwykle działa. Odwrotnie już nie: kotwice, wieloliniowe skalary i tagi YAML-a nie mają odpowiednika w JSON-ie i przy konwersji zostają rozwinięte albo zamienione na napisy.'
+			}
+		]
+	}
+};
 
 export default TOOL_CONTENT_PL;
