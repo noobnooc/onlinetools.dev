@@ -549,6 +549,586 @@ const TOOL_CONTENT_ID: Record<string, ToolContent> = {
 				a: 'Secara praktis ya — YAML 1.2 mengurai hampir semua dokumen JSON, itu sebabnya menempelkan JSON ke dalam konfigurasi YAML biasanya jalan. Sebaliknya tidak berlaku: jangkar, skalar multibaris, dan tag milik YAML tidak punya padanan di JSON sehingga saat dikonversi akan dikembangkan atau dijadikan string.'
 			}
 		]
+	},
+
+	'json-to-csv': {
+		about: [
+			'Tempel larik objek JSON dan dapatkan CSV yang siap masuk lembar sebar: objek bersarang diratakan menjadi nama kolom bertitik (user.address.city), kolomnya digabung dari seluruh baris (nilai yang tak ada menjadi sel kosong), dan pengutipannya mengikuti RFC 4180 sehingga koma, tanda kutip, dan ganti baris di dalam nilai selamat melewati Excel maupun Google Sheets.',
+			'Ini jalur tercepat dari respons API menuju lembar sebar yang bisa disaring dan dibuat pivot oleh siapa pun. Penggabungan kolom penting pada data dunia nyata yang objeknya tidak seragam — baris ke-1 bisa saja kekurangan bidang yang dimiliki baris ke-40, dan konverter menanganinya alih-alih menyerah dengan galat atau membuang data.',
+			'Konverternya juga berjalan terbalik: tempel hasil ekspor CSV dan dapatkan larik objek JSON berkunci baris tajuk, dengan deteksi pemisah otomatis (koma, titik koma, tab, garis tegak) dan opsi nilai bertipe — angka, boolean, dan null menjadi tipe JSON sungguhan. Kedua arah berjalan sepenuhnya di browser Anda, jadi ekspor data pelanggan tidak pernah meninggalkan mesin Anda.'
+		],
+		faqs: [
+			{
+				q: 'Bagaimana objek bersarang direpresentasikan?',
+				a: 'Diratakan dengan kunci yang disambung titik: {"user":{"name":"Ada"}} menjadi kolom user.name. Dengan begitu setiap nilai skalar tetap bisa dialamatkan dalam satu baris tajuk yang datar, dan itulah yang benar-benar bisa diolah perkakas lembar sebar.'
+			},
+			{
+				q: 'Apa yang terjadi pada larik di dalam sebuah baris?',
+				a: 'Larik disematkan sebagai teks JSON dalam satu sel (["a","b"]). Memecah larik menjadi kolom (tags.0, tags.1…) atau baris tambahan mengubah bentuk data Anda menurut selera tertentu — menyematkannya menjaga konversi tetap tanpa kehilangan dan mudah ditebak.'
+			},
+			{
+				q: 'Kenapa Excel menampilkan CSV saya dalam satu kolom saja?',
+				a: 'Karena setelan lokal: di sebagian besar Eropa, Excel mengharapkan berkas berpemisah titik koma sebab koma dipakai sebagai pemisah desimal. Ganti opsi pemisah menjadi titik koma, atau gunakan Data → From Text/CSV yang memungkinkan Anda menentukan pemisahnya sendiri.'
+			},
+			{
+				q: 'Apakah konverternya menangani objek tunggal (bukan larik)?',
+				a: 'Ya — objek yang berdiri sendiri menjadi CSV satu baris. Namun objek yang berkunci ID ({"a1":{...},"a2":{...}}) berubah menjadi satu baris yang sangat lebar; ubah dulu menjadi larik bila tiap nilainya semestinya menjadi satu baris.'
+			},
+			{
+				q: 'Bagaimana CSV → JSON menangani bidang berkutip dan ganti baris di dalamnya?',
+				a: 'Sesuai RFC 4180: bidang yang dibungkus tanda kutip ganda boleh memuat pemisah, kutip ganda berulang ("") untuk satu kutip harfiah, dan ganti baris. Excel dan sebagian besar basis data mengekspor persis format ini, jadi berkas nyata terurai dengan benar.'
+			},
+			{
+				q: 'Kenapa nol di depan kode pos saya hilang saat CSV → JSON?',
+				a: 'Konversi bertipe mengubah 02134 menjadi angka 2134. Matikan “Nilai bertipe” dan setiap sel akan tetap berupa string persis seperti tertulis — pilihan yang tepat untuk pengenal, nomor telepon, dan apa pun yang punya nol di depan.'
+			}
+		]
+	},
+
+	'json-to-typescript': {
+		about: [
+			'Tempel contoh JSON — respons API, berkas konfigurasi — dan dapatkan antarmuka TypeScript yang disimpulkan darinya: objek bersarang menjadi tipe bersarang, larik memperoleh tipe elemen (dengan union bila isinya campur), dan kunci yang bukan pengenal sah dikutip dengan benar.',
+			'Tipe yang dihasilkan adalah titik awal, bukan kontrak: penyimpulan hanya melihat satu contoh, jadi bidang yang kebetulan bernilai null di contoh Anda akan bertipe null, dan bidang opsional yang tidak muncul sama sekali tak diketahuinya. Keluarannya sengaja polos — tanpa dekorator, tanpa validasi saat runtime — supaya bisa Anda tempel ke mana pun lalu dipoles.',
+			'Untuk bidang yang berbeda-beda antar-permintaan, jalankan contoh kedua lalu gabungkan secara manual, atau naik kelas ke perkakas berbasis skema (OpenAPI, zod) begitu bentuk datanya stabil. Untuk momen harian “saya cuma butuh tipe buat respons ini”, sekali tempel sudah cukup.'
+		],
+		faqs: [
+			{
+				q: 'Kenapa bidang saya yang bisa null malah bertipe null saja?',
+				a: 'Penyimpulan hanya melihat contoh yang Anda tempel. Kalau di sana bidangnya null, ya null itulah satu-satunya yang bisa ia ketahui. Ubah menjadi string | null (atau apa pun tipe sebenarnya) setelah pembuatan — atau tempel contoh yang bidangnya terisi.'
+			},
+			{
+				q: 'Bagaimana bidang opsional ditangani?',
+				a: 'Tidak terdeteksi — satu contoh tidak bisa membedakan “selalu ada” dari “kebetulan ada kali ini”. Bidang yang absen di contoh juga absen di tipe. Tandai sendiri sebagai opsional (name?:) di tempat Anda tahu API kadang tidak mengirimkannya.'
+			},
+			{
+				q: 'Larik bertipe campuran menghasilkan apa?',
+				a: 'Sebuah union: [1, "a"] disimpulkan menjadi (number | string)[]. Larik kosong disimpulkan sebagai unknown[] karena tidak ada elemen untuk diperiksa — ganti dengan tipe elemen yang sesungguhnya begitu Anda tahu.'
+			},
+			{
+				q: 'Sebaiknya pakai tipe hasil penyimpulan atau pustaka skema seperti zod?',
+				a: 'Antarmuka hasil penyimpulan hanya hidup saat kompilasi — ia tidak memvalidasi apa pun saat runtime. Untuk perkakas internal dan pengetikan cepat, itu sempurna; untuk masukan tak tepercaya saat runtime, definisikan skema zod/valibot lalu turunkan tipe statisnya dari sana.'
+			}
+		]
+	},
+
+	'jsonpath-tester': {
+		about: [
+			'Uji ekspresi JSONPath terhadap JSON Anda sendiri dan lihat setiap kecocokan lengkap dengan nilainya sekaligus path konkretnya. Sintaksis yang didukung mencakup pemakaian sehari-hari: notasi titik dan kurung siku, indeks larik (termasuk negatif), wildcard, gabungan ([\'a\',\'b\']), dan penelusuran rekursif ($..price).',
+			'Keluaran path pada tiap kecocokan adalah bagian yang diam-diam paling berguna: jalankan $..id pada dokumen yang dalam, dan tiap hasil memberi tahu persis di mana ia tinggal ($.data.items[3].id), siap ditempel ke dalam kode. Ia mengubah “ada di suatu tempat dalam gumpalan ini” menjadi alamat yang pasti.',
+			'Ekspresi penyaring ([?(@.price < 10)]) belum diterapkan — alatnya mengatakannya terang-terangan alih-alih mengembalikan hasil yang salah. Untuk ekstraksi struktural, yang merupakan mayoritas penggunaan JSONPath, semuanya berfungsi.'
+		],
+		faqs: [
+			{
+				q: 'Apa bedanya $.a.b dan $..b?',
+				a: '$.a.b menempuh satu rute persis: kunci a di akar, lalu kunci b di dalamnya. $..b (penelusuran rekursif) menemukan setiap b di mana pun dalam dokumen, pada kedalaman berapa pun. Penelusuran rekursif itu ampuh tetapi bisa mengejutkan — ia juga mencocokkan kunci b yang bersarang di tempat yang tak Anda pertimbangkan.'
+			},
+			{
+				q: 'Bagaimana mengakses kunci yang mengandung spasi atau tanda hubung?',
+				a: 'Dengan notasi kurung siku berkutip: $[\'my key\'] atau $.data[\'content-type\']. Notasi titik hanya bekerja untuk kunci yang berbentuk nama pengenal yang sah.'
+			},
+			{
+				q: 'Apakah indeks larik negatif berfungsi?',
+				a: 'Ya — [-1] adalah elemen terakhir, [-2] elemen kedua dari belakang, mengikuti konvensi yang dipopulerkan Python dan diadopsi RFC 9535. [0] tetap elemen pertama.'
+			},
+			{
+				q: 'Apakah JSONPath sudah dibakukan?',
+				a: 'Sejak 2024, ya — RFC 9535 mendefinisikan sintaksis dan semantiknya. Implementasi yang ditulis sebelum itu berbeda-beda pada kasus tepi (terutama penyaring dan gabungan), jadi ekspresi yang sama bisa berperilaku lain di pustaka berbeda; ujilah pada implementasi yang Anda pakai saat merilis.'
+			}
+		]
+	},
+
+	'bcrypt-generator': {
+		about: [
+			'Hash kata sandi dengan bcrypt pada faktor biaya pilihan Anda, atau verifikasi teks polos terhadap hash yang sudah ada — keduanya sepenuhnya di dalam browser, yang justru itulah yang Anda inginkan ketika yang sedang diuji adalah sebuah kata sandi. Ada pula pemeriksa hash yang memecah hash bcrypt mana pun menjadi versi, biaya, dan salt-nya.',
+			'Bcrypt tetap pilihan yang kokoh untuk menyimpan kata sandi karena ia sengaja lambat dan bergaram per kata sandi: faktor biaya melipatduakan kerja pada setiap kenaikan, jadi biaya 12 berarti 4096 iterasi penyiapan sandi di bawahnya. Tampilan waktunya memperlihatkan berapa lama biaya pilihan Anda berjalan, sehingga pertukaran antara keamanan dan latensi menjadi konkret.',
+			'Kebutuhan harian yang lebih sering justru verifikasi: memastikan bahwa hash di basis data cocok dengan kata sandi yang diketahui tanpa menyalakan kode aplikasi. Tempel keduanya, dapatkan jawaban ya atau tidak.'
+		],
+		faqs: [
+			{
+				q: 'Faktor biaya berapa yang sebaiknya saya pakai di produksi?',
+				a: 'Panduan klasiknya: setinggi yang masih dimaafkan anggaran latensi login Anda, umumnya 10–13 saat ini. Bidik 100–300 ms per hash pada perangkat keras produksi Anda. JavaScript di browser berjalan lebih lambat daripada kode native, jadi waktu yang tampil di sini adalah batas atas untuk server Anda.'
+			},
+			{
+				q: 'Kenapa kata sandi yang sama menghasilkan hash berbeda setiap kali?',
+				a: 'Salt acak sepanjang 16 bita dibuat untuk tiap hash dan disimpan di dalam string hash itu sendiri. Itu memang disengaja — kata sandi identik memperoleh hash berbeda, sehingga tabel pelangi pra-hitung menjadi percuma. Verifikasi membaca kembali salt dari dalam hash, itulah sebabnya pembandingan tetap bisa jalan.'
+			},
+			{
+				q: 'Apa arti bagian-bagian sebuah hash bcrypt?',
+				a: '$2b$12$ + 53 karakter: 2b adalah versi algoritmenya, 12 adalah biayanya (2^12 iterasi), 22 karakter berikutnya adalah salt, dan 31 karakter terakhir adalah digest — semuanya dalam alfabet base64 khas bcrypt. Pemeriksa di bawah alat ini memecah hash mana pun dengan cara itu.'
+			},
+			{
+				q: 'Apakah bcrypt masih dianjurkan ketimbang Argon2?',
+				a: 'Argon2id adalah pilihan pertama saat ini untuk sistem baru (kebutuhan memorinya menyulitkan pembobolan dengan GPU). Bcrypt tetap dapat diterima dan ada di mana-mana — saran praktisnya: jangan panik memigrasikan penyimpanan bcrypt yang sudah berjalan baik, tetapi pilihlah Argon2id untuk rancangan yang dimulai dari nol. Keduanya jauh melampaui hash cepat semacam SHA-256.'
+			}
+		]
+	},
+
+	'user-agent-parser': {
+		about: [
+			'Tempel string User-Agent dari sebaris log, laporan bug, atau ekspor analitik dan dapatkan hasil bacaannya: browser dan versinya, mesin render, sistem operasi, jenis perangkat, dan arsitektur CPU. Penguraiannya memakai ua-parser-js, pustaka yang sama di balik tak terhitung alur analitik, berjalan lokal atas string Anda.',
+			'String User-Agent adalah situs arkeologi — semuanya masih mengaku Mozilla/5.0, Chrome mengaku Safari, Safari mengaku KHTML, dan identitas aslinya bersembunyi di token-token belakangan. Pengurai lebih baik daripada memicingkan mata: ia tahu “CriOS” berarti Chrome di iOS dan Edge bersembunyi di balik “Edg/”.',
+			'Perhatikan arah perkembangannya: browser sedang membekukan dan memangkas string UA (dan Chromium mengirim UA Client Hints sebagai gantinya), jadi detail versi dari UA semata makin kasar. Untuk forensik log dan triase bug ia tetap tak tergantikan; untuk keputusan soal fitur, gunakan deteksi fitur.'
+		],
+		faqs: [
+			{
+				q: 'Kenapa setiap User-Agent diawali Mozilla/5.0?',
+				a: 'Sandiwara kompatibilitas dari era 1990-an yang tidak pernah usai: server mengendus kata “Mozilla” sebelum menyajikan halaman modern, jadi setiap browser baru mengaku sebagai Mozilla, dan tiap browser berikutnya menyamar sebagai pendahulunya. Sekarang awalan itu tinggal tradisi tanpa makna.'
+			},
+			{
+				q: 'Bisakah saya memercayai versi OS di dalam string UA?',
+				a: 'Makin tahun makin tidak. macOS membekukan versi UA-nya pada 10_15_7, Windows 11 melaporkan diri sebagai Windows NT 10.0, dan browser ber-UA terpangkas sengaja mengasarkan versinya. Perlakukan versi OS dari UA sebagai perkiraan; pakailah UA Client Hints di tempat Anda menguasai kliennya.'
+			},
+			{
+				q: 'Apa maksud “like Gecko” atau “KHTML, like Gecko”?',
+				a: 'Lapisan penyamaran lagi: WebKit berakar pada KHTML dan ingin halaman yang memberi perlakuan khusus pada Gecko (mesin Firefox) tetap jalan, maka ia menambahkan “like Gecko”. Setiap browser WebKit/Blink membawa frasa itu sampai hari ini.'
+			},
+			{
+				q: 'Haruskah saya memakai penguraian UA untuk deteksi fitur?',
+				a: 'Jangan — pengendusan UA rusak begitu versi browser baru dirilis. Deteksilah fiturnya sendiri (if ("clipboard" in navigator)). Penguraian UA berguna untuk analitik, analisis log, dan mereproduksi bug yang dilaporkan pengguna, yaitu situasi ketika mengetahui lingkungannya memang justru intinya.'
+			}
+		]
+	},
+
+	'color-converter': {
+		about: [
+			'Masukkan warna dalam notasi umum mana pun — #hex, rgb(), hsl(), atau nama warna CSS — dan dapatkan semua format sekaligus: HEX, RGB, HSL, dan OKLCH, berdampingan dengan contoh warna langsung. Kanal alfa dipertahankan lintas format, dan keluarannya memakai sintaksis CSS modern (kanal dipisah spasi) yang menempel rapi ke lembar gaya masa kini.',
+			'OKLCH disertakan karena ke sanalah warna di CSS bergerak: berbeda dari HSL, sumbu terangnya seragam secara persepsi, jadi dua warna dengan L yang sama benar-benar tampak sama terangnya, dan mengubah rona tidak diam-diam menggeser terang yang dirasakan. Memindahkan palet yang sudah ada ke OKLCH adalah langkah pertama membangun skala warna yang konsisten.',
+			'Matematika konversinya berjalan lokal memakai transformasi sRGB↔OKLab yang telah dipublikasikan, dan nilainya bolak-balik utuh: RGB yang Anda peroleh kembali dari masukan HSL persis sama dengan yang akan dihitung browser.'
+		],
+		faqs: [
+			{
+				q: 'Kenapa nilai terang di HSL dan OKLCH tidak sepakat?',
+				a: 'Terang pada HSL adalah properti geometris nilai RGB, bukan properti penglihatan manusia — kuning hsl(60 100% 50%) tampak jauh lebih terang daripada biru hsl(240 100% 50%) meski L-nya identik. Sumbu L OKLCH dirancang mengikuti persepsi, jadi L yang sama berarti terang tampak yang sama. Ketidaksepakatan itulah alasan keberadaan OKLCH.'
+			},
+			{
+				q: 'Apa arti nilai alfa dan di mana letaknya pada tiap format?',
+				a: 'Alfa adalah keburaman, dari 0 (bening) sampai 1 (pekat). Pada hex delapan digit ia adalah bita terakhir (#RRGGBBAA); pada sintaksis fungsional modern ia mengikuti garis miring: rgb(76 141 255 / 0.5). Konverter ini membawa alfa melewati setiap format secara otomatis.'
+			},
+			{
+				q: 'Apakah setiap warna OKLCH bisa ditampilkan dalam sRGB?',
+				a: 'Tidak — OKLCH mencakup gamut lebar, dan sebagian kombinasi kroma/terang tidak punya padanan sRGB. Mengonversi dari sRGB (seperti yang dilakukan alat ini) selalu tetap dapat direpresentasikan; ke arah sebaliknya, warna di luar gamut harus dipangkas atau dipetakan — itu sebabnya hijau P3 yang menyala tampak lebih kusam di layar sRGB.'
+			},
+			{
+				q: 'Kenapa rgb(76 141 255) dipisah spasi, bukan koma?',
+				a: 'CSS Color Module Level 4 membakukan kanal berpemisah spasi dengan /alfa opsional, dan setiap browser modern mendukungnya. Bentuk berkoma masih berfungsi, tetapi bentuk berspasi itulah yang dipakai spesifikasi baru (dan alat ini).'
+			}
+		]
+	},
+
+	'image-to-base64': {
+		about: [
+			'Jatuhkan, pilih, atau tempel sebuah gambar lalu dapatkan bentuk Base64-nya dalam segala rasa yang mungkin Anda butuhkan: data URL siap pakai, deklarasi background-image untuk CSS, tag <img> lengkap dengan dimensi intrinsiknya, serta muatan Base64 mentah. Arah sebaliknya juga jalan — tempel data URL atau gumpalan Base64 telanjang, dan gambarnya didekode, dipratinjau, dan bisa diunduh sebagai berkas.',
+			'Formatnya dikenali dari bita ajaib, bukan dari ekstensi berkas atau tipe MIME yang dinyatakan, jadi berkas PNG yang diganti nama menjadi .jpg (atau data URL berlabel keliru) tetap terkonversi dengan benar. Panel ukurannya jujur soal ongkosnya: Base64 menggelembungkan data sekitar sepertiga, dan ukuran terenkode yang persis ditampilkan di sebelah aslinya supaya Anda bisa menimbang apakah penyematan itu sepadan.',
+			'Berbeda dari kebanyakan situs gambar-ke-Base64, tidak ada yang diunggah — berkasnya dibaca dengan FileReader API milik browser lalu dienkode di dalam halaman. Itu membuatnya aman untuk tangkapan layar dasbor internal, foto produk yang belum diluncurkan, atau apa pun yang lebih baik tidak Anda serahkan ke server orang asing.'
+		],
+		faqs: [
+			{
+				q: 'Kapan sebaiknya menyematkan gambar sebagai Base64 alih-alih menautkan berkas?',
+				a: 'Ketika gambarnya kecil (kira-kira di bawah 10 KB), jarang berubah, dan kalau dipisah justru menambah satu permintaan HTTP — misalnya ikon, logo di surel, atau dokumen HTML satu berkas. Untuk apa pun yang lebih besar, berkas terpisah menang: ia di-cache sendiri, dimuat paralel, dan tidak menggemukkan HTML atau CSS Anda sebesar 33%.'
+			},
+			{
+				q: 'Kenapa versi Base64-nya sekitar sepertiga lebih besar daripada berkas saya?',
+				a: 'Base64 mewakili tiap 3 bita biner sebagai 4 karakter ASCII, yakni tambahan struktural +33% (plus paling banyak dua karakter padding). Gzip atau Brotli di server merebut kembali sebagian, tetapi penggelembungan itu melekat pada pengodeannya — ia menukar ukuran demi kemampuan menyisipkan data biner ke dalam teks.'
+			},
+			{
+				q: 'Bisakah saya mendekode data URL yang saya temukan di lembar gaya atau HTML?',
+				a: 'Bisa — beralihlah ke Base64 → gambar lalu tempel seluruhnya, termasuk awalan data:. Data URL SVG berenkode persen (yang tanpa ;base64) juga bisa didekode, dan ganti baris atau spasi di dalam muatannya dibersihkan otomatis. Hasilnya dipratinjau di halaman dan diunduh dengan ekstensi yang benar.'
+			},
+			{
+				q: 'Apakah ini bekerja untuk SVG, GIF, dan ICO, atau hanya PNG dan JPEG?',
+				a: 'Semua yang dikenali pengendus format bisa dikonversi ke Base64: PNG, JPEG, WebP, GIF, SVG, BMP, ICO, dan AVIF. Khusus SVG, pertimbangkan bahwa sumber XML-nya sering kali lebih kecil dan lebih terbaca bila disisipkan langsung — mengenkode SVG ke Base64 baru masuk akal ketika urusan kutip-mengutip atau escape jadi merepotkan.'
+			}
+		]
+	},
+
+	'image-converter': {
+		about: [
+			'Konversikan gambar antara PNG, JPEG, dan WebP tanpa memasang apa pun dan tanpa mengunggah ke mana pun: jatuhkan berkasnya, pilih tujuannya, atur kualitas lewat penggeser langsung, dan pantau ukuran keluaran diperbarui seketika. Ubin Δ memperlihatkan persis seberapa lebih kecil (atau lebih besar) berkas hasil konversi, sehingga memilih setelan kualitas berhenti jadi tebak-tebakan.',
+			'Ketiga format punya tugas berbeda. PNG bersifat nirsusut dengan transparansi penuh — tepat untuk tangkapan layar, aset antarmuka, dan apa pun yang bertepi tajam atau berteks. JPEG memampatkan foto secara agresif tetapi tidak punya kanal alfa dan mengaburkan tepi keras. WebP biasanya mengungguli JPEG 25–35% pada kualitas setara, mendukung transparansi, dan didukung penuh di browser masa kini — untuk web, biasanya itulah jawabannya.',
+			'Konversinya terjadi di atas canvas dalam browser Anda: gambarnya didekode, digambar ulang, dan dienkode kembali oleh kodek yang sama dengan yang dipakai browser untuk menampilkan halaman. Itulah yang membuat alat ini privat — sekaligus alasan jumlah bita persisnya sedikit berbeda antara Chrome, Firefox, dan Safari, sebab masing-masing membawa enkodernya sendiri.'
+		],
+		faqs: [
+			{
+				q: 'Setelan kualitas berapa yang sebaiknya saya pakai untuk JPEG dan WebP?',
+				a: 'Rentang 75 sampai 90 mencakup hampir semua pemakaian nyata. Pada 85, kebanyakan foto tak terbedakan secara visual dari sumbernya dengan ukuran sepersekian; di bawah sekitar 70, artefak kotak-kotak merayapi gradasi dan warna kulit; di atas 90, ukuran berkas menanjak curam demi perolehan yang tak kasat mata. Geser penggesernya dan pantau ubin ukuran — titik manisnya biasanya kelihatan jelas.'
+			},
+			{
+				q: 'Kenapa PNG saya malah membesar setelah dikonversi ke JPEG?',
+				a: 'JPEG dibuat untuk gradasi fotografis, bukan warna datar. Tangkapan layar, diagram, dan gambar antarmuka memampat luar biasa sebagai PNG (deretan panjang piksel identik) tetapi memaksa JPEG menyimpan derau di sekeliling setiap tepi tajam — berkas lebih besar dan berbayang kentara. Simpan grafik semacam itu sebagai PNG, atau ubah ke WebP yang condong nirsusut.'
+			},
+			{
+				q: 'Apa yang terjadi pada transparansi ketika saya konversi ke JPEG?',
+				a: 'JPEG tidak punya kanal alfa, jadi wilayah transparan harus diisi sesuatu — alat ini meratakannya ke putih, konvensi untuk gambar web. Kalau transparansinya harus selamat, pilih PNG atau WebP sebagai tujuannya.'
+			},
+			{
+				q: 'Kenapa browser saya tidak bisa mengekspor AVIF atau HEIC di sini?',
+				a: 'API canvas toBlob hanya mengenkode format yang enkodernya dibawa browser — PNG dan JPEG di mana-mana, WebP di Chromium dan Firefox. Pengodean AVIF masih jarang dan HEIC terbebani paten, jadi browser mendekodenya tetapi tidak memproduksinya. Kalau Anda memilih format yang tak bisa ditulis browser Anda, alat ini mengatakannya alih-alih diam-diam memberi Anda PNG.'
+			}
+		]
+	},
+
+	'image-resizer': {
+		about: [
+			'Ubah ukuran gambar ke lebar tertentu, tinggi tertentu, atau persentase dari aslinya — dimensi satunya mengikuti otomatis sehingga tak ada yang melar. Pilih format keluaran (atau pertahankan format sumber), atur kualitas untuk tujuan yang bersusut, pratinjau hasilnya, lalu unduh. Ubin sebelum/sesudah memperlihatkan dimensi dan ukuran berkas sekali lihat.',
+			'Penskalaannya memakai mode penghalusan berkualitas tinggi milik browser, yang menerapkan pengambilan sampel ulang yang benar alih-alih pemangkasan tetangga terdekat — foto yang diperkecil tetap renyah, bukan berkelip oleh aliasing. Mengubah ukuran juga cara paling jujur untuk mengecilkan berkas: memangkas separuh kedua dimensi membuang tiga perempat pikselnya, sesuatu yang tak bisa ditandingi penggeser kualitas mana pun.',
+			'Berkas tak pernah meninggalkan halaman: pendekodean, pengambilan sampel ulang, dan pengodean ulang semuanya berjalan pada canvas lokal. Tidak ada bilah kemajuan unggah karena memang tidak ada unggahan — foto 40 megapiksel berubah ukuran secepat mesin Anda menggambarnya ulang, dan tetap jalan meski kabel jaringan dicabut.'
+		],
+		faqs: [
+			{
+				q: 'Apakah memperkecil lalu memperbesar lagi akan memulihkan gambar saya?',
+				a: 'Tidak — memperkecil membuang piksel secara permanen. Menskalakan foto 3000px menjadi 300px hanya menyisakan 1% datanya; memperbesarnya kembali cuma menginterpolasi 99% yang hilang menjadi keburaman. Simpan berkas aslinya dan ekspor salinan yang diperkecil dari sana, alih-alih mengubah ukuran satu-satunya salinan yang Anda punya.'
+			},
+			{
+				q: 'Kenapa gambar saya tampak lembek setelah diperbesar?',
+				a: 'Memperbesar tak bisa menciptakan detail yang memang tak pernah terekam — browser menginterpolasi di antara piksel yang ada, dan di atas sekitar 2× itu terbaca sebagai kelembekan. Pembesaran sungguhan melampaui itu memerlukan perkakas berbasis pembelajaran mesin yang mengarang detail yang masuk akal; pengambil sampel ulang di canvas justru sengaja tidak mengarang apa pun.'
+			},
+			{
+				q: 'Bagaimana cara mencapai target ukuran berkas, misalnya “di bawah 200 KB”?',
+				a: 'Mainkan kedua tuasnya: pertama kecilkan ke dimensi terbesar yang benar-benar Anda butuhkan (lebar 1200px sudah lebih dari cukup untuk mayoritas tata letak web), lalu pilih WebP atau JPEG dan turunkan kualitas sampai ubin ukurannya berada di bawah target. Pengurangan dimensi mengerjakan bagian terbesarnya — penyetelan kualitas merapikan sisanya.'
+			},
+			{
+				q: 'Apakah mengubah ukuran menghapus metadata EXIF seperti lokasi GPS?',
+				a: 'Ya. Jalur canvas mengenkode ulang piksel murni — model kamera, stempel waktu, koordinat GPS, dan semua tag EXIF lainnya lenyap dari keluarannya. Untuk gambar yang menuju web publik, itu biasanya keuntungan bagi privasi; kalau metadatanya perlu dipertahankan, simpan berkas aslinya di samping.'
+			}
+		]
+	},
+
+	'favicon-generator': {
+		about: [
+			'Jatuhkan satu gambar — idealnya logo persegi berukuran 512px atau lebih — dan dapatkan paket favicon lengkap: sebuah favicon.ico yang memuat 16, 32, dan 48 px untuk tab dan markah, berkas PNG pada ukuran-ukuran baku termasuk ikon Apple touch 180px dan ikon PWA 192/512px, satu site.webmanifest awal, serta tag <link> untuk ditempel ke dalam <head> Anda. Satu unduhan ZIP memuat semuanya, dengan penamaan persis seperti yang diharapkan konvensi.',
+			'Detail yang sering keliru di tutorial favicon sudah ditangani: ICO-nya menyematkan entri terkompresi PNG (didukung di mana-mana sejak Windows Vista, jauh lebih kecil daripada ikon BMP warisan); ikon Apple touch diratakan ke warna latar pilihan Anda, karena iOS mengganti transparansi dengan hitam; dan ikon PWA mempertahankan kanal alfanya. Sumber yang tidak persegi dipotong dari tengah, bukan dipenyet.',
+			'Mengecilkan logo ke 16px pada dasarnya merusak — detail halus memang tak mungkin selamat — maka baris pratinjau memperlihatkan tiap ukuran pada dimensi sebenarnya, supaya Anda bisa menilai keterbacaannya sebelum dirilis. Semuanya dirender pada canvas lokal dan wadah ICO/ZIP dirakit bita demi bita di dalam halaman; logo Anda tidak pernah diunggah ke mana pun.'
+		],
+		faqs: [
+			{
+				q: 'Ukuran favicon apa saja yang sebenarnya saya perlukan pada 2026?',
+				a: 'Lebih sedikit daripada yang disugestikan cerita rakyat: sebuah favicon.ico berisi 16/32/48 untuk keperluan warisan dan bilah alamat, satu apple-touch-icon.png 180px, serta PNG 192/512px yang dirujuk dari manifest aplikasi web. Browser modern memilih padanan terbaik justru dari himpunan ini — paket 20 berkas yang dimuntahkan sebagian generator itu sekadar kultus kargo.'
+			},
+			{
+				q: 'Kenapa logo saya tidak terbaca pada 16px?',
+				a: 'Enam belas piksel itu kejam kecilnya — logotaip, garis tipis, dan gradasi halus semuanya luluh. Favicon yang kuat memampatkan merek menjadi satu glif atau bentuk tebal dengan kontras tinggi. Kalau pratinjau 16px di sini tampak jadi bubur, potonglah lebih rapat ke bagian paling khas dari logo itu, atau pakai varian yang disederhanakan untuk ukuran kecil.'
+			},
+			{
+				q: 'Apakah saya masih perlu berkas .ico, atau favicon PNG sudah cukup?',
+				a: 'Setiap browser modern menerima favicon PNG, tetapi /favicon.ico tetap jalur yang diminta secara membabi buta oleh agen pengguna, perayap, dan perkakas lama. Menyajikan ICO sungguhan di sana hanya memakan beberapa kilobita dan menyingkirkan satu kelas penuh galat 404 serta keanehan cadangan — simpan saja berdampingan dengan tautan PNG Anda.'
+			},
+			{
+				q: 'Kenapa ikon Apple touch memerlukan warna latar?',
+				a: 'iOS tidak merender transparansi pada ikon layar utama — alfa apa pun di PNG Anda akan dikomposisikan di atas hitam. Meratakannya lebih dulu ke warna pilihan Anda menjaga hasilnya tetap disengaja. Pilih latar yang serasi dengan ikon Anda, dan ingat iOS membulatkan sudutnya sendiri, jadi sediakan persegi penuh tanpa margin.'
+			}
+		]
+	},
+
+	'sql-formatter': {
+		about: [
+			'Tempel kueri yang baru saja keluar dari berkas log, dari dump debug ORM, atau dari satu baris panjang milik rekan kerja, dan perapi ini memecahnya menjadi klausa-klausa terbaca dengan indentasi yang konsisten. Enam dialek didukung — SQL standar, PostgreSQL, MySQL, SQLite, SQL Server, dan BigQuery — sehingga sintaksis khas dialek seperti TOP, pengenal dalam tanda petik terbalik, atau tipe larik terformat dengan benar alih-alih menjegal penguraiannya.',
+			'Besar-kecil huruf kata kunci bisa diatur: HURUF BESAR untuk tampilan klasik, huruf kecil bila tim Anda lebih suka begitu, atau biarkan apa adanya. Mode minifikasi melakukan kebalikannya — ia meringkas kueri terformat menjadi satu baris, membuang komentar sambil membiarkan literal string utuh bita demi bita, persis yang Anda inginkan sebelum menempelkan SQL ke konfigurasi JSON atau ke sebuah flag CLI.',
+			'Kueri kerap memuat nama tabel, data pelanggan di dalam literal, atau petunjuk soal infrastruktur. Perapian berjalan sepenuhnya di browser Anda, jadi tidak satu pun dari itu sampai ke server.'
+		],
+		faqs: [
+			{
+				q: 'Dialek SQL mana yang sebaiknya saya pilih?',
+				a: 'Yang dipakai basis data Anda — pilihan itu mengubah cara pengenal, pengutipan string, dan kata kunci dialek diurai. Kalau Anda cuma perlu perapian umum, SQL standar sudah menangani inti yang lazim. Galat penguraian pada sintaksis yang sebenarnya sah di basis data Anda biasanya pertanda untuk berganti dialek.'
+			},
+			{
+				q: 'Apakah perapian mengubah apa yang dikerjakan kueri?',
+				a: 'Tidak. Perapian hanya memindahkan spasi dan, bila diaktifkan, mengubah besar-kecil huruf kata kunci — pengenal dan literal mempertahankan bitanya persis. Kata kunci SQL tidak peka besar-kecil huruf di semua dialek yang didukung, jadi SELECT dan select adalah pernyataan yang sama.'
+			},
+			{
+				q: 'Bisakah saya merapikan beberapa pernyataan sekaligus?',
+				a: 'Bisa — tempel satu skrip utuh, dan tiap pernyataan yang diakhiri titik koma dirapikan berurutan dengan satu baris kosong di antaranya.'
+			},
+			{
+				q: 'Apa persisnya yang dibuang minifikasi?',
+				a: 'Komentar baris (--) dan komentar blok (/* */) dibuang, deretan spasi menciut jadi satu spasi, dan spasi di sekitar koma serta tanda kurung dihapus. Teks di dalam petik tunggal, petik ganda, dan petik terbalik tidak pernah disentuh, termasuk escape berupa petik berganda.'
+			}
+		]
+	},
+
+	'xml-formatter': {
+		about: [
+			'Alat ini merapikan XML dengan indentasi pilihan Anda, menandai galat well-formedness lengkap dengan baris dan kolom persisnya, serta bisa memampatkan dokumen menjadi satu baris. Komentar, bagian CDATA, dan prolog XML selamat melewati perapian — mengejutkan banyaknya perapi yang diam-diam melahapnya.',
+			'Validasi di sini berarti well-formedness: tag bersarang dengan benar, atribut berkutip, karakter yang sah. Itu menangkap sebagian besar kecelakaan penyuntingan manual — garis miring yang hilang, elemen yang tak ditutup, ampersand nyasar. Validasi terhadap skema XSD sengaja berada di luar cakupan; tempatnya di alur build Anda, di mana berkas skemanya tersedia.',
+			'Berkas konfigurasi, muatan SOAP, umpan RSS, dan manifest Android rutin memuat nama host internal dan kunci. Semuanya diurai secara lokal di sini — tidak ada yang dikirim ke mana pun.'
+		],
+		faqs: [
+			{
+				q: 'Kenapa XML saya gagal dengan “char … is not expected”?',
+				a: 'Tersangka biasanya: & mentah yang seharusnya &amp;, nilai atribut tanpa tanda kutip, atau tag yang ditutup dengan urutan keliru. Pesan galatnya membawa baris dan kolom karakter bermasalah pertama, dan kotak masukan menandainya.'
+			},
+			{
+				q: 'Apakah perapinya mengurutkan ulang atau menormalkan dokumen saya?',
+				a: 'Tidak. Elemen, atribut, dan urutannya dipertahankan persis; yang berubah hanya spasi antar-elemen. Isi teks yang berbagi baris dengan markup akan dipangkas dan deretan spasi di dalamnya diciutkan — kalau Anda mengandalkan spasi yang bermakna (xml:space="preserve"), simpan bagian itu dalam bentuk terminifikasi.'
+			},
+			{
+				q: 'Apa yang dibuang minifikasi?',
+				a: 'Indentasi dan ganti baris antar-elemen, plus komentar. Bagian CDATA, instruksi pemrosesan, dan prolog tetap tinggal. Hasilnya terurai identik bagi konsumen mana pun yang tidak bergantung pada simpul teks yang isinya cuma spasi.'
+			},
+			{
+				q: 'Bisakah ia memvalidasi terhadap XSD atau DTD?',
+				a: 'Tidak — ini hanya memeriksa well-formedness. Validasi skema memerlukan berkas skema dan mesin XSD, yang lebih baik dilakukan di rantai perkakas Anda (xmllint --schema, atau pustaka XML milik bahasa Anda).'
+			}
+		]
+	},
+
+	'xml-to-json': {
+		about: [
+			'Konversikan XML ke JSON untuk menyuapkan respons SOAP warisan, umpan RSS, atau POM Maven ke JavaScript, jq, atau API yang bicara JSON — atau tempuh arah sebaliknya dan hasilkan XML dari data JSON. Atributnya dipertahankan: mereka menjadi kunci "@_nama", dan isi teks yang berdampingan dengan atribut mendarat di bawah "#text", jadi tak ada informasi yang lenyap diam-diam.',
+			'Kedua format berselisih di hal-hal mendasar, dan konverter ini mengambil pilihan pragmatis yang sudah baku: elemen bersaudara yang berulang diciutkan menjadi larik JSON, nilai yang terlihat numerik menjadi angka, dan namespace ikut serta sebagai bagian nama elemen. Perjalanan bolak-balik XML → JSON → XML mempertahankan struktur dan isi untuk dokumen pada umumnya.',
+			'Kedua arah berjalan lokal di browser Anda. Tempel umpan faktur atau respons API tanpa ia pergi ke mana-mana.'
+		],
+		faqs: [
+			{
+				q: 'Kenapa sebagian nilai kembali sebagai angka, bukan string?',
+				a: 'Penguraiannya mengenali teks numerik lalu mengonversinya, dan itulah yang diinginkan sebagian besar konsumen. Waspadalah pada pengenal dengan nol di depan (kode produk, nomor telepon) — kalau itu penting bagi data Anda, beri tanda kutip setelah konversi atau perlakukan keluarannya sebagai titik awal.'
+			},
+			{
+				q: 'Bagaimana elemen berulang ditangani?',
+				a: 'Dua atau lebih elemen bersaudara bernama sama menjadi larik JSON di bawah kunci itu. Kemunculan tunggal tetap menjadi objek biasa — ketaksimetrisan itu melekat pada pemetaannya, jadi kode yang mengonsumsi JSON-nya sebaiknya menerima kedua bentuk atau menormalkannya lebih dulu.'
+			},
+			{
+				q: 'Apa arti kunci @_ dan #text?',
+				a: '@_ menandai apa yang tadinya atribut XML, sedangkan #text membawa teks elemen ketika atribut juga hadir. Menyuapkan konvensi yang sama kembali ke arah JSON → XML akan merekonstruksi markup aslinya.'
+			},
+			{
+				q: 'Kenapa JSON → XML menolak larik saya di tingkat teratas?',
+				a: 'Dokumen XML harus punya tepat satu elemen akar, dan larik telanjang tidak punya satu pun. Bungkus lariknya di dalam objek — {"items": {"item": [...]}} — dan konverternya akan menghasilkan dokumen yang well-formed.'
+			}
+		]
+	},
+
+	'markdown-to-html': {
+		about: [
+			'Tulis atau tempel Markdown lalu lihat pratinjau hasil render dan HTML yang dihasilkan berdampingan — lengkap dengan judul, tabel GFM, butir bergaya daftar tugas, blok kode berpagar, dan coretan. Arah sebaliknya mengubah HTML yang sudah ada menjadi Markdown yang bersih dengan judul ATX, butir bertanda hubung, dan kode berpagar, yaitu cara tercepat memindahkan konten CMS lama ke repositori dokumentasi.',
+			'Pratinjaunya dibersihkan sebelum dirender: skrip, iframe, dan atribut penangan peristiwa dibuang, jadi tautan berbagi yang membawa markup jahat tidak bisa mengeksekusi apa pun di browser Anda. Kotak keluaran HTML selalu memperlihatkan hasil konversi mentahnya untuk disalin ke templat atau surel.',
+			'Konversi dan pratinjau berjalan lokal. Draf catatan rilis yang memuat nama fitur yang belum diumumkan tetap tinggal di mesin Anda.'
+		],
+		faqs: [
+			{
+				q: 'Ini ragam Markdown yang mana?',
+				a: 'CommonMark plus perluasan GitHub yang memang dipakai orang: tabel, coretan, dan URL yang otomatis jadi tautan. Ganti baris lunak tetap lunak — satu baris baru tidak berubah menjadi <br>, sesuai cara GitHub merender dokumen.'
+			},
+			{
+				q: 'Kenapa pratinjaunya berbeda dari keluaran HTML mentah?',
+				a: 'Pratinjau melewati penyaring yang membuang tag skrip, penangan peristiwa sebaris, dan URL javascript: sebelum dirender. Kotak keluaran melewati penyaringan itu karena isinya teks, bukan markup yang dirender — bersihkan sendiri di hilir bila Anda menyematkan HTML dari pengguna.'
+			},
+			{
+				q: 'Seberapa setia konversi HTML → Markdown?',
+				a: 'Elemen struktural — judul, daftar, tautan, penekanan, kode, kutipan, gambar — terkonversi dengan bersih. HTML yang tidak punya padanan Markdown (tabel bersarang, div berkelas, gaya sebaris) lewat begitu saja sebagai HTML mentah atau kehilangan gayanya, jadi membaca ulang sebentar sesudahnya itu berfaedah.'
+			},
+			{
+				q: 'Bisakah HTML yang dihasilkan dipakai di surel?',
+				a: 'Bisa — keluarannya HTML semantik polos tanpa kelas maupun lembar gaya eksternal, dan justru itulah yang paling ditoleransi klien surel. Tambahkan gaya yang Anda perlukan secara sebaris di atasnya.'
+			}
+		]
+	},
+
+	'html-formatter': {
+		about: [
+			'Percantik HTML yang keluar dari bundler, scraper, atau editor WYSIWYG: elemen diberi indentasi selebar pilihan Anda, atribut tetap di barisnya, dan isi pre serta textarea dibiarkan utuh bita demi bita. Mode minifikasi membuang komentar dan menciutkan spasi di antara tag — biasanya memangkas 10–25% ukuran halaman yang ditulis tangan.',
+			'Minifikasi di sini sengaja konservatif: skrip dan gaya sebaris dilindungi, komentar kondisional selamat, dan satu spasi di antara elemen sebaris dipertahankan supaya “klik <a>di sini</a> sekarang” tidak menyatu menjadi satu kata. Anda mendapat minifikasi yang aman, bukan yang seagresif mungkin.',
+			'Kedua operasi berjalan lokal di browser Anda — halaman yang belum terbit dan markup panel admin internal tidak pernah meninggalkan mesin Anda.'
+		],
+		faqs: [
+			{
+				q: 'Apakah minifikasi akan merusak JavaScript atau CSS sebaris saya?',
+				a: 'Tidak — blok <script>, <style>, <pre>, dan <textarea> dikecualikan sepenuhnya dari penciutan spasi. Hanya markup di antara tag yang disentuh. Untuk memampatkan skripnya sendiri, jalankan lewat minifier JavaScript secara terpisah.'
+			},
+			{
+				q: 'Kenapa spasi di antara tag aman dibuang?',
+				a: 'Sebagian besar memang begitu: spasi antar-elemen blok tidak berpengaruh secara visual. Di antara elemen sebaris, ia berpengaruh — itu sebabnya minifier menciutkan deretannya menjadi satu spasi alih-alih menghapusnya. Tata letak yang bergantung pada trik spasi inline-block adalah pengecualian langka yang layak dilirik.'
+			},
+			{
+				q: 'Apakah perapinya memperbaiki HTML yang tidak sah?',
+				a: 'Ia merapikan apa yang Anda berikan tanpa memvalidasinya terhadap spesifikasi HTML — tag yang tak ditutup tetap tak tertutup. Browser toleran terhadap markup berantakan, jadi perapian tetap membantu Anda melihat strukturnya cukup jelas untuk memergoki masalahnya.'
+			},
+			{
+				q: 'Lebar indentasi berapa yang sebaiknya saya pakai?',
+				a: '2 spasi adalah konvensi yang berlaku di basis kode web dan menjadi bawaan sebagian besar panduan gaya framework. Pilih 4 kalau tim Anda sudah menyeragamkannya — pilihan ini sekadar kosmetik.'
+			}
+		]
+	},
+
+	'css-formatter': {
+		about: [
+			'Bentangkan CSS yang terminifikasi atau hasil tempel-salin menjadi aturan dengan satu deklarasi per baris, atau perah lembar gaya untuk produksi. Pemercantiknya menormalkan indentasi dan penempatan kurung kurawal; minifiernya membuang komentar, menciutkan spasi, dan menghapus titik koma terakhir sambil membiarkan string, isi url(...), dan ekspresi calc() tak tersentuh.',
+			'Minifiernya terbuka soal apa yang tidak dilakukannya: ia tidak mengganti nama selektor, tidak menggabungkan aturan kembar, dan tidak menulis ulang warna. Itu membuat keluarannya mudah ditebak dan aman untuk lembar gaya mana pun, termasuk yang penuh trik dan awalan vendor — tempel, minifikasi, rilis.',
+			'Seperti semua alat di sini, pemrosesannya lokal. Kode design system yang belum dirilis tetap tinggal di browser Anda.'
+		],
+		faqs: [
+			{
+				q: 'Seberapa kecil CSS setelah diminifikasi?',
+				a: 'Biasanya 15–30% untuk CSS yang ditulis tangan, sebagian besar berkat indentasi dan komentar. Gzip di server Anda sudah menghapus banyak redundansi yang sama, jadi selisih ukuran di jaringan lebih kecil daripada yang disugestikan hitungan bita mentah — tetap minifikasi saja, sebab itu juga memangkas waktu penguraian.'
+			},
+			{
+				q: 'Apakah aman untuk calc(), properti kustom, dan kueri media?',
+				a: 'Aman. Spasi di dalam calc() bermakna dan dipertahankan; properti kustom beserta rujukan var()-nya hanyalah deklarasi biasa dan lewat tanpa berubah; @media dan aturan-at lainnya mempertahankan strukturnya.'
+			},
+			{
+				q: 'Kenapa selektor keturunan tetap menyimpan spasinya?',
+				a: 'Karena “nav a” dan “nava” memilih hal yang berbeda — spasi itu sebuah kombinator, bukan format. Minifiernya hanya membuang spasi yang tidak punya makna sintaksis.'
+			},
+			{
+				q: 'Bisakah ia mengonversi antara LESS/SCSS dan CSS?',
+				a: 'Tidak — sintaksis prapemroses butuh kompilasi, bukan perapian. SCSS polos yang sekaligus merupakan CSS sah akan terformat baik-baik saja; aturan bersarang dan mixin tidak.'
+			}
+		]
+	},
+
+	'js-formatter': {
+		about: [
+			'Percantik JavaScript dengan indentasi dan spasi yang konsisten — bentangkan bundel bawaan agar terbaca apa sebenarnya yang ia lakukan, atau bereskan kode yang ditempel dari konsol. Minifiernya barang sungguhan: Terser mengurai kode Anda menjadi AST, membuang kode mati, memendekkan nama variabel lokal, dan mencabut komentar — mesin yang sama dengan yang dipakai bundler di produksi.',
+			'Karena minifikasinya berbasis AST, ia tak pernah merusak kode yang berfungsi seperti yang bisa dilakukan “kompresor” berbasis regex: string, literal templat, regex, dan kasus tepi ASI ditangani oleh pengurai sungguhan. Galat sintaksis dilaporkan beserta posisinya alih-alih menghasilkan keluaran yang rusak.',
+			'Terser baru dimuat saat Anda pertama kali meminifikasi, sehingga halamannya tetap ringan, dan semuanya berjalan di dalam browser Anda — kode sumber berpemilik tidak pernah meninggalkan mesin Anda.'
+		],
+		faqs: [
+			{
+				q: 'Seberapa kecil kode saya nantinya?',
+				a: 'Kode tulisan tangan biasanya susut 30–60% sebelum gzip: spasi, komentar, dan nama lokal yang panjang memang seberat itu. Kode yang sudah dibundel menyusut jauh lebih sedikit — ia sudah pernah melewati transformasi yang sama.'
+			},
+			{
+				q: 'Apakah minifikasi mengubah perilaku?',
+				a: 'Pemampatan dan pemendekan nama mempertahankan semantik: hanya nama lokal yang diganti, dan penyingkiran kode mati hanya membuang cabang yang terbukti tak mungkin dijalankan. Pengecualian klasiknya adalah kode yang mengandalkan Function.prototype.name atau toString() atas fungsinya sendiri.'
+			},
+			{
+				q: 'Bisakah ini membuka kembali kode produksi dari sebuah situs?',
+				a: 'Perapinya memulihkan spasi dan struktur sehingga alur kendalinya terbaca — tetapi nama variabel asli dan komentar hilang selamanya; yang Anda lihat adalah a, b, c. Untuk debugging yang serius, lebih baik pakai source map bila situs itu menyertakannya.'
+			},
+			{
+				q: 'Apakah ia mendukung TypeScript atau JSX?',
+				a: 'Tidak — keduanya butuh pengurai sendiri. Kompilasi dulu ke JavaScript (tsc, esbuild), lalu rapikan atau minifikasi keluarannya di sini.'
+			}
+		]
+	},
+
+	'string-escape': {
+		about: [
+			'Ubah string berbaris banyak yang penuh tanda kutip menjadi sesuatu yang bisa Anda tempel ke dalam nilai JSON, literal JavaScript, string Java, simpul teks XML, literal SQL, atau sel CSV — dan balikkan prosesnya saat Anda menemukan teks ter-escape di berkas log dan ingin membacanya. Enam dialek, dua arah.',
+			'Tiap dialek mengikuti spesifikasi aslinya, bukan penyebut terkecil bersama: JSON meng-escape karakter kendali sebagai \\uXXXX, JavaScript menambah escape untuk petik tunggal dan petik terbalik, Java mengodekan non-ASCII sebagai urutan UTF-16 \\u, SQL menggandakan petik tunggal, CSV membungkus dan menggandakan sesuai RFC 4180, sedangkan XML memakai lima entitas terdefinisinya. Pembatal escape memahami bentuk \\x, \\u, dan \\u{…} serta melaporkan urutan cacat beserta posisinya.',
+			'String ter-escape kerap berupa string koneksi, token, dan potongan kueri. Ini berjalan lokal — tempel saja dengan bebas.'
+		],
+		faqs: [
+			{
+				q: 'Dialek mana yang saya perlukan untuk berkas konfigurasi JSON?',
+				a: 'JSON. Ia meng-escape petik ganda, garis miring terbalik, dan karakter kendali persis seperti yang dituntut RFC 8259 sekaligus membiarkan unicode tetap terbaca. Keluarannya jatuh pas ke nilai string JSON mana pun — tanpa tanda kutip pembungkusnya, yang diserahkan alat ini kepada Anda.'
+			},
+			{
+				q: 'Apa bedanya dialek JSON dan JavaScript?',
+				a: 'JavaScript tambahan meng-escape petik tunggal dan petik terbalik supaya hasilnya aman pada ketiga gaya pengutipan JS. JSON hanya perlu menangani petik ganda. Pembatalan escape menerima keduanya, plus bentuk \\x dan \\u{…} yang tidak didefinisikan JSON.'
+			},
+			{
+				q: 'Apakah escape SQL membuat masukan pengguna aman untuk digabung?',
+				a: 'Ia menghasilkan literal string SQL yang benar (petiknya digandakan), tetapi meng-escape lalu menggabung tetap pola yang keliru untuk masukan tak tepercaya — pakailah kueri berparameter. Alat ini untuk fikstur, migrasi, dan debugging, bukan untuk pertahanan terhadap injeksi.'
+			},
+			{
+				q: 'Kenapa pembatalan escape pada string saya gagal?',
+				a: 'Garis miring terbalik yang diikuti sesuatu yang bukan escape terdefinisi (\\q, atau \\u12 yang terpotong) itu cacat, dan galatnya menyebut indeks yang bermasalah. Kalau teks Anda memuat path Windows apa adanya, escape dulu — C:\\temp itu sebenarnya tab yang menyamar.'
+			}
+		]
+	},
+
+	'number-base-converter': {
+		about: [
+			'Ketik sebuah bilangan dalam basis apa pun lalu baca ia serentak dalam biner, oktal, desimal, dan heksadesimal — plus basis kustom apa pun sampai 36. Awalan dipahami (0x, 0o, 0b), pengelompokan digit membuat nilai panjang enak dipindai (1111 1111 · 255 · ff), dan penunjuk panjang bit memberi tahu sekilas apakah suatu nilai muat di 8, 32, atau 64 bit.',
+			'Aritmetikanya memakai BigInt, jadi presisinya persis pada ukuran berapa pun: izin berkas, warna ARGB, alamat IP, awalan hash, dan ID basis data 64-bit semuanya terkonversi tanpa pembulatan diam-diam yang menghantam angka JavaScript biasa di atas 2⁵³.',
+			'Bilangan negatif mempertahankan tandanya di semua basis. Semuanya dihitung lokal, seketika, sambil Anda mengetik.'
+		],
+		faqs: [
+			{
+				q: 'Bagaimana deteksi otomatis memutuskan basisnya?',
+				a: 'Lewat awalan: 0x berarti heksadesimal, 0o oktal, 0b biner; selebihnya diurai sebagai desimal. Digit seperti “ff” tanpa awalan itu ambigu, jadi pilihlah HEX secara eksplisit — pesan galatnya akan mengingatkan Anda.'
+			},
+			{
+				q: 'Apakah bilangan raksasa benar-benar persis?',
+				a: 'Ya — konversinya berjalan di atas BigInt, yang presisinya arbitrer. 18446744073709551615 (2⁶⁴−1) bolak-balik tetap persis; konverter berbasis pecahan akan merusaknya menjadi …551616.'
+			},
+			{
+				q: 'Bagaimana bilangan negatif ditampilkan dalam biner?',
+				a: 'Dengan tanda minus (-1010), bukan komplemen dua, karena komplemen dua menuntut lebar yang tetap. Untuk melihat pola komplemen dua, tambahkan 2ⁿ ke nilai negatif Anda sesuai lebar yang Anda pedulikan, lalu konversikan hasilnya.'
+			},
+			{
+				q: 'Basis 36 bisa dipakai untuk apa?',
+				a: 'Untuk ID yang ringkas: 0-9 ditambah a-z adalah alfabet terpadat yang tetap tak peka besar-kecil huruf dan aman untuk URL. Banyak pemendek URL dan sistem tiket mengodekan ID numerik dengan cara ini — tempel satu dan bacalah bilangan yang ada di baliknya.'
+			}
+		]
+	},
+
+	'text-to-hex': {
+		about: [
+			'Lihat persis dari bita apa saja teks Anda tersusun: alat ini mengenkode teks ke UTF-8 lalu menampilkannya sebagai nilai bita heksadesimal, biner, atau desimal — dengan pemisah, besar-kecil huruf, dan awalan 0x sesuai pilihan Anda. Pendekodenya menempuh arah sebaliknya dan sengaja toleran: ia menerima deretan menyambung (48656c6c6f), pasangan berspasi, notasi bergaya MAC berpemisah titik dua, dan urutan escape \\x.',
+			'Karena pengodeannya adalah UTF-8 pada tingkat bita, karakter multibita ditampilkan sebagaimana ia benar-benar ada di memori dan di jaringan: é adalah c3 a9, 世 adalah e4 b8 96, dan emoji memakan empat bita. Itu menjadikannya cara tercepat untuk membedah ketidakcocokan pengodean, misteri BOM, dan persoalan “kenapa string ini lebih panjang daripada tampaknya”.',
+			'Kalau bita hasil dekode bukan UTF-8 yang sah, alat ini mengatakannya alih-alih mencetak karakter kacau — petunjuk kuat bahwa yang Anda pandangi adalah data biner, bukan teks.'
+		],
+		faqs: [
+			{
+				q: 'Kenapa satu karakter menjadi beberapa bita?',
+				a: 'UTF-8 berlebar variabel: ASCII tetap satu bita, sebagian besar huruf Eropa dua, CJK tiga, emoji empat. Yang Anda lihat di sini adalah urutan bita persis yang disimpan sistem berbasis UTF-8 mana pun — berkas, HTTP, basis data — untuk teks Anda.'
+			},
+			{
+				q: 'Format masukan apa saja yang diterima pendekodenya?',
+				a: 'Heksadesimal sebagai deretan menyambung, pasangan berspasi, dengan awalan 0x atau \\x, atau berpemisah titik dua/koma; biner sebagai kelompok 8 bit dengan atau tanpa spasi; desimal sebagai nilai bita yang dipisahkan. Pemisah campur aduk dan spasi nyasar dibereskan otomatis.'
+			},
+			{
+				q: 'Kenapa pendekodean bilang bitanya bukan UTF-8 yang sah?',
+				a: 'Urutan bitanya melanggar aturan UTF-8 — misalnya ff yang berdiri sendiri, atau bita lanjutan tanpa bita pembuka. Datanya mungkin biner, dalam pengodean warisan seperti Latin-1, atau terpotong di tengah karakter.'
+			},
+			{
+				q: 'Apakah ini sama dengan hex dump dari xxd?',
+				a: 'Nilai bitanya identik; xxd menambahkan offset dan satu kolom ASCII. Tempel saja kolom heksadesimal dari dump xxd ke sini (tanpa kolom offsetnya) dan ia terdekode dengan baik.'
+			}
+		]
+	},
+
+	'json-schema-validator': {
+		about: [
+			'Dua arah dari disiplin yang sama: tempel contoh JSON lalu dapatkan skema draft-07 yang disimpulkan darinya, atau tempel data beserta skemanya dan lihat setiap pelanggaran terdaftar lengkap dengan path JSON-nya. Validasinya berjalan di atas Ajv — mesin yang sama dengan yang dipakai sebagian besar layanan Node — jadi yang lolos di sini juga lolos di CI.',
+			'Penyimpulannya berpikiran produksi: kunci objek menjadi properti bertipe dan entri required, larik menggabungkan bentuk seluruh anggotanya, bilangan bulat dibedakan dari pecahan, dan kunci yang hanya muncul di sebagian anggota larik dengan tepat ditinggalkan dari required. Hasilnya adalah titik awal yang Anda ketatkan dengan format, rentang, dan pola.',
+			'Respons API dan berkas konfigurasi justru data yang paling tak ingin Anda titipkan ke server pihak ketiga. Baik penyimpulan maupun validasi berjalan sepenuhnya di browser Anda.'
+		],
+		faqs: [
+			{
+				q: 'Draft JSON Schema mana yang didukung?',
+				a: 'Penyimpulan mengeluarkan draft-07, draft dengan dukungan terluas di berbagai editor dan validator. Validasi menerima draft-07 serta draft-draft lebih awal yang dipahami Ajv dalam mode non-ketat; kata kunci 2019-09/2020-12 pun umumnya jalan karena kata kunci tak dikenal diabaikan, bukan dianggap fatal.'
+			},
+			{
+				q: 'Apa arti tanda $ pada path pelanggaran?',
+				a: 'Itu akar dokumen, bergaya JSONPath: $.age berarti properti age di tingkat teratas, $.items.2.name berarti name milik elemen larik ketiga. Path kosong ($) berarti pelanggarannya menyangkut akar dokumen itu sendiri — tipe yang salah, atau properti wajib yang hilang.'
+			},
+			{
+				q: 'Kenapa skema hasil penyimpulan lebih ketat atau lebih longgar dari dugaan saya?',
+				a: 'Ia menggambarkan persis contoh yang Anda berikan: bidang yang hadir di mana-mana menjadi wajib, dan hanya tipe yang teramati yang diizinkan. Suapkan contoh yang lebih bervariasi (larik berisi objek-objek representatif) untuk skema yang lebih umum, lalu sesuaikan dengan tangan — penyimpulan tak bisa menebak maksud Anda.'
+			},
+			{
+				q: 'Apakah validasinya mendukung format, pattern, dan kata kunci batasan lainnya?',
+				a: 'Kata kunci struktural (type, required, properties, items, enum, minimum, pattern…) ditegakkan sepenuhnya. String format seperti “email” atau “date-time” tidak diuji — itu mencerminkan spesifikasi JSON Schema, yang secara bawaan memperlakukan format sebagai anotasi, sekaligus menghindari rasa aman yang keliru.'
+			}
+		]
+	},
+
+	'exif-viewer': {
+		about: [
+			'Setiap foto yang diambil ponsel Anda membawa metadata tersembunyi: model kamera, waktu pengambilan, perangkat lunak penyunting — dan, kecuali dimatikan, koordinat GPS tempat Anda berdiri. Alat ini membaca metadata itu dari berkas JPEG, PNG, dan WebP lalu menampilkannya terkelompok dan sudah diterjemahkan: nilai pencahayaan sebagai f/2.8 dan 1/250 s, orientasi dalam kata-kata, GPS sebagai koordinat desimal dengan tautan peta.',
+			'Pembersihnya menghasilkan salinan tanpa metadata — dan tanpa kehilangan mutu. Alih-alih mengenkode ulang gambarnya (yang memakan kualitas), ia membuang segmen metadata bita demi bita: blok EXIF dan XMP pada JPEG, chunk teks dan waktu pada PNG, chunk EXIF/XMP pada WebP. Piksel, dimensi, dan kualitas tak tersentuh; profil warna dipertahankan sehingga gambarnya tetap tampil sama persis.',
+			'Inilah satu kategori alat yang seluruh maknanya terletak pada “berjalan lokal”: memeriksa foto demi data GPS dengan cara mengunggahnya ke server justru menggagalkan tujuannya. Berkasnya tidak pernah meninggalkan browser Anda — bisa dibuktikan di tab jaringan.'
+		],
+		faqs: [
+			{
+				q: 'Apakah membuang metadata mengubah kualitas gambar?',
+				a: 'Tidak. Aliran data gambarnya disalin bit demi bit; hanya segmen metadata yang dilepas. Berkas hasil pembersihan lebih kecil persis sebesar ukuran metadatanya, dan pikselnya identik secara terbukti.'
+			},
+			{
+				q: 'Kenapa tangkapan layar saya tidak menampilkan metadata apa pun?',
+				a: 'Tangkapan layar dan sebagian besar gambar yang diekspor untuk web memang tidak pernah punya EXIF — kameralah yang menulisnya, sedangkan perkakas tangkapan layar umumnya tidak. Platform media sosial juga membuang metadata saat unggah, jadi foto yang diunduh dari sana biasanya sudah bersih.'
+			},
+			{
+				q: 'Seberapa tepat posisi GPS-nya?',
+				a: 'GPS ponsel di dalam EXIF biasanya akurat sampai beberapa meter — cukup untuk mengenali sebuah bangunan. Alat ini mengubah derajat/menit/detik yang tersimpan menjadi desimal dan menautkannya ke titik persisnya, jadi Anda bisa melihat tepat apa yang bisa dilihat penerima berkas itu.'
+			},
+			{
+				q: 'Kenapa berkas yang sudah dibersihkan tetap menyimpan profil warna ICC?',
+				a: 'Profil ICC memberi tahu perangkat lunak cara menafsirkan warnanya — membuangnya bisa menggeser warna secara kasatmata, dan ia sendiri tidak memuat informasi pribadi. Pembersihnya menyingkirkan metadata yang mengidentifikasi (EXIF, XMP, IPTC, komentar, stempel waktu) dan mempertahankan apa yang dibutuhkan gambar agar tampil benar.'
+			}
+		]
 	}
 };
 

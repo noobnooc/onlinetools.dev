@@ -398,9 +398,9 @@ const TOOL_CONTENT_ES: Record<string, ToolContent> = {
 
 	'html-entities': {
 		about: [
-			'Escapa texto para incluirlo con seguridad en HTML — & se convierte en &amp;amp;, < se convierte en &amp;lt; — o decodifica texto cargado de entidades de vuelta a caracteres legibles, cubriendo entidades con nombre (&amp;rarr;), decimales (&amp;#169;) y referencias numéricas hexadecimales (&amp;#xA9;).',
-			'La codificación ofrece dos niveles: los cinco caracteres esenciales que rompen la estructura HTML (&amp; &lt; &gt; " \'), que es todo lo que necesitas para la corrección, o todo lo no ASCII, útil cuando una cadena de herramientas estropea UTF-8 en algún punto entre tú y la página. Un modo solo numérico omite las entidades con nombre para máxima compatibilidad con parsers XML estrictos, que solo garantizan las cinco predefinidas.',
-			'El decodificador es la mitad de uso diario: pega un fragmento raspado o una respuesta de API llena de &amp;#x27; y obtén texto limpio. Los nombres de entidad desconocidos pasan intactos en lugar de adivinarse.'
+			'Escapa texto para incluirlo con seguridad en HTML — & se convierte en &amp;, < se convierte en &lt; — o decodifica texto cargado de entidades de vuelta a caracteres legibles, cubriendo entidades con nombre (&rarr;), decimales (&#169;) y referencias numéricas hexadecimales (&#xA9;).',
+			'La codificación ofrece dos niveles: los cinco caracteres esenciales que rompen la estructura HTML (& < > " \'), que es todo lo que necesitas para la corrección, o todo lo no ASCII, útil cuando una cadena de herramientas estropea UTF-8 en algún punto entre tú y la página. Un modo solo numérico omite las entidades con nombre para máxima compatibilidad con parsers XML estrictos, que solo garantizan las cinco predefinidas.',
+			'El decodificador es la mitad de uso diario: pega un fragmento raspado o una respuesta de API llena de &#x27; y obtén texto limpio. Los nombres de entidad desconocidos pasan intactos en lugar de adivinarse.'
 		],
 		faqs: [
 			{
@@ -413,11 +413,11 @@ const TOOL_CONTENT_ES: Record<string, ToolContent> = {
 			},
 			{
 				q: 'Entidades con nombre o numéricas — ¿cuáles debería emitir?',
-				a: 'Las referencias numéricas (&amp;#xE9;) funcionan en todo parser HTML y XML. Las entidades con nombre son más legibles, pero XML solo predefine cinco, así que &amp;eacute; rompe un pipeline XML/XHTML estricto. Ante la duda, numéricas.'
+				a: 'Las referencias numéricas (&#xE9;) funcionan en todo parser HTML y XML. Las entidades con nombre son más legibles, pero XML solo predefine cinco, así que &eacute; rompe un pipeline XML/XHTML estricto. Ante la duda, numéricas.'
 			},
 			{
-				q: '¿Por qué veo &amp;amp;#39; (doblemente codificado) en mis datos?',
-				a: 'Dos capas codificaron una vez cada una: el &amp; de la primera codificación fue a su vez escapado por una segunda pasada. Decodifica dos veces aquí para recuperar el texto, y luego encuentra y arregla la capa que no debería estar codificando.'
+				q: '¿Por qué veo &amp;#39; (doblemente codificado) en mis datos?',
+				a: 'Dos capas codificaron una vez cada una: el & de la primera codificación fue a su vez escapado por una segunda pasada. Decodifica dos veces aquí para recuperar el texto, y luego encuentra y arregla la capa que no debería estar codificando.'
 			}
 		]
 	},

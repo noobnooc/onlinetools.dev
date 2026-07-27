@@ -549,6 +549,586 @@ const TOOL_CONTENT_PL: Record<string, ToolContent> = {
 				a: 'Praktycznie tak — YAML 1.2 parsuje niemal wszystkie dokumenty JSON, dlatego wklejenie JSON-a do konfiguracji YAML zwykle działa. Odwrotnie już nie: kotwice, wieloliniowe skalary i tagi YAML-a nie mają odpowiednika w JSON-ie i przy konwersji zostają rozwinięte albo zamienione na napisy.'
 			}
 		]
+	},
+
+	'json-to-csv': {
+		about: [
+			'Wklej tablicę obiektów JSON i dostań CSV gotowy do arkusza: zagnieżdżone obiekty spłaszczane są do nazw kolumn z kropkami (user.address.city), kolumny są sumą wszystkich wierszy (brakujące wartości stają się pustymi komórkami), a cudzysłowy stawiane są zgodnie z RFC 4180, więc przecinki, cudzysłowy i łamania wierszy wewnątrz wartości przeżywają Excela i Arkusze Google.',
+			'To najkrótsza droga od odpowiedzi API do arkusza, który ktoś może przefiltrować i przekształcić w tabelę przestawną. Suma kolumn ma znaczenie przy prawdziwych danych, gdzie obiekty bywają różnorodne — wiersz 1. może nie mieć pól, które ma wiersz 40., a konwerter to obsługuje, zamiast zgłaszać błąd albo gubić dane.',
+			'Konwerter działa też w drugą stronę: wklej eksport CSV i dostań tablicę obiektów JSON z kluczami z wiersza nagłówka, z automatycznym wykrywaniem separatora (przecinek, średnik, tabulator, kreska pionowa) i opcjonalnym typowaniem wartości — liczby, wartości logiczne i null stają się prawdziwymi typami JSON. Oba kierunki działają w całości w Twojej przeglądarce, więc eksporty z danymi klientów nigdy nie opuszczają Twojej maszyny.'
+		],
+		faqs: [
+			{
+				q: 'Jak reprezentowane są zagnieżdżone obiekty?',
+				a: 'Spłaszczane do kluczy łączonych kropką: {"user":{"name":"Ada"}} staje się kolumną user.name. Dzięki temu każda wartość skalarna pozostaje adresowalna w jednym płaskim wierszu nagłówka, a właśnie z tym potrafią pracować arkusze.'
+			},
+			{
+				q: 'Co dzieje się z tablicami wewnątrz wiersza?',
+				a: 'Trafiają jako tekst JSON do pojedynczej komórki (["a","b"]). Rozbijanie tablic na kolumny (tags.0, tags.1…) albo dodatkowe wiersze zmienia kształt Twoich danych w dość arbitralny sposób — osadzenie zachowuje konwersję bezstratną i przewidywalną.'
+			},
+			{
+				q: 'Dlaczego Excel pokazuje mój CSV w jednej kolumnie?',
+				a: 'Przez ustawienia regionalne: w dużej części Europy Excel oczekuje plików rozdzielanych średnikiem, bo przecinek pełni rolę separatora dziesiętnego. Przełącz separator na średnik albo użyj Dane → Z tekstu/CSV, gdzie możesz wskazać separator ręcznie.'
+			},
+			{
+				q: 'Czy konwerter poradzi sobie z pojedynczym obiektem (nie tablicą)?',
+				a: 'Tak — samotny obiekt staje się jednowierszowym CSV-em. Obiekty kluczowane identyfikatorem ({"a1":{...},"a2":{...}}) zamieniają się jednak w jeden szeroki wiersz; jeśli każda wartość ma być osobnym wierszem, najpierw przekształć je w tablicę.'
+			},
+			{
+				q: 'Jak CSV → JSON radzi sobie z polami w cudzysłowach i łamaniami wierszy?',
+				a: 'Zgodnie z RFC 4180: pola ujęte w cudzysłowy mogą zawierać separator, podwojony cudzysłów ("") oznacza znak dosłowny, a łamania wierszy są dozwolone. Excel i większość baz danych eksportują dokładnie ten format, więc realne pliki parsują się poprawnie.'
+			},
+			{
+				q: 'Dlaczego moim kodom pocztowym znikają wiodące zera przy CSV → JSON?',
+				a: 'Typowana konwersja zamienia 02134 w liczbę 2134. Odznacz „Wartości z typami”, a każda komórka pozostanie napisem dokładnie tak, jak zapisano — to właściwy wybór dla identyfikatorów, numerów telefonu i wszystkiego z wiodącymi zerami.'
+			}
+		]
+	},
+
+	'json-to-typescript': {
+		about: [
+			'Wklej przykładowy JSON — odpowiedź API, plik konfiguracyjny — i dostań wywnioskowany z niego interfejs TypeScriptu: zagnieżdżone obiekty stają się zagnieżdżonymi typami, tablice dostają typ elementu (a przy mieszanej zawartości unię), a klucze niebędące poprawnymi identyfikatorami trafiają w cudzysłowy.',
+			'Wygenerowane typy to punkt wyjścia, a nie kontrakt: wnioskowanie widzi jedną próbkę, więc pole, które akurat jest w niej null, otypuje się jako null, a pola opcjonalne, których w próbce nie było, po prostu dla niego nie istnieją. Wynik jest celowo prosty — bez dekoratorów, bez walidacji w czasie działania — żebyś mógł wkleić go gdziekolwiek i dopracować.',
+			'Dla pól różniących się między żądaniami przepuść drugą próbkę i scal ręcznie, albo przejdź na narzędzia oparte na schemacie (OpenAPI, zod), gdy kształt danych się ustabilizuje. Na codzienne „potrzebuję po prostu typu dla tej odpowiedzi” jedno wklejenie wystarczy.'
+		],
+		faqs: [
+			{
+				q: 'Dlaczego moje pole dopuszczające null ma typ po prostu null?',
+				a: 'Wnioskowanie widzi tylko wklejoną próbkę. Jeśli pole było tam null-em, to null jest wszystkim, co może wiedzieć. Po wygenerowaniu zmień to na string | null (albo cokolwiek jest prawdziwym typem) — lub wklej próbkę, w której pole jest wypełnione.'
+			},
+			{
+				q: 'Jak traktowane są pola opcjonalne?',
+				a: 'Nie są wykrywane — pojedyncza próbka nie odróżni „zawsze obecne” od „obecne tym razem”. Pola nieobecne w próbce są nieobecne w typie. Tam, gdzie wiesz, że API je pomija, oznacz je opcjonalnie (name?:) ręcznie.'
+			},
+			{
+				q: 'Co powstaje z tablic o mieszanych typach?',
+				a: 'Unia: [1, "a"] daje (number | string)[]. Puste tablice dają unknown[], bo nie ma elementu do zbadania — podmień na prawdziwy typ elementu, gdy go poznasz.'
+			},
+			{
+				q: 'Używać typów wywnioskowanych czy biblioteki schematów w rodzaju zod?',
+				a: 'Wywnioskowane interfejsy istnieją wyłącznie w czasie kompilacji — niczego nie walidują w czasie działania. Do narzędzi wewnętrznych i szybkiego otypowania są idealne; dla niezaufanych danych w czasie działania zdefiniuj schemat zod/valibot i wyprowadź z niego typ statyczny.'
+			}
+		]
+	},
+
+	'jsonpath-tester': {
+		about: [
+			'Testuj wyrażenia JSONPath na własnym JSON-ie i oglądaj każde trafienie razem z jego wartością i konkretną ścieżką. Obsługiwana jest składnia pokrywająca codzienne zastosowania: notacja kropkowa i nawiasowa, indeksy tablic (także ujemne), symbole wieloznaczne, unie ([\'a\',\'b\']) i zejście rekurencyjne ($..price).',
+			'Ścieżka wypisywana przy każdym trafieniu to po cichu najużyteczniejsza część: zapytaj $..id o głęboki dokument, a każdy wynik powie Ci dokładnie, gdzie mieszka ($.data.items[3].id), gotowy do wklejenia w kod. Zamienia „gdzieś w tym worku danych” w konkretny adres.',
+			'Wyrażenia filtrujące ([?(@.price < 10)]) nie są jeszcze zaimplementowane — narzędzie mówi to wprost, zamiast zwracać błędne wyniki. Do ekstrakcji strukturalnej, czyli większości zastosowań JSONPath, wszystko działa.'
+		],
+		faqs: [
+			{
+				q: 'Czym różni się $.a.b od $..b?',
+				a: '$.a.b podąża jedną konkretną trasą: klucz a w korzeniu, a w nim klucz b. $..b (zejście rekurencyjne) znajduje każde b w dokumencie, na dowolnej głębokości. Zejście rekurencyjne jest potężne, ale bywa zaskakujące — dopasuje też klucze b zagnieżdżone w miejscach, o których nie pomyślałeś.'
+			},
+			{
+				q: 'Jak dostać się do kluczy ze spacjami albo myślnikami?',
+				a: 'Notacją nawiasową z cudzysłowami: $[\'my key\'] albo $.data[\'content-type\']. Notacja kropkowa działa tylko dla kluczy będących poprawnymi nazwami identyfikatorów.'
+			},
+			{
+				q: 'Czy ujemne indeksy tablic działają?',
+				a: 'Tak — [-1] to ostatni element, [-2] przedostatni, zgodnie z konwencją spopularyzowaną przez Pythona i przyjętą w RFC 9535. [0] pozostaje pierwszym elementem.'
+			},
+			{
+				q: 'Czy JSONPath jest ustandaryzowany?',
+				a: 'Od 2024 roku tak — RFC 9535 definiuje składnię i semantykę. Implementacje napisane wcześniej różnią się w przypadkach brzegowych (zwłaszcza przy filtrach i uniach), więc to samo wyrażenie może działać inaczej w różnych bibliotekach; testuj na tej, z którą wdrażasz.'
+			}
+		]
+	},
+
+	'bcrypt-generator': {
+		about: [
+			'Zahashuj hasło bcryptem przy wybranym współczynniku kosztu albo sprawdź tekst jawny wobec istniejącego hasha — jedno i drugie w całości w przeglądarce, czyli dokładnie tak, jak chcesz, gdy badaną rzeczą jest hasło. Inspektor hashy rozbija też dowolny hash bcrypt na wersję, koszt i sól.',
+			'Bcrypt pozostaje solidnym wyborem do przechowywania haseł, bo jest celowo wolny i solony osobno dla każdego hasła: współczynnik kosztu podwaja pracę z każdym krokiem, więc koszt 12 oznacza 4096 iteracji konfiguracji szyfru pod spodem. Odczyt czasu pokazuje, ile trwa wybrany przez Ciebie koszt, przez co kompromis bezpieczeństwo/opóźnienie staje się namacalny.',
+			'Częstszą codzienną potrzebą jest weryfikacja: potwierdzenie, że hash z bazy odpowiada znanemu hasłu, bez uruchamiania kodu aplikacji. Wklej jedno i drugie, dostań tak albo nie.'
+		],
+		faqs: [
+			{
+				q: 'Jakiego współczynnika kosztu używać na produkcji?',
+				a: 'Klasyczna wskazówka: tak wysokiego, na jaki pozwala Twój budżet opóźnienia logowania, dziś zwykle 10–13. Celuj w 100–300 ms na hash na sprzęcie produkcyjnym. JavaScript w przeglądarce działa wolniej niż kod natywny, więc czas pokazany tutaj jest górnym ograniczeniem dla Twoich serwerów.'
+			},
+			{
+				q: 'Dlaczego to samo hasło daje za każdym razem inny hash?',
+				a: 'Do każdego hasha generowana jest losowa 16-bajtowa sól, zapisywana wewnątrz samego ciągu hasha. Tak ma być — identyczne hasła dostają różne hashe, co unieważnia gotowe tęczowe tablice. Weryfikacja odczytuje sól z powrotem z hasha, dlatego porównanie w ogóle działa.'
+			},
+			{
+				q: 'Co oznaczają części hasha bcrypt?',
+				a: '$2b$12$ + 53 znaki: 2b to wersja algorytmu, 12 to koszt (2^12 iteracji), kolejne 22 znaki to sól, a ostatnie 31 to skrót — wszystko w bcryptowym wariancie base64. Inspektor pod narzędziem rozbija w ten sposób dowolny hash.'
+			},
+			{
+				q: 'Czy bcrypt jest nadal zalecany zamiast Argon2?',
+				a: 'Argon2id jest dziś pierwszym wyborem dla nowych systemów (twardość pamięciowa utrudnia łamanie na GPU). Bcrypt pozostaje akceptowalny i wszechobecny — praktyczna rada brzmi: nie migruj w panice działającego magazynu bcrypt, ale przy projektach od zera wybieraj Argon2id. Oba są o klasy lepsze od szybkich skrótów w rodzaju SHA-256.'
+			}
+		]
+	},
+
+	'user-agent-parser': {
+		about: [
+			'Wklej ciąg User-Agent z linii logu, zgłoszenia błędu albo eksportu z analityki i dostań go rozszyfrowanego: przeglądarka i wersja, silnik renderujący, system operacyjny, typ urządzenia i architektura procesora. Parserem jest ua-parser-js, ta sama biblioteka, która stoi za niezliczonymi potokami analitycznymi, uruchamiana lokalnie na Twoim ciągu.',
+			'Ciągi User-Agent są stanowiskami archeologicznymi — każdy nadal twierdzi, że jest Mozilla/5.0, Chrome podaje się za Safari, Safari za KHTML, a prawdziwa tożsamość kryje się w dalszych tokenach. Parser bije mrużenie oczu: wie, że „CriOS” oznacza Chrome na iOS, a Edge chowa się za „Edg/”.',
+			'Zwróć uwagę na kierunek zmian: przeglądarki zamrażają i skracają ciągi UA (a Chromium wysyła zamiast tego UA Client Hints), więc szczegółowość wersji z samego UA jest coraz zgrubniejsza. Do analizy logów i triage’u błędów pozostaje niezastąpiony; do decyzji o funkcjach używaj wykrywania funkcji.'
+		],
+		faqs: [
+			{
+				q: 'Dlaczego każdy User-Agent zaczyna się od Mozilla/5.0?',
+				a: 'To teatrzyk zgodności z lat 90., który nigdy się nie skończył: serwery szukały słowa „Mozilla”, żeby podać nowoczesną stronę, więc każda nowa przeglądarka twierdziła, że nią jest, a kolejne podszywały się pod poprzedniczki. Dziś ten przedrostek to już tylko bezsensowna tradycja.'
+			},
+			{
+				q: 'Czy mogę ufać wersji systemu w ciągu UA?',
+				a: 'Z roku na rok coraz mniej. macOS zamroził swoją wersję w UA na 10_15_7, Windows 11 przedstawia się jako Windows NT 10.0, a przeglądarki ze skróconym UA celowo zaokrąglają wersje. Traktuj wersję systemu z UA jako przybliżoną; tam, gdzie kontrolujesz klienta, korzystaj z UA Client Hints.'
+			},
+			{
+				q: 'Co znaczy „like Gecko” albo „KHTML, like Gecko”?',
+				a: 'Kolejne warstwy podszywania: WebKit wywodzi się z KHTML-a i chciał, by działały strony traktujące specjalnie Gecko (silnik Firefoksa), więc dopisał „like Gecko”. Każda przeglądarka na WebKicie i Blinku nosi tę frazę do dziś.'
+			},
+			{
+				q: 'Czy używać parsowania UA do wykrywania funkcji?',
+				a: 'Nie — sniffing psuje się w chwili wydania nowej wersji przeglądarki. Wykrywaj samą funkcję (if ("clipboard" in navigator)). Parsowanie UA służy analityce, analizie logów i odtwarzaniu błędów zgłoszonych przez użytkowników, gdzie poznanie środowiska jest właśnie celem.'
+			}
+		]
+	},
+
+	'color-converter': {
+		about: [
+			'Wpisz kolor w dowolnym popularnym zapisie — #hex, rgb(), hsl() albo nazwa koloru CSS — i dostań wszystkie formaty naraz: HEX, RGB, HSL i OKLCH, obok żywej próbki. Kanał alfa jest zachowywany między formatami, a wyjście używa nowoczesnej składni CSS (kanały rozdzielone spacjami), która wkleja się czysto do współczesnych arkuszy stylów.',
+			'OKLCH jest w zestawie, bo w tę stronę zmierza kolor w CSS: w odróżnieniu od HSL jego oś jasności jest percepcyjnie jednorodna, więc dwa kolory o tym samym L naprawdę wyglądają na równie jasne, a zmiana odcienia nie zmienia przy okazji postrzeganej jasności. Przeniesienie istniejącej palety do OKLCH to pierwszy krok do budowy spójnych skal kolorystycznych.',
+			'Matematyka konwersji działa lokalnie, na opublikowanych przekształceniach sRGB↔OKLab, a wartości wracają bez strat: RGB otrzymane z wejścia HSL jest dokładnie tym, co policzyłaby przeglądarka.'
+		],
+		faqs: [
+			{
+				q: 'Dlaczego wartości jasności w HSL i OKLCH się nie zgadzają?',
+				a: 'Jasność w HSL jest właściwością geometryczną wartości RGB, a nie ludzkiego wzroku — żółty hsl(60 100% 50%) wygląda o wiele jaśniej niż niebieski hsl(240 100% 50%), mimo identycznego L. Oś L w OKLCH zaprojektowano tak, by odpowiadała percepcji, więc równe L oznacza równą pozorną jasność. Ta rozbieżność jest właśnie powodem istnienia OKLCH.'
+			},
+			{
+				q: 'Co oznacza wartość alfa i gdzie trafia w każdym z formatów?',
+				a: 'Alfa to nieprzezroczystość, od 0 (przezroczysty) do 1 (kryjący). W ośmiocyfrowym hex to ostatni bajt (#RRGGBBAA); w nowoczesnej składni funkcyjnej idzie po ukośniku: rgb(76 141 255 / 0.5). Ten konwerter przenosi alfę przez wszystkie formaty automatycznie.'
+			},
+			{
+				q: 'Czy każdy kolor OKLCH da się pokazać w sRGB?',
+				a: 'Nie — OKLCH obejmuje szerokie gamuty, a niektóre kombinacje chromy i jasności nie mają odpowiednika w sRGB. Konwersja z sRGB (czyli to, co robi to narzędzie) zawsze pozostaje reprezentowalna; w drugą stronę kolory spoza gamutu trzeba przyciąć lub odwzorować — dlatego soczysta zieleń P3 na ekranie sRGB wygląda bledziej.'
+			},
+			{
+				q: 'Dlaczego rgb(76 141 255) ze spacjami zamiast przecinków?',
+				a: 'CSS Color Module Level 4 ustandaryzował kanały rozdzielone spacjami z opcjonalną /alfą, a każda nowoczesna przeglądarka to obsługuje. Forma z przecinkami nadal działa, ale to forma ze spacjami jest tą, której używają nowe specyfikacje (i to narzędzie).'
+			}
+		]
+	},
+
+	'image-to-base64': {
+		about: [
+			'Upuść, wybierz albo wklej obraz i dostań jego postać Base64 w każdym potrzebnym wariancie: gotowy do użycia data URL, deklarację background-image w CSS, kompletny znacznik <img> z wymiarami własnymi oraz surowy ładunek Base64. Odwrotny kierunek też działa — wklej data URL albo goły ciąg Base64, a obraz zostanie zdekodowany, pokazany w podglądzie i będzie do pobrania jako plik.',
+			'Format rozpoznawany jest z bajtów magicznych, a nie z rozszerzenia pliku czy deklarowanego typu MIME, więc PNG przemianowany na .jpg (albo data URL z błędną etykietą) i tak przekonwertuje się poprawnie. Panel rozmiaru uczciwie pokazuje koszt: Base64 powiększa dane o mniej więcej jedną trzecią, a dokładny rozmiar po zakodowaniu widnieje obok oryginalnego, żebyś mógł zdecydować, czy osadzanie się opłaca.',
+			'W odróżnieniu od większości stron „obraz na Base64” nic nie jest wysyłane — plik odczytywany jest przez przeglądarkowe API FileReader i kodowany na stronie. To czyni narzędzie bezpiecznym dla zrzutów wewnętrznych pulpitów, niewydanych zdjęć produktowych i wszystkiego innego, czego wolałbyś nie oddawać serwerowi obcej firmy.'
+		],
+		faqs: [
+			{
+				q: 'Kiedy osadzać obraz jako Base64 zamiast linkować plik?',
+				a: 'Gdy obraz jest mały (z grubsza poniżej 10 KB), rzadko się zmienia i w przeciwnym razie kosztowałby dodatkowe żądanie HTTP — czyli ikony, logo w e-mailach albo jednoplikowe dokumenty HTML. Przy czymkolwiek większym wygrywa osobny plik: buforuje się niezależnie, ładuje równolegle i nie powiększa Twojego HTML-a ani CSS-a o 33%.'
+			},
+			{
+				q: 'Dlaczego wersja Base64 jest o mniej więcej jedną trzecią większa od pliku?',
+				a: 'Base64 przedstawia każde 3 bajty danych binarnych jako 4 znaki ASCII, czyli strukturalny narzut +33% (plus najwyżej dwa znaki dopełnienia). Gzip albo Brotli na serwerze część tego odzyskuje, ale samo rozdęcie jest nieodłączne od kodowania — wymienia rozmiar na możliwość osadzenia danych binarnych w tekście.'
+			},
+			{
+				q: 'Czy mogę zdekodować data URL znaleziony w arkuszu stylów albo HTML-u?',
+				a: 'Tak — przełącz na Base64 → obraz i wklej całość razem z przedrostkiem data:. Zakodowane procentowo data URL-e z SVG (te bez ;base64) też się dekodują, a łamania wierszy i spacje w ładunku są usuwane automatycznie. Wynik pokazuje się w podglądzie i pobiera z właściwym rozszerzeniem.'
+			},
+			{
+				q: 'Czy działa to dla SVG, GIF i ICO, czy tylko dla PNG i JPEG?',
+				a: 'Wszystko, co rozpozna detektor, przekonwertuje się na Base64: PNG, JPEG, WebP, GIF, SVG, BMP, ICO i AVIF. Przy SVG warto jednak pamiętać, że źródło XML wklejone wprost bywa mniejsze i czytelniejsze — kodowanie SVG w Base64 ma sens głównie wtedy, gdy problemem staje się cytowanie albo escapowanie.'
+			}
+		]
+	},
+
+	'image-converter': {
+		about: [
+			'Konwertuj obraz między PNG, JPEG i WebP bez instalowania czegokolwiek i bez wysyłania go gdziekolwiek: upuść plik, wybierz format docelowy, ustaw jakość żywym suwakiem i patrz, jak rozmiar wyniku aktualizuje się na bieżąco. Kafelek Δ pokazuje dokładnie, o ile mniejszy (albo większy) jest plik po konwersji, więc dobór jakości przestaje być zgadywanką.',
+			'Te trzy formaty mają różne zadania. PNG jest bezstratny i ma pełną przezroczystość — właściwy do zrzutów ekranu, elementów interfejsu i wszystkiego z ostrymi krawędziami albo tekstem. JPEG mocno kompresuje fotografie, ale nie ma kanału alfa i rozmywa twarde krawędzie. WebP przy porównywalnej jakości bije zwykle JPEG o 25–35%, obsługuje przezroczystość i działa we wszystkich aktualnych przeglądarkach — w sieci to zwykle właściwa odpowiedź.',
+			'Konwersja odbywa się na płótnie w Twojej przeglądarce: obraz jest dekodowany, przerysowywany i kodowany ponownie tymi samymi kodekami, których przeglądarka używa do wyświetlania stron. To właśnie czyni narzędzie prywatnym — i dlatego dokładna liczba bajtów różni się nieco między Chrome, Firefoksem i Safari, bo każde ma własne kodery.'
+		],
+		faqs: [
+			{
+				q: 'Jaką jakość ustawiać dla JPEG i WebP?',
+				a: 'Przedział 75–90 pokrywa niemal każde realne zastosowanie. Przy 85 większość zdjęć jest wizualnie nie do odróżnienia od źródła przy ułamku rozmiaru; poniżej mniej więcej 70 w gradientach i odcieniach skóry pojawiają się artefakty blokowe; powyżej 90 rozmiar rośnie stromo za zysk, którego nie zobaczysz. Przeciągnij suwak i patrz na kafelek rozmiaru — optimum zwykle rzuca się w oczy.'
+			},
+			{
+				q: 'Dlaczego mój PNG urósł po konwersji na JPEG?',
+				a: 'JPEG powstał do fotograficznych gradientów, a nie płaskich barw. Zrzuty ekranu, diagramy i grafika interfejsu kompresują się znakomicie jako PNG (długie ciągi identycznych pikseli), ale zmuszają JPEG do zapisywania szumu wokół każdej ostrej krawędzi — stąd większe pliki i widoczne obwódki. Trzymaj grafikę w PNG albo skonwertuj ją na WebP nastawiony na bezstratność.'
+			},
+			{
+				q: 'Co dzieje się z przezroczystością przy konwersji na JPEG?',
+				a: 'JPEG nie ma kanału alfa, więc przezroczyste obszary trzeba czymś wypełnić — to narzędzie spłaszcza je na biało, zgodnie z konwencją obrazów w sieci. Jeśli przezroczystość ma przetrwać, wybierz jako cel PNG albo WebP.'
+			},
+			{
+				q: 'Dlaczego moja przeglądarka nie eksportuje tu AVIF ani HEIC?',
+				a: 'API canvas toBlob koduje wyłącznie formaty, dla których przeglądarka ma koder — PNG i JPEG wszędzie, WebP w Chromium i Firefoksie. Kodowanie AVIF wciąż jest rzadkie, a HEIC obciążone patentami, więc przeglądarki je dekodują, ale nie tworzą. Jeśli wybierzesz format, którego Twoja przeglądarka nie potrafi zapisać, narzędzie to powie, zamiast po cichu podać Ci PNG.'
+			}
+		]
+	},
+
+	'image-resizer': {
+		about: [
+			'Przeskaluj obraz do konkretnej szerokości, konkretnej wysokości albo procentu oryginału — drugi wymiar podąża automatycznie, więc nic się nie rozciąga. Wybierz format wyjściowy (albo zostaw źródłowy), ustaw jakość dla formatów stratnych, obejrzyj podgląd i pobierz. Kafelki przed/po pokazują wymiary i rozmiar pliku na pierwszy rzut oka.',
+			'Skalowanie korzysta z trybu wysokiej jakości wygładzania w przeglądarce, który stosuje właściwe ponowne próbkowanie zamiast prostego odrzucania pikseli — pomniejszone zdjęcia pozostają ostre, zamiast migotać aliasingiem. Zmiana rozmiaru to też uczciwy sposób na zmniejszenie pliku: przepołowienie obu wymiarów usuwa trzy czwarte pikseli, czemu żaden suwak jakości nie dorówna.',
+			'Pliki nigdy nie opuszczają strony: dekodowanie, ponowne próbkowanie i ponowne kodowanie działają na lokalnym płótnie. Nie ma paska postępu wysyłania, bo nie ma wysyłania — zdjęcie o rozdzielczości 40 megapikseli skaluje się tak szybko, jak Twoja maszyna zdąży je przerysować, i działa przy wypiętym kablu sieciowym.'
+		],
+		faqs: [
+			{
+				q: 'Czy pomniejszenie i powiększenie z powrotem odtworzy mój obraz?',
+				a: 'Nie — pomniejszanie bezpowrotnie odrzuca piksele. Skalowanie zdjęcia z 3000 px do 300 px zachowuje 1% danych; powiększenie z powrotem interpoluje brakujące 99% jako rozmycie. Trzymaj oryginał i eksportuj z niego pomniejszone kopie, zamiast skalować jedyny egzemplarz, jaki masz.'
+			},
+			{
+				q: 'Dlaczego powiększony obraz wygląda miękko?',
+				a: 'Powiększanie nie stworzy detalu, którego nigdy nie zarejestrowano — przeglądarka interpoluje między istniejącymi pikselami, co powyżej mniej więcej 2× odbiera się jako miękkość. Prawdziwe powiększanie ponad ten poziom wymaga narzędzi opartych na uczeniu maszynowym, które dopowiadają wiarygodny detal; resampler na płótnie celowo niczego nie zmyśla.'
+			},
+			{
+				q: 'Jak trafić w zadany rozmiar pliku, na przykład „poniżej 200 KB”?',
+				a: 'Użyj obu dźwigni: najpierw przeskaluj do największych wymiarów, jakich naprawdę potrzebujesz (1200 px szerokości w zupełności wystarcza większości układów w sieci), a potem wybierz WebP albo JPEG i obniżaj jakość, aż kafelek rozmiaru zejdzie poniżej celu. Największą robotę wykona redukcja wymiarów — jakość dostraja resztę.'
+			},
+			{
+				q: 'Czy zmiana rozmiaru usuwa metadane EXIF, na przykład lokalizację GPS?',
+				a: 'Tak. Potok na płótnie koduje na nowo czyste piksele — model aparatu, znaczniki czasu, współrzędne GPS i każdy inny znacznik EXIF znikają z wyniku. Dla obrazów trafiających do publicznej sieci to zwykle zysk dla prywatności; jeśli metadane mają zostać zachowane, trzymaj oryginał obok.'
+			}
+		]
+	},
+
+	'favicon-generator': {
+		about: [
+			'Upuść jeden obraz — najlepiej kwadratowe logo o boku 512 px lub większym — i dostań kompletny zestaw favikon: plik favicon.ico z rozmiarami 16, 32 i 48 px na karty i zakładki, pliki PNG w standardowych rozmiarach łącznie ze 180-pikselową ikoną Apple touch i ikonami PWA 192/512 px, startowy site.webmanifest oraz znaczniki <link> do wklejenia w <head>. Jedno pobranie ZIP zawiera wszystko, nazwane dokładnie tak, jak oczekują konwencje.',
+			'Szczegóły, które poradniki o favikonach zwykle psują, są tutaj dopilnowane: ICO osadza wpisy skompresowane jako PNG (obsługiwane wszędzie od czasów Windows Vista i znacznie mniejsze od dawnych ikon BMP); ikona Apple touch jest spłaszczana na wybrany przez Ciebie kolor tła, bo iOS zamienia przezroczystość na czerń; a ikony PWA zachowują kanał alfa. Źródła niekwadratowe są przycinane do środka, a nie ściskane.',
+			'Zmniejszenie logo do 16 px jest z natury destrukcyjne — drobny detal po prostu tego nie przeżyje — dlatego rząd podglądów pokazuje każdy rozmiar w rzeczywistych wymiarach, byś ocenił czytelność przed wdrożeniem. Wszystko renderuje się na lokalnym płótnie, a kontenery ICO i ZIP składane są bajt po bajcie na stronie; Twoje logo nigdzie nie jest wysyłane.'
+		],
+		faqs: [
+			{
+				q: 'Jakich rozmiarów favikon naprawdę potrzebuję w 2026 roku?',
+				a: 'Mniej, niż sugeruje folklor: favicon.ico z rozmiarami 16/32/48 dla starszych zastosowań i paska adresu, jeden apple-touch-icon.png o boku 180 px oraz pliki PNG 192/512 px wskazane z manifestu aplikacji webowej. Nowoczesne przeglądarki wybierają najlepsze dopasowanie właśnie z tego zestawu — dwudziestoplikowe paczki z niektórych generatorów to kult cargo.'
+			},
+			{
+				q: 'Dlaczego moje logo jest nieczytelne przy 16 px?',
+				a: 'Szesnaście pikseli to brutalnie mało — sygnety słowne, cienkie kreski i delikatne gradienty po prostu się rozpuszczają. Dobre favikony sprowadzają markę do jednego mocnego znaku lub kształtu o wysokim kontraście. Jeśli podgląd 16 px jest tutaj papką, przytnij ciaśniej do charakterystycznej części znaku albo użyj uproszczonego wariantu dla małych rozmiarów.'
+			},
+			{
+				q: 'Czy plik .ico jest wciąż potrzebny, czy wystarczą favikony PNG?',
+				a: 'Każda nowoczesna przeglądarka przyjmuje favikony PNG, ale /favicon.ico wciąż jest ścieżką, o którą agenty użytkownika, roboty i starsze narzędzia pytają w ciemno. Wystawienie tam prawdziwego ICO kosztuje kilka kilobajtów i eliminuje całą klasę błędów 404 oraz dziwactw awaryjnych — trzymaj go obok odnośników do PNG.'
+			},
+			{
+				q: 'Dlaczego ikona Apple touch potrzebuje koloru tła?',
+				a: 'iOS nie renderuje przezroczystości w ikonach na ekranie głównym — jakakolwiek alfa w Twoim PNG zostanie złożona na czarnym tle. Wcześniejsze spłaszczenie na wybranym kolorze sprawia, że wynik jest zamierzony. Wybierz tło pasujące do ikony i pamiętaj, że iOS sam zaokrągla narożniki, więc dostarcz pełny kwadrat na spad.'
+			}
+		]
+	},
+
+	'sql-formatter': {
+		about: [
+			'Wklej zapytanie prosto z pliku logu, z debugowego zrzutu ORM-a albo z jednolinijkowca kolegi, a ten formater rozbije je na czytelne klauzule ze spójnymi wcięciami. Obsługiwanych jest sześć dialektów — standardowy SQL, PostgreSQL, MySQL, SQLite, SQL Server i BigQuery — więc składnia specyficzna dla dialektu, jak TOP, identyfikatory w grawisach czy typy tablicowe, formatuje się poprawnie, zamiast wywracać parser.',
+			'Wielkość liter słów kluczowych jest konfigurowalna: WERSALIKI dla klasycznego wyglądu, małe litery, jeśli tak woli Twój zespół, albo zostawienie oryginału bez zmian. Tryb minifikacji robi rzecz odwrotną — zwija sformatowane zapytanie do jednej linii, usuwając komentarze i zostawiając literały tekstowe bajt w bajt nietknięte, czyli dokładnie to, czego chcesz przed wklejeniem SQL-a do konfiguracji JSON albo flagi w wierszu poleceń.',
+			'Zapytania często zawierają nazwy tabel, dane klientów w literałach albo wskazówki o infrastrukturze. Formatowanie działa w całości w Twojej przeglądarce, więc nic z tego nie trafia na żaden serwer.'
+		],
+		faqs: [
+			{
+				q: 'Który dialekt SQL wybrać?',
+				a: 'Ten, którym mówi Twoja baza — od niego zależy sposób parsowania identyfikatorów, cudzysłowów w napisach i słów kluczowych dialektu. Jeśli chodzi tylko o ogólne uporządkowanie, standardowy SQL obsłuży wspólny rdzeń. Błąd parsowania na składni poprawnej dla Twojej bazy to zwykle sygnał, żeby zmienić dialekt.'
+			},
+			{
+				q: 'Czy formatowanie zmienia działanie zapytania?',
+				a: 'Nie. Formatowanie przesuwa tylko białe znaki i — jeśli włączysz tę opcję — zmienia wielkość liter słów kluczowych; identyfikatory i literały zachowują dokładnie swoje bajty. Słowa kluczowe SQL są w każdym obsługiwanym dialekcie niewrażliwe na wielkość liter, więc SELECT i select to ta sama instrukcja.'
+			},
+			{
+				q: 'Czy mogę sformatować wiele instrukcji naraz?',
+				a: 'Tak — wklej cały skrypt, a każda instrukcja zakończona średnikiem zostanie sformatowana po kolei, z pustą linią pomiędzy nimi.'
+			},
+			{
+				q: 'Co dokładnie usuwa minifikacja?',
+				a: 'Znikają komentarze liniowe (--) i blokowe (/* */), ciągi białych znaków zwijają się do pojedynczych spacji, a spacje wokół przecinków i nawiasów są usuwane. Tekst w apostrofach, cudzysłowach i grawisach nie jest ruszany, łącznie z podwojonymi znakami ucieczki.'
+			}
+		]
+	},
+
+	'xml-formatter': {
+		about: [
+			'To narzędzie formatuje XML z wybranym przez Ciebie wcięciem, zgłasza błędy poprawności składniowej wraz z dokładnym wierszem i kolumną oraz potrafi zminifikować dokument do jednej linii. Komentarze, sekcje CDATA i prolog XML przeżywają formatowanie — zaskakująco wiele formaterów zjada je po cichu.',
+			'Walidacja oznacza tu poprawność składniową: właściwie zagnieżdżone znaczniki, wartości atrybutów w cudzysłowach, dozwolone znaki. To wyłapuje przytłaczającą większość wypadków przy ręcznej edycji — brakujący ukośnik, niedomknięty element, zabłąkany ampersand. Walidacja względem schematu XSD jest celowo poza zakresem; jej miejsce jest w Twoim potoku budowania, gdzie plik schematu jest dostępny.',
+			'Pliki konfiguracyjne, ładunki SOAP, kanały RSS i manifesty Androida rutynowo zawierają wewnętrzne nazwy hostów i klucze. Wszystko tutaj parsuje się lokalnie — nic nie jest przesyłane.'
+		],
+		faqs: [
+			{
+				q: 'Dlaczego mój XML wywala się z „char … is not expected”?',
+				a: 'Zwykle winne są: surowy znak &, który powinien być &amp;, wartość atrybutu bez cudzysłowów albo znaczniki zamykane w złej kolejności. Komunikat błędu niesie wiersz i kolumnę pierwszego problematycznego znaku, a pole wejściowe je zaznacza.'
+			},
+			{
+				q: 'Czy formater przestawia albo normalizuje mój dokument?',
+				a: 'Nie. Elementy, atrybuty i ich kolejność zostają zachowane co do joty; zmienia się wyłącznie odstęp między elementami. Treść tekstowa dzieląca wiersz ze znacznikami jest przycinana, a wewnętrzne ciągi białych znaków zwijane — jeśli polegasz na znaczących odstępach (xml:space="preserve"), trzymaj takie fragmenty w formie zminifikowanej.'
+			},
+			{
+				q: 'Co usuwa minifikacja?',
+				a: 'Wcięcia i łamania wierszy między elementami oraz komentarze. Sekcje CDATA, instrukcje przetwarzania i prolog zostają. Wynik parsuje się identycznie dla każdego odbiorcy, który nie zależy od węzłów tekstowych złożonych wyłącznie z białych znaków.'
+			},
+			{
+				q: 'Czy potrafi walidować względem XSD albo DTD?',
+				a: 'Nie — sprawdzana jest wyłącznie poprawność składniowa. Walidacja schematem wymaga pliku schematu i silnika XSD, co lepiej robić w swoim łańcuchu narzędzi (xmllint --schema albo biblioteka XML Twojego języka).'
+			}
+		]
+	},
+
+	'xml-to-json': {
+		about: [
+			'Konwertuj XML na JSON, żeby podać stare odpowiedzi SOAP, kanały RSS albo pliki POM Mavena do JavaScriptu, jq lub API mówiącego natywnie w JSON — albo idź w drugą stronę i wyprodukuj XML z danych JSON. Atrybuty są zachowywane: stają się kluczami „@_nazwa”, a treść tekstowa współistniejąca z atrybutami ląduje pod „#text”, więc żadna informacja nie znika po cichu.',
+			'Oba formaty różnią się w rzeczach podstawowych, a ten konwerter dokonuje standardowych, pragmatycznych wyborów: powtarzające się elementy rodzeństwa zwijają się w tablicę JSON, wartości wyglądające na liczby stają się liczbami, a przestrzenie nazw podróżują jako część nazwy elementu. Obieg XML → JSON → XML zachowuje strukturę i treść typowych dokumentów.',
+			'Oba kierunki działają lokalnie w Twojej przeglądarce. Wklej kanał z fakturami albo odpowiedź API, a nic nigdzie nie pojedzie.'
+		],
+		faqs: [
+			{
+				q: 'Dlaczego niektóre wartości wracają jako liczby zamiast napisów?',
+				a: 'Parser rozpoznaje tekst liczbowy i go konwertuje, czego oczekuje większość odbiorców. Uważaj na identyfikatory z wiodącymi zerami (kody produktów, numery telefonów) — jeśli to ma dla Twoich danych znaczenie, ujmij je w cudzysłów po konwersji albo potraktuj wynik jako punkt wyjścia.'
+			},
+			{
+				q: 'Jak traktowane są powtarzające się elementy?',
+				a: 'Dwa lub więcej elementów rodzeństwa o tej samej nazwie stają się tablicą JSON pod tym kluczem. Pojedyncze wystąpienie pozostaje zwykłym obiektem — ta asymetria jest wpisana w to odwzorowanie, więc kod czytający ten JSON powinien znieść oba kształty albo najpierw je ujednolicić.'
+			},
+			{
+				q: 'Co oznaczają klucze @_ i #text?',
+				a: '@_ oznacza to, co było atrybutem XML, a #text niesie tekst elementu, gdy występują też atrybuty. Podanie tej samej konwencji z powrotem w kierunku JSON → XML odtwarza oryginalny dokument.'
+			},
+			{
+				q: 'Dlaczego JSON → XML odrzuca moją tablicę na najwyższym poziomie?',
+				a: 'Dokument XML musi mieć dokładnie jeden element główny, a goła tablica nie ma żadnego. Zawiń ją w obiekt — {"items": {"item": [...]}} — a konwerter wyprodukuje poprawny składniowo dokument.'
+			}
+		]
+	},
+
+	'markdown-to-html': {
+		about: [
+			'Pisz albo wklejaj Markdown i oglądaj obok siebie wyrenderowany podgląd i wygenerowany HTML — z nagłówkami, tabelami GFM, punktami w stylu list zadań, blokami kodu w ogrodzeniach i przekreśleniem. Kierunek odwrotny zamienia istniejący HTML w czysty Markdown z nagłówkami ATX, punktami z myślnikiem i kodem w ogrodzeniach, co jest najszybszą drogą do przeniesienia starych treści z CMS-a do repozytorium dokumentacji.',
+			'Podgląd jest oczyszczany przed renderowaniem: skrypty, ramki iframe i atrybuty obsługi zdarzeń są usuwane, więc udostępniony link niosący wrogi kod nie uruchomi niczego w Twojej przeglądarce. Pole wyjściowe HTML zawsze pokazuje surową konwersję do skopiowania do szablonów albo maili.',
+			'Konwersja i podgląd działają lokalnie. Szkice informacji o wydaniu z nazwami niezapowiedzianych funkcji zostają na Twojej maszynie.'
+		],
+		faqs: [
+			{
+				q: 'Która to odmiana Markdowna?',
+				a: 'CommonMark plus te rozszerzenia GitHuba, których ludzie faktycznie używają: tabele, przekreślenie i automatyczne linkowanie adresów. Miękkie łamania wierszy pozostają miękkie — pojedynczy znak nowej linii nie zamienia się w <br>, zgodnie z tym, jak GitHub renderuje dokumenty.'
+			},
+			{
+				q: 'Dlaczego podgląd różni się od surowego wyjścia HTML?',
+				a: 'Podgląd przechodzi przez sanityzator, który przed renderowaniem usuwa znaczniki script, wbudowane procedury obsługi zdarzeń i adresy javascript:. Pole wyjściowe pomija sanityzację, bo to tekst, a nie renderowany dokument — jeśli osadzasz HTML od użytkowników, oczyść go u siebie.'
+			},
+			{
+				q: 'Jak wierna jest konwersja HTML → Markdown?',
+				a: 'Elementy strukturalne — nagłówki, listy, odnośniki, wyróżnienia, kod, cytaty, obrazy — konwertują się czysto. HTML bez odpowiednika w Markdownie (zagnieżdżone tabele, divy z klasami, style inline) przechodzi jako surowy HTML albo traci stylowanie, więc szybkie przejrzenie wyniku bywa opłacalne.'
+			},
+			{
+				q: 'Czy mogę użyć wygenerowanego HTML-a w e-mailu?',
+				a: 'Tak — wynik to zwykły semantyczny HTML bez klas i zewnętrznych arkuszy stylów, czyli dokładnie to, co klienci poczty znoszą najlepiej. Potrzebne stylowanie dołóż na wierzchu jako inline.'
+			}
+		]
+	},
+
+	'html-formatter': {
+		about: [
+			'Uporządkuj HTML, który wyszedł z bundlera, scrapera albo edytora WYSIWYG: elementy dostają wcięcia o wybranej szerokości, atrybuty zostają w swoim wierszu, a zawartość pre i textarea pozostaje nietknięta bajt w bajt. Tryb minifikacji usuwa komentarze i zwija odstępy między znacznikami — na ręcznie pisanych stronach to zwykle 10–25% mniej wagi.',
+			'Minifikacja jest tu celowo zachowawcza: skrypty i style inline są chronione, komentarze warunkowe przeżywają, a pojedyncze spacje między elementami liniowymi zostają zachowane, żeby „kliknij <a>tutaj</a> teraz” nie zlało się w jedno słowo. Dostajesz minifikację bezpieczną, a nie maksymalnie agresywną.',
+			'Obie operacje działają lokalnie w Twojej przeglądarce — nieopublikowane strony i markup wewnętrznych paneli administracyjnych nigdy nie opuszczają Twojej maszyny.'
+		],
+		faqs: [
+			{
+				q: 'Czy minifikacja zepsuje mój wbudowany JavaScript albo CSS?',
+				a: 'Nie — bloki <script>, <style>, <pre> i <textarea> są całkowicie wyłączone ze zwijania białych znaków. Ruszany jest wyłącznie markup pomiędzy znacznikami. Żeby skompresować same skrypty, przepuść je osobno przez minifikator JavaScriptu.'
+			},
+			{
+				q: 'Dlaczego usuwanie odstępów między znacznikami jest bezpieczne?',
+				a: 'Przeważnie jest: odstęp między elementami blokowymi nie ma efektu wizualnego. Między elementami liniowymi już ma — dlatego minifikator zwija ciągi do pojedynczej spacji, zamiast je kasować. Układy oparte na sztuczkach z odstępami przy inline-block to rzadki wyjątek wart obejrzenia.'
+			},
+			{
+				q: 'Czy formater naprawia niepoprawny HTML?',
+				a: 'Formatuje to, co dostanie, bez walidacji względem specyfikacji HTML — niedomknięte znaczniki zostają niedomknięte. Przeglądarki wybaczają zupę znaczników, więc formatowanie i tak pomoże Ci zobaczyć strukturę na tyle dobrze, by wypatrzyć problem.'
+			},
+			{
+				q: 'Jakiej szerokości wcięcia używać?',
+				a: '2 spacje to dominująca konwencja w webowych bazach kodu i domyślne ustawienie większości przewodników stylu we frameworkach. Wybierz 4, jeśli Twój zespół tak się umówił — to kwestia czysto kosmetyczna.'
+			}
+		]
+	},
+
+	'css-formatter': {
+		about: [
+			'Rozwiń zminifikowany albo wklejony skądś CSS w reguły z jedną deklaracją na wiersz, albo ściśnij arkusz na produkcję. Upiększacz normalizuje wcięcia i ustawienie nawiasów klamrowych; minifikator usuwa komentarze, zwija białe znaki i kasuje końcowe średniki, zostawiając nietknięte napisy, zawartość url(...) i wyrażenia calc().',
+			'Minifikator uczciwie mówi, czego nie robi: nie zmienia nazw selektorów, nie scala zduplikowanych reguł ani nie przepisuje kolorów. Dzięki temu wynik jest przewidywalny i bezpieczny dla każdego arkusza, także takiego z hackami i prefiksami producentów — wklej, zminifikuj, wdrażaj.',
+			'Jak w każdym narzędziu tutaj, przetwarzanie jest lokalne. Niewydany kod systemu projektowego zostaje w Twojej przeglądarce.'
+		],
+		faqs: [
+			{
+				q: 'O ile mniejszy robi się zminifikowany CSS?',
+				a: 'Zwykle o 15–30% przy CSS-ie pisanym ręcznie, głównie dzięki wcięciom i komentarzom. Gzip na serwerze usuwa dużą część tej samej redundancji, więc różnica w rozmiarze na łączu jest mniejsza, niż sugerują surowe bajty — i tak minifikuj, bo skraca to również czas parsowania.'
+			},
+			{
+				q: 'Czy to bezpieczne dla calc(), właściwości niestandardowych i zapytań medialnych?',
+				a: 'Tak. Spacje wewnątrz calc() są znaczące i zostają zachowane; właściwości niestandardowe i odwołania var() to zwykłe deklaracje i przechodzą bez zmian; @media i inne reguły at zachowują swoją strukturę.'
+			},
+			{
+				q: 'Dlaczego selektory potomka zachowały spacje?',
+				a: 'Bo „nav a” i „nava” wybierają co innego — ta spacja jest kombinatorem, a nie formatowaniem. Minifikator usuwa wyłącznie białe znaki pozbawione znaczenia składniowego.'
+			},
+			{
+				q: 'Czy potrafi konwertować między LESS/SCSS a CSS?',
+				a: 'Nie — składnia preprocesorów wymaga kompilacji, a nie formatowania. Zwykły SCSS będący jednocześnie poprawnym CSS-em sformatuje się bez problemu; zagnieżdżone reguły i miksiny już nie.'
+			}
+		]
+	},
+
+	'js-formatter': {
+		about: [
+			'Upiększ JavaScript spójnymi wcięciami i odstępami — rozminifikuj dołączony bundle, żeby zobaczyć, co naprawdę robi, albo uporządkuj kod wklejony z konsoli. Minifikator jest tu prawdziwy: Terser parsuje kod do AST, usuwa martwy kod, skraca nazwy zmiennych lokalnych i wycina komentarze — to ten sam silnik, którego bundlery używają na produkcji.',
+			'Ponieważ minifikacja opiera się na AST, nigdy nie psuje działającego kodu w sposób, w jaki potrafią „kompresory” oparte na wyrażeniach regularnych: napisy, literały szablonowe, wyrażenia regularne i przypadki brzegowe ASI obsługuje prawdziwy parser. Błędy składni są raportowane z pozycją, zamiast dawać uszkodzone wyjście.',
+			'Terser ładuje się dopiero przy pierwszej minifikacji, dzięki czemu strona pozostaje lekka, i działa w całości w Twojej przeglądarce — zastrzeżony kod źródłowy nigdy nie opuszcza Twojej maszyny.'
+		],
+		faqs: [
+			{
+				q: 'O ile mniejszy będzie mój kod?',
+				a: 'Kod pisany ręcznie zwykle chudnie o 30–60% przed gzipem: białe znaki, komentarze i długie nazwy lokalne ważą właśnie tyle. Kod już zbundlowany kurczy się znacznie mniej — raz przeszedł przez tę samą transformację.'
+			},
+			{
+				q: 'Czy minifikacja zmienia zachowanie?',
+				a: 'Kompresja i skracanie nazw zachowują semantykę: zmieniane są tylko nazwy lokalne, a usuwanie martwego kodu wycina gałęzie, które dowodnie nie mogą się wykonać. Klasycznym wyjątkiem jest kod polegający na Function.prototype.name albo na toString() własnych funkcji.'
+			},
+			{
+				q: 'Czy da się tym odminifikować kod produkcyjny ze strony?',
+				a: 'Formater przywraca białe znaki i strukturę, przez co przepływ sterowania staje się czytelny — ale oryginalne nazwy zmiennych i komentarze przepadły na zawsze; zobaczysz a, b, c. Do poważnego debugowania lepiej sięgnąć po source mapy, jeśli serwis je publikuje.'
+			},
+			{
+				q: 'Czy obsługuje TypeScript albo JSX?',
+				a: 'Nie — jedno i drugie potrzebuje własnego parsera. Najpierw skompiluj do JavaScriptu (tsc, esbuild), a potem formatuj albo minifikuj tutaj wynik.'
+			}
+		]
+	},
+
+	'string-escape': {
+		about: [
+			'Zamień wielowierszowy napis z cudzysłowami w coś, co wkleisz do wartości JSON, literału JavaScriptu, napisu w Javie, węzła tekstowego XML, literału SQL albo komórki CSV — i odwróć proces, gdy trafisz na escapowany tekst w logu i chcesz go przeczytać. Sześć dialektów, w obie strony.',
+			'Każdy dialekt trzyma się swojej faktycznej specyfikacji, a nie najmniejszego wspólnego mianownika: JSON escapuje znaki sterujące jako \\uXXXX, JavaScript dodatkowo apostrofy i grawisy, Java koduje znaki spoza ASCII jako sekwencje UTF-16 \\u, SQL podwaja apostrofy, CSV opakowuje i podwaja zgodnie z RFC 4180, a XML używa swoich pięciu predefiniowanych encji. Odwrotny tryb rozumie formy \\x, \\u i \\u{…} oraz zgłasza wadliwe sekwencje wraz z ich pozycją.',
+			'Escapowane napisy to często ciągi połączeń, tokeny i fragmenty zapytań. To działa lokalnie — wklejaj bez obaw.'
+		],
+		faqs: [
+			{
+				q: 'Którego dialektu potrzebuję do pliku konfiguracyjnego JSON?',
+				a: 'JSON. Escapuje cudzysłowy, ukośniki wsteczne i znaki sterujące dokładnie tak, jak wymaga RFC 8259, i zostawia unikod czytelny. Wynik wchodzi w dowolną wartość napisową JSON — bez otaczających cudzysłowów, które narzędzie zostawia Tobie.'
+			},
+			{
+				q: 'Czym różni się dialekt JSON od JavaScriptu?',
+				a: 'JavaScript escapuje dodatkowo apostrofy i grawisy, dzięki czemu wynik jest bezpieczny w każdym z trzech sposobów cytowania w JS. JSON potrzebuje wyłącznie obsługi cudzysłowów. Odwracanie escapowania przyjmuje oba, a także formy \\x i \\u{…}, których JSON nie definiuje.'
+			},
+			{
+				q: 'Czy escapowanie SQL sprawia, że dane od użytkownika można bezpiecznie sklejać?',
+				a: 'Daje poprawny literał tekstowy SQL (z podwojonymi apostrofami), ale escapowanie i sklejanie to wciąż zły wzorzec dla niezaufanych danych — używaj zapytań parametryzowanych. To narzędzie służy do fikstur, migracji i debugowania, a nie do obrony przed wstrzyknięciami.'
+			},
+			{
+				q: 'Dlaczego odwrócenie escapowania mojego napisu się nie udaje?',
+				a: 'Ukośnik wsteczny, po którym idzie coś, co nie jest zdefiniowaną sekwencją ucieczki (\\q, ucięte \\u12), jest wadliwy, a błąd wskazuje indeks winowajcy. Jeśli w tekście masz dosłowne ścieżki Windows, najpierw je zescapuj — C:\\temp to tabulator w przebraniu.'
+			}
+		]
+	},
+
+	'number-base-converter': {
+		about: [
+			'Wpisz liczbę w dowolnym systemie i czytaj ją jednocześnie dwójkowo, ósemkowo, dziesiętnie i szesnastkowo — plus w dowolnym systemie własnym do 36. Przedrostki są rozumiane (0x, 0o, 0b), grupowanie cyfr sprawia, że długie wartości daje się objąć wzrokiem (1111 1111 · 255 · ff), a odczyt długości w bitach od razu mówi, czy wartość zmieści się w 8, 32 czy 64 bitach.',
+			'Arytmetyka opiera się na BigInt, więc precyzja jest dokładna przy każdym rozmiarze: uprawnienia plików, kolory ARGB, adresy IP, przedrostki skrótów i 64-bitowe identyfikatory bazodanowe konwertują się bez cichego zaokrąglania, które dotyka zwykłych liczb JavaScriptu powyżej 2⁵³.',
+			'Liczby ujemne zachowują znak we wszystkich systemach. Wszystko liczy się lokalnie i natychmiast, w trakcie pisania.'
+		],
+		faqs: [
+			{
+				q: 'Jak automatyczne wykrywanie ustala system?',
+				a: 'Po przedrostku: 0x oznacza szesnastkowy, 0o ósemkowy, 0b dwójkowy; cała reszta parsuje się jako dziesiętna. Cyfry w rodzaju „ff” bez przedrostka są niejednoznaczne, więc wybierz HEX wprost — komunikat błędu Ci o tym przypomni.'
+			},
+			{
+				q: 'Czy naprawdę ogromne liczby są dokładne?',
+				a: 'Tak — konwersja działa na BigInt, czyli na arbitralnej precyzji. 18446744073709551615 (2⁶⁴−1) wraca w obiegu co do jedności; konwerter oparty na liczbach zmiennoprzecinkowych zepsułby to do …551616.'
+			},
+			{
+				q: 'Jak pokazywane są liczby ujemne w zapisie dwójkowym?',
+				a: 'Ze znakiem minus (-1010), a nie w kodzie uzupełnień do dwóch, bo uzupełnienie do dwóch wymaga ustalonej szerokości. Żeby zobaczyć wzorzec U2, dodaj do swojej wartości ujemnej 2ⁿ dla interesującej Cię szerokości i przekonwertuj wynik.'
+			},
+			{
+				q: 'Do czego przydaje się system o podstawie 36?',
+				a: 'Do zwięzłych identyfikatorów: 0-9 plus a-z to najgęstszy alfabet, który pozostaje niewrażliwy na wielkość liter i bezpieczny w adresach URL. Wiele skracaczy linków i systemów zgłoszeń koduje tak numeryczne identyfikatory — wklej jeden i odczytaj kryjącą się pod nim liczbę.'
+			}
+		]
+	},
+
+	'text-to-hex': {
+		about: [
+			'Zobacz dokładnie, z jakich bajtów zbudowany jest Twój tekst: to narzędzie koduje tekst do UTF-8 i pokazuje go jako wartości szesnastkowe, dwójkowe albo dziesiętne — z wybranym separatorem, wielkością liter i przedrostkami 0x. Dekoder działa w drugą stronę i jest celowo wyrozumiały: przyjmuje ciągłe ciągi (48656c6c6f), pary rozdzielone spacjami, notację z dwukropkami w stylu adresów MAC oraz sekwencje ucieczki \\x.',
+			'Ponieważ kodowanie odbywa się na poziomie bajtów UTF-8, znaki wielobajtowe widać takimi, jakie naprawdę są w pamięci i na łączu: é to c3 a9, 世 to e4 b8 96, a emoji zajmuje cztery bajty. To najszybszy sposób na diagnozowanie niezgodności kodowań, zagadek z BOM-em i problemów typu „czemu ten napis jest dłuższy, niż wygląda”.',
+			'Jeśli zdekodowane bajty nie są poprawnym UTF-8, narzędzie mówi to wprost zamiast wypisywać krzaki — to mocna wskazówka, że patrzysz na dane binarne, a nie na tekst.'
+		],
+		faqs: [
+			{
+				q: 'Dlaczego jeden znak zamienia się w kilka bajtów?',
+				a: 'UTF-8 ma zmienną szerokość: ASCII zostaje jednobajtowe, większość liter europejskich zajmuje dwa bajty, znaki CJK trzy, a emoji cztery. To, co tu widzisz, to dokładna sekwencja bajtów, jaką dowolny system oparty na UTF-8 — pliki, HTTP, bazy danych — zapisuje dla Twojego tekstu.'
+			},
+			{
+				q: 'Jakie formaty wejścia przyjmuje dekoder?',
+				a: 'Szesnastkowe jako ciągły ciąg, pary rozdzielone spacjami, z przedrostkami 0x lub \\x, albo rozdzielone dwukropkiem czy przecinkiem; dwójkowe jako grupy ośmiobitowe ze spacjami lub bez; dziesiętne jako rozdzielone wartości bajtów. Mieszane separatory i zabłąkane białe znaki są usuwane automatycznie.'
+			},
+			{
+				q: 'Dlaczego dekodowanie mówi, że bajty nie są poprawnym UTF-8?',
+				a: 'Sekwencja bajtów łamie reguły UTF-8 — na przykład samotne ff albo bajt kontynuacji bez bajtu prowadzącego. Dane mogą być binarne, w starszym kodowaniu w rodzaju Latin-1 albo ucięte w środku znaku.'
+			},
+			{
+				q: 'Czy to to samo, co zrzut szesnastkowy z xxd?',
+				a: 'Wartości bajtów są identyczne; xxd dokłada offsety i kolumnę ASCII. Wklej tutaj same kolumny szesnastkowe ze zrzutu xxd (bez kolumny offsetu), a zdekodują się bez problemu.'
+			}
+		]
+	},
+
+	'json-schema-validator': {
+		about: [
+			'Dwa kierunki tej samej dyscypliny: wklej przykładowy JSON i dostań wywnioskowany z niego schemat draft-07, albo wklej dane razem ze schematem i zobacz każde naruszenie wypisane wraz ze ścieżką JSON. Walidacja działa na Ajv — tym samym silniku, którego używa większość serwisów w Node — więc co przechodzi tutaj, przejdzie i w CI.',
+			'Wnioskowanie jest nastawione produkcyjnie: klucze obiektów stają się otypowanymi właściwościami i pozycjami w required, tablice scalają kształty wszystkich swoich elementów, liczby całkowite są odróżniane od zmiennoprzecinkowych, a klucze występujące tylko w części elementów tablicy słusznie zostają poza required. Wynik to punkt wyjścia, który dociskasz formatami, zakresami i wzorcami.',
+			'Odpowiedzi API i pliki konfiguracyjne to akurat te dane, których najmniej chcesz na cudzym serwerze. I wnioskowanie, i walidacja działają w całości w Twojej przeglądarce.'
+		],
+		faqs: [
+			{
+				q: 'Który draft JSON Schema jest obsługiwany?',
+				a: 'Wnioskowanie generuje draft-07, najszerzej wspierany draft wśród edytorów i walidatorów. Walidacja przyjmuje draft-07 oraz wcześniejsze drafty, które Ajv rozumie w trybie nierestrykcyjnym; słowa kluczowe z 2019-09/2020-12 przeważnie też działają, bo nieznane słowa kluczowe są ignorowane, a nie traktowane jako błąd krytyczny.'
+			},
+			{
+				q: 'Co oznacza $ w ścieżkach naruszeń?',
+				a: 'To korzeń dokumentu, w stylu JSONPath: $.age to właściwość age na najwyższym poziomie, a $.items.2.name to pole name trzeciego elementu tablicy. Pusta ścieżka ($) znaczy, że naruszenie dotyczy samego korzenia dokumentu — złego typu albo brakującej wymaganej właściwości.'
+			},
+			{
+				q: 'Dlaczego wywnioskowany schemat jest bardziej albo mniej restrykcyjny, niż oczekiwałem?',
+				a: 'Opisuje dokładnie tę próbkę, którą podałeś: pola obecne wszędzie stają się wymagane, a dozwolone są wyłącznie zaobserwowane typy. Podaj bardziej zróżnicowaną próbkę (tablicę reprezentatywnych obiektów), żeby dostać ogólniejszy schemat, a potem popraw go ręcznie — wnioskowanie nie zna Twoich intencji.'
+			},
+			{
+				q: 'Czy walidacja obsługuje format, pattern i inne słowa kluczowe ograniczeń?',
+				a: 'Słowa kluczowe strukturalne (type, required, properties, items, enum, minimum, pattern…) są egzekwowane w pełni. Wartości format w rodzaju „email” czy „date-time” nie są sprawdzane — odzwierciedla to specyfikację JSON Schema, w której format jest domyślnie adnotacją, i pozwala uniknąć fałszywego poczucia bezpieczeństwa.'
+			}
+		]
+	},
+
+	'exif-viewer': {
+		about: [
+			'Każde zdjęcie z Twojego telefonu niesie ukryte metadane: model aparatu, czas wykonania, oprogramowanie do edycji — a jeśli nie wyłączono tej opcji, także współrzędne GPS miejsca, w którym stałeś. To narzędzie odczytuje takie metadane z plików JPEG, PNG i WebP i pokazuje je pogrupowane oraz rozszyfrowane: wartości ekspozycji jako f/2.8 i 1/250 s, orientację słowami, a GPS jako współrzędne dziesiętne z odnośnikiem do mapy.',
+			'Funkcja czyszczenia tworzy kopię pozbawioną metadanych — bezstratnie. Zamiast kodować obraz na nowo (co kosztuje jakość), usuwa segmenty metadanych bajt po bajcie: bloki EXIF i XMP w JPEG, fragmenty tekstowe i czasowe w PNG, kawałki EXIF/XMP w WebP. Piksele, wymiary i jakość zostają nietknięte; profile kolorów są zachowywane, więc obraz nadal wyświetla się identycznie.',
+			'To jedyna kategoria narzędzi, w której „działa lokalnie” jest całym sensem: sprawdzanie zdjęcia pod kątem danych GPS przez wysłanie go na serwer przeczyłoby idei. Plik nigdy nie opuszcza Twojej przeglądarki — co możesz sprawdzić w zakładce sieci.'
+		],
+		faqs: [
+			{
+				q: 'Czy usunięcie metadanych zmienia jakość obrazu?',
+				a: 'Nie. Strumień danych obrazu jest kopiowany bit w bit; usuwane są wyłącznie segmenty metadanych. Oczyszczony plik jest mniejszy dokładnie o rozmiar metadanych, a piksele pozostają dowodliwie identyczne.'
+			},
+			{
+				q: 'Dlaczego mój zrzut ekranu nie pokazuje żadnych metadanych?',
+				a: 'Zrzuty ekranu i większość obrazów eksportowanych na potrzeby sieci nigdy nie miały EXIF-u — zapisują go aparaty, a narzędzia do zrzutów przeważnie nie. Platformy społecznościowe też usuwają metadane przy wgrywaniu, więc zdjęcie pobrane z takiej platformy zwykle jest już czyste.'
+			},
+			{
+				q: 'Czy pozycja GPS jest dokładna?',
+				a: 'GPS telefonu zapisany w EXIF jest zwykle dokładny do kilku metrów — wystarczająco, by wskazać budynek. Narzędzie zamienia zapisane stopnie, minuty i sekundy na postać dziesiętną i linkuje do konkretnego punktu, żebyś zobaczył dokładnie to, co zobaczyłby odbiorca pliku.'
+			},
+			{
+				q: 'Dlaczego oczyszczony plik zachowuje profil kolorów ICC?',
+				a: 'Profil ICC mówi oprogramowaniu, jak interpretować kolory — usunięcie go potrafi je widocznie przesunąć, a sam profil nie zawiera żadnych informacji osobowych. Czyszczenie usuwa metadane identyfikujące (EXIF, XMP, IPTC, komentarze, znaczniki czasu) i zostawia to, czego obraz potrzebuje do poprawnego wyświetlenia.'
+			}
+		]
 	}
 };
 

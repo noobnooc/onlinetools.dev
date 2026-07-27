@@ -398,9 +398,9 @@ const TOOL_CONTENT_DE: Record<string, ToolContent> = {
 
 	'html-entities': {
 		about: [
-			'Escape Text für die sichere Einbettung in HTML — aus & wird &amp;amp;, aus < wird &amp;lt; — oder dekodiere entity-gespickten Text zurück in lesbare Zeichen, inklusive benannter Entities (&amp;rarr;), dezimaler (&amp;#169;) und hexadezimaler (&amp;#xA9;) numerischer Referenzen.',
-			'Beim Kodieren gibt es zwei Stufen: die fünf essenziellen Zeichen, die die HTML-Struktur brechen (&amp; &lt; &gt; " \') — mehr braucht es für Korrektheit nicht — oder alles Nicht-ASCII, nützlich, wenn irgendwo zwischen dir und der Seite eine Toolchain UTF-8 verstümmelt. Ein Nur-numerisch-Modus lässt benannte Entities weg, für maximale Kompatibilität mit strikten XML-Parsern, die nur die fünf vordefinierten garantieren.',
-			'Der Decoder ist die Alltagsseite: Füge ein gescraptes Snippet oder eine API-Antwort voller &amp;#x27; ein und erhalte sauberen Text. Unbekannte Entity-Namen werden unverändert durchgereicht statt geraten.'
+			'Escape Text für die sichere Einbettung in HTML — aus & wird &amp;, aus < wird &lt; — oder dekodiere entity-gespickten Text zurück in lesbare Zeichen, inklusive benannter Entities (&rarr;), dezimaler (&#169;) und hexadezimaler (&#xA9;) numerischer Referenzen.',
+			'Beim Kodieren gibt es zwei Stufen: die fünf essenziellen Zeichen, die die HTML-Struktur brechen (& < > " \') — mehr braucht es für Korrektheit nicht — oder alles Nicht-ASCII, nützlich, wenn irgendwo zwischen dir und der Seite eine Toolchain UTF-8 verstümmelt. Ein Nur-numerisch-Modus lässt benannte Entities weg, für maximale Kompatibilität mit strikten XML-Parsern, die nur die fünf vordefinierten garantieren.',
+			'Der Decoder ist die Alltagsseite: Füge ein gescraptes Snippet oder eine API-Antwort voller &#x27; ein und erhalte sauberen Text. Unbekannte Entity-Namen werden unverändert durchgereicht statt geraten.'
 		],
 		faqs: [
 			{
@@ -413,11 +413,11 @@ const TOOL_CONTENT_DE: Record<string, ToolContent> = {
 			},
 			{
 				q: 'Benannte oder numerische Entities — welche sollte ich ausgeben?',
-				a: 'Numerische Referenzen (&amp;#xE9;) funktionieren in jedem HTML- und XML-Parser. Benannte Entities sind lesbarer, aber XML definiert nur fünf vor — &amp;eacute; bricht also eine strikte XML/XHTML-Pipeline. Im Zweifel: numerisch.'
+				a: 'Numerische Referenzen (&#xE9;) funktionieren in jedem HTML- und XML-Parser. Benannte Entities sind lesbarer, aber XML definiert nur fünf vor — &eacute; bricht also eine strikte XML/XHTML-Pipeline. Im Zweifel: numerisch.'
 			},
 			{
-				q: 'Warum sehe ich &amp;amp;#39; (doppelt kodiert) in meinen Daten?',
-				a: 'Zwei Schichten haben je einmal kodiert: Das &amp; der ersten Kodierung wurde von einem zweiten Durchlauf selbst escaped. Dekodiere hier zweimal, um den Text wiederherzustellen, und finde und repariere dann die Schicht, die nicht kodieren sollte.'
+				q: 'Warum sehe ich &amp;#39; (doppelt kodiert) in meinen Daten?',
+				a: 'Zwei Schichten haben je einmal kodiert: Das & der ersten Kodierung wurde von einem zweiten Durchlauf selbst escaped. Dekodiere hier zweimal, um den Text wiederherzustellen, und finde und repariere dann die Schicht, die nicht kodieren sollte.'
 			}
 		]
 	},

@@ -549,6 +549,586 @@ const TOOL_CONTENT_TR: Record<string, ToolContent> = {
 				a: 'Pratikte evet — YAML 1.2 neredeyse tüm JSON belgelerini ayrıştırır; JSON’u bir YAML yapılandırmasına yapıştırmanın genelde çalışmasının nedeni budur. Tersi doğru değildir: YAML’ın çapaları, çok satırlı skalerleri ve etiketlerinin JSON karşılığı yoktur; dönüşümde genişletilir ya da dizgeye çevrilirler.'
 			}
 		]
+	},
+
+	'json-to-csv': {
+		about: [
+			'Bir JSON nesne dizisi yapıştırın, elektronik tabloya hazır bir CSV alın: iç içe nesneler noktalı sütun adlarına düzleştirilir (user.address.city), sütunlar tüm satırların birleşimi olarak çıkarılır (eksik değerler boş hücre olur) ve tırnaklama RFC 4180’i izler; böylece değerlerin içindeki virgüller, tırnaklar ve satır sonları Excel ile Google E-Tablolar’dan sağ çıkar.',
+			'Bu, bir API yanıtından birinin filtreleyip pivotlayabileceği bir tabloya giden en kısa yoldur. Sütun birleşimi, nesnelerin türdeş olmadığı gerçek dünya verisinde önemlidir — 1. satırda olmayan alanlar 40. satırda olabilir; dönüştürücü hata vermek ya da veri düşürmek yerine bunu düzgünce ele alır.',
+			'Dönüştürücü ters yönde de çalışır: bir CSV dışa aktarımı yapıştırın, başlık satırına göre anahtarlanmış bir JSON nesne dizisi alın; ayırıcı otomatik algılanır (virgül, noktalı virgül, sekme, dikey çizgi) ve isteğe bağlı türlü değerlerle sayılar, boole’lar ve null gerçek JSON türlerine dönüşür. Her iki yön de tamamen tarayıcınızda çalışır; yani müşteri dışa aktarımları makinenizden hiç çıkmaz.'
+		],
+		faqs: [
+			{
+				q: 'İç içe nesneler nasıl gösteriliyor?',
+				a: 'Nokta ile birleştirilmiş anahtarlara düzleştirilerek: {"user":{"name":"Ada"}} bir user.name sütunu olur. Böylece her skaler değer tek düz bir başlık satırında adreslenebilir kalır — elektronik tablo araçlarının gerçekten çalışabildiği biçim budur.'
+			},
+			{
+				q: 'Bir satırın içindeki dizilere ne oluyor?',
+				a: 'Tek bir hücreye JSON metni olarak gömülürler (["a","b"]). Dizileri sütunlara (tags.0, tags.1…) ya da fazladan satırlara açmak, verinizin şeklini iddialı biçimde değiştirir — gömme ise dönüşümü kayıpsız ve öngörülebilir tutar.'
+			},
+			{
+				q: 'Excel neden CSV’mi tek sütunda gösteriyor?',
+				a: 'Yerel ayarlar yüzünden: Avrupa’nın büyük kısmında Excel, virgül ondalık ayırıcı olduğu için noktalı virgülle ayrılmış dosyalar bekler. Ayırıcı seçeneğini noktalı virgüle alın ya da ayırıcıyı belirtmenize izin veren Veri → Metin/CSV’den seçeneğini kullanın.'
+			},
+			{
+				q: 'Dönüştürücü tek bir nesneyi (dizi değil) işleyebiliyor mu?',
+				a: 'Evet — tek başına bir nesne, tek satırlık bir CSV olur. Ancak kimlikle anahtarlanmış nesneler ({"a1":{...},"a2":{...}}) tek bir geniş satıra dönüşür; her değerin bir satır olması gerekiyorsa önce onları diziye çevirin.'
+			},
+			{
+				q: 'CSV → JSON tırnaklı alanları ve gömülü satır sonlarını nasıl işliyor?',
+				a: 'RFC 4180’e göre: çift tırnak içine alınmış alanlar ayırıcıyı, düz tırnak için ikilenmiş tırnakları ("") ve satır sonlarını içerebilir. Excel ve çoğu veritabanı tam olarak bu biçimde dışa aktarır, dolayısıyla gerçek dosyalar doğru ayrıştırılır.'
+			},
+			{
+				q: 'CSV → JSON dönüşümünde posta kodlarımın baştaki sıfırları neden kayboluyor?',
+				a: 'Türlü dönüşüm 02134 değerini 2134 sayısına çevirir. “Türlü değerler” seçeneğinin işaretini kaldırın; o zaman her hücre yazıldığı gibi dizge kalır — kimlikler, telefon numaraları ve baştaki sıfırı önemli olan her şey için doğru seçim budur.'
+			}
+		]
+	},
+
+	'json-to-typescript': {
+		about: [
+			'Bir JSON örneği yapıştırın — bir API yanıtı, bir yapılandırma dosyası — ve ondan çıkarılmış bir TypeScript arayüzü alın: iç içe nesneler iç içe türlere dönüşür, diziler eleman türü kazanır (karışık içerikte birleşimlerle) ve geçerli tanımlayıcı olmayan anahtarlar düzgün biçimde tırnaklanır.',
+			'Üretilen türler bir başlangıç noktasıdır, bir sözleşme değil: çıkarım tek bir örnek görür; yani örneğinizde tesadüfen null olan bir alan null olarak türlenir ve bulunmayan isteğe bağlı alanlar onun için yok hükmündedir. Çıktı bilerek sadedir — dekoratör yok, çalışma zamanı doğrulaması yok — böylece istediğiniz yere yapıştırıp geliştirebilirsiniz.',
+			'İstekten isteğe değişen alanlar için ikinci bir örneği de geçirip elle birleştirin ya da şekil oturduğunda şema öncelikli araçlara (OpenAPI, zod) terfi edin. Günlük “şu yanıt için bir tür lazım” anı içinse tek bir yapıştırma yeter.'
+		],
+		faqs: [
+			{
+				q: 'Null olabilen alanım neden sadece null olarak türlenmiş?',
+				a: 'Çıkarım yalnızca yapıştırdığınız örneği görür. Alan orada null idiyse, bilebileceği tek şey null’dır. Üretimden sonra string | null (ya da gerçek tür neyse) olarak değiştirin — veya alanın dolu olduğu bir örnek yapıştırın.'
+			},
+			{
+				q: 'İsteğe bağlı alanlar nasıl ele alınıyor?',
+				a: 'Ele alınmıyor — tek bir örnek, “her zaman var” ile “bu seferlik var” arasındaki farkı ayırt edemez. Örnekte bulunmayan alanlar türde de bulunmaz. API’nin atladığını bildiğiniz alanları elle isteğe bağlı (name?:) işaretleyin.'
+			},
+			{
+				q: 'Karışık türlü diziler ne üretir?',
+				a: 'Bir birleşim: [1, "a"] için (number | string)[] çıkarılır. Boş diziler, incelenecek eleman olmadığı için unknown[] olur — gerçek eleman türünü öğrendiğinizde onunla değiştirin.'
+			},
+			{
+				q: 'Çıkarılmış türleri mi yoksa zod gibi bir şema kütüphanesini mi kullanmalıyım?',
+				a: 'Çıkarılan arayüzler yalnızca derleme zamanındadır — çalışma zamanında hiçbir şey doğrulamazlar. İç araçlar ve hızlı türleme için mükemmeldirler; çalışma zamanında güvenilmeyen girdi içinse bir zod/valibot şeması tanımlayın ve statik türü ondan türetin.'
+			}
+		]
+	},
+
+	'jsonpath-tester': {
+		about: [
+			'JSONPath ifadelerini kendi JSON’unuza karşı test edin; her eşleşmeyi hem değeriyle hem somut yoluyla görün. Günlük kullanımı kapsayan sözdizimi desteklenir: nokta ve köşeli parantez gösterimi, dizi indeksleri (negatifler dâhil), joker karakterler, birleşimler ([\'a\',\'b\']) ve özyinelemeli iniş ($..price).',
+			'Eşleşme başına yol çıktısı sessizce en faydalı kısımdır: derin bir belgede $..id sorgusu çalıştırın; her sonuç size tam olarak nerede yaşadığını söyler ($.data.items[3].id) ve doğrudan koda yapıştırmaya hazırdır. “Bu yığının bir yerinde” ifadesini kesin bir adrese çevirir.',
+			'Filtre ifadeleri ([?(@.price < 10)]) henüz uygulanmadı — araç yanlış sonuç döndürmek yerine bunu açıkça söyler. JSONPath kullanımının çoğunu oluşturan yapısal ayıklama içinse her şey çalışır.'
+		],
+		faqs: [
+			{
+				q: '$.a.b ile $..b arasındaki fark ne?',
+				a: '$.a.b tek bir kesin rotayı izler: kökteki a anahtarı, sonra onun içindeki b anahtarı. $..b (özyinelemeli iniş) ise belgenin herhangi bir derinliğindeki her b değerini bulur. Özyinelemeli iniş güçlüdür ama şaşırtabilir — hiç düşünmediğiniz şeylerin içine gömülü b anahtarlarını da eşler.'
+			},
+			{
+				q: 'Boşluk ya da tire içeren anahtarlara nasıl erişirim?',
+				a: 'Tırnaklı köşeli parantez gösterimiyle: $[\'my key\'] veya $.data[\'content-type\']. Nokta gösterimi yalnızca geçerli tanımlayıcıya benzeyen adlarda çalışır.'
+			},
+			{
+				q: 'Negatif dizi indeksleri çalışıyor mu?',
+				a: 'Evet — [-1] son eleman, [-2] sondan ikincidir; Python’un yaygınlaştırdığı ve RFC 9535’in benimsediği gelenekle uyumludur. [0] yine ilk elemandır.'
+			},
+			{
+				q: 'JSONPath standartlaştırıldı mı?',
+				a: '2024’ten beri evet — RFC 9535 sözdizimini ve anlambilimini tanımlar. Ondan önce yazılmış uygulamalar sınır durumlarda (özellikle filtreler ve birleşimler) farklılık gösterir; yani aynı ifade kütüphaneden kütüphaneye farklı davranabilir. Dağıtımda kullandığınız uygulamaya karşı test edin.'
+			}
+		]
+	},
+
+	'bcrypt-generator': {
+		about: [
+			'Bir parolayı seçtiğiniz maliyet faktörüyle bcrypt kullanarak hash’leyin ya da düz metni mevcut bir hash ile doğrulayın — ikisi de tamamen tarayıcıda; test edilen şey bir parolaysa tam da isteyeceğiniz budur. Bir hash inceleyicisi ayrıca herhangi bir bcrypt hash’ini sürüm, maliyet ve tuz olarak parçalar.',
+			'Bcrypt, parola saklamak için sağlam bir seçim olmayı sürdürüyor; çünkü bilerek yavaştır ve parola başına tuzlanır: maliyet faktörü her artışta işi ikiye katlar, yani maliyet 12, altta yatan şifre kurulumunun 4096 yinelemesi demektir. Zamanlama göstergesi seçtiğiniz maliyetin ne kadar sürdüğünü gösterir ve güvenlik/gecikme ödünleşimini somutlaştırır.',
+			'Günlük hayatta daha sık gereken doğrulamadır: uygulama kodunu ayağa kaldırmadan bir veritabanındaki hash’in bilinen bir parolayla eşleştiğini teyit etmek. İkisini de yapıştırın, evet ya da hayır cevabını alın.'
+		],
+		faqs: [
+			{
+				q: 'Üretimde hangi maliyet faktörünü kullanmalıyım?',
+				a: 'Klasik öneri: giriş gecikme bütçenizin izin verdiği kadar yüksek; bugün genellikle 10–13. Üretim donanımınızda hash başına 100–300 ms hedefleyin. Tarayıcıdaki JavaScript yerel koddan yavaş çalışır, dolayısıyla burada görünen süre sunucularınız için bir üst sınırdır.'
+			},
+			{
+				q: 'Aynı parola neden her seferinde farklı bir hash veriyor?',
+				a: 'Her hash için rastgele 16 baytlık bir tuz üretilir ve hash dizgesinin içinde saklanır. Bu tasarım gereğidir — özdeş parolalar farklı hash’ler alır ve önceden hesaplanmış gökkuşağı tabloları boşa çıkar. Doğrulama tuzu hash’in içinden geri okur; karşılaştırmanın çalışmasının nedeni budur.'
+			},
+			{
+				q: 'Bir bcrypt hash’inin parçaları ne anlama geliyor?',
+				a: '$2b$12$ + 53 karakter: 2b algoritma sürümü, 12 maliyet (2^12 yineleme), sonraki 22 karakter tuz ve son 31 karakter özettir — hepsi bcrypt’in kendi base64 alfabesiyle. Aracın altındaki inceleyici herhangi bir hash’i bu şekilde ayırır.'
+			},
+			{
+				q: 'Bcrypt hâlâ Argon2 yerine önerilir mi?',
+				a: 'Yeni sistemler için ilk tercih artık Argon2id’dir (bellek sertliği GPU ile kırmaya direnir). Bcrypt kabul edilebilir ve her yerde bulunur olmayı sürdürüyor — pratik öneri şudur: çalışan bir bcrypt altyapısını panikle taşımayın ama sıfırdan tasarımlarda Argon2id’yi seçin. Her ikisi de SHA-256 gibi hızlı hash’lerin kat kat ötesindedir.'
+			}
+		]
+	},
+
+	'user-agent-parser': {
+		about: [
+			'Bir log satırından, hata raporundan veya analitik dışa aktarımından bir User-Agent dizgesi yapıştırın ve çözümlenmiş hâlini alın: tarayıcı ve sürümü, işleme motoru, işletim sistemi, cihaz türü ve CPU mimarisi. Ayrıştırıcı, sayısız analitik hattının arkasındaki kütüphane olan ua-parser-js’tir ve dizgeniz üzerinde yerelde çalışır.',
+			'User-Agent dizgeleri birer kazı alanıdır — hepsi hâlâ Mozilla/5.0 olduğunu iddia eder, Chrome kendine Safari der, Safari KHTML der ve gerçek kimlik sonraki belirteçlerde saklanır. Bir ayrıştırıcı gözünüzü kısarak bakmaktan iyidir: “CriOS”un iOS’taki Chrome demek olduğunu ve Edge’in “Edg/” arkasına saklandığını bilir.',
+			'Gidişatı da not edin: tarayıcılar UA dizgelerini donduruyor ve kısaltıyor (Chromium bunun yerine UA Client Hints gönderiyor), dolayısıyla yalnızca UA’dan gelen sürüm ayrıntısı giderek kabalaşıyor. Log adli incelemesi ve hata ayıklama için vazgeçilmez olmayı sürdürür; özellik kararları içinse özellik algılamayı kullanın.'
+		],
+		faqs: [
+			{
+				q: 'Neden her User-Agent Mozilla/5.0 ile başlıyor?',
+				a: '1990’lardan kalma, hiç bitmeyen bir uyumluluk tiyatrosu: sunucular modern sayfaları sunmak için “Mozilla” arıyordu, bu yüzden her yeni tarayıcı öyle olduğunu iddia etti ve her tarayıcı kendinden öncekileri taklit etti. Önek artık anlamsız bir gelenektir.'
+			},
+			{
+				q: 'Bir UA dizgesindeki işletim sistemi sürümüne güvenebilir miyim?',
+				a: 'Her yıl biraz daha az. macOS UA sürümünü 10_15_7’de dondurdu, Windows 11 kendini Windows NT 10.0 olarak bildiriyor ve UA’sını kısaltan tarayıcılar sürümleri bilerek kabalaştırıyor. UA’dan gelen işletim sistemi sürümlerini yaklaşık kabul edin; istemciyi siz denetliyorsanız UA Client Hints kullanın.'
+			},
+			{
+				q: '“like Gecko” ya da “KHTML, like Gecko” ne demek?',
+				a: 'Bir taklit katmanı daha: WebKit, KHTML’den türedi ve Gecko’yu (Firefox’un motorunu) özel olarak ele alan sayfaların çalışmasını istedi; bu yüzden sonuna “like Gecko” ekledi. Her WebKit/Blink tarayıcısı bu ifadeyi bugün de taşır.'
+			},
+			{
+				q: 'Özellik algılama için UA ayrıştırma kullanmalı mıyım?',
+				a: 'Hayır — yeni bir tarayıcı sürümü çıktığı anda UA ayıklaması bozulur. Özelliğin kendisini algılayın (if ("clipboard" in navigator)). UA ayrıştırma; analitik, log çözümlemesi ve kullanıcıların bildirdiği hataları yeniden üretmek içindir, ki oralarda ortamı bilmek işin ta kendisidir.'
+			}
+		]
+	},
+
+	'color-converter': {
+		about: [
+			'Bir rengi yaygın gösterimlerin herhangi biriyle girin — #hex, rgb(), hsl() ya da CSS renk adı — ve tüm biçimleri aynı anda alın: HEX, RGB, HSL ve OKLCH, yanında canlı bir örnek kareyle. Alfa kanalları biçimler arasında korunur ve çıktı, güncel stil dosyalarına temizce yapıştırılan modern CSS sözdizimini (boşlukla ayrılmış kanallar) kullanır.',
+			'OKLCH dâhil edildi, çünkü CSS rengi oraya gidiyor: HSL’den farklı olarak açıklık ekseni algısal olarak tekdüzedir; yani aynı L değerine sahip iki renk gerçekten eşit parlaklıkta görünür ve tonu değiştirmek algılanan parlaklığı kazara değiştirmez. Var olan bir paleti OKLCH’ye çevirmek, tutarlı renk skalaları kurmanın ilk adımıdır.',
+			'Dönüşüm matematiği yayımlanmış sRGB↔OKLab dönüşümleriyle yerelde çalışır ve değerler gidip geri döner: bir HSL girdisinden aldığınız RGB, tarayıcının hesaplayacağının tam olarak aynısıdır.'
+		],
+		faqs: [
+			{
+				q: 'HSL ile OKLCH açıklık değerleri neden birbirini tutmuyor?',
+				a: 'HSL açıklığı, insan görüşünün değil RGB değerlerinin geometrik bir özelliğidir — hsl(60 100% 50%) sarısı, aynı L değerine sahip olmasına rağmen hsl(240 100% 50%) mavisinden çok daha parlak görünür. OKLCH’nin L ekseni algıyla örtüşecek şekilde tasarlanmıştır; yani eşit L, eşit görünür parlaklık demektir. Bu uyuşmazlık, OKLCH’nin var olma sebebinin ta kendisidir.'
+			},
+			{
+				q: 'Alfa değeri ne anlama geliyor ve her biçimde nereye yazılıyor?',
+				a: 'Alfa donukluktur; 0 (saydam) ile 1 (tam opak) arasındadır. 8 haneli hex’te son bayttır (#RRGGBBAA); modern işlevsel sözdiziminde bir eğik çizginin ardından gelir: rgb(76 141 255 / 0.5). Bu dönüştürücü alfayı her biçimde kendiliğinden taşır.'
+			},
+			{
+				q: 'Her OKLCH rengi sRGB’de gösterilebilir mi?',
+				a: 'Hayır — OKLCH geniş renk gamlarını kapsar ve bazı kroma/açıklık birleşimlerinin sRGB karşılığı yoktur. sRGB’den dönüştürmek (bu aracın yaptığı gibi) her zaman gösterilebilir kalır; ters yönde ise gam dışı renkler kırpılmalı ya da eşlenmelidir — canlı bir P3 yeşilinin sRGB ekranda daha donuk görünmesinin nedeni budur.'
+			},
+			{
+				q: 'Neden virgüllü değil de boşluklu rgb(76 141 255)?',
+				a: 'CSS Color Module Level 4, isteğe bağlı /alfa ile birlikte boşlukla ayrılmış kanalları standartlaştırdı ve her modern tarayıcı bunu destekliyor. Virgüllü biçim hâlâ çalışır ama yeni belirtimlerin (ve bu aracın) kullandığı boşluklu biçimdir.'
+			}
+		]
+	},
+
+	'image-to-base64': {
+		about: [
+			'Bir görseli sürükleyin, seçin ya da yapıştırın; Base64 hâlini ihtiyaç duyabileceğiniz her tatta alın: kullanıma hazır bir data URL, bir CSS background-image bildirimi, doğal boyutlarıyla eksiksiz bir <img> etiketi ve ham Base64 yükü. Ters yön de çalışır — bir data URL ya da çıplak bir Base64 bloğu yapıştırın; görsel çözülür, önizlenir ve dosya olarak indirilebilir.',
+			'Biçim, dosya uzantısından ya da bildirilen mime türünden değil sihirli baytlardan belirlenir; yani .jpg olarak yeniden adlandırılmış bir PNG (ya da yanlış etiketli bir data URL) yine de doğru dönüşür. Boyut paneli maliyet konusunda dürüsttür: Base64 veriyi yaklaşık üçte bir oranında şişirir ve tam kodlanmış boyut, özgün boyutun yanında gösterilir; böylece gömmenin buna değip değmediğine karar verebilirsiniz.',
+			'Çoğu görselden-Base64’e sitesinin aksine hiçbir şey karşıya yüklenmez — dosya tarayıcının FileReader API’siyle okunur ve sayfada kodlanır. Bu da onu iç panellerin ekran görüntüleri, yayımlanmamış ürün fotoğrafları ya da bir yabancının sunucusuna vermeyi tercih etmeyeceğiniz her şey için güvenli kılar.'
+		],
+		faqs: [
+			{
+				q: 'Bir görseli dosya olarak bağlamak yerine ne zaman Base64 olarak gömmeliyim?',
+				a: 'Görsel küçükse (kabaca 10 KB’ın altı), nadiren değişiyorsa ve aksi hâlde fazladan bir HTTP isteğine mal olacaksa — ikonlar, e-postalardaki logolar ya da tek dosyalık HTML belgeleri gibi. Bundan büyüğünde ayrı dosya kazanır: bağımsız önbelleklenir, paralel yüklenir ve HTML’inizi ya da CSS’inizi %33 şişirmez.'
+			},
+			{
+				q: 'Base64 sürümü neden dosyamdan yaklaşık üçte bir daha büyük?',
+				a: 'Base64 her 3 baytlık ikili veriyi 4 ASCII karakteriyle temsil eder; bu yapısal olarak +%33 ek yüktür (artı en fazla iki dolgu karakteri). Sunucunuzdaki gzip ya da Brotli bunun bir kısmını geri kazandırır ama şişme kodlamanın doğasında vardır — ikili veriyi metne gömebilme yeteneğini boyutla takas eder.'
+			},
+			{
+				q: 'Bir stil dosyasında ya da HTML’de bulduğum bir data URL’yi çözebilir miyim?',
+				a: 'Evet — Base64 → görsel moduna geçin ve data: önekiyle birlikte tamamını yapıştırın. Yüzde kodlu SVG data URL’leri (;base64 içermeyen tür) de çözülür ve yükün içindeki satır sonlarıyla boşluklar kendiliğinden temizlenir. Sonuç sayfada önizlenir ve doğru uzantıyla indirilir.'
+			},
+			{
+				q: 'Bu yalnızca PNG ve JPEG için mi, yoksa SVG, GIF ve ICO da işe yarar mı?',
+				a: 'Algılayıcının tanıdığı her şey Base64’e dönüşür: PNG, JPEG, WebP, GIF, SVG, BMP, ICO ve AVIF. Özellikle SVG için şunu düşünün: XML kaynağı doğrudan satır içine alındığında çoğu zaman daha küçük ve daha okunaklıdır — SVG’yi Base64 ile kodlamak asıl olarak tırnaklama ya da kaçışlama sorun olduğunda anlamlıdır.'
+			}
+		]
+	},
+
+	'image-converter': {
+		about: [
+			'Bir görseli PNG, JPEG ve WebP arasında hiçbir şey kurmadan ve hiçbir yere yüklemeden dönüştürün: dosyayı bırakın, hedefi seçin, canlı bir kaydırıcıyla kaliteyi ayarlayın ve çıktı boyutunun gerçek zamanlı güncellendiğini izleyin. Δ karesi, dönüştürülen dosyanın tam olarak ne kadar küçüldüğünü (ya da büyüdüğünü) gösterir; böylece kalite ayarı seçmek tahmin işi olmaktan çıkar.',
+			'Üç biçimin farklı görevleri vardır. PNG kayıpsızdır ve tam saydamlık sunar — ekran görüntüleri, arayüz varlıkları ve keskin kenar veya metin içeren her şey için doğrudur. JPEG fotoğrafları agresif biçimde sıkıştırır ama alfa kanalı yoktur ve sert kenarları bulanıklaştırır. WebP karşılaştırılabilir kalitede genelde JPEG’i %25–35 geçer, saydamlığı destekler ve güncel tarayıcıların hepsinde çalışır — web için genellikle cevap odur.',
+			'Dönüşüm tarayıcınızdaki bir canvas üzerinde olur: görsel, tarayıcınızın sayfaları göstermek için kullandığı kodeklerle çözülür, yeniden çizilir ve yeniden kodlanır. Aracı gizli kılan da budur — ve her biri kendi kodlayıcısını taşıyan Chrome, Firefox ve Safari arasında tam bayt sayılarının hafifçe farklı çıkmasının nedeni de.'
+		],
+		faqs: [
+			{
+				q: 'JPEG ve WebP için hangi kalite ayarını kullanmalıyım?',
+				a: '75 ile 90 arası neredeyse her gerçek kullanımı karşılar. 85’te çoğu fotoğraf kaynaktan gözle ayırt edilemez ve boyutun küçük bir kesrindedir; ~70’in altında degradelerde ve ten tonlarında blok artefaktları belirmeye başlar; 90’ın üzerinde ise dosya boyutu, göremeyeceğiniz kazanımlar için hızla tırmanır. Kaydırıcıyı çekin ve boyut karesini izleyin — tatlı nokta genelde kendini belli eder.'
+			},
+			{
+				q: 'PNG’m JPEG’e dönüştürülünce neden büyüdü?',
+				a: 'JPEG düz renk için değil, fotoğraf degradeleri için tasarlanmıştır. Ekran görüntüleri, diyagramlar ve arayüz grafikleri PNG olarak muhteşem sıkışır (uzun aynı piksel dizileri) ama JPEG’i her keskin kenarın etrafında gürültü saklamaya zorlar — daha büyük dosyalar ve gözle görülür halkalanma. Grafikleri PNG olarak tutun ya da kayıpsıza yakın WebP’ye dönüştürün.'
+			},
+			{
+				q: 'JPEG’e dönüştürürken saydamlığa ne oluyor?',
+				a: 'JPEG’in alfa kanalı yoktur, dolayısıyla saydam bölgeler bir şeyle doldurulmalıdır — bu araç onları web görselleri için alışılmış olan beyaz üzerine düzleştirir. Saydamlığın hayatta kalması gerekiyorsa hedef olarak PNG ya da WebP seçin.'
+			},
+			{
+				q: 'Tarayıcım neden burada AVIF ya da HEIC dışa aktaramıyor?',
+				a: 'Canvas toBlob API’si yalnızca tarayıcının kodlayıcı taşıdığı biçimleri kodlar — her yerde PNG ve JPEG, Chromium ile Firefox’ta WebP. AVIF kodlaması hâlâ nadirdir, HEIC ise patent yüklüdür; yani tarayıcılar bunları çözer ama üretmez. Tarayıcınızın yazamadığı bir biçim seçerseniz araç sessizce size PNG vermek yerine durumu söyler.'
+			}
+		]
+	},
+
+	'image-resizer': {
+		about: [
+			'Bir görseli tam bir genişliğe, tam bir yüksekliğe ya da özgün boyutun bir yüzdesine göre yeniden boyutlandırın — diğer boyut kendiliğinden izler, böylece hiçbir şey esnemez. Bir çıktı biçimi seçin (ya da kaynak biçimi koruyun), kayıplı hedefler için kaliteyi ayarlayın, sonucu önizleyin ve indirin. Önce/sonra kareleri boyutları ve dosya büyüklüğünü bir bakışta gösterir.',
+			'Ölçekleme, tarayıcının yüksek kaliteli yumuşatma kipini kullanır; bu, en yakın komşu seyreltmesi yerine düzgün yeniden örnekleme uygular — küçültülen fotoğraflar takma titremesiyle kırpışmak yerine net kalır. Yeniden boyutlandırma aynı zamanda dosya boyutunu küçültmenin dürüst yoludur: iki boyutu da yarıya indirmek piksellerin dörtte üçünü kaldırır, ki hiçbir kalite kaydırıcısı buna erişemez.',
+			'Dosyalar sayfadan hiç çıkmaz: çözme, yeniden örnekleme ve yeniden kodlamanın hepsi yerel bir canvas üzerinde çalışır. Yükleme ilerleme çubuğu yoktur, çünkü yükleme yoktur — 40 megapikselik bir fotoğraf, makineniz onu yeniden çizebildiği hızda boyutlanır ve ağ kablosu takılı değilken bile çalışır.'
+		],
+		faqs: [
+			{
+				q: 'Küçültüp sonra tekrar büyütmek görselimi geri getirir mi?',
+				a: 'Hayır — küçültme pikselleri kalıcı olarak atar. 3000 piksellik bir fotoğrafı 300 piksele indirmek verinin %1’ini tutar; geri büyütmek eksik %99’u bulanıklık olarak aradeğerler. Elinizdeki tek kopyayı yeniden boyutlandırmak yerine özgün dosyayı saklayın ve ondan boyutlandırılmış kopyalar çıkarın.'
+			},
+			{
+				q: 'Büyütülmüş görselim neden yumuşak görünüyor?',
+				a: 'Büyütme, hiç yakalanmamış ayrıntıyı yaratamaz — tarayıcı var olan pikseller arasında aradeğerleme yapar ve bu, yaklaşık 2×’in ötesinde yumuşaklık olarak okunur. Bunun ötesinde gerçek büyütme, makul ayrıntıyı uyduran yapay zekâ tabanlı araçlar ister; bir canvas yeniden örnekleyicisi bilerek hiçbir şey uydurmaz.'
+			},
+			{
+				q: '“200 KB altı” gibi bir hedef dosya boyutunu nasıl tutturabilirim?',
+				a: 'İki kolu da kullanın: önce gerçekten ihtiyacınız olan en büyük boyutlara indirin (çoğu web düzeni için 1200 piksel genişlik fazlasıyla yeter), sonra WebP ya da JPEG seçip boyut karesi hedefin altına düşene kadar kaliteyi azaltın. İşin çoğunu boyut küçültme yapar — kalite ayarı gerisine ince ayar çeker.'
+			},
+			{
+				q: 'Yeniden boyutlandırma GPS konumu gibi EXIF meta verisini siler mi?',
+				a: 'Evet. Canvas hattı saf pikselleri yeniden kodlar — kamera modeli, zaman damgaları, GPS koordinatları ve diğer bütün EXIF etiketleri çıktıda yoktur. Kamuya açık web’e gidecek görsellerde bu genelde bir gizlilik kazancıdır; meta verinin korunması gerekiyorsa özgün dosyayı yanınızda tutun.'
+			}
+		]
+	},
+
+	'favicon-generator': {
+		about: [
+			'Tek bir görsel bırakın — tercihen 512 piksel ya da daha büyük kare bir logo — ve eksiksiz favicon setini alın: sekmeler ve yer imleri için 16, 32 ve 48 pikseli paketleyen bir favicon.ico; 180 pikselik Apple touch ikonu ve 192/512 pikselik PWA ikonları dâhil standart boyutlarda PNG’ler; başlangıç için bir site.webmanifest ve <head> içine yapıştıracağınız <link> etiketleri. Tek bir ZIP indirmesi, geleneklerin beklediği adlarla her şeyi içerir.',
+			'Favicon rehberlerinin yanlış yaptığı ayrıntılar burada halledilmiştir: ICO, PNG sıkıştırmalı girdiler gömer (Windows Vista’dan beri her yerde desteklenir ve eski BMP ikonlarından çok daha küçüktür); Apple touch ikonu, iOS saydamlığı siyahla değiştirdiği için seçtiğiniz bir arka plan rengine düzleştirilir; PWA ikonları ise alfa kanalını korur. Kare olmayan kaynaklar ezilmek yerine ortadan kırpılır.',
+			'Bir logoyu 16 piksele indirmek doğası gereği yıkıcıdır — ince ayrıntı basitçe hayatta kalamaz — bu yüzden önizleme satırı her boyutu gerçek ölçüsünde gösterir ve yayına almadan önce okunaklılığı değerlendirmenizi sağlar. Her şey yerel bir canvas üzerinde işlenir, ICO/ZIP kapları sayfada bayt bayt kurulur; logonuz hiçbir yere yüklenmez.'
+		],
+		faqs: [
+			{
+				q: '2026’da gerçekten hangi favicon boyutlarına ihtiyacım var?',
+				a: 'Söylencelerin ima ettiğinden azına: eski istemciler ve adres çubuğu için 16/32/48 içeren bir favicon.ico, tek bir 180 piksellik apple-touch-icon.png ve web uygulama manifestosundan başvurulan 192/512 piksellik PNG’ler. Modern tarayıcılar en uygun eşleşmeyi tam olarak bu kümeden seçer — bazı üreteçlerin çıkardığı 20 dosyalık paketler kargo kültüdür.'
+			},
+			{
+				q: 'Logom 16 pikselde neden okunmuyor?',
+				a: 'On altı piksel acımasızca küçüktür — kelime logoları, ince çizgiler ve zarif degradeler orada erir. Güçlü favicon’lar markayı yüksek kontrastlı tek bir kalın simgeye ya da şekle indirger. Buradaki 16 piksel önizlemesi lapa gibi görünüyorsa markanın ayırt edici kısmına daha sıkı kırpın ya da küçük boyutlar için sadeleştirilmiş bir varyant kullanın.'
+			},
+			{
+				q: 'Hâlâ bir .ico dosyasına ihtiyacım var mı, PNG favicon’lar yetmiyor mu?',
+				a: 'Her modern tarayıcı PNG favicon kabul eder ama /favicon.ico, kullanıcı aracılarının, tarayıcı botlarının ve eski araçların körlemesine istediği yol olmayı sürdürür. Oraya gerçek bir ICO koymak birkaç kilobayta mal olur ve bütün bir 404 ile geri düşme tuhaflıkları sınıfını ortadan kaldırır — PNG bağlantılarınızın yanında tutun.'
+			},
+			{
+				q: 'Apple touch ikonu neden bir arka plan rengi istiyor?',
+				a: 'iOS ana ekran ikonlarında saydamlığı işlemez — PNG’nizdeki alfa neyse siyah üzerine bindirilir. Seçtiğiniz bir renge önceden düzleştirmek sonucun kasıtlı olmasını sağlar. İkonunuzla uyumlu arka planı seçin ve iOS’un köşeleri kendisinin yuvarladığını unutmayın; yani taşma paylı, tam kare bir görsel verin.'
+			}
+		]
+	},
+
+	'sql-formatter': {
+		about: [
+			'Bir log dosyasından, bir ORM hata ayıklama dökümünden ya da bir meslektaşınızın tek satırlık sorgusundan taze çıkmış bir sorguyu yapıştırın; bu biçimlendirici onu tutarlı girintilerle okunabilir yan tümcelere ayırır. Altı lehçe desteklenir — standart SQL, PostgreSQL, MySQL, SQLite, SQL Server ve BigQuery — böylece TOP, ters tırnaklı tanımlayıcılar ya da dizi türleri gibi lehçeye özgü sözdizimi ayrıştırıcıyı takılmak yerine doğru biçimlenir.',
+			'Anahtar kelime yazımı ayarlanabilir: klasik görünüm için BÜYÜK HARF, ekibiniz tercih ediyorsa küçük harf ya da özgün hâlini olduğu gibi bırakın. Küçültme kipi tersini yapar — biçimlendirilmiş bir sorguyu tek satıra indirir, yorumları atarken dizge değişmezlerini bayt bayt korur; SQL’i bir JSON yapılandırmasına ya da bir CLI bayrağına yapıştırmadan önce isteyeceğiniz de tam budur.',
+			'Sorgular sıkça tablo adları, değişmezler içindeki müşteri verisi ya da altyapı ipuçları taşır. Biçimlendirme tamamen tarayıcınızda çalışır, dolayısıyla bunların hiçbiri bir sunucuya ulaşmaz.'
+		],
+		faqs: [
+			{
+				q: 'Hangi SQL lehçesini seçmeliyim?',
+				a: 'Veritabanınızın konuştuğunu — bu seçim tanımlayıcıların, dizge tırnaklamasının ve lehçeye özgü anahtar kelimelerin nasıl ayrıştırıldığını değiştirir. Yalnızca genel bir derleme toplama istiyorsanız standart SQL ortak çekirdeği karşılar. Veritabanınız için geçerli olan bir sözdiziminde ayrıştırma hatası alıyorsanız, bu genelde lehçe değiştirme işaretidir.'
+			},
+			{
+				q: 'Biçimlendirme sorgunun yaptığı işi değiştirir mi?',
+				a: 'Hayır. Biçimlendirme yalnızca boşlukları taşır ve etkinse anahtar kelime yazımını değiştirir — tanımlayıcılar ile değişmezler baytlarını korur. SQL anahtar kelimeleri desteklenen her lehçede büyük/küçük harf duyarsızdır; yani SELECT ile select aynı ifadedir.'
+			},
+			{
+				q: 'Aynı anda birden çok ifadeyi biçimlendirebilir miyim?',
+				a: 'Evet — bütün bir betiği yapıştırın; ; ile biten her ifade sırayla, aralarında birer boş satır bırakılarak biçimlendirilir.'
+			},
+			{
+				q: 'Küçültme tam olarak neyi kaldırıyor?',
+				a: 'Satır yorumları (--) ve blok yorumları (/* */) atılır, ardışık boşluklar tek boşluğa iner, virgül ve parantez etrafındaki boşluklar kaldırılır. Tek tırnak, çift tırnak ve ters tırnak içindeki metne — ikilenmiş tırnak kaçışları dâhil — asla dokunulmaz.'
+			}
+		]
+	},
+
+	'xml-formatter': {
+		about: [
+			'Bu araç XML’i seçtiğiniz girintiyle güzelce yazar, biçim doğruluğu hatalarını tam satır ve sütunuyla işaretler ve bir belgeyi tek satıra küçültebilir. Yorumlar, CDATA bölümleri ve XML prologu biçimlendirmeden sağ çıkar — şaşırtıcı sayıda biçimlendirici bunları sessizce yer.',
+			'Buradaki doğrulama, biçim doğruluğu anlamındadır: düzgün iç içe geçmiş etiketler, tırnaklanmış öznitelikler, geçerli karakterler. Bu, elle düzenleme kazalarının ezici çoğunluğunu yakalar — eksik bir eğik çizgi, kapatılmamış bir öğe, başıboş bir ve işareti. XSD’ye karşı şema doğrulaması bilerek kapsam dışıdır; onun yeri, şema dosyasının hazır olduğu derleme hattınızdır.',
+			'Yapılandırma dosyaları, SOAP yükleri, RSS akışları ve Android manifestoları rutin olarak iç ağ adları ve anahtarlar içerir. Buradaki her şey yerelde ayrıştırılır — hiçbir şey iletilmez.'
+		],
+		faqs: [
+			{
+				q: 'XML’im neden “char … is not expected” hatası veriyor?',
+				a: 'Olağan şüpheliler: &amp; olması gereken çıplak bir &, tırnaklanmamış bir öznitelik değeri ya da yanlış sırada kapanan etiketler. Hata mesajı ilk sorunlu karakterin satır ve sütununu taşır, girdi kutusu da onu işaretler.'
+			},
+			{
+				q: 'Biçimlendirici belgemi yeniden sıralar ya da normalleştirir mi?',
+				a: 'Hayır. Öğeler, öznitelikler ve sıraları tam olarak korunur; yalnızca öğeler arası boşluk değişir. Biçimlendirmeyle aynı satırı paylaşan metin içeriği kırpılır ve içerideki ardışık boşluklar tek boşluğa iner — anlamlı boşluğa güveniyorsanız (xml:space="preserve"), o bölümleri küçültülmüş hâlde tutun.'
+			},
+			{
+				q: 'Küçültme neyi kaldırıyor?',
+				a: 'Öğeler arasındaki girintiler ile satır sonlarını ve ayrıca yorumları. CDATA bölümleri, işlem talimatları ve prolog kalır. Sonuç, yalnızca boşluktan oluşan metin düğümlerine bağımlı olmayan her tüketici için özdeş biçimde ayrıştırılır.'
+			},
+			{
+				q: 'XSD ya da DTD’ye karşı doğrulama yapabilir mi?',
+				a: 'Hayır — bu yalnızca biçim doğruluğunu denetler. Şema doğrulaması, şema dosyasını ve bir XSD motorunu gerektirir; bu iş araç zincirinizde daha iyi yapılır (xmllint --schema ya da dilinizin XML kütüphanesi).'
+			}
+		]
+	},
+
+	'xml-to-json': {
+		about: [
+			'Eski SOAP yanıtlarını, RSS akışlarını ya da Maven POM’larını JavaScript’e, jq’ya veya JSON tabanlı bir API’ye beslemek için XML’i JSON’a dönüştürün — ya da tersini yapıp JSON verisinden XML üretin. Öznitelikler korunur: "@_ad" anahtarlarına dönüşürler ve özniteliklerle birlikte var olan metin içeriği "#text" altına iner; böylece hiçbir bilgi sessizce kaybolmaz.',
+			'İki biçim temel konularda anlaşmaz ve bu dönüştürücü alışılmış pragmatik seçimleri yapar: aynı adlı ardışık kardeş öğeler bir JSON dizisine toplanır, sayı gibi görünen değerler sayıya dönüşür ve ad alanları öğe adının parçası olarak taşınır. Tipik belgelerde XML → JSON → XML çevrimi yapıyı ve içeriği korur.',
+			'Her iki yön de tarayıcınızda yerelde çalışır. Bir fatura akışını ya da bir API yanıtını, hiçbir yere gitmeden yapıştırın.'
+		],
+		faqs: [
+			{
+				q: 'Bazı değerler neden dizge yerine sayı olarak dönüyor?',
+				a: 'Ayrıştırıcı sayısal metni tanır ve dönüştürür; çoğu tüketicinin istediği de budur. Baştaki sıfırları olan tanımlayıcılara dikkat edin (ürün kodları, telefon numaraları) — veriniz için bu önemliyse dönüşümden sonra onları tırnaklayın ya da çıktıyı bir başlangıç noktası sayın.'
+			},
+			{
+				q: 'Yinelenen öğeler nasıl ele alınıyor?',
+				a: 'Aynı ada sahip iki ya da daha fazla kardeş, o anahtar altında bir JSON dizisine dönüşür. Tek geçiş ise düz bir nesne olarak kalır — bu asimetri eşlemenin doğasında vardır; dolayısıyla JSON’u tüketen kod her iki şekle de dayanmalı ya da önce normalleştirmelidir.'
+			},
+			{
+				q: '@_ ve #text anahtarları ne anlama geliyor?',
+				a: '@_ bir XML özniteliği olan şeyi işaretler; #text ise öznitelikler de varken öğenin metnini taşır. Aynı geleneği JSON → XML yönünde geri beslemek özgün biçimlendirmeyi yeniden kurar.'
+			},
+			{
+				q: 'JSON → XML üst düzey dizimi neden reddediyor?',
+				a: 'Bir XML belgesinin tam olarak bir kök öğesi olmalıdır; çıplak bir dizinin ise hiç yoktur. Diziyi bir nesneye sarın — {"items": {"item": [...]}} — dönüştürücü biçim açısından doğru bir belge üretecektir.'
+			}
+		]
+	},
+
+	'markdown-to-html': {
+		about: [
+			'Markdown yazın ya da yapıştırın; hem işlenmiş önizlemeyi hem üretilen HTML’i yan yana görün — başlıklar, GFM tabloları, görev listesi tarzı maddeler, çitli kod blokları ve üstü çizili metin dâhil. Ters yön ise var olan HTML’i temiz Markdown’a çevirir: ATX başlıkları, tireli maddeler ve çitli kod ile — eski CMS içeriğini bir dokümantasyon deposuna taşımanın en hızlı yolu budur.',
+			'Önizleme işlenmeden önce temizlenir: betikler, iframe’ler ve olay işleyici öznitelikleri sıyrılır; böylece düşmanca biçimlendirme taşıyan paylaşılmış bir bağlantı tarayıcınızda hiçbir şey çalıştıramaz. HTML çıktı kutusu ise şablonlara ya da e-postalara kopyalamanız için her zaman ham dönüşümü gösterir.',
+			'Dönüştürme ve önizleme yerelde çalışır. Henüz duyurulmamış özellik adları içeren sürüm notu taslakları makinenizde kalır.'
+		],
+		faqs: [
+			{
+				q: 'Bu hangi Markdown lehçesi?',
+				a: 'CommonMark artı insanların gerçekten kullandığı GitHub uzantıları: tablolar, üstü çizili metin ve kendiliğinden bağlanan URL’ler. Yumuşak satır sonları yumuşak kalır — tek bir yeni satır <br> olmaz; bu, GitHub’ın belgeleri işleme biçimiyle örtüşür.'
+			},
+			{
+				q: 'Önizleme neden ham HTML çıktısından farklı?',
+				a: 'Önizleme, işlemeden önce script etiketlerini, satır içi olay işleyicilerini ve javascript: URL’lerini kaldıran bir temizleyiciden geçer. Çıktı kutusu temizlemeyi atlar, çünkü orada işlenmiş biçimlendirme değil metin vardır — kullanıcı kaynaklı HTML’i gömüyorsanız akışın ilerisinde siz temizleyin.'
+			},
+			{
+				q: 'HTML → Markdown ne kadar sadık?',
+				a: 'Yapısal öğeler — başlıklar, listeler, bağlantılar, vurgular, kod, alıntı blokları, görseller — temiz dönüşür. Markdown karşılığı olmayan HTML (iç içe tablolar, sınıflı div’ler, satır içi stiller) ham HTML olarak geçer ya da biçemini kaybeder; bu yüzden sonrasında hızlı bir gözden geçirme yapmak değer.'
+			},
+			{
+				q: 'Üretilen HTML’i bir e-postada kullanabilir miyim?',
+				a: 'Evet — çıktı, sınıf ve dış stil dosyası içermeyen düz anlamsal HTML’dir; e-posta istemcilerinin en iyi tolere ettiği şey de tam olarak budur. İhtiyacınız olan biçemi üstüne satır içi olarak ekleyin.'
+			}
+		]
+	},
+
+	'html-formatter': {
+		about: [
+			'Bir paketleyiciden, bir kazıyıcıdan ya da bir WYSIWYG editöründen çıkmış HTML’i güzelleştirin: öğeler seçtiğiniz genişlikte girintilenir, öznitelikler kendi satırında kalır ve pre/textarea içerikleri bayt bayt olduğu gibi bırakılır. Küçültme kipi yorumları sıyırır ve etiketler arası boşlukları toplar — elle yazılmış sayfalarda tipik olarak %10–25 boyut kazancı.',
+			'Buradaki küçültme bilerek tutucudur: satır içi betikler ve stiller korunur, koşullu yorumlar hayatta kalır ve satır içi öğeler arasındaki tek boşluklar saklanır; böylece “şuraya <a>tıkla</a> hemen” ifadesi birbirine yapışmaz. Azami saldırganlıkta değil, güvenli bir küçültme elde edersiniz.',
+			'Her iki işlem de tarayıcınızda yerelde çalışır — yayımlanmamış sayfalar ve iç yönetim arayüzü biçimlendirmesi makinenizden hiç çıkmaz.'
+		],
+		faqs: [
+			{
+				q: 'Küçültme satır içi JavaScript’imi ya da CSS’imi bozar mı?',
+				a: 'Hayır — <script>, <style>, <pre> ve <textarea> blokları boşluk toplamanın tümüyle dışında tutulur. Yalnızca etiketler arasındaki biçimlendirmeye dokunulur. Betiklerin kendisini sıkıştırmak için onları ayrıca JavaScript küçültücüsünden geçirin.'
+			},
+			{
+				q: 'Etiketler arasındaki boşluğu kaldırmak neden güvenli?',
+				a: 'Çoğunlukla öyledir: blok düzeyindeki öğeler arasındaki boşluğun görsel etkisi yoktur. Satır içi öğeler arasında ise vardır; bu yüzden küçültücü ardışık boşlukları silmek yerine tek boşluğa indirir. Satır içi blok boşluk hilelerine dayanan düzenler, göz atmaya değecek ender istisnadır.'
+			},
+			{
+				q: 'Biçimlendirici geçersiz HTML’i düzeltir mi?',
+				a: 'Verdiğinizi HTML belirtimine karşı doğrulamadan biçimlendirir — kapatılmamış etiketler kapatılmamış kalır. Tarayıcılar etiket çorbasına hoşgörülüdür; yine de biçimlendirme, sorunu fark edecek kadar yapıyı görmenize yardım eder.'
+			},
+			{
+				q: 'Hangi girinti genişliğini kullanmalıyım?',
+				a: 'Web kod tabanlarında hâkim gelenek 2 boşluktur ve çoğu çatı biçem kılavuzunun varsayılanı da odur. Ekibiniz 4’te standartlaştıysa onu seçin — bu tercih tümüyle biçimseldir.'
+			}
+		]
+	},
+
+	'css-formatter': {
+		about: [
+			'Küçültülmüş ya da kopyala-yapıştır edilmiş CSS’i satır başına tek bildirim düşecek şekilde açın veya bir stil dosyasını üretim için sıkıştırın. Güzelleştirici girintileri ve süslü parantez yerleşimini normalleştirir; küçültücü ise yorumları sıyırır, boşlukları toplar ve son noktalı virgülleri atarken dizgelere, url(...) içeriklerine ve calc() ifadelerine dokunmaz.',
+			'Küçültücü, yapmadığı şeyler konusunda şeffaftır: seçicileri yeniden adlandırmaz, yinelenen kuralları birleştirmez, renkleri yeniden yazmaz. Bu da çıktıyı öngörülebilir ve her stil dosyası için güvenli kılar — hile ve üretici önekleri içerenler dâhil. Yapıştır, küçült, yayına al.',
+			'Buradaki her araç gibi işlem yereldir. Yayımlanmamış tasarım sistemi kodu tarayıcınızda kalır.'
+		],
+		faqs: [
+			{
+				q: 'Küçültülmüş CSS ne kadar küçülür?',
+				a: 'Elle yazılmış CSS’te tipik olarak %15–30; bunun çoğu girintiler ve yorumlardan gelir. Sunucunuzdaki gzip aynı fazlalığın büyük kısmını zaten kaldırır; yani hat üzerindeki fark ham bayt sayısının ima ettiğinden küçüktür — yine de küçültün, ayrıştırma süresini de kısaltır.'
+			},
+			{
+				q: 'calc(), özel özellikler ve medya sorguları için güvenli mi?',
+				a: 'Evet. calc() içindeki boşluklar anlamlıdır ve korunur; özel özellikler ile var() başvuruları düz bildirimlerdir ve değişmeden kalır; @media ve diğer at-kuralları yapısını korur.'
+			},
+			{
+				q: 'Torun seçicileri neden boşluklarını korudu?',
+				a: 'Çünkü “nav a” ile “nava” farklı şeyleri seçer — o boşluk biçimlendirme değil, bir birleştiricidir. Küçültücü yalnızca sözdizimsel anlamı olmayan boşlukları kaldırır.'
+			},
+			{
+				q: 'LESS/SCSS ile CSS arasında dönüşüm yapabilir mi?',
+				a: 'Hayır — ön işlemci sözdizimi biçimlendirmeyi değil derlemeyi gerektirir. Aynı zamanda geçerli CSS olan sade SCSS sorunsuz biçimlenir; iç içe kurallar ve mixin’ler biçimlenmez.'
+			}
+		]
+	},
+
+	'js-formatter': {
+		about: [
+			'JavaScript’i tutarlı girinti ve boşluklarla güzelleştirin — depoya alınmış bir paketi açıp gerçekte ne yaptığını okuyun ya da konsoldan yapıştırılmış kodu temizleyin. Küçültücü ise işin aslıdır: Terser kodunuzu bir AST’ye ayrıştırır, ölü kodu atar, yerel değişken adlarını kısaltır ve yorumları sıyırır — paketleyicilerin üretimde kullandığı motorun aynısı.',
+			'Küçültme AST tabanlı olduğu için, regex temelli “sıkıştırıcıların” yapabildiği gibi çalışan kodu asla bozmaz: dizgeler, şablon değişmezleri, düzenli ifadeler ve ASI sınır durumları gerçek bir ayrıştırıcı tarafından ele alınır. Sözdizimi hataları bozuk çıktı üretmek yerine konumuyla bildirilir.',
+			'Terser yalnızca ilk kez küçültme yaptığınızda yüklenir, böylece sayfa hafif kalır ve tamamen tarayıcınızda çalışır — özel mülk kaynak kodu makinenizden hiç çıkmaz.'
+		],
+		faqs: [
+			{
+				q: 'Kodum ne kadar küçülecek?',
+				a: 'Elle yazılmış kod gzip’ten önce tipik olarak %30–60 düşer: boşluklar, yorumlar ve uzun yerel adlar bu kadar yer kaplar. Zaten paketlenmiş kod çok daha az küçülür — aynı dönüşümden bir kez geçmiştir.'
+			},
+			{
+				q: 'Küçültme davranışı değiştirir mi?',
+				a: 'Sıkıştırma ve ad kısaltma anlambilimi korur: yalnızca yerel adlar değiştirilir ve ölü kod eleme, kanıtlanabilir biçimde çalışamayacak dalları kaldırır. Klasik istisna, Function.prototype.name ya da kendi işlevlerinin toString() çıktısına dayanan koddur.'
+			},
+			{
+				q: 'Bir web sitesinden alınan üretim kodunu geri açabilir mi?',
+				a: 'Biçimlendirici boşlukları ve yapıyı geri getirir; bu da denetim akışını okunabilir kılar — ama özgün değişken adları ve yorumlar sonsuza dek gitmiştir; karşınızda a, b, c olacak. Ciddi hata ayıklama için site kaynak haritası yayınlıyorsa onu tercih edin.'
+			},
+			{
+				q: 'TypeScript ya da JSX destekliyor mu?',
+				a: 'Hayır — ikisi de kendi ayrıştırıcılarını ister. Önce JavaScript’e derleyin (tsc, esbuild), sonra çıktıyı burada biçimlendirin ya da küçültün.'
+			}
+		]
+	},
+
+	'string-escape': {
+		about: [
+			'Tırnak içeren çok satırlı bir dizgeyi; bir JSON değerinin, bir JavaScript değişmezinin, bir Java dizgesinin, bir XML metin düğümünün, bir SQL değişmezinin ya da bir CSV hücresinin içine yapıştırabileceğiniz hâle getirin — ve bir log dosyasında kaçışlanmış metin bulup okumak istediğinizde süreci tersine çevirin. Altı lehçe, iki yön.',
+			'Her lehçe, en küçük ortak paydayı değil kendi gerçek belirtimini izler: JSON denetim karakterlerini \\uXXXX olarak kaçışlar, JavaScript ek olarak tek tırnakları ve ters tırnakları kaçışlar, Java ASCII dışını UTF-16 \\u dizileri olarak kodlar, SQL tek tırnakları ikiler, CSV RFC 4180’e göre sarar ve ikiler, XML ise önceden tanımlı beş varlığını kullanır. Kaçış çözücü \\x, \\u ve \\u{…} biçimlerini anlar ve bozuk dizileri konumuyla bildirir.',
+			'Kaçışlanmış dizgeler sıklıkla bağlantı dizgeleri, token’lar ve sorgu parçalarıdır. Bu araç yerelde çalışır — gönül rahatlığıyla yapıştırın.'
+		],
+		faqs: [
+			{
+				q: 'Bir JSON yapılandırma dosyası için hangi lehçe gerekir?',
+				a: 'JSON. Çift tırnakları, ters eğik çizgileri ve denetim karakterlerini tam olarak RFC 8259’un gerektirdiği gibi kaçışlar ve unicode’u okunur bırakır. Çıktı herhangi bir JSON dizge değerine düşer — etrafındaki tırnaklar hariç; onları size bırakır.'
+			},
+			{
+				q: 'JSON ile JavaScript lehçesi arasındaki fark ne?',
+				a: 'JavaScript ek olarak tek tırnakları ve ters tırnakları kaçışlar; böylece sonuç üç JS tırnaklama biçiminin hepsinde güvenlidir. JSON yalnızca çift tırnak işlemesine ihtiyaç duyar. Kaçış çözme ikisini de kabul eder, ayrıca JSON’un tanımlamadığı \\x ve \\u{…} biçimlerini de.'
+			},
+			{
+				q: 'SQL kaçışlaması kullanıcı girdisini birleştirmeyi güvenli kılar mı?',
+				a: 'Doğru bir SQL dizge değişmezi üretir (tırnaklar ikilenir) ama güvenilmeyen girdide kaçışla-sonra-birleştir hâlâ yanlış desendir — parametreli sorgular kullanın. Bu araç fikstürler, göçler ve hata ayıklama içindir; enjeksiyon savunması için değil.'
+			},
+			{
+				q: 'Dizgemin kaçışını çözmek neden başarısız oluyor?',
+				a: 'Tanımlı bir kaçış olmayan bir şeyin izlediği ters eğik çizgi (\\q, yarım kalmış bir \\u12) bozuktur ve hata, sorunlu konumu adıyla söyler. Metninizde düz Windows yolları varsa önce onu kaçışlayın — C:\\temp aslında kılık değiştirmiş bir sekmedir.'
+			}
+		]
+	},
+
+	'number-base-converter': {
+		about: [
+			'Bir sayıyı herhangi bir tabanda yazın ve onu ikili, sekizli, onlu ve onaltılı olarak aynı anda okuyun — ayrıca 36’ya kadar istediğiniz özel tabanda. Önekler anlaşılır (0x, 0o, 0b), basamak gruplama uzun değerleri göz taranabilir kılar (1111 1111 · 255 · ff) ve bit uzunluğu göstergesi bir değerin 8, 32 ya da 64 bite sığıp sığmadığını bir bakışta söyler.',
+			'Aritmetik BigInt kullanır; yani duyarlık her boyutta tamdır: dosya izinleri, ARGB renkleri, IP adresleri, hash önekleri ve 64 bitlik veritabanı kimliklerinin hepsi, sıradan JavaScript sayılarında 2⁵³ üzerinde görülen sessiz yuvarlama olmadan dönüşür.',
+			'Negatif sayılar tüm tabanlarda işaretini korur. Her şey siz yazdıkça yerelde ve anında hesaplanır.'
+		],
+		faqs: [
+			{
+				q: 'Otomatik algılama tabanı nasıl belirliyor?',
+				a: 'Öneke göre: 0x onaltılı, 0o sekizli, 0b ikili demektir; başka her şey onlu olarak ayrıştırılır. Öneksiz “ff” gibi basamaklar belirsizdir, o yüzden HEX’i açıkça seçin — hata mesajı da size bunu hatırlatır.'
+			},
+			{
+				q: 'Devasa sayılar gerçekten tam mı?',
+				a: 'Evet — dönüşüm, keyfî duyarlıklı BigInt üzerinde çalışır. 18446744073709551615 (2⁶⁴−1) tam olarak gidip geri döner; kayan nokta tabanlı bir dönüştürücü onu …551616 diye bozardı.'
+			},
+			{
+				q: 'Negatif sayılar ikilide nasıl gösteriliyor?',
+				a: 'İkiye tümleyenle değil eksi işaretiyle (-1010); çünkü ikiye tümleyen sabit bir genişlik gerektirir. İkiye tümleyen deseni görmek için, önemsediğiniz genişliğe göre negatif değerinize 2ⁿ ekleyip onu dönüştürün.'
+			},
+			{
+				q: '36 tabanı ne işe yarar?',
+				a: 'Derli toplu kimliklere: 0-9 artı a-z, büyük/küçük harf duyarsız ve URL güvenli kalan en yoğun alfabedir. Pek çok URL kısaltıcı ve bilet sistemi sayısal kimlikleri böyle kodlar — birini yapıştırın ve altındaki sayıyı okuyun.'
+			}
+		]
+	},
+
+	'text-to-hex': {
+		about: [
+			'Metninizin tam olarak hangi baytlardan oluştuğunu görün: bu araç metni UTF-8’e kodlar ve onu onaltılık, ikili ya da onlu bayt değerleri olarak gösterir — ayırıcıyı, harf durumunu ve 0x öneklerini siz seçersiniz. Çözücü ters yönde çalışır ve bilerek hoşgörülüdür: kesintisiz diziler (48656c6c6f), boşlukla ayrılmış çiftler, iki nokta ile ayrılmış MAC tarzı gösterim ve \\x kaçış dizileri kabul edilir.',
+			'Kodlama bayt düzeyinde UTF-8 olduğu için çok baytlı karakterler bellekte ve hat üzerinde gerçekte nasıl varsalar öyle gösterilir: é c3 a9’dur, 世 e4 b8 96’dır ve emojiler dört bayt tutar. Bu da onu kodlama uyuşmazlıklarını, BOM gizemlerini ve “bu dizge neden göründüğünden uzun” sorunlarını ayıklamanın en hızlı yolu yapar.',
+			'Çözülen baytlar geçerli UTF-8 değilse araç, anlamsız karakterler basmak yerine bunu söyler — metin değil ikili veriye baktığınıza dair güçlü bir ipucu.'
+		],
+		faqs: [
+			{
+				q: 'Tek bir karakter neden birkaç bayta dönüşüyor?',
+				a: 'UTF-8 değişken genişliklidir: ASCII tek bayt kalır, çoğu Avrupa harfi iki, CJK üç, emoji dört bayt tutar. Burada gördüğünüz şey, herhangi bir UTF-8 sisteminin — dosyalar, HTTP, veritabanları — metniniz için sakladığı tam bayt dizisidir.'
+			},
+			{
+				q: 'Çözücü hangi girdi biçimlerini kabul ediyor?',
+				a: 'Onaltılık: kesintisiz dizi, boşluklu çiftler, 0x ya da \\x önekli veya iki nokta/virgülle ayrılmış hâlde; ikili: boşluklu ya da boşluksuz 8 bitlik gruplar; onlu: ayrılmış bayt değerleri. Karışık ayırıcılar ve başıboş boşluklar kendiliğinden temizlenir.'
+			},
+			{
+				q: 'Çözme neden baytların geçerli UTF-8 olmadığını söylüyor?',
+				a: 'Bayt dizisi UTF-8 kurallarını çiğniyordur — örneğin tek başına bir ff ya da öncü baytı olmayan bir devam baytı. Veri ikili olabilir, Latin-1 gibi eski bir kodlamada olabilir ya da karakterin ortasından kesilmiş olabilir.'
+			},
+			{
+				q: 'Bu, xxd’den alınan bir hex dökümüyle aynı şey mi?',
+				a: 'Bayt değerleri özdeştir; xxd ayrıca ofsetler ve bir ASCII sütunu ekler. Bir xxd dökümünün onaltılık sütunlarını (ofset sütunu olmadan) buraya yapıştırın, sorunsuz çözülür.'
+			}
+		]
+	},
+
+	'json-schema-validator': {
+		about: [
+			'Aynı disiplinin iki yönü: örnek bir JSON yapıştırın ve ondan çıkarılmış bir draft-07 şeması alın ya da veriyle birlikte bir şema yapıştırın ve her ihlali JSON yoluyla birlikte listelenmiş görün. Doğrulama Ajv üzerinde çalışır — çoğu Node servisinin kullandığı motorun aynısı — yani burada geçen, CI’da da geçer.',
+			'Çıkarım üretim odaklıdır: nesne anahtarları türlü özelliklere ve required girdilerine dönüşür, diziler tüm üyelerinin şekillerini birleştirir, tam sayılar ondalıklardan ayırt edilir ve yalnızca bazı dizi üyelerinde görünen anahtarlar doğru biçimde required dışında bırakılır. Sonuç, biçimler, aralıklar ve desenlerle sıkılaştıracağınız bir başlangıç noktasıdır.',
+			'API yanıtları ve yapılandırma dosyaları, üçüncü taraf bir sunucuda en son isteyeceğiniz verilerdir. Hem çıkarım hem doğrulama tamamen tarayıcınızda çalışır.'
+		],
+		faqs: [
+			{
+				q: 'Hangi JSON Schema taslağı destekleniyor?',
+				a: 'Çıkarım, editörler ve doğrulayıcılar arasında en yaygın desteklenen taslak olan draft-07 üretir. Doğrulama, draft-07’yi ve Ajv’nin katı olmayan kipte anladığı önceki taslakları kabul eder; bilinmeyen anahtar kelimeler ölümcül olmak yerine yok sayıldığından 2019-09/2020-12 anahtar kelimeleri de çoğunlukla çalışır.'
+			},
+			{
+				q: 'İhlal yollarındaki $ ne anlama geliyor?',
+				a: 'JSONPath tarzında belgenin köküdür: $.age üst düzeydeki age özelliği, $.items.2.name ise üçüncü dizi elemanının adı demektir. Boş bir yol ($) ihlalin belgenin kendisiyle ilgili olduğunu gösterir — yanlış tür ya da eksik bir zorunlu özellik.'
+			},
+			{
+				q: 'Çıkarılan şema neden beklediğimden daha katı ya da daha gevşek?',
+				a: 'Tam olarak verdiğiniz örneği betimler: her yerde bulunan alanlar required olur ve yalnızca gözlemlenen türlere izin verilir. Daha genel bir şema için daha çeşitli bir örnek verin (temsilî nesnelerden oluşan bir dizi), sonra elle ayarlayın — çıkarım niyeti bilemez.'
+			},
+			{
+				q: 'Doğrulama format, pattern ve diğer kısıt anahtar kelimelerini destekliyor mu?',
+				a: 'Yapısal anahtar kelimeler (type, required, properties, items, enum, minimum, pattern…) tümüyle uygulanır. "email" ya da "date-time" gibi format dizgeleri ise doğrulanmaz — bu, format’ın varsayılan olarak açıklama sayıldığı JSON Schema belirtimini yansıtır ve yanlış bir güven duygusundan kaçınır.'
+			}
+		]
+	},
+
+	'exif-viewer': {
+		about: [
+			'Telefonunuzun çektiği her fotoğraf gizli meta veri taşır: kamera modeli, çekim zamanı, düzenleme yazılımı — ve kapatılmadıysa nerede durduğunuzun GPS koordinatları. Bu araç bu meta veriyi JPEG, PNG ve WebP dosyalarından okur ve gruplanmış, çözülmüş hâlde gösterir: pozlama değerleri f/2.8 ve 1/250 s olarak, yönelim kelimelerle, GPS ise harita bağlantılı ondalık koordinatlar olarak.',
+			'Temizleyici, meta verisi kaldırılmış bir kopya üretir — hem de kayıpsız. Görseli yeniden kodlamak (ki kaliteye mal olur) yerine meta veri bölümlerini bayt bayt kaldırır: JPEG’teki EXIF ve XMP blokları, PNG’deki metin ve zaman parçaları, WebP’deki EXIF/XMP parçaları. Pikseller, boyutlar ve kalite el değmemiş kalır; renk profilleri korunur, böylece görsel aynı şekilde görünmeyi sürdürür.',
+			'“Yerelde çalışır” ifadesinin bütün mesele olduğu tek araç kategorisi budur: bir fotoğrafta GPS verisi olup olmadığını denetlemek için onu bir sunucuya yüklemek amacın kendisini boşa çıkarırdı. Dosya tarayıcınızdan hiç çıkmaz — Network sekmesinden doğrulanabilir.'
+		],
+		faqs: [
+			{
+				q: 'Meta veriyi kaldırmak görsel kalitesini değiştirir mi?',
+				a: 'Hayır. Görsel veri akışı bit bit kopyalanır; yalnızca meta veri bölümleri atılır. Temizlenmiş dosya tam olarak meta veri boyutu kadar küçüktür ve piksellerin özdeşliği kanıtlanabilir.'
+			},
+			{
+				q: 'Ekran görüntümde neden hiç meta veri yok?',
+				a: 'Ekran görüntülerinde ve web için dışa aktarılmış görsellerin çoğunda zaten hiç EXIF olmamıştır — onu kameralar yazar, ekran görüntüsü araçları çoğunlukla yazmaz. Sosyal medya platformları da yüklemede meta veriyi sıyırır; yani birinden indirilen bir fotoğraf genelde çoktan temizdir.'
+			},
+			{
+				q: 'GPS konumu kesin mi?',
+				a: 'EXIF’teki telefon GPS’i tipik olarak birkaç metre hassasiyetindedir — bir binayı belirlemeye yeter. Araç, saklanan derece/dakika/saniye değerlerini ondalığa çevirir ve tam noktaya bağlantı verir; böylece dosyayı alan birinin tam olarak neyi görebileceğini siz de görürsünüz.'
+			},
+			{
+				q: 'Temizlenmiş dosya neden bir ICC renk profili koruyor?',
+				a: 'ICC profili, yazılıma renklerin nasıl yorumlanacağını söyler — onu sıyırmak renkleri gözle görülür biçimde kaydırabilir ve içinde kişisel bilgi yoktur. Temizleyici kimlik belirleyici meta veriyi (EXIF, XMP, IPTC, yorumlar, zaman damgaları) kaldırır ve görselin doğru görünmesi için gerekeni bırakır.'
+			}
+		]
 	}
 };
 
