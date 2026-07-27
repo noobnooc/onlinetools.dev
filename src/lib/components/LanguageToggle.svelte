@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { LOCALES, locale, lp, unlp, t } from '$lib/i18n';
+	import { LOCALE_NAMES } from '$lib/i18n/codes';
 	import { Globe, Check } from 'lucide-svelte';
 
 	/**
@@ -8,19 +9,6 @@
 	 * icon button opening a menu of real <a> links (crawlable) to the same
 	 * page in every locale.
 	 */
-	const NAMES: Record<string, string> = {
-		en: 'English',
-		zh: '中文',
-		ja: '日本語',
-		ko: '한국어',
-		es: 'Español',
-		fr: 'Français',
-		de: 'Deutsch',
-		pt: 'Português',
-		ru: 'Русский',
-		it: 'Italiano'
-	};
-
 	let open = $state(false);
 	const base = $derived(unlp(page.url.pathname));
 </script>
@@ -51,7 +39,7 @@
 						class="flex items-center justify-between rounded-md px-2.5 py-1.5 transition-colors duration-120
 							{l === locale() ? 'font-medium text-fg' : 'text-dim hover:bg-surface-2 hover:text-fg'}"
 					>
-						{NAMES[l]}
+						{LOCALE_NAMES[l]}
 						{#if l === locale()}<Check size={13} class="text-accent" />{/if}
 					</a>
 				</li>
