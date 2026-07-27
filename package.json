@@ -25,6 +25,7 @@
 		"@tailwindcss/vite": "^4.3.3",
 		"@types/js-beautify": "^1.14.3",
 		"@types/turndown": "^5.0.6",
+		"@types/ua-parser-js": "^0.7.39",
 		"bits-ui": "^2.18.1",
 		"happy-dom": "^20.11.0",
 		"lucide-svelte": "^1.0.1",
@@ -48,7 +49,7 @@
 		"sql-formatter": "^15.8.2",
 		"terser": "^5.49.0",
 		"turndown": "^7.2.4",
-		"ua-parser-js": "^2.0.10",
+		"ua-parser-js": "^1.0.41",
 		"yaml": "^2.9.0"
 	}
 }

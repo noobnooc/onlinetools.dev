@@ -1,0 +1,13 @@
+# Security headers for Cloudflare Workers Static Assets.
+#
+# The Content-Security-Policy itself is emitted per-page by SvelteKit (see
+# `kit.csp` in svelte.config.js) so the inline theme and hydration scripts can
+# be hashed rather than blanket-allowed. Only the directives that a <meta> tag
+# cannot express, plus the non-CSP hardening headers, live here.
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+  Permissions-Policy: accelerometer=(), camera=(), display-capture=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()
