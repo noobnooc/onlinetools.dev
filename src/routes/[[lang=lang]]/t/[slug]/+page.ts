@@ -28,7 +28,11 @@ const CONTENT_L10N: Record<string, () => Promise<{ default: Record<string, ToolC
 	tr: () => import('$lib/tools/content.tr'),
 	pl: () => import('$lib/tools/content.pl'),
 	vi: () => import('$lib/tools/content.vi'),
-	id: () => import('$lib/tools/content.id')
+	id: () => import('$lib/tools/content.id'),
+	nl: () => import('$lib/tools/content.nl'),
+	th: () => import('$lib/tools/content.th'),
+	uk: () => import('$lib/tools/content.uk'),
+	hi: () => import('$lib/tools/content.hi')
 };
 
 export const load: PageLoad = async ({ params }) => {
