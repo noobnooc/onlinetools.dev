@@ -525,6 +525,32 @@ const TOOL_CONTENT_ID: Record<string, ToolContent> = {
 		]
 	},
 
+	'qr-code-decoder': {
+		about: [
+			'Seret, tempel, atau pilih gambar apa pun yang berisi kode QR — tangkapan layar, tiket yang diunduh, foto sebuah poster — dan isinya diekstrak langsung di browser Anda. Ini persis menutup kasus yang tak bisa ditangani kamera ponsel: kode QR yang sudah ada di layar yang sedang Anda lihat. Dan bila kodenya ada di kertas di depan Anda, mode kamera memindainya langsung — tanpa aplikasi apa pun.',
+			'Pendekode mengenali apa yang ditemukannya dan bereaksi sesuai itu: URL mendapat tombol buka tautan, kode WiFi diurai menjadi nama jaringan, kata sandi, dan jenis keamanan, sedangkan muatan vCard, mailto:, tel:, geo:, dan otpauth: diberi label agar Anda tahu apa yang akan ditempel sebelum menggunakannya. Teks non-Latin dan emoji terdekode dengan benar sebagai UTF-8, dan kode terbalik (terang di atas gelap) ditangani otomatis.',
+			'Karena pemindaian berlangsung lokal, aman untuk kode yang sensitif: kata sandi WiFi, kode penyiapan 2FA, atau tautan pribadi tidak pernah meninggalkan mesin Anda. Ini juga cara yang jujur untuk memeriksa apa isi sebenarnya dari kode yang mencurigakan sebelum apa pun benar-benar memindainya.'
+		],
+		faqs: [
+			{
+				q: 'Mengapa tidak ada kode QR yang ditemukan di gambar saya?',
+				a: 'Penyebab umumnya adalah buram, kontras rendah, distorsi perspektif yang kuat, atau kode hanya mengisi sebagian kecil dari foto besar. Potong lebih dekat ke kode, gunakan sumber yang lebih tajam, dan pastikan zona tenang — margin kosong di sekeliling simbol — terlihat. Tangkapan layar hampir selalu terdekode; foto miring dari permukaan melengkung atau mengkilap adalah kasus sulitnya.'
+			},
+			{
+				q: 'Bisakah membaca kode QR WiFi?',
+				a: 'Bisa. Muatan WIFI: (format yang dihasilkan Android dan iOS saat berbagi jaringan) diurai menjadi nama jaringan, kata sandi, jenis keamanan, dan penanda jaringan tersembunyi, dengan aturan escape yang sudah ditangani — kata sandi yang mengandung ; atau : keluar utuh.'
+			},
+			{
+				q: 'Amankah mendekode kode QR dari sumber tak dikenal?',
+				a: 'Pendekodean di sini hanya membaca polanya dan menampilkan teksnya — tidak ada yang dikunjungi, dijalankan, atau diunggah. Itu menjadikannya langkah pertama yang baik untuk kode yang tidak Anda percayai: lihat URL sebenarnya sebelum memutuskan membukanya. Tombol buka tautan tidak pernah aktif sendiri.'
+			},
+			{
+				q: 'Format gambar apa saja yang didukung?',
+				a: 'Apa pun yang bisa ditampilkan browser Anda: PNG, JPEG, WebP, GIF, BMP, AVIF, dan SVG. Gambar digambar ke kanvas dan dipindai pada beberapa skala, jadi foto raksasa maupun tangkapan layar kecil sama-sama punya peluang. Gambar animasi dipindai pada bingkai pertamanya.'
+			}
+		]
+	},
+
 	'json-to-yaml': {
 		about: [
 			'Konversikan antara JSON, YAML, dan TOML ke segala arah. Format sumbernya dideteksi otomatis sambil Anda menempel — kurung siku mengisyaratkan JSON, titik dua setelah kunci mengisyaratkan YAML, [tabel] mengisyaratkan TOML — dengan penimpaan manual untuk masukan yang ambigu. Konversinya melewati penguraian sungguhan, jadi keluarannya dijamin sah, bukan hasil transformasi teks baris demi baris.',

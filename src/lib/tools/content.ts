@@ -538,7 +538,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
 
 	'qr-code-decoder': {
 		about: [
-			'Drop, paste or pick any image containing a QR code — a screenshot, a downloaded ticket, a photo of a poster — and the content is extracted right here in your browser. That covers the case your phone camera cannot: a QR code that is already on the screen you are looking at.',
+			'Drop, paste or pick any image containing a QR code — a screenshot, a downloaded ticket, a photo of a poster — and the content is extracted right here in your browser. That covers the case your phone camera cannot: a QR code that is already on the screen you are looking at. And when the code is on paper in front of you, camera mode scans it live instead — no app required.',
 			'The decoder recognizes what it found and reacts accordingly: URLs get an open-link button, WiFi codes are unpacked into network name, password and security type, and vCard, mailto:, tel:, geo: and otpauth: payloads are labeled so you know what you are pasting before you use it. Non-Latin text and emoji decode correctly as UTF-8, and inverted (light-on-dark) codes are handled automatically.',
 			'Because scanning is local, it is safe for sensitive codes: a WiFi password, a 2FA setup code or a private link never leaves your machine. This is also the honest way to check what a suspicious code actually contains before anything scans it for real.'
 		],

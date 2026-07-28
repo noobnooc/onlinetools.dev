@@ -525,6 +525,32 @@ const TOOL_CONTENT_VI: Record<string, ToolContent> = {
 		]
 	},
 
+	'qr-code-decoder': {
+		about: [
+			'Kéo thả, dán hoặc chọn bất kỳ hình ảnh nào chứa mã QR — ảnh chụp màn hình, vé đã tải về, ảnh chụp một tấm áp phích — và nội dung được trích xuất ngay trong trình duyệt của bạn. Nó bao trọn tình huống mà camera điện thoại bó tay: mã QR đang nằm ngay trên màn hình bạn đang nhìn. Còn khi mã nằm trên giấy trước mặt bạn, chế độ camera sẽ quét trực tiếp — không cần ứng dụng nào.',
+			'Trình giải mã nhận ra thứ nó tìm thấy và phản ứng tương ứng: URL có nút mở liên kết, mã WiFi được tách thành tên mạng, mật khẩu và kiểu bảo mật, còn các nội dung vCard, mailto:, tel:, geo: và otpauth: được gắn nhãn để bạn biết mình sắp dán gì trước khi dùng. Văn bản ngoài hệ Latinh và emoji được giải mã đúng theo UTF-8, mã đảo ngược (sáng trên nền tối) được xử lý tự động.',
+			'Vì việc quét diễn ra cục bộ, nó an toàn cả với các mã nhạy cảm: mật khẩu WiFi, mã thiết lập 2FA hay liên kết riêng tư không bao giờ rời khỏi máy của bạn. Đây cũng là cách trung thực để kiểm tra một mã đáng ngờ thực sự chứa gì trước khi bất cứ thứ gì quét nó thật.'
+		],
+		faqs: [
+			{
+				q: 'Vì sao không tìm thấy mã QR trong ảnh của tôi?',
+				a: 'Nguyên nhân thường gặp là ảnh mờ, độ tương phản thấp, méo phối cảnh nặng, hoặc mã chỉ chiếm một phần rất nhỏ của bức ảnh lớn. Hãy cắt sát mã hơn, dùng nguồn rõ nét hơn và bảo đảm vùng lặng — phần lề trắng quanh ký hiệu — còn nhìn thấy được. Ảnh chụp màn hình hầu như luôn giải mã được; ảnh chụp nghiêng các bề mặt cong hoặc bóng là trường hợp khó.'
+			},
+			{
+				q: 'Có đọc được mã QR WiFi không?',
+				a: 'Có. Nội dung WIFI: (định dạng Android và iOS tạo ra khi chia sẻ mạng) được phân tích thành tên mạng, mật khẩu, kiểu bảo mật và cờ mạng ẩn, các quy tắc thoát ký tự cũng được xử lý — mật khẩu chứa ; hay : vẫn ra nguyên vẹn.'
+			},
+			{
+				q: 'Giải mã mã QR từ nguồn không rõ có an toàn không?',
+				a: 'Việc giải mã ở đây chỉ đọc hoa văn và hiển thị văn bản — không truy cập, không thực thi, không tải lên bất cứ thứ gì. Vì thế nó là bước đầu hợp lý với một mã bạn không tin: xem URL thật trước khi quyết định mở. Nút mở liên kết không bao giờ tự kích hoạt.'
+			},
+			{
+				q: 'Những định dạng ảnh nào dùng được?',
+				a: 'Mọi thứ trình duyệt của bạn hiển thị được: PNG, JPEG, WebP, GIF, BMP, AVIF và SVG. Ảnh được vẽ lên canvas và quét ở nhiều tỷ lệ, nên cả ảnh khổng lồ lẫn ảnh chụp màn hình nhỏ đều có cơ hội. Ảnh động được quét ở khung hình đầu tiên.'
+			}
+		]
+	},
+
 	'json-to-yaml': {
 		about: [
 			'Chuyển đổi giữa JSON, YAML và TOML theo mọi chiều. Định dạng nguồn được tự nhận diện ngay khi bạn dán — dấu ngoặc gợi ý JSON, kiểu key: gợi ý YAML, [bảng] gợi ý TOML — và bạn vẫn có thể chọn tay khi dữ liệu mập mờ. Việc chuyển đổi đi qua một lần phân tích thật sự, nên kết quả chắc chắn hợp lệ chứ không phải phép biến đổi văn bản theo từng dòng.',

@@ -355,6 +355,9 @@ const pl: Messages = {
 		qrdWifiHidden: 'Sieć ukryta',
 		qrdNote:
 			'Skanowanie odbywa się w całości w przeglądarce — ani obraz, ani zawartość kodu nie są nigdzie wysyłane.',
+		qrdCamera: 'Skanuj kamerą',
+		qrdCameraStop: 'Zatrzymaj kamerę',
+		qrdCameraErr: 'Kamera niedostępna — sprawdź uprawnienia przeglądarki lub użyj obrazu',
 		rxPattern: 'Wzorzec',
 		rxTest: 'Tekst testowy',
 		rxTestPh: 'Wklej tekst, na którym sprawdzisz wzorzec',

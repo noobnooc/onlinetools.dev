@@ -525,6 +525,32 @@ const TOOL_CONTENT_PL: Record<string, ToolContent> = {
 		]
 	},
 
+	'qr-code-decoder': {
+		about: [
+			'Upuść, wklej lub wybierz dowolny obraz z kodem QR — zrzut ekranu, pobrany bilet, zdjęcie plakatu — a treść zostanie wydobyta tutaj, w Twojej przeglądarce. To dokładnie ten przypadek, z którym kamera telefonu sobie nie poradzi: kod QR już jest na ekranie, na który patrzysz. A gdy kod leży na papierze przed Tobą, tryb kamery zeskanuje go na żywo — bez żadnej aplikacji.',
+			'Dekoder rozpoznaje, co znalazł, i odpowiednio reaguje: URL-e dostają przycisk otwarcia linku, kody WiFi są rozkładane na nazwę sieci, hasło i typ zabezpieczeń, a ładunki vCard, mailto:, tel:, geo: i otpauth: są oznaczane, aby było wiadomo, co wklejasz, zanim tego użyjesz. Tekst niełaciński i emoji dekodują się poprawnie jako UTF-8, a odwrócone kody (jasne na ciemnym tle) są obsługiwane automatycznie.',
+			'Ponieważ skanowanie jest lokalne, jest bezpieczne także dla wrażliwych kodów: hasło WiFi, kod konfiguracji 2FA czy prywatny link nigdy nie opuszczają Twojego komputera. To także uczciwy sposób, by sprawdzić, co naprawdę zawiera podejrzany kod, zanim cokolwiek zeskanuje go naprawdę.'
+		],
+		faqs: [
+			{
+				q: 'Dlaczego w moim obrazie nie znaleziono kodu QR?',
+				a: 'Typowe przyczyny to rozmycie, niski kontrast, silne zniekształcenie perspektywy albo kod zajmujący maleńki fragment dużego zdjęcia. Przytnij bliżej kodu, użyj ostrzejszego źródła i upewnij się, że strefa ciszy — pusty margines wokół symbolu — jest widoczna. Zrzuty ekranu dekodują się niemal zawsze; zdjęcia pod kątem zakrzywionych lub błyszczących powierzchni to trudny przypadek.'
+			},
+			{
+				q: 'Czy odczytuje kody QR sieci WiFi?',
+				a: 'Tak. Ładunki WIFI: (format generowany przez Androida i iOS przy udostępnianiu sieci) są rozkładane na nazwę sieci, hasło, typ zabezpieczeń i flagę sieci ukrytej, z obsługą reguł ucieczki — hasło zawierające ; lub : wychodzi nietknięte.'
+			},
+			{
+				q: 'Czy dekodowanie kodu QR z nieznanego źródła jest bezpieczne?',
+				a: 'Dekodowanie tutaj tylko odczytuje wzór i pokazuje tekst — nic nie jest odwiedzane, wykonywane ani wysyłane. To dobry pierwszy krok przy kodzie, któremu nie ufasz: zobacz prawdziwy URL, zanim zdecydujesz się go otworzyć. Przycisk otwarcia linku nigdy nie uruchamia się sam.'
+			},
+			{
+				q: 'Jakie formaty obrazów działają?',
+				a: 'Wszystko, co potrafi wyświetlić Twoja przeglądarka: PNG, JPEG, WebP, GIF, BMP, AVIF i SVG. Obraz jest rysowany na płótnie i skanowany w kilku skalach, więc zarówno ogromne zdjęcia, jak i małe zrzuty ekranu mają szansę. Animowane obrazy są skanowane na pierwszej klatce.'
+			}
+		]
+	},
+
 	'json-to-yaml': {
 		about: [
 			'Konwertuj między JSON-em, YAML-em i TOML-em w dowolną stronę. Format źródłowy rozpoznawany jest automatycznie w trakcie wklejania — nawiasy sugerują JSON, dwukropki po kluczach YAML, [tabele] TOML — z możliwością ręcznego wskazania przy niejednoznacznym wejściu. Konwersja przechodzi przez prawdziwe parsowanie, więc wynik jest z definicji poprawny, a nie efektem przekształcania tekstu wiersz po wierszu.',

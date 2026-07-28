@@ -354,6 +354,9 @@ const id: Messages = {
 		qrdWifiHidden: 'Jaringan tersembunyi',
 		qrdNote:
 			'Pemindaian sepenuhnya terjadi di browser Anda — gambar maupun isi kode tidak pernah diunggah.',
+		qrdCamera: 'Pindai dengan kamera',
+		qrdCameraStop: 'Hentikan kamera',
+		qrdCameraErr: 'Kamera tidak tersedia — periksa izin browser atau gunakan gambar',
 		rxPattern: 'Pola',
 		rxTest: 'Teks uji',
 		rxTestPh: 'Tempel teks untuk menguji polanya',

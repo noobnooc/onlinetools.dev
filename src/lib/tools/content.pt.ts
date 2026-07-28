@@ -526,6 +526,32 @@ const TOOL_CONTENT_PT: Record<string, ToolContent> = {
 		]
 	},
 
+	'qr-code-decoder': {
+		about: [
+			'Solte, cole ou escolha qualquer imagem com um código QR — uma captura de tela, um ingresso baixado, a foto de um cartaz — e o conteúdo é extraído aqui mesmo, no seu navegador. Isso cobre justamente o caso em que a câmera do celular não ajuda: um código QR que já está na tela que você está olhando. E quando o código está num papel à sua frente, o modo câmera o lê ao vivo — sem instalar nada.',
+			'O decodificador reconhece o que encontrou e reage de acordo: URLs ganham um botão de abrir link, códigos WiFi são desdobrados em nome da rede, senha e tipo de segurança, e cargas vCard, mailto:, tel:, geo: e otpauth: são rotuladas para você saber o que está colando antes de usar. Texto não latino e emoji decodificam corretamente como UTF-8, e códigos invertidos (claros sobre fundo escuro) são tratados automaticamente.',
+			'Como a leitura é local, é segura para códigos sensíveis: uma senha de WiFi, um código de configuração 2FA ou um link privado nunca saem da sua máquina. Também é o jeito honesto de conferir o que um código suspeito realmente contém antes que qualquer coisa o escaneie de verdade.'
+		],
+		faqs: [
+			{
+				q: 'Por que nenhum código QR foi encontrado na minha imagem?',
+				a: 'As causas comuns são desfoque, baixo contraste, distorção de perspectiva forte, ou o código ocupar uma fração minúscula de uma foto grande. Recorte mais perto do código, use uma fonte mais nítida e garanta que a zona de silêncio — a margem em branco ao redor do símbolo — esteja visível. Capturas de tela quase sempre decodificam; fotos em ângulo de superfícies curvas ou brilhantes são o caso difícil.'
+			},
+			{
+				q: 'Ele lê códigos QR de WiFi?',
+				a: 'Sim. Cargas WIFI: (o formato que Android e iOS geram ao compartilhar uma rede) são analisadas em nome da rede, senha, tipo de segurança e o indicador de rede oculta, com as regras de escape tratadas — uma senha com ; ou : sai intacta.'
+			},
+			{
+				q: 'É seguro decodificar um código QR de origem desconhecida?',
+				a: 'Decodificar aqui apenas lê o padrão e mostra o texto — nada é visitado, executado ou enviado. Isso faz daqui um bom primeiro passo para um código em que você não confia: veja a URL real antes de decidir abri-la. O botão de abrir link nunca dispara sozinho.'
+			},
+			{
+				q: 'Quais formatos de imagem funcionam?',
+				a: 'Tudo o que seu navegador consegue exibir: PNG, JPEG, WebP, GIF, BMP, AVIF e SVG. A imagem é desenhada em um canvas e lida em várias escalas, então tanto fotos enormes quanto capturas pequenas têm boas chances. Imagens animadas são lidas no primeiro quadro.'
+			}
+		]
+	},
+
 	'json-to-yaml': {
 		about: [
 			'Converta entre JSON, YAML e TOML em qualquer direção. O formato de origem é detectado automaticamente enquanto você cola — colchetes sugerem JSON, dois-pontos de chave: sugerem YAML, [tabelas] sugerem TOML — com uma sobrescrita manual para entradas ambíguas. A conversão passa por um parse de verdade, então a saída é garantidamente válida, não uma transformação textual linha a linha.',

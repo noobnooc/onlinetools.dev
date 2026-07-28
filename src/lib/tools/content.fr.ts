@@ -526,6 +526,32 @@ const TOOL_CONTENT_FR: Record<string, ToolContent> = {
 		]
 	},
 
+	'qr-code-decoder': {
+		about: [
+			'Déposez, collez ou choisissez n’importe quelle image contenant un QR code — une capture d’écran, un billet téléchargé, la photo d’une affiche — et le contenu est extrait ici même, dans votre navigateur. Cela couvre précisément le cas où la caméra du téléphone ne peut rien : un QR code déjà affiché sur l’écran que vous regardez. Et quand le code est sur un papier devant vous, le mode caméra le scanne en direct — sans aucune application.',
+			'Le décodeur reconnaît ce qu’il a trouvé et réagit en conséquence : les URL reçoivent un bouton d’ouverture, les codes WiFi sont dépliés en nom de réseau, mot de passe et type de sécurité, et les charges vCard, mailto:, tel:, geo: et otpauth: sont étiquetées pour que vous sachiez ce que vous collez avant de l’utiliser. Le texte non latin et les emoji se décodent correctement en UTF-8, et les codes inversés (clairs sur fond sombre) sont gérés automatiquement.',
+			'Le scan étant local, il convient aux codes sensibles : un mot de passe WiFi, un code de configuration 2FA ou un lien privé ne quittent jamais votre machine. C’est aussi la façon honnête de vérifier ce que contient réellement un code suspect avant que quoi que ce soit ne le scanne pour de vrai.'
+		],
+		faqs: [
+			{
+				q: 'Pourquoi aucun QR code n’a-t-il été trouvé dans mon image ?',
+				a: 'Les causes habituelles sont le flou, le faible contraste, une forte distorsion de perspective, ou un code qui n’occupe qu’une infime partie d’une grande photo. Recadrez plus près du code, utilisez une source plus nette et vérifiez que la zone de silence — la marge vierge autour du symbole — est visible. Les captures d’écran se décodent presque toujours ; les photos en biais de surfaces courbes ou brillantes sont le cas difficile.'
+			},
+			{
+				q: 'Peut-il lire les QR codes WiFi ?',
+				a: 'Oui. Les charges WIFI: (le format généré par Android et iOS pour partager un réseau) sont analysées en nom de réseau, mot de passe, type de sécurité et indicateur de réseau masqué, règles d’échappement comprises — un mot de passe contenant ; ou : ressort donc intact.'
+			},
+			{
+				q: 'Est-il sûr de décoder un QR code d’origine inconnue ?',
+				a: 'Le décodage ici se contente de lire le motif et de vous montrer le texte — rien n’est visité, exécuté ni envoyé. C’est donc un bon premier réflexe face à un code douteux : voyez l’URL réelle avant de décider de l’ouvrir. Le bouton d’ouverture du lien ne se déclenche jamais tout seul.'
+			},
+			{
+				q: 'Quels formats d’image fonctionnent ?',
+				a: 'Tout ce que votre navigateur sait afficher : PNG, JPEG, WebP, GIF, BMP, AVIF et SVG. L’image est dessinée sur un canevas et scannée à plusieurs échelles, si bien que les photos énormes comme les petites captures ont leurs chances. Les images animées sont scannées sur leur première trame.'
+			}
+		]
+	},
+
 	'json-to-yaml': {
 		about: [
 			'Convertissez entre JSON, YAML et TOML dans tous les sens. Le format source est détecté automatiquement au collage — des crochets suggèrent du JSON, des deux-points key: du YAML, des [tables] du TOML — avec un choix manuel pour les entrées ambiguës. La conversion passe par une vraie analyse syntaxique : la sortie est garantie valide, ce n’est pas une transformation texte ligne à ligne.',
