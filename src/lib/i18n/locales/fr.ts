@@ -320,7 +320,7 @@ const fr: Messages = {
 		qrdWifiPass: 'Mot de passe',
 		qrdWifiSec: 'Sécurité',
 		qrdWifiHidden: 'Réseau masqué',
-		qrdNote: 'Le scan se fait entièrement dans votre navigateur — ni l’image ni le contenu du code ne sont envoyés.',
+		qrdNote: 'Le scan se fait entièrement dans votre navigateur — ni l’image, ni le flux de la caméra, ni le contenu du code ne sont envoyés.',
 		qrdCamera: 'Scanner avec la caméra',
 		qrdCameraStop: 'Arrêter la caméra',
 		qrdCameraErr: 'Caméra indisponible — vérifiez l’autorisation du navigateur ou utilisez une image',
@@ -610,7 +610,7 @@ const fr: Messages = {
 		},
 		'qr-code-decoder': {
 			name: 'Décodeur de QR codes',
-			description: 'Lisez un QR code depuis une image — URL, WiFi et texte, sans envoi'
+			description: 'Lisez un QR code depuis une image ou la caméra — URL, WiFi et texte, sans envoi'
 		},
 		'json-to-yaml': {
 			name: 'Convertisseur JSON ↔ YAML ↔ TOML',

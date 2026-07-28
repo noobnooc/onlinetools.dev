@@ -295,7 +295,7 @@ export const TOOLS: ToolMeta[] = [
 		slug: 'qr-code-decoder',
 		accepts: ['image'],
 		name: 'QR Code Decoder',
-		description: 'Read a QR code from any image — URLs, WiFi credentials and text, offline',
+		description: 'Read QR codes from images or live camera — URLs, WiFi and text, offline',
 		category: 'image',
 		aliases: ['qr decode', 'qr reader', 'qr scanner', 'scan qr', 'read qr code'],
 		keywords: ['qr code decoder', 'qr code reader', 'decode qr from image', 'scan qr code online', 'qr to text'],

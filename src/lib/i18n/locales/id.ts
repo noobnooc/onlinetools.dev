@@ -353,7 +353,7 @@ const id: Messages = {
 		qrdWifiSec: 'Keamanan',
 		qrdWifiHidden: 'Jaringan tersembunyi',
 		qrdNote:
-			'Pemindaian sepenuhnya terjadi di browser Anda — gambar maupun isi kode tidak pernah diunggah.',
+			'Pemindaian sepenuhnya terjadi di browser Anda — gambar, tampilan kamera, maupun isi kode tidak pernah diunggah.',
 		qrdCamera: 'Pindai dengan kamera',
 		qrdCameraStop: 'Hentikan kamera',
 		qrdCameraErr: 'Kamera tidak tersedia — periksa izin browser atau gunakan gambar',
@@ -637,7 +637,7 @@ const id: Messages = {
 		},
 		'qr-code-decoder': {
 			name: 'Pendekode Kode QR',
-			description: 'Baca kode QR dari gambar — URL, WiFi, dan teks, sepenuhnya offline'
+			description: 'Baca kode QR dari gambar atau kamera — URL, WiFi, dan teks, sepenuhnya offline'
 		},
 		'json-to-yaml': {
 			name: 'Konverter JSON ↔ YAML ↔ TOML',
