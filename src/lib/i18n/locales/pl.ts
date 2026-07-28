@@ -354,7 +354,7 @@ const pl: Messages = {
 		qrdWifiSec: 'Zabezpieczenia',
 		qrdWifiHidden: 'Sieć ukryta',
 		qrdNote:
-			'Skanowanie odbywa się w całości w przeglądarce — ani obraz, ani zawartość kodu nie są nigdzie wysyłane.',
+			'Skanowanie odbywa się w całości w przeglądarce — ani obraz, ani podgląd z kamery, ani zawartość kodu nie są nigdzie wysyłane.',
 		qrdCamera: 'Skanuj kamerą',
 		qrdCameraStop: 'Zatrzymaj kamerę',
 		qrdCameraErr: 'Kamera niedostępna — sprawdź uprawnienia przeglądarki lub użyj obrazu',
@@ -638,7 +638,7 @@ const pl: Messages = {
 		},
 		'qr-code-decoder': {
 			name: 'Dekoder kodów QR',
-			description: 'Odczytuj kody QR z obrazów — URL, WiFi i tekst, całkowicie offline'
+			description: 'Odczytuj kody QR z obrazów lub kamerą — URL, WiFi i tekst, całkowicie offline'
 		},
 		'json-to-yaml': {
 			name: 'Konwerter JSON ↔ YAML ↔ TOML',

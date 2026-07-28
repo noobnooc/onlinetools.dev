@@ -354,7 +354,7 @@ const vi: Messages = {
 		qrdWifiSec: 'Bảo mật',
 		qrdWifiHidden: 'Mạng ẩn',
 		qrdNote:
-			'Quá trình quét diễn ra hoàn toàn trong trình duyệt — ảnh và nội dung mã không bao giờ được tải lên.',
+			'Quá trình quét diễn ra hoàn toàn trong trình duyệt — ảnh, hình ảnh từ camera và nội dung mã không bao giờ được tải lên.',
 		qrdCamera: 'Quét bằng camera',
 		qrdCameraStop: 'Tắt camera',
 		qrdCameraErr: 'Không truy cập được camera — kiểm tra quyền của trình duyệt hoặc dùng ảnh thay thế',
@@ -638,7 +638,7 @@ const vi: Messages = {
 		},
 		'qr-code-decoder': {
 			name: 'Giải mã mã QR',
-			description: 'Đọc mã QR từ hình ảnh — URL, WiFi và văn bản, hoàn toàn ngoại tuyến'
+			description: 'Đọc mã QR từ hình ảnh hoặc camera — URL, WiFi và văn bản, hoàn toàn ngoại tuyến'
 		},
 		'json-to-yaml': {
 			name: 'Chuyển đổi JSON ↔ YAML ↔ TOML',

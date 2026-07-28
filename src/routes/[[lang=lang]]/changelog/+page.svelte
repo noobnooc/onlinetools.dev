@@ -30,8 +30,14 @@
 				otpauth: payloads are labeled. Inverted codes and UTF-8 text (CJK, emoji) just work.
 			</li>
 			<li>
-				Like everything here, scanning is local — the image and whatever the code contains never
-				leave your browser, which also makes it a safe way to inspect a QR code you don't trust.
+				A camera mode too: point your webcam or phone camera at a code on paper and it scans
+				live, no app required. And the decoder's About &amp; FAQ content now ships in all
+				fourteen languages.
+			</li>
+			<li>
+				Like everything here, scanning is local — the image, the camera feed and whatever the
+				code contains never leave your browser, which also makes it a safe way to inspect a QR
+				code you don't trust.
 			</li>
 		</ul>
 	</section>

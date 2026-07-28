@@ -320,7 +320,7 @@ const ja: Messages = {
 		qrdWifiPass: 'パスワード',
 		qrdWifiSec: 'セキュリティ',
 		qrdWifiHidden: '非公開ネットワーク',
-		qrdNote: '読み取りはすべてブラウザ内で行われます — 画像もコードの内容もアップロードされません。',
+		qrdNote: '読み取りはすべてブラウザ内で行われます — 画像もカメラ映像もコードの内容もアップロードされません。',
 		qrdCamera: 'カメラでスキャン',
 		qrdCameraStop: 'カメラを停止',
 		qrdCameraErr: 'カメラを利用できません — ブラウザの権限を確認するか、画像をご利用ください',
@@ -610,7 +610,7 @@ const ja: Messages = {
 		},
 		'qr-code-decoder': {
 			name: 'QRコードリーダー',
-			description: '画像から QR コードを読み取り — URL、WiFi、テキスト、すべてオフライン'
+			description: '画像やカメラから QR コードを読み取り — URL、WiFi、テキスト、すべてオフライン'
 		},
 		'json-to-yaml': {
 			name: 'JSON ↔ YAML ↔ TOML変換',

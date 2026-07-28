@@ -317,7 +317,7 @@ const zh: Messages = {
 		qrdWifiPass: '密码',
 		qrdWifiSec: '加密方式',
 		qrdWifiHidden: '隐藏网络',
-		qrdNote: '识别完全在你的浏览器中进行 — 图片和二维码内容都不会被上传。',
+		qrdNote: '识别完全在你的浏览器中进行 — 图片、摄像头画面和二维码内容都不会被上传。',
 		qrdCamera: '摄像头扫描',
 		qrdCameraStop: '关闭摄像头',
 		qrdCameraErr: '无法访问摄像头 — 请检查浏览器权限,或改用图片',
@@ -612,7 +612,7 @@ const zh: Messages = {
 		},
 		'qr-code-decoder': {
 			name: '二维码识别器',
-			description: '从图片中识别二维码 — 链接、WiFi 密码、文本,全程本地处理'
+			description: '从图片或摄像头识别二维码 — 链接、WiFi 密码、文本,全程本地处理'
 		},
 		'json-to-yaml': {
 			name: 'JSON ↔ YAML ↔ TOML 转换',

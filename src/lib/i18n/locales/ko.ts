@@ -320,7 +320,7 @@ const ko: Messages = {
 		qrdWifiPass: '비밀번호',
 		qrdWifiSec: '보안 방식',
 		qrdWifiHidden: '숨겨진 네트워크',
-		qrdNote: '스캔은 전부 브라우저 안에서 이루어집니다 — 이미지도 코드 내용도 업로드되지 않습니다.',
+		qrdNote: '스캔은 전부 브라우저 안에서 이루어집니다 — 이미지도 카메라 화면도 코드 내용도 업로드되지 않습니다.',
 		qrdCamera: '카메라로 스캔',
 		qrdCameraStop: '카메라 중지',
 		qrdCameraErr: '카메라를 사용할 수 없습니다 — 브라우저 권한을 확인하거나 이미지를 사용해 주세요',
@@ -610,7 +610,7 @@ const ko: Messages = {
 		},
 		'qr-code-decoder': {
 			name: 'QR 코드 디코더',
-			description: '이미지 속 QR 코드 판독 — URL, WiFi, 텍스트까지 전부 오프라인'
+			description: '이미지나 카메라로 QR 코드 판독 — URL, WiFi, 텍스트까지 전부 오프라인'
 		},
 		'json-to-yaml': {
 			name: 'JSON ↔ YAML ↔ TOML 변환기',

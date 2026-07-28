@@ -395,7 +395,7 @@ const en = {
 		qrdWifiPass: 'Password',
 		qrdWifiSec: 'Security',
 		qrdWifiHidden: 'Hidden network',
-		qrdNote: 'Scanning happens entirely in your browser — the image and whatever the code contains are never uploaded.',
+		qrdNote: 'Scanning happens entirely in your browser — neither the image, the camera feed nor whatever the code contains is ever uploaded.',
 		qrdCamera: 'Scan with camera',
 		qrdCameraStop: 'Stop camera',
 		qrdCameraErr: 'Camera unavailable — check the browser permission, or drop an image instead',

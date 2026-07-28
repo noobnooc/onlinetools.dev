@@ -350,7 +350,7 @@ const tr: Messages = {
 		qrdWifiSec: 'Güvenlik',
 		qrdWifiHidden: 'Gizli ağ',
 		qrdNote:
-			'Tarama tamamen tarayıcınızda gerçekleşir — ne görsel ne de kodun içeriği hiçbir yere yüklenir.',
+			'Tarama tamamen tarayıcınızda gerçekleşir — ne görsel, ne kamera görüntüsü, ne de kodun içeriği hiçbir yere yüklenir.',
 		qrdCamera: 'Kamerayla tara',
 		qrdCameraStop: 'Kamerayı durdur',
 		qrdCameraErr: 'Kamera kullanılamıyor — tarayıcı iznini kontrol edin ya da bir görsel kullanın',
@@ -634,7 +634,7 @@ const tr: Messages = {
 		},
 		'qr-code-decoder': {
 			name: 'QR Kod Çözücü',
-			description: 'Görsellerdeki QR kodları okuyun — URL, WiFi ve metin, tamamen çevrimdışı'
+			description: 'QR kodları görsellerden ya da kamerayla okuyun — URL, WiFi ve metin, tamamen çevrimdışı'
 		},
 		'json-to-yaml': {
 			name: 'JSON ↔ YAML ↔ TOML Dönüştürücü',
