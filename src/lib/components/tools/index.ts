@@ -26,6 +26,7 @@ export const TOOL_COMPONENTS: Record<string, () => Promise<{ default: Component 
 	'cron-parser': () => import('./CronTool.svelte'),
 	'password-generator': () => import('./PasswordTool.svelte'),
 	'qr-code-generator': () => import('./QrTool.svelte'),
+	'qr-code-decoder': () => import('./QrDecodeTool.svelte'),
 	'json-to-yaml': () => import('./JsonYamlTool.svelte'),
 	'json-to-csv': () => import('./JsonCsvTool.svelte'),
 	'json-to-typescript': () => import('./JsonTsTool.svelte'),

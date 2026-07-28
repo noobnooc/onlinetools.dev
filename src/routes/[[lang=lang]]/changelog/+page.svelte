@@ -16,6 +16,28 @@
 	<div lang="en">
 	<section class="relative border-l border-line pb-8 pl-6">
 		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full bg-accent" aria-hidden="true"></span>
+		<h2 class="text-sm font-medium">Read QR codes, not just make them</h2>
+		<p class="mt-0.5 font-mono text-xs text-dim">v2026.07.28</p>
+		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
+			<li>
+				New <a href={lp('/t/qr-code-decoder')} class="text-accent hover:underline">QR Code
+				Decoder</a>: drop, paste or pick any image with a QR code — a screenshot, a ticket, a
+				photo of a poster — and see what's inside, without pointing a phone at your own screen.
+			</li>
+			<li>
+				It tells you what it found before you use it: URLs get an open-link button, WiFi codes
+				unpack into network, password and security type, and vCard / mailto: / tel: / geo: /
+				otpauth: payloads are labeled. Inverted codes and UTF-8 text (CJK, emoji) just work.
+			</li>
+			<li>
+				Like everything here, scanning is local — the image and whatever the code contains never
+				leave your browser, which also makes it a safe way to inspect a QR code you don't trust.
+			</li>
+		</ul>
+	</section>
+
+	<section class="relative border-l border-line pb-8 pl-6">
+		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
 		<h2 class="text-sm font-medium">A page about trust — and a way to check it</h2>
 		<p class="mt-0.5 font-mono text-xs text-dim">v2026.07.24</p>
 		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">

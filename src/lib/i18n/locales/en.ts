@@ -387,6 +387,16 @@ const en = {
 		qrPng: 'PNG (chat, slides)',
 		qrNote: 'The content is encoded directly — no redirect service, nothing expires, no scan tracking.',
 
+		// QR decoder
+		qrdResult: 'Decoded content',
+		qrdNone: 'No QR code found — try a sharper image, crop closer to the code, and keep the blank margin around it',
+		qrdOpen: 'Open link',
+		qrdWifiSsid: 'Network (SSID)',
+		qrdWifiPass: 'Password',
+		qrdWifiSec: 'Security',
+		qrdWifiHidden: 'Hidden network',
+		qrdNote: 'Scanning happens entirely in your browser — the image and whatever the code contains are never uploaded.',
+
 		// Regex
 		rxPattern: 'Pattern',
 		rxTest: 'Test string',

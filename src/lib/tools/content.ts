@@ -536,6 +536,32 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
 		]
 	},
 
+	'qr-code-decoder': {
+		about: [
+			'Drop, paste or pick any image containing a QR code — a screenshot, a downloaded ticket, a photo of a poster — and the content is extracted right here in your browser. That covers the case your phone camera cannot: a QR code that is already on the screen you are looking at.',
+			'The decoder recognizes what it found and reacts accordingly: URLs get an open-link button, WiFi codes are unpacked into network name, password and security type, and vCard, mailto:, tel:, geo: and otpauth: payloads are labeled so you know what you are pasting before you use it. Non-Latin text and emoji decode correctly as UTF-8, and inverted (light-on-dark) codes are handled automatically.',
+			'Because scanning is local, it is safe for sensitive codes: a WiFi password, a 2FA setup code or a private link never leaves your machine. This is also the honest way to check what a suspicious code actually contains before anything scans it for real.'
+		],
+		faqs: [
+			{
+				q: 'Why was no QR code found in my image?',
+				a: 'The usual causes are blur, low contrast, heavy perspective distortion, or the code being a tiny fraction of a large photo. Crop closer to the code, use a sharper source, and make sure the quiet zone — the blank margin around the symbol — is visible. Screenshots decode almost always; angled photos of curved or glossy surfaces are the hard case.'
+			},
+			{
+				q: 'Can it read WiFi QR codes?',
+				a: 'Yes. WIFI: payloads (the format Android and iOS generate for network sharing) are parsed into network name, password, security type and the hidden-network flag, with the escaping rules handled — so a password containing ; or : comes out intact.'
+			},
+			{
+				q: 'Is it safe to decode a QR code from an unknown source?',
+				a: 'Decoding here only reads the pattern and shows you the text — nothing is visited, executed or uploaded. That makes this a good first step for a code you do not trust: see the actual URL before deciding to open it. The open-link button never fires on its own.'
+			},
+			{
+				q: 'Which image formats work?',
+				a: 'Anything your browser can display: PNG, JPEG, WebP, GIF, BMP, AVIF and SVG. The image is drawn to a canvas and scanned at multiple scales, so both huge photos and small screenshots have a fair chance. Animated images are scanned on their first frame.'
+			}
+		]
+	},
+
 	'json-to-yaml': {
 		about: [
 			'Convert between JSON, YAML and TOML in any direction. The source format is auto-detected as you paste — brackets suggest JSON, key: colons suggest YAML, [tables] suggest TOML — with a manual override for ambiguous input. Conversion goes through a real parse, so the output is guaranteed valid, not a line-by-line text transform.',

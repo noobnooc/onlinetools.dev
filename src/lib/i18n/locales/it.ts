@@ -313,6 +313,14 @@ const it: Messages = {
 		qrSvg: 'SVG (vettoriale, stampa)',
 		qrPng: 'PNG (chat, slide)',
 		qrNote: 'Il contenuto è codificato direttamente — nessun redirect, nulla scade, nessun tracciamento delle scansioni.',
+		qrdResult: 'Contenuto decodificato',
+		qrdNone: 'Nessun codice QR trovato — usa un’immagine più nitida, ritaglia vicino al codice e mantieni il margine bianco',
+		qrdOpen: 'Apri link',
+		qrdWifiSsid: 'Rete (SSID)',
+		qrdWifiPass: 'Password',
+		qrdWifiSec: 'Sicurezza',
+		qrdWifiHidden: 'Rete nascosta',
+		qrdNote: 'La scansione avviene interamente nel browser — né l’immagine né il contenuto del codice vengono caricati.',
 		rxPattern: 'Pattern',
 		rxTest: 'Testo di prova',
 		rxTestPh: 'Incolla il testo su cui provare il pattern',
@@ -596,6 +604,10 @@ const it: Messages = {
 		'qr-code-generator': {
 			name: 'Generatore di codici QR',
 			description: 'Genera codici QR nitidi in SVG o PNG — senza watermark, senza upload'
+		},
+		'qr-code-decoder': {
+			name: 'Decodificatore di codici QR',
+			description: 'Leggi i codici QR dalle immagini — URL, WiFi e testo, tutto offline'
 		},
 		'json-to-yaml': {
 			name: 'Convertitore JSON ↔ YAML ↔ TOML',
