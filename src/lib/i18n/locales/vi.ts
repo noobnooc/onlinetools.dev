@@ -355,6 +355,9 @@ const vi: Messages = {
 		qrdWifiHidden: 'Mạng ẩn',
 		qrdNote:
 			'Quá trình quét diễn ra hoàn toàn trong trình duyệt — ảnh và nội dung mã không bao giờ được tải lên.',
+		qrdCamera: 'Quét bằng camera',
+		qrdCameraStop: 'Tắt camera',
+		qrdCameraErr: 'Không truy cập được camera — kiểm tra quyền của trình duyệt hoặc dùng ảnh thay thế',
 		rxPattern: 'Mẫu',
 		rxTest: 'Chuỗi thử',
 		rxTestPh: 'Dán văn bản để thử mẫu lên đó',

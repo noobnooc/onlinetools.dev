@@ -396,6 +396,9 @@ const en = {
 		qrdWifiSec: 'Security',
 		qrdWifiHidden: 'Hidden network',
 		qrdNote: 'Scanning happens entirely in your browser — the image and whatever the code contains are never uploaded.',
+		qrdCamera: 'Scan with camera',
+		qrdCameraStop: 'Stop camera',
+		qrdCameraErr: 'Camera unavailable — check the browser permission, or drop an image instead',
 
 		// Regex
 		rxPattern: 'Pattern',

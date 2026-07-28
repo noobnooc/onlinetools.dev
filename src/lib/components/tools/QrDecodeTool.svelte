@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onDestroy } from 'svelte';
 	import { tt } from '$lib/i18n';
 	import ImageDrop from '../ImageDrop.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
@@ -6,11 +7,15 @@
 	import { readImageFile, loadImageElement, type LoadedImage } from '$lib/utils/image';
 	import { formatBytes } from '$lib/utils/format';
 	import { currentResult } from '$lib/state/app.svelte';
-	import { ExternalLink, Wifi } from 'lucide-svelte';
+	import { Camera, ExternalLink, VideoOff, Wifi } from 'lucide-svelte';
 
 	let image = $state<LoadedImage | null>(null);
 	let decoded = $state<DecodedQr | null>(null);
 	let scanError = $state('');
+
+	let videoEl = $state<HTMLVideoElement | null>(null);
+	let cameraOn = $state(false);
+	let stream: MediaStream | null = null;
 
 	const KIND_LABEL: Record<QrPayloadKind, string> = {
 		url: 'URL',
@@ -59,6 +64,7 @@
 	}
 
 	async function onfile(file: File) {
+		stopCamera();
 		decoded = null;
 		scanError = '';
 		const r = await readImageFile(file);
@@ -72,6 +78,53 @@
 		if (result) decoded = result;
 		else scanError = tt('qrdNone');
 	}
+
+	async function startCamera() {
+		decoded = null;
+		scanError = '';
+		image = null;
+		try {
+			stream = await navigator.mediaDevices.getUserMedia({
+				video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
+				audio: false
+			});
+		} catch {
+			scanError = tt('qrdCameraErr');
+			return;
+		}
+		cameraOn = true;
+	}
+
+	function stopCamera() {
+		stream?.getTracks().forEach((t) => t.stop());
+		stream = null;
+		cameraOn = false;
+	}
+
+	// Once the <video> renders, attach the stream and poll frames until a
+	// code decodes or the camera is stopped.
+	$effect(() => {
+		if (!cameraOn || !videoEl || !stream) return;
+		const video = videoEl;
+		video.srcObject = stream;
+		void video.play();
+		const canvas = document.createElement('canvas');
+		const ctx = canvas.getContext('2d', { willReadFrequently: true });
+		const timer = setInterval(() => {
+			if (!ctx || video.readyState < 2 || video.videoWidth === 0) return;
+			canvas.width = video.videoWidth;
+			canvas.height = video.videoHeight;
+			ctx.drawImage(video, 0, 0);
+			const r = decodeQr(ctx.getImageData(0, 0, canvas.width, canvas.height).data, canvas.width, canvas.height);
+			if (r.ok) {
+				decoded = r.value;
+				stopCamera();
+			}
+		}, 250);
+		return () => clearInterval(timer);
+	});
+
+	onDestroy(stopCamera);
 
 	const output = $derived(decoded?.text ?? '');
 
@@ -90,6 +143,28 @@
 		{onfile}
 		summary={image ? `${image.name} · ${formatBytes(image.bytes.length)} · ${image.width}×${image.height}` : ''}
 	/>
+	<div class="flex flex-wrap items-center gap-3">
+		<button
+			type="button"
+			onclick={() => (cameraOn ? stopCamera() : startCamera())}
+			class="inline-flex items-center gap-1.5 rounded-md border border-line bg-surface px-3 py-1.5 text-sm transition-colors duration-120 hover:border-accent/50"
+		>
+			{#if cameraOn}
+				<VideoOff size={13} /> {tt('qrdCameraStop')}
+			{:else}
+				<Camera size={13} /> {tt('qrdCamera')}
+			{/if}
+		</button>
+	</div>
+	{#if cameraOn}
+		<!-- svelte-ignore a11y_media_has_caption — live camera preview has no audio track -->
+		<video
+			bind:this={videoEl}
+			playsinline
+			muted
+			class="w-full max-w-md rounded-lg border border-line bg-black"
+		></video>
+	{/if}
 	{#if scanError}
 		<p class="text-sm text-err">{scanError}</p>
 	{/if}

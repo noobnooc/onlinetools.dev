@@ -351,6 +351,9 @@ const tr: Messages = {
 		qrdWifiHidden: 'Gizli ağ',
 		qrdNote:
 			'Tarama tamamen tarayıcınızda gerçekleşir — ne görsel ne de kodun içeriği hiçbir yere yüklenir.',
+		qrdCamera: 'Kamerayla tara',
+		qrdCameraStop: 'Kamerayı durdur',
+		qrdCameraErr: 'Kamera kullanılamıyor — tarayıcı iznini kontrol edin ya da bir görsel kullanın',
 		rxPattern: 'Desen',
 		rxTest: 'Test metni',
 		rxTestPh: 'Deseni deneyeceğiniz metni yapıştırın',

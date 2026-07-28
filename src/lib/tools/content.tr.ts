@@ -525,6 +525,32 @@ const TOOL_CONTENT_TR: Record<string, ToolContent> = {
 		]
 	},
 
+	'qr-code-decoder': {
+		about: [
+			'QR kod içeren herhangi bir görseli — ekran görüntüsü, indirilmiş bir bilet, bir afiş fotoğrafı — sürükleyin, yapıştırın ya da seçin; içerik tam burada, tarayıcınızda çıkarılır. Telefon kamerasının çözemediği durumu tam olarak kapsar: baktığınız ekranın üzerinde duran bir QR kod. Kod önünüzdeki bir kâğıttaysa kamera modu onu canlı tarar — uygulama gerekmez.',
+			'Çözücü bulduğu şeyi tanır ve ona göre davranır: URL’lere bağlantıyı açma düğmesi eklenir, WiFi kodları ağ adı, parola ve güvenlik türüne ayrıştırılır; vCard, mailto:, tel:, geo: ve otpauth: yükleri etiketlenir, böylece kullanmadan önce ne yapıştırdığınızı bilirsiniz. Latin dışı metin ve emojiler UTF-8 olarak doğru çözülür, ters (koyu zemin üzerine açık) kodlar otomatik işlenir.',
+			'Tarama yerel olduğundan hassas kodlar için de güvenlidir: bir WiFi parolası, bir 2FA kurulum kodu ya da özel bir bağlantı makinenizden asla çıkmaz. Şüpheli bir kodun gerçekte ne içerdiğini, herhangi bir şey onu gerçekten taramadan önce görmenin dürüst yolu da budur.'
+		],
+		faqs: [
+			{
+				q: 'Görselimde neden QR kod bulunamadı?',
+				a: 'Olağan nedenler bulanıklık, düşük kontrast, güçlü perspektif bozulması ya da kodun büyük bir fotoğrafın küçücük bir bölümünü kaplamasıdır. Koda daha yakın kırpın, daha net bir kaynak kullanın ve sessiz bölgenin — sembolün çevresindeki boş kenar boşluğunun — görünür olduğundan emin olun. Ekran görüntüleri neredeyse her zaman çözülür; kavisli ya da parlak yüzeylerin açılı fotoğrafları zor durumdur.'
+			},
+			{
+				q: 'WiFi QR kodlarını okuyabilir mi?',
+				a: 'Evet. WIFI: yükleri (Android ve iOS’un ağ paylaşırken ürettiği biçim) ağ adı, parola, güvenlik türü ve gizli ağ bayrağına ayrıştırılır; kaçış kuralları da işlenir — içinde ; ya da : bulunan bir parola bozulmadan çıkar.'
+			},
+			{
+				q: 'Kaynağı bilinmeyen bir QR kodu çözmek güvenli mi?',
+				a: 'Buradaki çözme yalnızca deseni okur ve size metni gösterir — hiçbir şey ziyaret edilmez, çalıştırılmaz ya da yüklenmez. Bu da güvenmediğiniz bir kod için iyi bir ilk adımdır: açmaya karar vermeden önce gerçek URL’yi görün. Bağlantıyı açma düğmesi asla kendiliğinden tetiklenmez.'
+			},
+			{
+				q: 'Hangi görsel biçimleri çalışır?',
+				a: 'Tarayıcınızın gösterebildiği her şey: PNG, JPEG, WebP, GIF, BMP, AVIF ve SVG. Görsel bir tuvale çizilir ve birden çok ölçekte taranır; böylece dev fotoğrafların da küçük ekran görüntülerinin de şansı olur. Hareketli görseller ilk karede taranır.'
+			}
+		]
+	},
+
 	'json-to-yaml': {
 		about: [
 			'JSON, YAML ve TOML arasında her yönde dönüştürün. Kaynak biçim siz yapıştırdıkça kendiliğinden algılanır — köşeli parantezler JSON’a, key: iki noktaları YAML’a, [tablolar] TOML’a işaret eder — belirsiz girdiler için elle geçiş de vardır. Dönüştürme gerçek bir ayrıştırmadan geçer; yani çıktı satır satır bir metin dönüşümü değil, geçerliliği güvence altına alınmış bir belgedir.',
