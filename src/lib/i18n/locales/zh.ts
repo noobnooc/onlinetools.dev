@@ -310,6 +310,14 @@ const zh: Messages = {
 		qrSvg: 'SVG(矢量,适合印刷)',
 		qrPng: 'PNG(聊天,幻灯片)',
 		qrNote: '内容被直接编码 — 无跳转服务、永不过期、无扫描追踪。',
+		qrdResult: '识别结果',
+		qrdNone: '未在图片中找到二维码 — 请使用更清晰的图片、裁剪到二维码附近,并保留四周留白',
+		qrdOpen: '打开链接',
+		qrdWifiSsid: '网络名称 (SSID)',
+		qrdWifiPass: '密码',
+		qrdWifiSec: '加密方式',
+		qrdWifiHidden: '隐藏网络',
+		qrdNote: '识别完全在你的浏览器中进行 — 图片和二维码内容都不会被上传。',
 		rxPattern: '模式',
 		rxTest: '测试文本',
 		rxTestPh: '粘贴要匹配的文本',
@@ -598,6 +606,10 @@ const zh: Messages = {
 		'qr-code-generator': {
 			name: '二维码生成器',
 			description: '生成清晰的 SVG / PNG 二维码 — 无水印、不上传'
+		},
+		'qr-code-decoder': {
+			name: '二维码识别器',
+			description: '从图片中识别二维码 — 链接、WiFi 密码、文本,全程本地处理'
 		},
 		'json-to-yaml': {
 			name: 'JSON ↔ YAML ↔ TOML 转换',

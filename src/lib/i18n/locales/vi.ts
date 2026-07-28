@@ -345,6 +345,16 @@ const vi: Messages = {
 		qrPng: 'PNG (chat, slide)',
 		qrNote:
 			'Nội dung được mã hóa trực tiếp — không qua dịch vụ chuyển hướng, không hết hạn, không theo dõi lượt quét.',
+		qrdResult: 'Nội dung giải mã',
+		qrdNone:
+			'Không tìm thấy mã QR — hãy dùng ảnh rõ nét hơn, cắt sát mã và giữ phần lề trắng xung quanh',
+		qrdOpen: 'Mở liên kết',
+		qrdWifiSsid: 'Mạng (SSID)',
+		qrdWifiPass: 'Mật khẩu',
+		qrdWifiSec: 'Bảo mật',
+		qrdWifiHidden: 'Mạng ẩn',
+		qrdNote:
+			'Quá trình quét diễn ra hoàn toàn trong trình duyệt — ảnh và nội dung mã không bao giờ được tải lên.',
 		rxPattern: 'Mẫu',
 		rxTest: 'Chuỗi thử',
 		rxTestPh: 'Dán văn bản để thử mẫu lên đó',
@@ -622,6 +632,10 @@ const vi: Messages = {
 		'qr-code-generator': {
 			name: 'Tạo mã QR',
 			description: 'Tạo mã QR sắc nét dạng SVG hoặc PNG — không watermark, không tải lên'
+		},
+		'qr-code-decoder': {
+			name: 'Giải mã mã QR',
+			description: 'Đọc mã QR từ hình ảnh — URL, WiFi và văn bản, hoàn toàn ngoại tuyến'
 		},
 		'json-to-yaml': {
 			name: 'Chuyển đổi JSON ↔ YAML ↔ TOML',

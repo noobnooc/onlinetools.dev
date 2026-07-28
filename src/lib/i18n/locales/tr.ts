@@ -341,6 +341,16 @@ const tr: Messages = {
 		qrPng: 'PNG (sohbet, sunum)',
 		qrNote:
 			'İçerik doğrudan kodlanır — yönlendirme servisi yok, süresi dolan bir şey yok, tarama takibi yok.',
+		qrdResult: 'Çözülen içerik',
+		qrdNone:
+			'QR kod bulunamadı — daha net bir görsel kullanın, koda yakın kırpın ve çevresindeki boşluğu koruyun',
+		qrdOpen: 'Bağlantıyı aç',
+		qrdWifiSsid: 'Ağ (SSID)',
+		qrdWifiPass: 'Parola',
+		qrdWifiSec: 'Güvenlik',
+		qrdWifiHidden: 'Gizli ağ',
+		qrdNote:
+			'Tarama tamamen tarayıcınızda gerçekleşir — ne görsel ne de kodun içeriği hiçbir yere yüklenir.',
 		rxPattern: 'Desen',
 		rxTest: 'Test metni',
 		rxTestPh: 'Deseni deneyeceğiniz metni yapıştırın',
@@ -618,6 +628,10 @@ const tr: Messages = {
 		'qr-code-generator': {
 			name: 'QR Kod Üreteci',
 			description: 'SVG veya PNG olarak net QR kodları üretin — filigran yok, yükleme yok'
+		},
+		'qr-code-decoder': {
+			name: 'QR Kod Çözücü',
+			description: 'Görsellerdeki QR kodları okuyun — URL, WiFi ve metin, tamamen çevrimdışı'
 		},
 		'json-to-yaml': {
 			name: 'JSON ↔ YAML ↔ TOML Dönüştürücü',

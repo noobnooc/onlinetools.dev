@@ -313,6 +313,14 @@ const ko: Messages = {
 		qrSvg: 'SVG (벡터, 인쇄용)',
 		qrPng: 'PNG (채팅, 슬라이드)',
 		qrNote: '내용이 직접 인코딩됩니다 — 리디렉션 없음, 만료 없음, 스캔 추적 없음.',
+		qrdResult: '디코딩 결과',
+		qrdNone: 'QR 코드를 찾지 못했습니다 — 더 선명한 이미지를 사용하고, 코드 가까이 자른 뒤 주변 여백을 남겨 주세요',
+		qrdOpen: '링크 열기',
+		qrdWifiSsid: '네트워크 이름 (SSID)',
+		qrdWifiPass: '비밀번호',
+		qrdWifiSec: '보안 방식',
+		qrdWifiHidden: '숨겨진 네트워크',
+		qrdNote: '스캔은 전부 브라우저 안에서 이루어집니다 — 이미지도 코드 내용도 업로드되지 않습니다.',
 		rxPattern: '패턴',
 		rxTest: '테스트 문자열',
 		rxTestPh: '패턴을 시험할 텍스트를 붙여넣기',
@@ -596,6 +604,10 @@ const ko: Messages = {
 		'qr-code-generator': {
 			name: 'QR 코드 생성기',
 			description: '선명한 QR 코드를 SVG/PNG로 생성 — 워터마크 없음, 업로드 없음'
+		},
+		'qr-code-decoder': {
+			name: 'QR 코드 디코더',
+			description: '이미지 속 QR 코드 판독 — URL, WiFi, 텍스트까지 전부 오프라인'
 		},
 		'json-to-yaml': {
 			name: 'JSON ↔ YAML ↔ TOML 변환기',

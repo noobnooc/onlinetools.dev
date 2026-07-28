@@ -313,6 +313,14 @@ const ja: Messages = {
 		qrSvg: 'SVG(ベクター、印刷向け)',
 		qrPng: 'PNG(チャット、スライド)',
 		qrNote: '内容は直接エンコードされます — リダイレクトなし、期限なし、スキャン追跡なし。',
+		qrdResult: '読み取り結果',
+		qrdNone: 'QR コードが見つかりません — より鮮明な画像を使い、コードの近くで切り抜き、周囲の余白を残してください',
+		qrdOpen: 'リンクを開く',
+		qrdWifiSsid: 'ネットワーク名 (SSID)',
+		qrdWifiPass: 'パスワード',
+		qrdWifiSec: 'セキュリティ',
+		qrdWifiHidden: '非公開ネットワーク',
+		qrdNote: '読み取りはすべてブラウザ内で行われます — 画像もコードの内容もアップロードされません。',
 		rxPattern: 'パターン',
 		rxTest: 'テスト文字列',
 		rxTestPh: 'パターンを試すテキストを貼り付け',
@@ -596,6 +604,10 @@ const ja: Messages = {
 		'qr-code-generator': {
 			name: 'QRコードジェネレーター',
 			description: '高精細な QR コードを SVG / PNG で生成 — 透かしなし、アップロードなし'
+		},
+		'qr-code-decoder': {
+			name: 'QRコードリーダー',
+			description: '画像から QR コードを読み取り — URL、WiFi、テキスト、すべてオフライン'
 		},
 		'json-to-yaml': {
 			name: 'JSON ↔ YAML ↔ TOML変換',

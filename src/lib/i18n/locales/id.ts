@@ -344,6 +344,16 @@ const id: Messages = {
 		qrPng: 'PNG (obrolan, salindia)',
 		qrNote:
 			'Kontennya dienkode langsung — tanpa layanan pengalihan, tidak ada yang kedaluwarsa, tanpa pelacakan pemindaian.',
+		qrdResult: 'Konten hasil dekode',
+		qrdNone:
+			'Kode QR tidak ditemukan — gunakan gambar yang lebih tajam, potong lebih dekat ke kode, dan pertahankan margin putih di sekitarnya',
+		qrdOpen: 'Buka tautan',
+		qrdWifiSsid: 'Jaringan (SSID)',
+		qrdWifiPass: 'Kata sandi',
+		qrdWifiSec: 'Keamanan',
+		qrdWifiHidden: 'Jaringan tersembunyi',
+		qrdNote:
+			'Pemindaian sepenuhnya terjadi di browser Anda — gambar maupun isi kode tidak pernah diunggah.',
 		rxPattern: 'Pola',
 		rxTest: 'Teks uji',
 		rxTestPh: 'Tempel teks untuk menguji polanya',
@@ -621,6 +631,10 @@ const id: Messages = {
 		'qr-code-generator': {
 			name: 'Generator Kode QR',
 			description: 'Hasilkan kode QR yang tajam sebagai SVG atau PNG — tanpa watermark, tanpa unggah'
+		},
+		'qr-code-decoder': {
+			name: 'Pendekode Kode QR',
+			description: 'Baca kode QR dari gambar — URL, WiFi, dan teks, sepenuhnya offline'
 		},
 		'json-to-yaml': {
 			name: 'Konverter JSON ↔ YAML ↔ TOML',

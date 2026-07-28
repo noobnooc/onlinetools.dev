@@ -289,7 +289,17 @@ export const TOOLS: ToolMeta[] = [
 		category: 'generators',
 		aliases: ['qr', 'qrcode', 'qr code'],
 		keywords: ['qr code generator', 'free qr code', 'qr code svg', 'url to qr'],
-		related: ['url-parser', 'password-generator', 'uuid-generator', 'image-to-base64', 'slug-generator', 'color-converter']
+		related: ['qr-code-decoder', 'url-parser', 'password-generator', 'uuid-generator', 'image-to-base64', 'slug-generator']
+	},
+	{
+		slug: 'qr-code-decoder',
+		accepts: ['image'],
+		name: 'QR Code Decoder',
+		description: 'Read a QR code from any image — URLs, WiFi credentials and text, offline',
+		category: 'image',
+		aliases: ['qr decode', 'qr reader', 'qr scanner', 'scan qr', 'read qr code'],
+		keywords: ['qr code decoder', 'qr code reader', 'decode qr from image', 'scan qr code online', 'qr to text'],
+		related: ['qr-code-generator', 'exif-viewer', 'image-converter', 'image-to-base64', 'url-parser', 'image-resizer']
 	},
 	{
 		slug: 'json-to-yaml',
@@ -459,7 +469,7 @@ export const TOOLS: ToolMeta[] = [
 		category: 'privacy',
 		aliases: ['exif', 'metadata', 'remove exif', 'exif data', 'image metadata', 'gps location'],
 		keywords: ['exif viewer', 'remove exif data', 'image metadata viewer', 'strip exif online', 'photo gps data'],
-		related: ['image-converter', 'image-resizer', 'image-to-base64', 'favicon-generator', 'hash-generator', 'qr-code-generator']
+		related: ['image-converter', 'image-resizer', 'image-to-base64', 'favicon-generator', 'hash-generator', 'qr-code-decoder']
 	},
 	{
 		slug: 'user-agent-parser',
