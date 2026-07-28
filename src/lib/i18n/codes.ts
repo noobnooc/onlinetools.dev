@@ -12,7 +12,11 @@ export const EXTRA_LOCALES = [
 	'tr',
 	'pl',
 	'vi',
-	'id'
+	'id',
+	'nl',
+	'th',
+	'uk',
+	'hi'
 ] as const;
 export const LOCALES = ['en', ...EXTRA_LOCALES] as const;
 export type Locale = (typeof LOCALES)[number];
@@ -36,7 +40,11 @@ export const OG_LOCALES: Record<Locale, string> = {
 	tr: 'tr_TR',
 	pl: 'pl_PL',
 	vi: 'vi_VN',
-	id: 'id_ID'
+	id: 'id_ID',
+	nl: 'nl_NL',
+	th: 'th_TH',
+	uk: 'uk_UA',
+	hi: 'hi_IN'
 };
 
 /**
@@ -58,5 +66,9 @@ export const LOCALE_NAMES: Record<Locale, string> = {
 	tr: 'Türkçe',
 	pl: 'Polski',
 	vi: 'Tiếng Việt',
-	id: 'Bahasa Indonesia'
+	id: 'Bahasa Indonesia',
+	nl: 'Nederlands',
+	th: 'ไทย',
+	uk: 'Українська',
+	hi: 'हिन्दी'
 };
