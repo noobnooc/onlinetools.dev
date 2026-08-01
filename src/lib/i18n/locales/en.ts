@@ -142,6 +142,8 @@ const en = {
 		faqHeading: 'Frequently asked questions',
 		relatedTools: 'Related tools',
 		breadcrumbTools: 'tools',
+		reportIssue: 'Report an issue',
+		reportIssueTitle: 'Report an issue with {name} on GitHub',
 
 		// Shared tool components
 		sample: 'Sample',

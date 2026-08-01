@@ -5,13 +5,14 @@
 	import type { ToolContent } from '$lib/tools/content';
 	import { iconFor } from '$lib/tools/icons';
 	import { pushRecentTool } from '$lib/state/app.svelte';
+	import { issueUrl } from '$lib/links';
 	import { t, lt, ltCategory, lp, canonical, locale } from '$lib/i18n';
 	import ToolCard from './ToolCard.svelte';
 	import FavoriteButton from './FavoriteButton.svelte';
 	import PlusCorners from './PlusCorners.svelte';
 	import Eyebrow from './Eyebrow.svelte';
 	import SeoHead from './SeoHead.svelte';
-	import { ChevronDown } from 'lucide-svelte';
+	import { ChevronDown, Bug } from 'lucide-svelte';
 
 	interface Props {
 		tool: ToolMeta;
@@ -36,6 +37,7 @@
 	const l10n = $derived(lt(tool));
 	const path = $derived(`/t/${tool.slug}`);
 	const Icon = $derived(iconFor(tool.slug));
+	const reportUrl = $derived(issueUrl(canonical(path)));
 
 	const jsonLd = $derived(
 		JSON.stringify([
@@ -130,9 +132,28 @@
 	</header>
 
 	<!-- The tool itself sits in a framed panel, lifted off the page background. -->
-	<div class="relative mb-12 rounded-(--radius-xl) border border-line bg-surface p-4 shadow-lg shadow-black/[0.03] sm:p-6">
+	<div class="relative mb-2.5 rounded-(--radius-xl) border border-line bg-surface p-4 shadow-lg shadow-black/[0.03] sm:p-6">
 		<PlusCorners />
 		{@render children()}
+	</div>
+
+	<!--
+		The moment a tool gets something wrong is the moment someone is willing to
+		say so, so the reporting link sits with the tool rather than in a footer.
+		Quiet by default — it should be findable, not a call to action competing
+		with the result. Pre-fills the bug form with this page's exact URL.
+	-->
+	<div class="mb-10 flex justify-end">
+		<a
+			href={reportUrl}
+			target="_blank"
+			rel="noopener noreferrer"
+			title={t('reportIssueTitle', { name: l10n.name })}
+			class="inline-flex items-center gap-1.5 font-mono text-[11px] text-dim/70 transition-colors duration-120 hover:text-fg"
+		>
+			<Bug size={12} aria-hidden="true" />
+			{t('reportIssue')}
+		</a>
 	</div>
 
 	<details class="group mb-8 rounded-(--radius-lg) border border-line bg-surface">

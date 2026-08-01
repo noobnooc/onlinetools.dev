@@ -130,6 +130,8 @@ const pt: Messages = {
 		faqHeading: 'Perguntas frequentes',
 		relatedTools: 'Ferramentas relacionadas',
 		breadcrumbTools: 'ferramentas',
+		reportIssue: 'Relatar um problema',
+		reportIssueTitle: 'Relatar um problema com {name} no GitHub',
 		sample: 'Exemplo',
 		line: 'linha',
 		output: 'Resultado',

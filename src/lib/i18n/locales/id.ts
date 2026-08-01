@@ -142,6 +142,8 @@ const id: Messages = {
 		faqHeading: 'Pertanyaan yang sering diajukan',
 		relatedTools: 'Alat terkait',
 		breadcrumbTools: 'alat',
+		reportIssue: 'Laporkan masalah',
+		reportIssueTitle: 'Laporkan masalah {name} di GitHub',
 
 		// Shared tool components
 		sample: 'Contoh',

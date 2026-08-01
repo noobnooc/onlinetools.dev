@@ -128,6 +128,8 @@ const uk: Messages = {
 		faqHeading: 'Часті запитання',
 		relatedTools: 'Пов’язані інструменти',
 		breadcrumbTools: 'інструменти',
+		reportIssue: 'Повідомити про проблему',
+		reportIssueTitle: 'Повідомити про проблему з «{name}» на GitHub',
 
 		sample: 'Приклад',
 		line: 'рядок',

@@ -182,6 +182,8 @@ goes out. See the [roadmap](README.md#roadmap) for what's being considered.
 
 ### Added
 
+- A "Report an issue" link on every tool page, opening the GitHub bug form with
+  that tool's URL already filled in. Localized in all 18 languages.
 - Tool pipelines (`/chain`) — compose tools into a recipe, with five curated,
   individually indexable preset workflows.
 - A paste-first homepage workbench.

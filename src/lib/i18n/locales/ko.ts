@@ -130,6 +130,8 @@ const ko: Messages = {
 		faqHeading: '자주 묻는 질문',
 		relatedTools: '관련 도구',
 		breadcrumbTools: '도구',
+		reportIssue: '문제 신고',
+		reportIssueTitle: 'GitHub에서 {name} 문제 신고하기',
 		sample: '샘플',
 		line: '행',
 		output: '출력',
