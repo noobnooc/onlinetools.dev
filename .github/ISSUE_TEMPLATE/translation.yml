@@ -1,0 +1,65 @@
+name: 🌍 Translation or copy issue
+description: A string reads badly, is wrong, overflows — or you want to add a language
+labels: ['i18n']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The site ships in 18 languages, and a native speaker's eye is worth more
+        than any amount of review. Small corrections are extremely welcome — you
+        don't need to fix a whole locale.
+
+        Happy to take this straight as a PR instead:
+        [docs/i18n.md](https://github.com/noobnooc/onlinetools.dev/blob/main/docs/i18n.md).
+
+  - type: input
+    id: locale
+    attributes:
+      label: Language
+      description: Code and name — or the language you'd like to add.
+      placeholder: de — Deutsch
+    validations:
+      required: true
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of issue?
+      options:
+        - Wrong or unnatural translation
+        - Untranslated text (still in English)
+        - Text overflows, wraps or is cut off
+        - Wrong typography or punctuation for this language
+        - Request to add a new language
+        - Something else
+    validations:
+      required: true
+
+  - type: textarea
+    id: where
+    attributes:
+      label: Where is it?
+      description: The URL, and what's on screen — a screenshot is ideal.
+      placeholder: https://onlinetools.dev/de/t/string-escape — the "Escape" control label
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Current text → what it should say
+      placeholder: |
+        Current:  "Flucht"     (the escaping-from-prison sense)
+        Better:   "Maskieren"
+      render: text
+
+  - type: dropdown
+    id: native
+    attributes:
+      label: Do you speak this language natively or fluently?
+      description: We only ship languages a real speaker has checked — machine-translated locales are worse than none.
+      options:
+        - 'Yes'
+        - 'No, but I have a source for the correction'
+    validations:
+      required: true
