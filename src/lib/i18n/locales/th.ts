@@ -127,6 +127,8 @@ const th: Messages = {
 		faqHeading: 'คำถามที่พบบ่อย',
 		relatedTools: 'เครื่องมือที่เกี่ยวข้อง',
 		breadcrumbTools: 'เครื่องมือ',
+		reportIssue: 'รายงานปัญหา',
+		reportIssueTitle: 'รายงานปัญหาของ {name} บน GitHub',
 
 		sample: 'ตัวอย่าง',
 		line: 'บรรทัด',

@@ -130,6 +130,8 @@ const es: Messages = {
 		faqHeading: 'Preguntas frecuentes',
 		relatedTools: 'Herramientas relacionadas',
 		breadcrumbTools: 'herramientas',
+		reportIssue: 'Informar de un problema',
+		reportIssueTitle: 'Informar de un problema con {name} en GitHub',
 		sample: 'Ejemplo',
 		line: 'línea',
 		output: 'Resultado',

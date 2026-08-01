@@ -130,6 +130,8 @@ const ru: Messages = {
 		faqHeading: 'Частые вопросы',
 		relatedTools: 'Похожие инструменты',
 		breadcrumbTools: 'инструменты',
+		reportIssue: 'Сообщить о проблеме',
+		reportIssueTitle: 'Сообщить о проблеме с «{name}» на GitHub',
 		sample: 'Пример',
 		line: 'строка',
 		output: 'Результат',

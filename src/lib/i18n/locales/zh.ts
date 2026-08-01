@@ -128,6 +128,8 @@ const zh: Messages = {
 		faqHeading: '常见问题',
 		relatedTools: '相关工具',
 		breadcrumbTools: '工具',
+		reportIssue: '报告问题',
+		reportIssueTitle: '在 GitHub 上报告「{name}」的问题',
 		sample: '示例',
 		line: '行',
 		output: '输出',

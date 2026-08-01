@@ -127,6 +127,8 @@ const hi: Messages = {
 		faqHeading: 'अक्सर पूछे जाने वाले प्रश्न',
 		relatedTools: 'संबंधित टूल',
 		breadcrumbTools: 'टूल',
+		reportIssue: 'समस्या की रिपोर्ट करें',
+		reportIssueTitle: 'GitHub पर {name} से जुड़ी समस्या की रिपोर्ट करें',
 
 		sample: 'नमूना',
 		line: 'पंक्ति',

@@ -138,6 +138,8 @@ const tr: Messages = {
 		faqHeading: 'Sıkça sorulan sorular',
 		relatedTools: 'İlgili araçlar',
 		breadcrumbTools: 'araçlar',
+		reportIssue: 'Sorun bildir',
+		reportIssueTitle: "{name} ile ilgili bir sorunu GitHub'da bildir",
 
 		// Shared tool components
 		sample: 'Örnek',

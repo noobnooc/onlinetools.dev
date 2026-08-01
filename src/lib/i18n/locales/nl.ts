@@ -128,6 +128,8 @@ const nl: Messages = {
 		faqHeading: 'Veelgestelde vragen',
 		relatedTools: 'Gerelateerde tools',
 		breadcrumbTools: 'tools',
+		reportIssue: 'Probleem melden',
+		reportIssueTitle: 'Meld een probleem met {name} op GitHub',
 
 		sample: 'Voorbeeld',
 		line: 'regel',

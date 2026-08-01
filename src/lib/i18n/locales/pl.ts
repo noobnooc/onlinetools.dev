@@ -143,6 +143,8 @@ const pl: Messages = {
 		faqHeading: 'Często zadawane pytania',
 		relatedTools: 'Powiązane narzędzia',
 		breadcrumbTools: 'narzędzia',
+		reportIssue: 'Zgłoś problem',
+		reportIssueTitle: 'Zgłoś problem z {name} na GitHubie',
 
 		// Shared tool components
 		sample: 'Przykład',

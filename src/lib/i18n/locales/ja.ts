@@ -130,6 +130,8 @@ const ja: Messages = {
 		faqHeading: 'よくある質問',
 		relatedTools: '関連ツール',
 		breadcrumbTools: 'ツール',
+		reportIssue: '問題を報告',
+		reportIssueTitle: '{name} の問題を GitHub で報告する',
 		sample: 'サンプル',
 		line: '行',
 		output: '出力',

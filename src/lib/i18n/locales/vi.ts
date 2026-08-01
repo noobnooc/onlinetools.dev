@@ -143,6 +143,8 @@ const vi: Messages = {
 		faqHeading: 'Câu hỏi thường gặp',
 		relatedTools: 'Công cụ liên quan',
 		breadcrumbTools: 'công cụ',
+		reportIssue: 'Báo lỗi',
+		reportIssueTitle: 'Báo lỗi của {name} trên GitHub',
 
 		// Shared tool components
 		sample: 'Mẫu',
