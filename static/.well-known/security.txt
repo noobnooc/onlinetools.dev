@@ -1,8 +1,9 @@
-Contact: https://github.com/noobnooc/onlinetools.dev/issues
+Contact: https://github.com/noobnooc/onlinetools.dev/security/advisories/new
+Contact: mailto:nooc@nooc.me
 Expires: 2027-07-25T00:00:00.000Z
 Preferred-Languages: en, zh
 Canonical: https://onlinetools.dev/.well-known/security.txt
-Policy: https://github.com/noobnooc/onlinetools.dev/blob/main/README.md
+Policy: https://github.com/noobnooc/onlinetools.dev/blob/main/SECURITY.md
 
 # onlinetools.dev runs entirely in the browser: there is no backend, no
 # account system and no analytics, so there is no server-side data to breach.

@@ -1,0 +1,68 @@
+name: 🔧 Tool proposal
+description: Suggest a new tool, or a new capability for an existing one
+labels: ['tool proposal']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please open this **before** building — scope is much cheaper to settle
+        before the code exists. See
+        [docs/adding-a-tool.md](https://github.com/noobnooc/onlinetools.dev/blob/main/docs/adding-a-tool.md)
+        for what building one involves.
+
+  - type: input
+    id: name
+    attributes:
+      label: What's the tool?
+      placeholder: ROT13 / ROT47 encoder
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: When would you reach for it?
+      description: A real moment from your own week beats a category. What do you do today instead?
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Does it fit the constraints?
+      description: |
+        Every tool here runs entirely in the browser. Tools needing a server, an
+        API key, or someone else's dataset are out of scope by design.
+      options:
+        - label: It can compute its result entirely in the browser — no API, no remote dataset
+          required: true
+        - label: It needs no new dependency, or only a permissively licensed one (no (A)GPL)
+        - label: I searched existing issues and the 44 shipped tools first
+          required: true
+
+  - type: textarea
+    id: shape
+    attributes:
+      label: Rough shape
+      description: Inputs, options, output. What does a good result look like?
+      placeholder: |
+        Input: any text
+        Options: ROT13 (letters) / ROT47 (printable ASCII)
+        Output: transformed text — the operation is its own inverse, so no direction switch
+
+  - type: textarea
+    id: prior-art
+    attributes:
+      label: Prior art, and what's wrong with it
+      description: Links to how other sites do it. What do they get wrong — uploads, ads, Unicode handling, missing edge cases?
+
+  - type: dropdown
+    id: help
+    attributes:
+      label: Would you like to build it?
+      options:
+        - Yes, if the proposal is accepted
+        - I'd like to, but I'd need pointers
+        - No, just suggesting
+    validations:
+      required: true

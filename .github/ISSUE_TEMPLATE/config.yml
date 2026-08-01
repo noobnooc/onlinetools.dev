@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 🔒 Report a security vulnerability
+    url: https://github.com/noobnooc/onlinetools.dev/security/advisories/new
+    about: Please report privately, not as a public issue. See SECURITY.md for what's in scope.
+  - name: 📖 Contributing guide
+    url: https://github.com/noobnooc/onlinetools.dev/blob/main/CONTRIBUTING.md
+    about: Setup, conventions, and the invariants a PR needs to respect.
+  - name: 🛠 Adding a tool
+    url: https://github.com/noobnooc/onlinetools.dev/blob/main/docs/adding-a-tool.md
+    about: The full walkthrough, from pure logic to the page copy.

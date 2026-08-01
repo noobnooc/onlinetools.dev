@@ -1,0 +1,65 @@
+name: 🐛 Bug report
+description: A tool gives the wrong answer, breaks, or looks wrong
+labels: ['bug']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. The most useful bug report is one someone else can
+        reproduce in ten seconds — the exact input beats any description of it.
+
+        **Please don't paste real secrets.** Tokens, passwords and personal data
+        stay private on the site, but a GitHub issue is public forever. Redact
+        first, or reproduce with a fake value.
+
+  - type: input
+    id: tool
+    attributes:
+      label: Which tool?
+      description: The URL, or the tool name.
+      placeholder: https://onlinetools.dev/t/json-formatter
+    validations:
+      required: true
+
+  - type: textarea
+    id: input
+    attributes:
+      label: Input that triggers it
+      description: The smallest input that still shows the problem. A share link (the 🔗 button) works too.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What should have happened, and what happened instead
+      placeholder: |
+        Expected: the trailing comma is flagged at line 4, column 12
+        Actual: "Unexpected token" with no position
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Browser and OS
+      placeholder: Firefox 141 on Ubuntu 24.04 / Safari on iOS 19
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before you file
+      options:
+        - label: I searched existing issues and this isn't a duplicate
+          required: true
+        - label: My input contains no real secrets or personal data
+          required: true
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else
+      description: Screenshots, console errors, whether it also happens in another browser.
