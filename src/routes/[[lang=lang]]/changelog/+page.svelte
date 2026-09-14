@@ -16,6 +16,29 @@
 	<div lang="en">
 	<section class="relative border-l border-line pb-8 pl-6">
 		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full bg-accent" aria-hidden="true"></span>
+		<h2 class="text-sm font-medium">Remove a background without uploading the photo</h2>
+		<p class="mt-0.5 font-mono text-xs text-dim">v2026.09.14</p>
+		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
+			<li>
+				New <a href={lp('/t/background-remover')} class="text-accent hover:underline">Background
+				Remover</a>: drop a photo and the subject is cut out automatically — download a transparent
+				PNG or WebP, or flatten it onto a color and export a JPEG, all at the original resolution.
+			</li>
+			<li>
+				It runs a U²-Net segmentation model through ONNX Runtime in WebAssembly, right in the page.
+				The first use fetches the runtime and the 4.6 MB model from this site (about 19 MB); after
+				that both are cached and it works offline.
+			</li>
+			<li>
+				No upload, no signup, no credits, no watermark — and no resolution cap beyond what your
+				browser can decode. Fine edges like hair are approximate; it is at its best with one subject
+				that stands out from the background.
+			</li>
+		</ul>
+	</section>
+
+	<section class="relative border-l border-line pb-8 pl-6">
+		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
 		<h2 class="text-sm font-medium">Read QR codes, not just make them</h2>
 		<p class="mt-0.5 font-mono text-xs text-dim">v2026.07.28</p>
 		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">

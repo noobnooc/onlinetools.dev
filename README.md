@@ -4,7 +4,7 @@
 
 # onlinetools.dev
 
-**44 developer tools that run entirely in your browser.**
+**45 developer tools that run entirely in your browser.**
 No upload, no login, no ads, no trackers — and you can verify it.
 
 [**onlinetools.dev**](https://onlinetools.dev) · [Why this exists](https://onlinetools.dev/about) · [Changelog](https://onlinetools.dev/changelog) · [Contributing](CONTRIBUTING.md)
@@ -102,13 +102,14 @@ That single constraint shapes everything else:
 </details>
 
 <details>
-<summary><b>Image</b> (5)</summary>
+<summary><b>Image</b> (6)</summary>
 
 | Tool | What it does |
 | --- | --- |
 | [Image ↔ Base64 Converter](https://onlinetools.dev/t/image-to-base64) | Turn images into Base64 data URLs and back — with CSS and HTML snippets |
 | [Image Format Converter](https://onlinetools.dev/t/image-converter) | Convert images between PNG, JPEG and WebP with a quality dial |
 | [Image Resizer](https://onlinetools.dev/t/image-resizer) | Resize images by width, height or percentage — sharp and entirely offline |
+| [Background Remover](https://onlinetools.dev/t/background-remover) | Remove the background from any photo — free, in your browser, no upload |
 | [Favicon Generator](https://onlinetools.dev/t/favicon-generator) | Turn any image into `favicon.ico` plus the full PNG and manifest icon set |
 | [QR Code Decoder](https://onlinetools.dev/t/qr-code-decoder) | Read QR codes from images or live camera — URLs, WiFi and text, offline |
 

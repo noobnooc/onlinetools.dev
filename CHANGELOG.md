@@ -11,6 +11,25 @@ the footer badge and every `<lastmod>` in the sitemap.
 
 ---
 
+## [2026.09.14] — Remove a background without uploading the photo
+
+### Added
+
+- **Background Remover** — drop a photo and the subject is cut out
+  automatically. Download a transparent PNG or WebP, or flatten it onto a
+  solid color and export a JPEG, at the original resolution.
+- It runs U²-Net (the model behind `rembg`) through ONNX Runtime compiled to
+  WebAssembly, in the page. The runtime and the 4.6 MB model are fetched from
+  this site once and cached by the browser; later runs work offline.
+- About & FAQ copy in English and Chinese; the tool's name, description and
+  labels in all eighteen languages.
+
+### Notes
+
+- The Content-Security-Policy now carries `'wasm-unsafe-eval'` in
+  `script-src` so WebAssembly can compile. Unlike `'unsafe-eval'` it permits
+  no JavaScript `eval`.
+
 ## [2026.07.28] — Read QR codes, not just make them
 
 ### Added

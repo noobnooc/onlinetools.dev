@@ -246,6 +246,22 @@ const ja: Messages = {
 		fgHtml: 'HTML <link> タグ',
 		fgSmall: '元画像は {px}px です — それを超えるサイズは拡大され、ぼやける可能性があります',
 		fgNote: 'ICO には 16・32・48 px を格納。Apple タッチアイコンは透過不可のため選択した背景色に合成され、PWA アイコンはアルファを保持します。正方形でない元画像は中央でトリミングされます。',
+		// Background remover
+		brBackground: '背景',
+		brTransparent: '透明',
+		brColor: '単色',
+		brFormat: '形式',
+		brDownloading: 'モデルをダウンロード中…',
+		brFirstLoad: 'ランタイムとモデルは初回のみ取得され(約 19 MB)、以後はブラウザにキャッシュされます。',
+		brStarting: 'モデルを起動中…',
+		brRunning: '被写体を検出中…',
+		brResult: '切り抜き',
+		brSubject: '被写体の割合',
+		brTime: '処理時間 {s} 秒',
+		brErrLoad: 'モデルを読み込めませんでした — 接続を確認して再試行してください',
+		brErrRun: 'モデルはこの画像を処理できませんでした',
+		brErrFlat: '被写体が見つかりません — 背景から際立つものがこの画像にはありません',
+		brNote: 'U²-Net モデルがブラウザ内で 320 px で動作し、マスクを元のサイズに拡大するため、髪の毛などの細部の輪郭は近似になります。背景から際立つ被写体が 1 つある場合に最も効果的です。',
 		irBy: 'リサイズ基準',
 		irWidth: '幅',
 		irHeight: '高さ',
@@ -637,6 +653,10 @@ const ja: Messages = {
 		'user-agent-parser': {
 			name: 'User-Agentパーサー',
 			description: 'UA 文字列からブラウザ・エンジン・OS・デバイスを判定'
+		},
+		'background-remover': {
+			name: '背景リムーバー',
+			description: '写真の背景を自動で削除 — 無料、ブラウザ内で処理、アップロードなし'
 		},
 		'image-to-base64': {
 			name: '画像 ↔ Base64 変換',

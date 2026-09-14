@@ -45,6 +45,7 @@
 		"js-beautify": "^2.0.3",
 		"jsqr": "^1.4.0",
 		"marked": "^18.0.7",
+		"onnxruntime-web": "1.29.0",
 		"qrcode-generator": "^2.0.4",
 		"smol-toml": "^1.7.0",
 		"sql-formatter": "^15.8.2",

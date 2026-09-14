@@ -306,7 +306,7 @@ tl: {
 ```
 
 Prefix tool-specific keys with a short tool name (`rot13…`, `b64…`, `uuid…`) —
-`tl` is one flat namespace shared by all 44 tools, so bare words like `mode` or
+`tl` is one flat namespace shared by all 45 tools, so bare words like `mode` or
 `count` are already taken as *shared* labels. Reuse those where they fit.
 
 The `Messages` type is derived from `en`, so **every other locale file must
@@ -380,7 +380,7 @@ for ("decode a JWT and read its payload"), not the individual tool.
 
 [ ] pnpm test    passes
 [ ] pnpm check   0 errors
-[ ] pnpm build   prerenders (44 tools × 18 locales — a bad link fails the build)
+[ ] pnpm build   prerenders (45 tools × 18 locales — a bad link fails the build)
 [ ] Works offline: load the page, kill the network, use the tool
 [ ] Both themes, keyboard reachable, visible focus
 [ ] ⌘K finds it by name and by alias

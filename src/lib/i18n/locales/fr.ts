@@ -246,6 +246,22 @@ const fr: Messages = {
 		fgHtml: 'Balises <link> HTML',
 		fgSmall: 'La source fait {px}px — les icônes plus grandes seront agrandies et pourront paraître floues',
 		fgNote: 'L’ICO contient 16, 32 et 48 px. L’icône tactile Apple ne peut pas être transparente : elle est aplatie sur le fond choisi ; les icônes PWA gardent leur alpha. Les sources non carrées sont recadrées au centre.',
+		// Background remover
+		brBackground: 'Arrière-plan',
+		brTransparent: 'Transparent',
+		brColor: 'Couleur',
+		brFormat: 'Format',
+		brDownloading: 'Téléchargement du modèle…',
+		brFirstLoad: 'Le runtime et le modèle ne sont téléchargés qu\'une fois (environ 19 Mo), puis mis en cache par le navigateur.',
+		brStarting: 'Démarrage du modèle…',
+		brRunning: 'Recherche du sujet…',
+		brResult: 'Détourage',
+		brSubject: 'Sujet',
+		brTime: 'calculé en {s} s',
+		brErrLoad: 'Impossible de charger le modèle — vérifiez votre connexion et réessayez',
+		brErrRun: 'Le modèle n\'a pas pu traiter cette image',
+		brErrFlat: 'Aucun sujet trouvé — rien ne se détache de l\'arrière-plan dans cette image',
+		brNote: 'Un modèle U²-Net s\'exécute à 320 px dans votre navigateur et le masque est remis à l\'échelle d\'origine : les contours fins comme les cheveux sont approximatifs. Fonctionne mieux quand un seul sujet se détache de l\'arrière-plan.',
 		irBy: 'Redimensionner par',
 		irWidth: 'Largeur',
 		irHeight: 'Hauteur',
@@ -637,6 +653,10 @@ const fr: Messages = {
 		'user-agent-parser': {
 			name: 'Analyseur de User-Agent',
 			description: 'Identifiez navigateur, moteur, OS et appareil depuis une chaîne User-Agent'
+		},
+		'background-remover': {
+			name: 'Suppression d\'arrière-plan',
+			description: 'Supprimez l\'arrière-plan d\'une photo gratuitement — dans votre navigateur, sans envoi'
 		},
 		'image-to-base64': {
 			name: 'Convertisseur image ↔ Base64',

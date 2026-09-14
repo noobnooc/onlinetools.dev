@@ -243,6 +243,22 @@ const zh: Messages = {
 		fgHtml: 'HTML <link> 标签',
 		fgSmall: '源图为 {px}px — 超过该尺寸的图标将被放大,可能发虚',
 		fgNote: 'ICO 内打包 16、32、48 px。Apple 触摸图标不支持透明,会压平到所选背景色上;PWA 图标保留透明通道。非正方形的源图会居中裁剪。',
+		// Background remover
+		brBackground: '背景',
+		brTransparent: '透明',
+		brColor: '纯色',
+		brFormat: '格式',
+		brDownloading: '正在下载模型…',
+		brFirstLoad: '运行时与模型只需下载一次(约 19 MB),之后由浏览器缓存。',
+		brStarting: '正在启动模型…',
+		brRunning: '正在识别主体…',
+		brResult: '抠图结果',
+		brSubject: '主体占比',
+		brTime: '计算耗时 {s} 秒',
+		brErrLoad: '模型加载失败 — 请检查网络后重试',
+		brErrRun: '模型无法处理这张图片',
+		brErrFlat: '未找到主体 — 图中没有明显区别于背景的对象',
+		brNote: 'U²-Net 模型在浏览器内以 320 px 运行,再把蒙版放大回原尺寸,因此头发等细微边缘只是近似。当画面中有一个与背景对比明显的主体时效果最好。',
 		irBy: '缩放方式',
 		irWidth: '宽度',
 		irHeight: '高度',
@@ -639,6 +655,10 @@ const zh: Messages = {
 		'user-agent-parser': {
 			name: 'User-Agent 解析器',
 			description: '从 UA 字符串识别浏览器、内核、操作系统与设备'
+		},
+		'background-remover': {
+			name: '图片背景移除',
+			description: '免费在线抠图:自动去除照片背景 — 浏览器本地处理,不上传'
 		},
 		'image-to-base64': {
 			name: '图片 ↔ Base64 转换',

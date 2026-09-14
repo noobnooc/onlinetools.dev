@@ -64,6 +64,16 @@ export const TOOLS: ToolMeta[] = [
 		related: ['url-encode-decode', 'jwt-decoder', 'json-formatter', 'hash-generator', 'uuid-generator', 'image-to-base64']
 	},
 	{
+		slug: 'background-remover',
+		accepts: ['image'],
+		name: 'Background Remover',
+		description: 'Remove the background from any photo — free, in your browser, no upload',
+		category: 'image',
+		aliases: ['remove background', 'remove bg', 'background eraser', 'transparent background', 'cut out image', 'remove.bg alternative', 'png background remover', 'image background remover'],
+		keywords: ['remove background from image', 'background remover free', 'remove bg', 'transparent background maker', 'photo background remover online', 'remove image background'],
+		related: ['image-resizer', 'image-converter', 'image-to-base64', 'favicon-generator', 'exif-viewer', 'color-converter']
+	},
+	{
 		slug: 'image-to-base64',
 		accepts: ['image', 'image-data-url', 'base64'],
 		name: 'Image ↔ Base64 Converter',
@@ -71,7 +81,7 @@ export const TOOLS: ToolMeta[] = [
 		category: 'image',
 		aliases: ['image to base64', 'base64 image', 'data url', 'data uri', 'img to base64'],
 		keywords: ['image to base64', 'base64 to image', 'data url generator', 'image data uri'],
-		related: ['image-converter', 'image-resizer', 'favicon-generator', 'base64-decode', 'qr-code-generator', 'color-converter']
+		related: ['image-converter', 'image-resizer', 'background-remover', 'favicon-generator', 'base64-decode', 'qr-code-generator']
 	},
 	{
 		slug: 'image-converter',
@@ -81,7 +91,7 @@ export const TOOLS: ToolMeta[] = [
 		category: 'image',
 		aliases: ['png to webp', 'jpg to png', 'webp converter', 'convert image', 'image format'],
 		keywords: ['image converter', 'png to webp', 'jpeg to webp', 'webp to png', 'convert image online'],
-		related: ['image-resizer', 'image-to-base64', 'favicon-generator', 'qr-code-generator', 'color-converter', 'base64-decode']
+		related: ['image-resizer', 'background-remover', 'image-to-base64', 'favicon-generator', 'qr-code-generator', 'color-converter']
 	},
 	{
 		slug: 'image-resizer',
@@ -91,7 +101,7 @@ export const TOOLS: ToolMeta[] = [
 		category: 'image',
 		aliases: ['resize image', 'image resize', 'scale image', 'shrink image', 'image compressor'],
 		keywords: ['image resizer', 'resize image online', 'scale image', 'compress image'],
-		related: ['image-converter', 'image-to-base64', 'favicon-generator', 'qr-code-generator', 'color-converter', 'base64-decode']
+		related: ['image-converter', 'background-remover', 'image-to-base64', 'favicon-generator', 'qr-code-generator', 'color-converter']
 	},
 	{
 		slug: 'favicon-generator',
@@ -101,7 +111,7 @@ export const TOOLS: ToolMeta[] = [
 		category: 'image',
 		aliases: ['favicon', 'ico', 'png to ico', 'favicon.ico', 'apple touch icon'],
 		keywords: ['favicon generator', 'png to ico', 'favicon.ico generator', 'apple touch icon generator'],
-		related: ['image-resizer', 'image-converter', 'image-to-base64', 'qr-code-generator', 'color-converter', 'slug-generator']
+		related: ['image-resizer', 'image-converter', 'background-remover', 'image-to-base64', 'qr-code-generator', 'color-converter']
 	},
 	{
 		slug: 'timestamp-converter',
@@ -469,7 +479,7 @@ export const TOOLS: ToolMeta[] = [
 		category: 'privacy',
 		aliases: ['exif', 'metadata', 'remove exif', 'exif data', 'image metadata', 'gps location'],
 		keywords: ['exif viewer', 'remove exif data', 'image metadata viewer', 'strip exif online', 'photo gps data'],
-		related: ['image-converter', 'image-resizer', 'image-to-base64', 'favicon-generator', 'hash-generator', 'qr-code-decoder']
+		related: ['image-converter', 'image-resizer', 'background-remover', 'image-to-base64', 'favicon-generator', 'hash-generator']
 	},
 	{
 		slug: 'user-agent-parser',

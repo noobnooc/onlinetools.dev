@@ -36,6 +36,7 @@ export const TOOL_COMPONENTS: Record<string, () => Promise<{ default: Component 
 	'image-to-base64': () => import('./ImageBase64Tool.svelte'),
 	'image-converter': () => import('./ImageConvertTool.svelte'),
 	'image-resizer': () => import('./ImageResizeTool.svelte'),
+	'background-remover': () => import('./BackgroundRemoverTool.svelte'),
 	'favicon-generator': () => import('./FaviconTool.svelte'),
 	'sql-formatter': () => import('./SqlFormatterTool.svelte'),
 	'xml-formatter': () => import('./XmlFormatterTool.svelte'),

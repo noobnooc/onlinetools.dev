@@ -246,6 +246,22 @@ const de: Messages = {
 		fgHtml: 'HTML-<link>-Tags',
 		fgSmall: 'Quelle ist {px}px — größere Icons werden hochskaliert und können weich wirken',
 		fgNote: 'Das ICO packt 16, 32 und 48 px. Apple-Touch-Icons können nicht transparent sein und werden auf die gewählte Hintergrundfarbe reduziert; PWA-Icons behalten ihren Alphakanal. Nicht-quadratische Quellen werden mittig zugeschnitten.',
+		// Background remover
+		brBackground: 'Hintergrund',
+		brTransparent: 'Transparent',
+		brColor: 'Farbe',
+		brFormat: 'Format',
+		brDownloading: 'Modell wird geladen…',
+		brFirstLoad: 'Laufzeit und Modell werden nur einmal geladen (etwa 19 MB) und danach vom Browser zwischengespeichert.',
+		brStarting: 'Modell wird gestartet…',
+		brRunning: 'Motiv wird gesucht…',
+		brResult: 'Freisteller',
+		brSubject: 'Motiv',
+		brTime: 'in {s} s berechnet',
+		brErrLoad: 'Modell konnte nicht geladen werden — Verbindung prüfen und erneut versuchen',
+		brErrRun: 'Das Modell konnte dieses Bild nicht verarbeiten',
+		brErrFlat: 'Kein Motiv gefunden — nichts hebt sich in diesem Bild vom Hintergrund ab',
+		brNote: 'Ein U²-Net-Modell läuft mit 320 px im Browser, die Maske wird auf Originalgröße skaliert — feine Kanten wie Haare sind daher nur angenähert. Am besten funktioniert es, wenn sich ein Motiv klar vom Hintergrund abhebt.',
 		irBy: 'Skalieren nach',
 		irWidth: 'Breite',
 		irHeight: 'Höhe',
@@ -642,6 +658,10 @@ const de: Messages = {
 		'user-agent-parser': {
 			name: 'User-Agent-Parser',
 			description: 'Browser, Engine, OS und Gerät aus einem User-Agent-String erkennen'
+		},
+		'background-remover': {
+			name: 'Hintergrund entfernen',
+			description: 'Entferne den Hintergrund eines Fotos kostenlos — im Browser, ohne Upload'
 		},
 		'image-to-base64': {
 			name: 'Bild ↔ Base64 Konverter',

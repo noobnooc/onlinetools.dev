@@ -246,6 +246,22 @@ const pt: Messages = {
 		fgHtml: 'Tags <link> HTML',
 		fgSmall: 'A origem tem {px}px — ícones maiores serão ampliados e podem ficar borrados',
 		fgNote: 'O ICO empacota 16, 32 e 48 px. O ícone de toque da Apple não aceita transparência e é achatado sobre o fundo escolhido; os ícones PWA mantêm o alfa. Origens não quadradas são cortadas ao centro.',
+		// Background remover
+		brBackground: 'Fundo',
+		brTransparent: 'Transparente',
+		brColor: 'Cor',
+		brFormat: 'Formato',
+		brDownloading: 'Baixando o modelo…',
+		brFirstLoad: 'O runtime e o modelo são baixados uma única vez (cerca de 19 MB) e depois ficam no cache do navegador.',
+		brStarting: 'Iniciando o modelo…',
+		brRunning: 'Procurando o assunto…',
+		brResult: 'Recorte',
+		brSubject: 'Assunto',
+		brTime: 'calculado em {s} s',
+		brErrLoad: 'Não foi possível carregar o modelo — verifique a conexão e tente de novo',
+		brErrRun: 'O modelo não conseguiu processar esta imagem',
+		brErrFlat: 'Nenhum assunto encontrado — nada nesta imagem se destaca do fundo',
+		brNote: 'Um modelo U²-Net roda a 320 px no seu navegador e a máscara é redimensionada ao tamanho original, então bordas finas como cabelo são aproximadas. Funciona melhor quando um único assunto se destaca do fundo.',
 		irBy: 'Redimensionar por',
 		irWidth: 'Largura',
 		irHeight: 'Altura',
@@ -637,6 +653,10 @@ const pt: Messages = {
 		'user-agent-parser': {
 			name: 'Analisador de User-Agent',
 			description: 'Identifique navegador, engine, SO e dispositivo a partir de uma string User-Agent'
+		},
+		'background-remover': {
+			name: 'Remover fundo de imagem',
+			description: 'Remova o fundo de qualquer foto grátis — no seu navegador, sem upload'
 		},
 		'image-to-base64': {
 			name: 'Conversor imagem ↔ Base64',

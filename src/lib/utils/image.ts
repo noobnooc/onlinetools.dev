@@ -85,6 +85,19 @@ export async function encodeImage(
 	ctx.imageSmoothingEnabled = true;
 	ctx.imageSmoothingQuality = 'high';
 	ctx.drawImage(img, 0, 0, width, height);
+	return encodeCanvas(canvas, target, quality);
+}
+
+/**
+ * Encode an already-drawn canvas. Fails when the browser cannot encode the
+ * target format (the canvas then silently falls back to PNG — detected via
+ * the result's actual mime).
+ */
+export async function encodeCanvas(
+	canvas: HTMLCanvasElement,
+	target: EncodeKind,
+	quality: number
+): Promise<ToolResult<EncodedImage>> {
 	const mime = IMAGE_MIME[target];
 	const blob = await new Promise<Blob | null>((resolve) =>
 		canvas.toBlob(resolve, mime, quality / 100)
@@ -92,7 +105,7 @@ export async function encodeImage(
 	if (!blob) return err('cannotEncode');
 	if (blob.type !== mime) return err('formatUnsupported');
 	const dataUrl = canvas.toDataURL(mime, quality / 100);
-	return ok({ blob, dataUrl, width, height });
+	return ok({ blob, dataUrl, width: canvas.width, height: canvas.height });
 }
 
 /** Load a data URL into an <img> element for repeated canvas drawing. */
