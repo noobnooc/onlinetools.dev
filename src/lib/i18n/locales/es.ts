@@ -246,6 +246,22 @@ const es: Messages = {
 		fgHtml: 'Etiquetas <link> HTML',
 		fgSmall: 'La fuente es de {px}px — los iconos mayores se ampliarán y pueden verse borrosos',
 		fgNote: 'El ICO empaqueta 16, 32 y 48 px. El icono táctil de Apple no admite transparencia, así que se aplana sobre el fondo elegido; los iconos PWA conservan su alfa. Las fuentes no cuadradas se recortan al centro.',
+		// Background remover
+		brBackground: 'Fondo',
+		brTransparent: 'Transparente',
+		brColor: 'Color',
+		brFormat: 'Formato',
+		brDownloading: 'Descargando el modelo…',
+		brFirstLoad: 'El runtime y el modelo se descargan una sola vez (unos 19 MB) y luego quedan en la caché del navegador.',
+		brStarting: 'Iniciando el modelo…',
+		brRunning: 'Buscando el sujeto…',
+		brResult: 'Recorte',
+		brSubject: 'Sujeto',
+		brTime: 'calculado en {s} s',
+		brErrLoad: 'No se pudo cargar el modelo — comprueba tu conexión e inténtalo de nuevo',
+		brErrRun: 'El modelo no pudo procesar esta imagen',
+		brErrFlat: 'No se encontró ningún sujeto — nada en esta imagen destaca sobre el fondo',
+		brNote: 'Un modelo U²-Net se ejecuta a 320 px en tu navegador y la máscara se reescala al tamaño original, así que los bordes finos como el pelo son aproximados. Funciona mejor cuando un solo sujeto destaca sobre el fondo.',
 		irBy: 'Redimensionar por',
 		irWidth: 'Ancho',
 		irHeight: 'Alto',
@@ -637,6 +653,10 @@ const es: Messages = {
 		'user-agent-parser': {
 			name: 'Analizador de User-Agent',
 			description: 'Identifica navegador, motor, SO y dispositivo desde una cadena User-Agent'
+		},
+		'background-remover': {
+			name: 'Eliminar fondo de imagen',
+			description: 'Quita el fondo de cualquier foto gratis — en tu navegador, sin subir nada'
 		},
 		'image-to-base64': {
 			name: 'Conversor imagen ↔ Base64',

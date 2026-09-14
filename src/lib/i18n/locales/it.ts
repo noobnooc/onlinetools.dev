@@ -246,6 +246,22 @@ const it: Messages = {
 		fgHtml: 'Tag <link> HTML',
 		fgSmall: 'La sorgente è {px}px — le icone più grandi verranno ingrandite e potrebbero risultare sfocate',
 		fgNote: 'L’ICO contiene 16, 32 e 48 px. L’icona touch Apple non supporta la trasparenza e viene appiattita sullo sfondo scelto; le icone PWA mantengono l’alfa. Le sorgenti non quadrate vengono ritagliate al centro.',
+		// Background remover
+		brBackground: 'Sfondo',
+		brTransparent: 'Trasparente',
+		brColor: 'Colore',
+		brFormat: 'Formato',
+		brDownloading: 'Download del modello…',
+		brFirstLoad: 'Runtime e modello vengono scaricati una sola volta (circa 19 MB) e poi restano nella cache del browser.',
+		brStarting: 'Avvio del modello…',
+		brRunning: 'Ricerca del soggetto…',
+		brResult: 'Ritaglio',
+		brSubject: 'Soggetto',
+		brTime: 'calcolato in {s} s',
+		brErrLoad: 'Impossibile caricare il modello — controlla la connessione e riprova',
+		brErrRun: 'Il modello non è riuscito a elaborare questa immagine',
+		brErrFlat: 'Nessun soggetto trovato — nulla in questa immagine si distingue dallo sfondo',
+		brNote: 'Un modello U²-Net gira a 320 px nel browser e la maschera viene riportata alla dimensione originale: i bordi fini come i capelli sono approssimati. Funziona meglio quando un solo soggetto si distingue dallo sfondo.',
 		irBy: 'Ridimensiona per',
 		irWidth: 'Larghezza',
 		irHeight: 'Altezza',
@@ -637,6 +653,10 @@ const it: Messages = {
 		'user-agent-parser': {
 			name: 'Parser di User-Agent',
 			description: 'Identifica browser, engine, SO e dispositivo da una stringa User-Agent'
+		},
+		'background-remover': {
+			name: 'Rimuovi sfondo',
+			description: 'Rimuovi lo sfondo da qualsiasi foto gratis — nel browser, senza caricamenti'
 		},
 		'image-to-base64': {
 			name: 'Convertitore immagine ↔ Base64',

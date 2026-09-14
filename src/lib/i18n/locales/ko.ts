@@ -246,6 +246,22 @@ const ko: Messages = {
 		fgHtml: 'HTML <link> 태그',
 		fgSmall: '원본이 {px}px입니다 — 그보다 큰 아이콘은 확대되어 흐릿할 수 있습니다',
 		fgNote: 'ICO에는 16, 32, 48px가 담깁니다. Apple 터치 아이콘은 투명도를 지원하지 않아 선택한 배경색 위에 평탄화되며, PWA 아이콘은 알파를 유지합니다. 정사각형이 아닌 원본은 중앙 기준으로 잘립니다.',
+		// Background remover
+		brBackground: '배경',
+		brTransparent: '투명',
+		brColor: '단색',
+		brFormat: '형식',
+		brDownloading: '모델 다운로드 중…',
+		brFirstLoad: '런타임과 모델은 한 번만 받아오며(약 19 MB) 이후 브라우저에 캐시됩니다.',
+		brStarting: '모델 시작 중…',
+		brRunning: '피사체 찾는 중…',
+		brResult: '잘라낸 결과',
+		brSubject: '피사체 비율',
+		brTime: '처리 시간 {s}초',
+		brErrLoad: '모델을 불러오지 못했습니다 — 연결을 확인하고 다시 시도하세요',
+		brErrRun: '모델이 이 이미지를 처리하지 못했습니다',
+		brErrFlat: '피사체를 찾지 못했습니다 — 배경과 구분되는 대상이 없습니다',
+		brNote: 'U²-Net 모델이 브라우저에서 320 px로 실행되고 마스크를 원본 크기로 확대하므로 머리카락 같은 미세한 가장자리는 근사치입니다. 배경과 뚜렷이 구분되는 피사체가 하나일 때 가장 잘 작동합니다.',
 		irBy: '조절 기준',
 		irWidth: '너비',
 		irHeight: '높이',
@@ -637,6 +653,10 @@ const ko: Messages = {
 		'user-agent-parser': {
 			name: 'User-Agent 파서',
 			description: 'UA 문자열에서 브라우저·엔진·OS·기기 식별'
+		},
+		'background-remover': {
+			name: '배경 제거',
+			description: '사진 배경을 자동으로 제거 — 무료, 브라우저에서 처리, 업로드 없음'
 		},
 		'image-to-base64': {
 			name: '이미지 ↔ Base64 변환기',

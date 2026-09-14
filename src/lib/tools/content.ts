@@ -804,6 +804,36 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
 		]
 	},
 
+	'background-remover': {
+		about: [
+			'Drop a photo and the subject is cut out automatically — no brush, no clicking around the edges. Download it as a transparent PNG or WebP, or flatten it onto a solid color (white for a product listing, a brand color for a thumbnail) and export a JPEG. The cut-out is produced at the original resolution, so a 4000-pixel photo stays a 4000-pixel photo.',
+			'Under the hood is U²-Net, the salient-object segmentation network behind the popular rembg command-line tool, running through ONNX Runtime compiled to WebAssembly. The first use fetches the runtime and the 4.6 MB model from this site (about 19 MB in total), after which your browser caches both and later runs need no network at all. Inference takes one to three seconds on a typical laptop.',
+			'Your photo never leaves the page — there is no upload, no queue and no account. That matters more here than for most tools: the pictures people cut out are product shots before launch, ID photos and family portraits. It also means no per-image credits and no resolution cap — the tool is free at any size your browser can decode.'
+		],
+		faqs: [
+			{
+				q: 'Is this a free alternative to remove.bg?',
+				a: 'For the common case — one clear subject, a transparent PNG at full resolution — yes, with no signup, credits or watermark, because there is no server doing the work. The trade-off is quality on hard cases: hair, fur, glass and motion blur come out rougher than a cloud service running a much larger model, and the mask is predicted at 320 px before being scaled back up, so very fine detail is approximate.'
+			},
+			{
+				q: 'Why does the first run take a while?',
+				a: 'The page has to fetch ONNX Runtime (about 14 MB of WebAssembly) and the model (4.6 MB) from this site before it can do anything — the progress bar shows exactly that download. Both are cached by the browser, so the second image, and every image after a reload, starts immediately. The network run itself is one to three seconds on a laptop and longer on a phone.'
+			},
+			{
+				q: 'What kind of images work best?',
+				a: 'Photos with one subject that stands out from its background: a person against a wall, a product on a table, a pet on the floor. The model looks for whatever is visually salient, so it struggles when the subject fills the entire frame, when several things compete for attention, or when subject and background share colors and texture. Cropping closer to a single subject before dropping the file often fixes a bad result.'
+			},
+			{
+				q: 'How do I get a white background instead of transparent?',
+				a: 'Switch Background to Color and pick white (or any color) — the cut-out is composited onto it and JPEG becomes available as an output format. Keep Transparent when the image will sit on a colored or patterned surface later; PNG and WebP both store the alpha channel, WebP at a fraction of the size.'
+			},
+			{
+				q: 'Does the result keep my photo\'s EXIF data?',
+				a: 'No. The output is rendered from pixels on a canvas, so camera model, timestamps and GPS coordinates are not carried over — usually what you want for an image headed to a listing or a social profile. If you need the metadata, keep the original alongside; the EXIF viewer here shows what it contains.'
+			}
+		]
+	},
+
 	'image-resizer': {
 		about: [
 			'Resize an image to an exact width, an exact height, or a percentage of the original — the other dimension follows automatically so nothing gets stretched. Pick an output format (or keep the source format), set quality for lossy targets, preview the result, and download. Before/after tiles show dimensions and file size at a glance.',

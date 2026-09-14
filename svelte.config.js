@@ -13,11 +13,13 @@ const config = {
 		// scripts so `unsafe-inline` is never needed for script-src.
 		// `frame-ancestors` is header-only and lives in `_headers` at the repo
 		// root, where adapter-cloudflare expects it.
+		// `wasm-unsafe-eval` lets WebAssembly compile (the background remover
+		// runs ONNX Runtime in wasm); unlike `unsafe-eval` it permits no JS eval.
 		csp: {
 			mode: 'hash',
 			directives: {
 				'default-src': ['self'],
-				'script-src': ['self'],
+				'script-src': ['self', 'wasm-unsafe-eval'],
 				'style-src': ['self', 'unsafe-inline'],
 				'style-src-attr': ['unsafe-inline'],
 				'img-src': ['self', 'data:', 'blob:'],

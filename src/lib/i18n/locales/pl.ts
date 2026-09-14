@@ -272,6 +272,22 @@ const pl: Messages = {
 		fgSmall: 'Źródło ma {px}px — ikony większe od tego zostaną powiększone i mogą być nieostre',
 		fgNote:
 			'Plik ICO zawiera rozmiary 16, 32 i 48 px. Ikony Apple touch nie mogą być przezroczyste, więc są spłaszczane na wybranym tle; ikony PWA zachowują kanał alfa. Źródła, które nie są kwadratowe, są przycinane do środka.',
+		// Background remover
+		brBackground: 'Tło',
+		brTransparent: 'Przezroczyste',
+		brColor: 'Kolor',
+		brFormat: 'Format',
+		brDownloading: 'Pobieranie modelu…',
+		brFirstLoad: 'Środowisko i model pobierane są tylko raz (ok. 19 MB), potem przeglądarka trzyma je w pamięci podręcznej.',
+		brStarting: 'Uruchamianie modelu…',
+		brRunning: 'Szukanie obiektu…',
+		brResult: 'Wycinek',
+		brSubject: 'Obiekt',
+		brTime: 'obliczono w {s} s',
+		brErrLoad: 'Nie udało się wczytać modelu — sprawdź połączenie i spróbuj ponownie',
+		brErrRun: 'Model nie mógł przetworzyć tego obrazu',
+		brErrFlat: 'Nie znaleziono obiektu — nic na tym obrazie nie odróżnia się od tła',
+		brNote: 'Model U²-Net działa w przeglądarce przy 320 px, a maska jest skalowana do oryginalnego rozmiaru, więc drobne krawędzie, jak włosy, są przybliżone. Najlepiej działa, gdy jeden obiekt wyraźnie odróżnia się od tła.',
 		irBy: 'Skaluj według',
 		irWidth: 'Szerokość',
 		irHeight: 'Wysokość',
@@ -545,6 +561,10 @@ const pl: Messages = {
 		'base64-decode': {
 			name: 'Base64 — kodowanie / dekodowanie',
 			description: 'Zakoduj tekst do Base64 lub zdekoduj Base64 do tekstu, także w wariancie URL-safe'
+		},
+		'background-remover': {
+			name: 'Usuwanie tła',
+			description: 'Usuń tło z dowolnego zdjęcia za darmo — w przeglądarce, bez wysyłania'
 		},
 		'image-to-base64': {
 			name: 'Konwerter obraz ↔ Base64',

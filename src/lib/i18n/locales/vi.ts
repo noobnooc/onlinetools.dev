@@ -272,6 +272,22 @@ const vi: Messages = {
 		fgSmall: 'Ảnh nguồn là {px}px — icon lớn hơn mức đó sẽ bị phóng to và có thể bị mờ',
 		fgNote:
 			'Tệp ICO gói sẵn 16, 32 và 48 px. Icon Apple touch không được trong suốt nên sẽ được làm phẳng trên nền bạn chọn; icon PWA giữ nguyên kênh alpha. Ảnh nguồn không vuông sẽ được cắt theo tâm.',
+		// Background remover
+		brBackground: 'Nền',
+		brTransparent: 'Trong suốt',
+		brColor: 'Màu',
+		brFormat: 'Định dạng',
+		brDownloading: 'Đang tải mô hình…',
+		brFirstLoad: 'Runtime và mô hình chỉ tải một lần (khoảng 19 MB), sau đó trình duyệt lưu vào bộ nhớ đệm.',
+		brStarting: 'Đang khởi động mô hình…',
+		brRunning: 'Đang tìm chủ thể…',
+		brResult: 'Ảnh tách nền',
+		brSubject: 'Chủ thể',
+		brTime: 'tính trong {s} giây',
+		brErrLoad: 'Không tải được mô hình — kiểm tra kết nối rồi thử lại',
+		brErrRun: 'Mô hình không xử lý được ảnh này',
+		brErrFlat: 'Không tìm thấy chủ thể — không có gì trong ảnh nổi bật so với nền',
+		brNote: 'Mô hình U²-Net chạy ở 320 px ngay trong trình duyệt rồi phóng mặt nạ về kích thước gốc, nên các mép mảnh như tóc chỉ là gần đúng. Hiệu quả nhất khi có một chủ thể nổi bật rõ so với nền.',
 		irBy: 'Đổi cỡ theo',
 		irWidth: 'Chiều rộng',
 		irHeight: 'Chiều cao',
@@ -545,6 +561,10 @@ const vi: Messages = {
 		'base64-decode': {
 			name: 'Mã hóa / giải mã Base64',
 			description: 'Mã hóa văn bản sang Base64 hoặc giải mã Base64 về văn bản, có cả biến thể URL-safe'
+		},
+		'background-remover': {
+			name: 'Xóa nền ảnh',
+			description: 'Xóa nền khỏi bất kỳ ảnh nào miễn phí — ngay trong trình duyệt, không tải lên'
 		},
 		'image-to-base64': {
 			name: 'Chuyển đổi ảnh ↔ Base64',

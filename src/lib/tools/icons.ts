@@ -41,7 +41,8 @@ import {
 	FileText,
 	FileCheck,
 	EyeOff,
-	Shield
+	Shield,
+	WandSparkles
 } from 'lucide-svelte';
 import type { ToolCategory } from './registry';
 
@@ -80,6 +81,7 @@ export const TOOL_ICONS: Record<string, IconComponent> = {
 	'image-to-base64': FileImage,
 	'image-converter': Images,
 	'image-resizer': Scaling,
+	'background-remover': WandSparkles,
 	'favicon-generator': AppWindow,
 	'sql-formatter': Database,
 	'xml-formatter': CodeXml,

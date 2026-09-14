@@ -268,6 +268,22 @@ const tr: Messages = {
 			'Kaynak {px}px — bunun üzerindeki ikonlar büyütülecek ve bulanık görünebilir',
 		fgNote:
 			'ICO içinde 16, 32 ve 48 px bulunur. Apple touch ikonları saydam olamaz, bu yüzden seçtiğiniz arka plan üzerine düzleştirilir; PWA ikonları alfa kanalını korur. Kare olmayan kaynaklar ortadan kırpılır.',
+		// Background remover
+		brBackground: 'Arka plan',
+		brTransparent: 'Saydam',
+		brColor: 'Renk',
+		brFormat: 'Biçim',
+		brDownloading: 'Model indiriliyor…',
+		brFirstLoad: 'Çalışma zamanı ve model yalnızca bir kez indirilir (yaklaşık 19 MB), sonra tarayıcı önbelleğinde kalır.',
+		brStarting: 'Model başlatılıyor…',
+		brRunning: 'Özne aranıyor…',
+		brResult: 'Kesim',
+		brSubject: 'Özne',
+		brTime: '{s} sn\'de hesaplandı',
+		brErrLoad: 'Model yüklenemedi — bağlantınızı kontrol edip yeniden deneyin',
+		brErrRun: 'Model bu görseli işleyemedi',
+		brErrFlat: 'Özne bulunamadı — bu görselde arka plandan ayrışan bir şey yok',
+		brNote: 'Bir U²-Net modeli tarayıcınızda 320 px\'de çalışır ve maske orijinal boyuta ölçeklenir; saç gibi ince kenarlar yaklaşıktır. Tek bir özne arka plandan belirgin biçimde ayrıştığında en iyi sonucu verir.',
 		irBy: 'Şuna göre boyutlandır',
 		irWidth: 'Genişlik',
 		irHeight: 'Yükseklik',
@@ -541,6 +557,10 @@ const tr: Messages = {
 		'base64-decode': {
 			name: 'Base64 Kodlama / Çözme',
 			description: 'Metni Base64’e kodlayın veya Base64’ü metne çözün, URL güvenli biçim dâhil'
+		},
+		'background-remover': {
+			name: 'Arka Plan Kaldırıcı',
+			description: 'Herhangi bir fotoğrafın arka planını ücretsiz kaldırın — tarayıcınızda, yükleme yok'
 		},
 		'image-to-base64': {
 			name: 'Görsel ↔ Base64 Dönüştürücü',

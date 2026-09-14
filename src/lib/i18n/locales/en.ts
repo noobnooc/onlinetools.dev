@@ -297,6 +297,22 @@ const en = {
 		fgNote:
 			'The ICO packs 16, 32 and 48 px. Apple touch icons cannot be transparent, so theirs is flattened onto the chosen background; PWA icons keep their alpha. Non-square sources are center-cropped.',
 
+		// Background remover
+		brBackground: 'Background',
+		brTransparent: 'Transparent',
+		brColor: 'Color',
+		brFormat: 'Format',
+		brDownloading: 'Downloading the model…',
+		brFirstLoad: 'The runtime and model are fetched once (about 19 MB) and then cached by your browser.',
+		brStarting: 'Starting the model…',
+		brRunning: 'Finding the subject…',
+		brResult: 'Cut-out',
+		brSubject: 'Subject',
+		brTime: 'computed in {s} s',
+		brErrLoad: 'Could not load the model — check your connection and try again',
+		brErrRun: 'The model could not process this image',
+		brErrFlat: 'No subject found — nothing in this image stands out from its background',
+		brNote: 'A U²-Net model runs at 320 px in your browser and the mask is scaled back to full size, so fine edges like hair are approximate. Works best when one subject stands out from the background.',
 		// Image resizer
 		irBy: 'Resize by',
 		irWidth: 'Width',

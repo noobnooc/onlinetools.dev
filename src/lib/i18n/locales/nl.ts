@@ -266,6 +266,22 @@ const nl: Messages = {
 		fgNote:
 			'De ICO bevat 16, 32 en 48 px. Apple touch-iconen kunnen niet transparant zijn, dus die worden op de gekozen achtergrond gelegd; PWA-iconen behouden hun alpha. Niet-vierkante bronnen worden vanuit het midden bijgesneden.',
 
+		// Background remover
+		brBackground: 'Achtergrond',
+		brTransparent: 'Transparant',
+		brColor: 'Kleur',
+		brFormat: 'Formaat',
+		brDownloading: 'Model downloaden…',
+		brFirstLoad: 'Runtime en model worden één keer opgehaald (ongeveer 19 MB) en daarna door je browser gecachet.',
+		brStarting: 'Model starten…',
+		brRunning: 'Onderwerp zoeken…',
+		brResult: 'Uitsnede',
+		brSubject: 'Onderwerp',
+		brTime: 'berekend in {s} s',
+		brErrLoad: 'Model kon niet worden geladen — controleer je verbinding en probeer opnieuw',
+		brErrRun: 'Het model kon deze afbeelding niet verwerken',
+		brErrFlat: 'Geen onderwerp gevonden — niets in deze afbeelding steekt af tegen de achtergrond',
+		brNote: 'Een U²-Net-model draait op 320 px in je browser en het masker wordt terug geschaald naar de originele grootte, dus fijne randen zoals haar zijn bij benadering. Werkt het best als één onderwerp duidelijk afsteekt tegen de achtergrond.',
 		irBy: 'Schalen op',
 		irWidth: 'Breedte',
 		irHeight: 'Hoogte',
@@ -568,6 +584,10 @@ const nl: Messages = {
 		'base64-decode': {
 			name: 'Base64 coderen / decoderen',
 			description: 'Codeer tekst naar Base64 of decodeer Base64 naar tekst, URL-veilig inbegrepen'
+		},
+		'background-remover': {
+			name: 'Achtergrond verwijderen',
+			description: 'Verwijder de achtergrond van elke foto gratis — in je browser, zonder upload'
 		},
 		'image-to-base64': {
 			name: 'Afbeelding ↔ Base64-converter',

@@ -271,6 +271,22 @@ const id: Messages = {
 		fgSmall: 'Sumbernya {px}px — ikon yang lebih besar akan diperbesar dan bisa tampak buram',
 		fgNote:
 			'Berkas ICO memuat 16, 32, dan 48 px. Ikon Apple touch tidak boleh transparan, jadi diratakan ke latar yang Anda pilih; ikon PWA mempertahankan kanal alfanya. Sumber yang tidak persegi dipotong dari tengah.',
+		// Background remover
+		brBackground: 'Latar belakang',
+		brTransparent: 'Transparan',
+		brColor: 'Warna',
+		brFormat: 'Format',
+		brDownloading: 'Mengunduh model…',
+		brFirstLoad: 'Runtime dan model hanya diunduh sekali (sekitar 19 MB), lalu disimpan di cache browser.',
+		brStarting: 'Memulai model…',
+		brRunning: 'Mencari subjek…',
+		brResult: 'Hasil potong',
+		brSubject: 'Subjek',
+		brTime: 'dihitung dalam {s} dtk',
+		brErrLoad: 'Model tidak dapat dimuat — periksa koneksi dan coba lagi',
+		brErrRun: 'Model tidak dapat memproses gambar ini',
+		brErrFlat: 'Subjek tidak ditemukan — tidak ada yang menonjol dari latar belakang pada gambar ini',
+		brNote: 'Model U²-Net berjalan pada 320 px di browser Anda dan masker diskalakan kembali ke ukuran asli, sehingga tepi halus seperti rambut hanya perkiraan. Paling baik jika satu subjek menonjol jelas dari latar belakang.',
 		irBy: 'Ubah ukuran berdasarkan',
 		irWidth: 'Lebar',
 		irHeight: 'Tinggi',
@@ -544,6 +560,10 @@ const id: Messages = {
 		'base64-decode': {
 			name: 'Enkode / Dekode Base64',
 			description: 'Enkode teks ke Base64 atau dekode Base64 ke teks, termasuk varian aman-URL'
+		},
+		'background-remover': {
+			name: 'Penghapus Latar Belakang',
+			description: 'Hapus latar belakang foto apa pun gratis — di browser, tanpa unggah'
 		},
 		'image-to-base64': {
 			name: 'Konverter Gambar ↔ Base64',

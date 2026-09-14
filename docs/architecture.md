@@ -62,7 +62,7 @@ Typing runs pure functions in the page. No further requests, ever.
 ```
 
 Build time is where the work happens: `pnpm build` prerenders every page in
-every locale — 44 tools × 18 locales, plus the catalog, About, changelog, chain
+every locale — 45 tools × 18 locales, plus the catalog, About, changelog, chain
 pages, `sitemap.xml` and `robots.txt`. `handleHttpError: 'fail'` means a broken
 internal link fails the build rather than shipping a 404.
 
