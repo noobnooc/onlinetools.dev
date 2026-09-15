@@ -235,31 +235,29 @@
 				hint={tt('brTime', { s: (seg.inferenceMs / 1000).toFixed(1) })}
 			/>
 		</div>
-		<div class="flex flex-col items-start gap-4 sm:flex-row">
-			<div class="flex flex-wrap gap-3">
-				<figure class="m-0">
-					<div class="max-w-64 rounded-lg border border-line bg-surface-2 p-2">
-						<img src={img.dataUrl} alt="" class="max-h-56 max-w-full" />
-					</div>
-					<figcaption class="mt-1 text-[11px] tracking-wide text-dim uppercase">{tt('imgOriginal')}</figcaption>
-				</figure>
-				<figure class="m-0">
-					<div class="max-w-64 rounded-lg border border-line bg-[repeating-conic-gradient(rgba(128,128,128,0.15)_0%_25%,transparent_0%_50%)] bg-size-[16px_16px] p-2 {busy ? 'opacity-60' : ''}">
-						<img src={result.dataUrl} alt="" class="max-h-56 max-w-full" />
-					</div>
-					<figcaption class="mt-1 text-[11px] tracking-wide text-dim uppercase">{tt('brResult')}</figcaption>
-				</figure>
-			</div>
-			<div class="flex flex-col gap-2">
-				<button
-					type="button"
-					onclick={download}
-					class="flex items-center gap-1.5 rounded-md border border-line bg-surface px-3 py-1.5 text-sm transition-colors duration-120 hover:border-accent/50"
-				>
-					<Download size={13} /> {tt('imgDownload', { fmt: IMAGE_LABEL[format] })}
-				</button>
-				<p class="max-w-52 text-xs text-dim">{tt('brNote')}</p>
-			</div>
+		<div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+			<figure class="m-0">
+				<div class="overflow-hidden rounded-lg border border-line bg-surface-2">
+					<img src={img.dataUrl} alt="" class="block h-auto w-full" />
+				</div>
+				<figcaption class="mt-1 text-[11px] tracking-wide text-dim uppercase">{tt('imgOriginal')}</figcaption>
+			</figure>
+			<figure class="m-0">
+				<div class="overflow-hidden rounded-lg border border-line bg-[repeating-conic-gradient(rgba(128,128,128,0.15)_0%_25%,transparent_0%_50%)] bg-size-[16px_16px] {busy ? 'opacity-60' : ''}">
+					<img src={result.dataUrl} alt="" class="block h-auto w-full" />
+				</div>
+				<figcaption class="mt-1 text-[11px] tracking-wide text-dim uppercase">{tt('brResult')}</figcaption>
+			</figure>
+		</div>
+		<div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+			<button
+				type="button"
+				onclick={download}
+				class="flex items-center gap-1.5 rounded-md border border-line bg-surface px-3 py-1.5 text-sm transition-colors duration-120 hover:border-accent/50"
+			>
+				<Download size={13} /> {tt('imgDownload', { fmt: IMAGE_LABEL[format] })}
+			</button>
+			<p class="max-w-xl text-xs text-dim">{tt('brNote')}</p>
 		</div>
 	{/if}
 </div>
