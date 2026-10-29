@@ -473,6 +473,31 @@ const ko: Messages = {
 		nbDec: '10진수',
 		nbHex: '16진수',
 		nbBits: '비트',
+		cidrInput: 'CIDR, 주소 또는 범위',
+		cidrAddress: '주소',
+		cidrNetwork: '네트워크',
+		cidrBroadcast: '브로드캐스트',
+		cidrLastAddr: '마지막 주소',
+		cidrNetmask: '넷마스크',
+		cidrWildcard: '와일드카드 마스크',
+		cidrFirstHost: '첫 호스트',
+		cidrLastHost: '마지막 호스트',
+		cidrTotal: '주소 수',
+		cidrUsable: '사용 가능한 호스트',
+		cidrScope: '범위 유형',
+		cidrExpanded: '전체 표기',
+		cidrInteger: '정수',
+		cidrBinary: '2진수',
+		cidrReverse: '역방향 DNS',
+		cidrHostBits: '호스트 비트가 설정되어 있습니다 — 네트워크 주소는 {net}입니다',
+		cidrSplit: '분할',
+		cidrSubnets: '서브넷 {n}개',
+		cidrShowing: '처음 {n}개 표시',
+		cidrCheck: '주소 포함 여부',
+		cidrInside: '블록 안',
+		cidrOutside: '블록 밖',
+		cidrBlocks: 'CIDR 블록 {n}개',
+		cidrEmpty: '여기에 결과가 표시됩니다 — 10.0.0.0/16 또는 10.0.0.1 - 10.0.0.50 같은 범위를 입력해 보세요',
 
 		// Text ↔ hex/binary
 		hbFormat: '바이트 표기',
@@ -709,6 +734,10 @@ const ko: Messages = {
 		'number-base-converter': {
 			name: '진법 변환기',
 			description: '2·8·10·16진수와 최대 36진법 사이의 숫자 변환'
+		},
+		'cidr-calculator': {
+			name: 'CIDR / 서브넷 계산기',
+			description: 'IPv4·IPv6 CIDR 블록의 네트워크, 브로드캐스트, 마스크, 호스트 범위를 계산'
 		},
 		'text-to-hex': {
 			name: '텍스트 ↔ Hex / 바이너리 변환기',

@@ -473,6 +473,31 @@ const ja: Messages = {
 		nbDec: '10 進数',
 		nbHex: '16 進数',
 		nbBits: 'ビット',
+		cidrInput: 'CIDR・アドレス・範囲',
+		cidrAddress: 'アドレス',
+		cidrNetwork: 'ネットワーク',
+		cidrBroadcast: 'ブロードキャスト',
+		cidrLastAddr: '最終アドレス',
+		cidrNetmask: 'サブネットマスク',
+		cidrWildcard: 'ワイルドカードマスク',
+		cidrFirstHost: '先頭ホスト',
+		cidrLastHost: '末尾ホスト',
+		cidrTotal: 'アドレス数',
+		cidrUsable: '利用可能ホスト数',
+		cidrScope: '範囲の種類',
+		cidrExpanded: '完全表記',
+		cidrInteger: '整数',
+		cidrBinary: '2 進数',
+		cidrReverse: '逆引き DNS',
+		cidrHostBits: 'ホスト部が 0 ではありません — ネットワークアドレスは {net} です',
+		cidrSplit: '分割',
+		cidrSubnets: '{n} 個のサブネット',
+		cidrShowing: '先頭 {n} 件を表示',
+		cidrCheck: 'このアドレスを含む?',
+		cidrInside: 'ブロック内',
+		cidrOutside: 'ブロック外',
+		cidrBlocks: '{n} 個の CIDR ブロック',
+		cidrEmpty: 'ここに詳細が表示されます — 10.0.0.0/16 や 10.0.0.1 - 10.0.0.50 のような範囲を試してください',
 
 		// Text ↔ hex/binary
 		hbFormat: 'バイトの表記',
@@ -709,6 +734,10 @@ const ja: Messages = {
 		'number-base-converter': {
 			name: '基数変換',
 			description: '2 進・8 進・10 進・16 進から基数 36 まで、数値を相互変換'
+		},
+		'cidr-calculator': {
+			name: 'CIDR / サブネット計算機',
+			description: 'IPv4・IPv6 の CIDR ブロックからネットワーク、ブロードキャスト、マスク、ホスト範囲を計算'
 		},
 		'text-to-hex': {
 			name: 'テキスト ↔ 16進 / 2進変換',

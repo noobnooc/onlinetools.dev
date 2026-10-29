@@ -473,6 +473,31 @@ const fr: Messages = {
 		nbDec: 'Décimal',
 		nbHex: 'Hex',
 		nbBits: 'bits',
+		cidrInput: 'CIDR, adresse ou plage',
+		cidrAddress: 'Adresse',
+		cidrNetwork: 'Réseau',
+		cidrBroadcast: 'Broadcast',
+		cidrLastAddr: 'Dernière adresse',
+		cidrNetmask: 'Masque de sous-réseau',
+		cidrWildcard: 'Masque générique',
+		cidrFirstHost: 'Premier hôte',
+		cidrLastHost: 'Dernier hôte',
+		cidrTotal: 'Adresses',
+		cidrUsable: 'Hôtes utilisables',
+		cidrScope: 'Type de plage',
+		cidrExpanded: 'Forme développée',
+		cidrInteger: 'Entier',
+		cidrBinary: 'Binaire',
+		cidrReverse: 'DNS inverse',
+		cidrHostBits: 'Des bits d’hôte sont définis — l’adresse réseau est {net}',
+		cidrSplit: 'Découper en',
+		cidrSubnets: '{n} sous-réseaux',
+		cidrShowing: 'affichage des {n} premiers',
+		cidrCheck: 'Contient l’adresse ?',
+		cidrInside: 'Dans le bloc',
+		cidrOutside: 'Hors du bloc',
+		cidrBlocks: '{n} blocs CIDR',
+		cidrEmpty: 'Les détails s’affichent ici — essayez 10.0.0.0/16 ou une plage comme 10.0.0.1 - 10.0.0.50',
 
 		// Text ↔ hex/binary
 		hbFormat: 'Octets en',
@@ -709,6 +734,10 @@ const fr: Messages = {
 		'number-base-converter': {
 			name: 'Convertisseur de bases numériques',
 			description: 'Convertissez des nombres entre binaire, octal, décimal, hex et toute base jusqu’à 36'
+		},
+		'cidr-calculator': {
+			name: 'Calculateur CIDR / de sous-réseau',
+			description: 'Calculez réseau, broadcast, masque et plage d’hôtes de tout bloc CIDR IPv4 ou IPv6'
 		},
 		'text-to-hex': {
 			name: 'Convertisseur texte ↔ hex / binaire',

@@ -473,6 +473,31 @@ const ru: Messages = {
 		nbDec: 'Десятичное',
 		nbHex: 'Шестнадцатеричное',
 		nbBits: 'бит',
+		cidrInput: 'CIDR, адрес или диапазон',
+		cidrAddress: 'Адрес',
+		cidrNetwork: 'Сеть',
+		cidrBroadcast: 'Широковещательный',
+		cidrLastAddr: 'Последний адрес',
+		cidrNetmask: 'Маска сети',
+		cidrWildcard: 'Обратная маска',
+		cidrFirstHost: 'Первый хост',
+		cidrLastHost: 'Последний хост',
+		cidrTotal: 'Адресов',
+		cidrUsable: 'Доступно хостов',
+		cidrScope: 'Тип диапазона',
+		cidrExpanded: 'Полная запись',
+		cidrInteger: 'Целое число',
+		cidrBinary: 'Двоичный',
+		cidrReverse: 'Обратный DNS',
+		cidrHostBits: 'Заданы биты хоста — адрес сети {net}',
+		cidrSplit: 'Разбить на',
+		cidrSubnets: 'подсетей: {n}',
+		cidrShowing: 'показаны первые {n}',
+		cidrCheck: 'Входит ли адрес?',
+		cidrInside: 'Внутри блока',
+		cidrOutside: 'Вне блока',
+		cidrBlocks: 'CIDR-блоков: {n}',
+		cidrEmpty: 'Здесь появятся данные — попробуйте 10.0.0.0/16 или диапазон 10.0.0.1 - 10.0.0.50',
 
 		// Text ↔ hex/binary
 		hbFormat: 'Байты как',
@@ -709,6 +734,10 @@ const ru: Messages = {
 		'number-base-converter': {
 			name: 'Конвертер систем счисления',
 			description: 'Переводите числа между двоичной, восьмеричной, десятичной, шестнадцатеричной и любой системой до основания 36'
+		},
+		'cidr-calculator': {
+			name: 'CIDR / калькулятор подсетей',
+			description: 'Сеть, широковещательный адрес, маска и диапазон хостов для любого блока IPv4 или IPv6'
 		},
 		'text-to-hex': {
 			name: 'Конвертер текст ↔ hex / двоичный код',

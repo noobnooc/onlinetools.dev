@@ -141,7 +141,7 @@ export const TOOLS: ToolMeta[] = [
 		category: 'web',
 		aliases: ['regex', 'regexp', 'regular expression', 're test'],
 		keywords: ['regex tester', 'regex online', 'regular expression tester', 'regex match'],
-		related: ['diff-checker', 'json-formatter', 'url-parser', 'base64-decode', 'color-converter', 'timestamp-converter']
+		related: ['diff-checker', 'json-formatter', 'url-parser', 'base64-decode', 'cidr-calculator', 'timestamp-converter']
 	},
 	{
 		slug: 'diff-checker',
@@ -171,7 +171,7 @@ export const TOOLS: ToolMeta[] = [
 		category: 'web',
 		aliases: ['parse url', 'query string', 'url inspector', 'query params'],
 		keywords: ['url parser', 'parse url online', 'query string parser'],
-		related: ['url-encode-decode', 'json-formatter', 'regex-tester', 'base64-decode', 'jwt-decoder', 'timestamp-converter']
+		related: ['url-encode-decode', 'json-formatter', 'regex-tester', 'base64-decode', 'jwt-decoder', 'cidr-calculator']
 	},
 	{
 		slug: 'uuid-generator',
@@ -449,7 +449,7 @@ export const TOOLS: ToolMeta[] = [
 		category: 'encoding',
 		aliases: ['base converter', 'hex to decimal', 'binary to decimal', 'radix', 'dec to hex'],
 		keywords: ['number base converter', 'hex to decimal', 'decimal to binary', 'base conversion online'],
-		related: ['text-to-hex', 'unicode-inspector', 'base64-decode', 'hash-generator', 'timestamp-converter', 'uuid-generator']
+		related: ['text-to-hex', 'unicode-inspector', 'base64-decode', 'hash-generator', 'timestamp-converter', 'cidr-calculator']
 	},
 	{
 		slug: 'text-to-hex',
@@ -459,7 +459,7 @@ export const TOOLS: ToolMeta[] = [
 		category: 'encoding',
 		aliases: ['hex', 'text to hex', 'hex to text', 'text to binary', 'binary to text', 'hex dump'],
 		keywords: ['text to hex', 'hex to text', 'text to binary', 'binary to text', 'hex converter'],
-		related: ['number-base-converter', 'base64-decode', 'unicode-inspector', 'string-escape', 'hash-generator', 'url-encode-decode']
+		related: ['number-base-converter', 'base64-decode', 'unicode-inspector', 'string-escape', 'hash-generator', 'cidr-calculator']
 	},
 	{
 		slug: 'json-schema-validator',
@@ -489,7 +489,17 @@ export const TOOLS: ToolMeta[] = [
 		category: 'web',
 		aliases: ['ua', 'useragent', 'user agent', 'browser detect'],
 		keywords: ['user agent parser', 'ua parser', 'user agent lookup', 'browser detection'],
-		related: ['url-parser', 'jwt-decoder', 'regex-tester', 'json-formatter', 'timestamp-converter', 'hash-generator']
+		related: ['url-parser', 'jwt-decoder', 'regex-tester', 'json-formatter', 'timestamp-converter', 'cidr-calculator']
+	},
+	{
+		slug: 'cidr-calculator',
+		accepts: ['cidr'],
+		name: 'CIDR / Subnet Calculator',
+		description: 'Work out network, broadcast, mask and host range for any IPv4 or IPv6 CIDR block',
+		category: 'web',
+		aliases: ['cidr', 'subnet', 'subnet calculator', 'ip calculator', 'netmask', 'ipv6 subnet', 'ip range to cidr'],
+		keywords: ['cidr calculator', 'subnet calculator', 'ipv4 subnet calculator', 'ipv6 cidr calculator', 'ip range to cidr', 'netmask calculator'],
+		related: ['number-base-converter', 'url-parser', 'user-agent-parser', 'text-to-hex', 'regex-tester', 'url-encode-decode']
 	}
 ];
 

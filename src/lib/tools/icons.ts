@@ -1,5 +1,6 @@
 import {
 	Braces,
+	Network,
 	Binary,
 	Clock,
 	Key,
@@ -78,6 +79,7 @@ export const TOOL_ICONS: Record<string, IconComponent> = {
 	'jsonpath-tester': Route,
 	'bcrypt-generator': ShieldCheck,
 	'user-agent-parser': MonitorSmartphone,
+	'cidr-calculator': Network,
 	'image-to-base64': FileImage,
 	'image-converter': Images,
 	'image-resizer': Scaling,

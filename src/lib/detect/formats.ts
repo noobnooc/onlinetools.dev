@@ -30,6 +30,7 @@ export type DataFormat =
 	| 'uuid'
 	| 'cron'
 	| 'useragent'
+	| 'cidr'
 	| 'image-data-url'
 	| 'image'
 	| 'text';
@@ -60,6 +61,7 @@ export const FORMAT_FALLBACKS: Record<DataFormat, DataFormat[]> = {
 	uuid: ['text'],
 	cron: ['text'],
 	useragent: ['text'],
+	cidr: ['text'],
 	'image-data-url': ['base64', 'text'],
 	image: [],
 	text: []

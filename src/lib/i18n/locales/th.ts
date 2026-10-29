@@ -500,6 +500,31 @@ const th: Messages = {
 		nbDec: 'ฐานสิบ',
 		nbHex: 'ฐานสิบหก',
 		nbBits: 'บิต',
+		cidrInput: 'CIDR, ที่อยู่ หรือช่วง',
+		cidrAddress: 'ที่อยู่',
+		cidrNetwork: 'เครือข่าย',
+		cidrBroadcast: 'บรอดแคสต์',
+		cidrLastAddr: 'ที่อยู่สุดท้าย',
+		cidrNetmask: 'เน็ตมาสก์',
+		cidrWildcard: 'ไวลด์การ์ดมาสก์',
+		cidrFirstHost: 'โฮสต์แรก',
+		cidrLastHost: 'โฮสต์สุดท้าย',
+		cidrTotal: 'จำนวนที่อยู่',
+		cidrUsable: 'โฮสต์ที่ใช้ได้',
+		cidrScope: 'ประเภทช่วง',
+		cidrExpanded: 'แบบเต็ม',
+		cidrInteger: 'จำนวนเต็ม',
+		cidrBinary: 'ฐานสอง',
+		cidrReverse: 'Reverse DNS',
+		cidrHostBits: 'มีบิตโฮสต์ถูกตั้งค่า — ที่อยู่เครือข่ายคือ {net}',
+		cidrSplit: 'แบ่งเป็น',
+		cidrSubnets: '{n} ซับเน็ต',
+		cidrShowing: 'แสดง {n} รายการแรก',
+		cidrCheck: 'มีที่อยู่นี้หรือไม่?',
+		cidrInside: 'อยู่ในบล็อก',
+		cidrOutside: 'อยู่นอกบล็อก',
+		cidrBlocks: '{n} บล็อก CIDR',
+		cidrEmpty: 'รายละเอียดจะแสดงที่นี่ — ลอง 10.0.0.0/16 หรือช่วงอย่าง 10.0.0.1 - 10.0.0.50',
 
 		hbFormat: 'แสดงไบต์เป็น',
 		hbSep: 'ตัวคั่น',
@@ -743,6 +768,10 @@ const th: Messages = {
 		'number-base-converter': {
 			name: 'ตัวแปลงฐานเลข',
 			description: 'แปลงตัวเลขระหว่างฐานสอง ฐานแปด ฐานสิบ ฐานสิบหก และฐานใดก็ได้ถึง 36'
+		},
+		'cidr-calculator': {
+			name: 'เครื่องคำนวณ CIDR / ซับเน็ต',
+			description: 'คำนวณเครือข่าย บรอดแคสต์ มาสก์ และช่วงโฮสต์ของบล็อก CIDR ทั้ง IPv4 และ IPv6'
 		},
 		'text-to-hex': {
 			name: 'ตัวแปลงข้อความ ↔ ฐานสิบหก / ฐานสอง',

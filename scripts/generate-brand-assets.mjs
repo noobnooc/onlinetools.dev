@@ -257,7 +257,7 @@ out(
 	'og.png',
 	renderPng(
 		ogSvg({
-			eyebrow: '27 tools · local-first',
+			eyebrow: '46 tools · local-first',
 			line1: 'Developer tools that run',
 			line2: 'in your browser.',
 			sub: 'No upload, no signup, no waiting — everything runs locally, even offline.',
@@ -269,7 +269,7 @@ out(
 				{ label: 'Regex' },
 				{ label: 'Cron' },
 				{ label: 'UUID' },
-				{ label: '+ 21 more' }
+				{ label: '+ 40 more' }
 			]
 		}),
 		1200
