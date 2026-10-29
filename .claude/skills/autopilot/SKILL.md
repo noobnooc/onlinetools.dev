@@ -212,6 +212,26 @@ issues each run — the owner's replies there are instructions.
 
 ## Recipes
 
+**When the MCP tools are missing.** A scheduled session may start without
+the Cloudflare or GitHub connectors. Both have working fallbacks through the
+session proxy, which injects credentials, so send no auth header yourself:
+
+- Cloudflare REST and GraphQL:
+  `curl -sS https://api.cloudflare.com/client/v4/<path>`. GraphQL is
+  `POST /graphql` with `{"query": …, "variables": …}`, and the reply has the
+  usual `data` wrapper. The one gap is the Workers Builds API ("Invalid
+  token"); `wait-checks.sh` covers it through the GitHub check runs.
+- GitHub, REST only. GraphQL is blocked, so `gh pr view` and `gh pr merge`
+  fail. Use `gh api` instead:
+  - open a PR: `gh api repos/noobnooc/onlinetools.dev/pulls -f title=… -f head=<branch> -f base=main -f body=…`
+  - merge: `gh api -X PUT repos/noobnooc/onlinetools.dev/pulls/<n>/merge -f merge_method=squash -f commit_title=…`
+  - issues: `gh api repos/noobnooc/onlinetools.dev/issues?state=open`
+  - comment: `gh api repos/noobnooc/onlinetools.dev/issues/<n>/comments -f body=…`
+  - CI logs: `gh api repos/noobnooc/onlinetools.dev/actions/jobs/<job-id>/logs`
+
+  `gh auth status` reports the token as invalid even though these calls
+  succeed. Ignore it.
+
 **Cloudflare MCP.** `mcp__Cloudflare_API__search` finds endpoints in the
 OpenAPI spec; `mcp__Cloudflare_API__execute` runs JS with
 `cloudflare.request({method, path, query, body})`. Always pass
