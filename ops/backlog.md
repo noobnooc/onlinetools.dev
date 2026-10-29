@@ -15,10 +15,8 @@ _(empty — humans: put a line here to steer the next run)_
 
 | Item | Area | Impact | Effort | Notes |
 | --- | --- | :-: | :-: | --- |
-| Find the top 10 tool pages by human traffic over 7 days | growth | 3 | 1 | Everything else gets prioritized against this. `httpRequestsAdaptiveGroups` by `clientRequestPath`, `requestSource: "eyeball"`, HTML only; the adaptive dataset only keeps a few days, so record what you find in `metrics.md` |
-| Block vulnerability-scanner probes (`/.env*`, `/phpinfo.php`, `/.git/*`, `/wp-*`…) with a zone WAF custom rule | cloudflare | 1 | 1 | They are ~30% of requests on some days and pollute the metrics. Free plan allows 5 custom rules — check what exists first. Make sure no real site path matches |
+| Keep a 7-day log of the top human HTML paths | growth | 3 | 1 | One day (10-28) is recorded in `metrics.md`: traffic is a long tail with no dominant tool; zh/id localized pages show up near the top. Record a day each run until there are 7 to rank against. `clientRefererHost` is not available on this plan |
 | Translate the Background Remover About/FAQ content into the 16 locales that lack it | content | 2 | 2 | Every other tool has all 17 translations; `bgremove` only has `en` + `zh`. Follow the tone of each `content.<lang>.ts` |
-| CIDR / subnet calculator | tool | 3 | 2 | High search volume, pure math, nothing to upload |
 | JWT encoder / signer (HS256/384/512, RS/ES via WebCrypto) | tool | 3 | 2 | Pairs with the decoder; add as `related` both ways |
 | Unix file-permission (chmod) calculator | tool | 2 | 1 | Symbolic ↔ octal, with `ls -l` string parsing |
 | cURL → fetch / Python requests converter | tool | 3 | 3 | Developers paste curl commands with tokens in them — the local angle is strong |
@@ -35,14 +33,18 @@ _(empty — humans: put a line here to steer the next run)_
 | More pipeline presets as indexable pages (`/chain`) for common multi-step jobs | growth | 2 | 1 | e.g. "decode a JWT and pretty-print the payload" already exists — find the next ones |
 | Lighthouse pass on the 5 most-visited pages (performance, a11y) | quality | 2 | 2 | Chromium + Playwright are preinstalled in the container |
 | Audit zone settings (TLS min version, HSTS, Always Use HTTPS, HTTP/3, Brotli, caching of `/_app/immutable/*`) | cloudflare | 2 | 1 | Log every change in `cloudflare-changes.md` |
-| Update the OG image / README tool count when the number of tools changes | housekeeping | 1 | 1 | `pnpm brand:assets`; see docs/deployment.md |
+| Update the OG image / README tool count when the number of tools changes | housekeeping | 1 | 1 | `pnpm brand:assets`; see docs/deployment.md. Done for 46 on 10-29 |
+| Translate the CIDR calculator About/FAQ into the 16 locales that lack it | content | 1 | 2 | Shipped with `en` + `zh` only, like the Background Remover |
+| CIDR calculator follow-ups: a pipeline op (range → CIDR list) and multi-line input (aggregate/summarize a list of blocks) | tool | 1 | 1 | Aggregation is the next most-asked subnet job after range → CIDR |
 
 ## Done
 
 | Date | Item | PR |
 | --- | --- | --- |
+| 2026-10-29 | CIDR / subnet calculator (IPv4 + IPv6, range → CIDR, split, membership, Smart Paste) | [#27](https://github.com/noobnooc/onlinetools.dev/pull/27) |
 
 ## Dropped
 
 | Item | Why |
 | --- | --- |
+| Block vulnerability-scanner probes with a WAF custom rule | Already in place: two custom rules (scanner paths, scanner user agents) were added 2026-08-26, before the autopilot existed. 4xx fell from ~11.9k to ~3.6k per week. Revisit only if a new probe pattern shows up in eyeball traffic |
