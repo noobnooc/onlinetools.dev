@@ -82,6 +82,13 @@ describe('smart paste detection', () => {
 			'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36';
 		expect(detect(ua)[0]?.type).toBe('useragent');
 	});
+	it('detects CIDR blocks and IP ranges but not bare dates or fractions', () => {
+		expect(detect('10.0.0.0/8')[0]?.type).toBe('cidr');
+		expect(detect('2001:db8::/32')[0]?.type).toBe('cidr');
+		expect(detect('192.168.0.1 - 192.168.0.40')[0]?.type).toBe('cidr');
+		expect(detect('1/2').some((d) => d.type === 'cidr')).toBe(false);
+		expect(detect('2024-01-01').some((d) => d.type === 'cidr')).toBe(false);
+	});
 	it('detects YAML documents', () => {
 		expect(detect('name: demo\nversion: 2\nitems:\n  - a\n  - b')[0]?.type).toBe('yaml');
 	});

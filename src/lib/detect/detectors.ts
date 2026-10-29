@@ -9,6 +9,7 @@ import { isLikelyXml } from '$lib/tools/xml';
 import { isLikelyCsv } from '$lib/tools/dataconvert';
 import { isLikelyMarkdown } from '$lib/tools/markdown';
 import { isLikelyHexDump } from '$lib/tools/hexbin';
+import { isLikelyCidr } from '$lib/tools/cidr';
 import type { DataFormat } from './formats';
 
 export interface Detection {
@@ -129,6 +130,20 @@ export const DETECTORS: Detector[] = [
 				confidence: 0.92,
 				tool: 'uuid-generator',
 				actions: [{ label: 'Inspect / generate more', tool: 'uuid-generator' }]
+			};
+		}
+	},
+	{
+		id: 'cidr',
+		detect(input) {
+			if (!isLikelyCidr(input)) return null;
+			return {
+				type: 'cidr',
+				format: 'cidr',
+				label: 'CIDR block',
+				confidence: 0.9,
+				tool: 'cidr-calculator',
+				actions: [{ label: 'Calculate subnet', tool: 'cidr-calculator' }]
 			};
 		}
 	},

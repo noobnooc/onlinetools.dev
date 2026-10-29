@@ -500,6 +500,31 @@ const hi: Messages = {
 		nbDec: 'दशमलव',
 		nbHex: 'षोडश आधारी',
 		nbBits: 'बिट',
+		cidrInput: 'CIDR, पता या रेंज',
+		cidrAddress: 'पता',
+		cidrNetwork: 'नेटवर्क',
+		cidrBroadcast: 'ब्रॉडकास्ट',
+		cidrLastAddr: 'अंतिम पता',
+		cidrNetmask: 'नेटमास्क',
+		cidrWildcard: 'वाइल्डकार्ड मास्क',
+		cidrFirstHost: 'पहला होस्ट',
+		cidrLastHost: 'अंतिम होस्ट',
+		cidrTotal: 'पतों की संख्या',
+		cidrUsable: 'उपयोग योग्य होस्ट',
+		cidrScope: 'रेंज का प्रकार',
+		cidrExpanded: 'पूरा रूप',
+		cidrInteger: 'पूर्णांक',
+		cidrBinary: 'बाइनरी',
+		cidrReverse: 'रिवर्स DNS',
+		cidrHostBits: 'होस्ट बिट सेट हैं — नेटवर्क पता {net} है',
+		cidrSplit: 'इसमें बाँटें',
+		cidrSubnets: '{n} सबनेट',
+		cidrShowing: 'पहले {n} दिखाए गए',
+		cidrCheck: 'क्या पता शामिल है?',
+		cidrInside: 'ब्लॉक के अंदर',
+		cidrOutside: 'ब्लॉक के बाहर',
+		cidrBlocks: '{n} CIDR ब्लॉक',
+		cidrEmpty: 'विवरण यहाँ दिखेगा — 10.0.0.0/16 या 10.0.0.1 - 10.0.0.50 जैसी रेंज आज़माएँ',
 
 		hbFormat: 'बाइट इस रूप में',
 		hbSep: 'विभाजक',
@@ -743,6 +768,10 @@ const hi: Messages = {
 		'number-base-converter': {
 			name: 'संख्या आधार कनवर्टर',
 			description: 'संख्याओं को द्विआधारी, अष्टाधारी, दशमलव, षोडश आधारी और 36 तक किसी भी आधार में बदलिए'
+		},
+		'cidr-calculator': {
+			name: 'CIDR / सबनेट कैलकुलेटर',
+			description: 'किसी भी IPv4 या IPv6 CIDR ब्लॉक का नेटवर्क, ब्रॉडकास्ट, मास्क और होस्ट रेंज निकालें'
 		},
 		'text-to-hex': {
 			name: 'पाठ ↔ हेक्स / द्विआधारी कनवर्टर',

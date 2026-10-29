@@ -33,6 +33,7 @@ export const TOOL_COMPONENTS: Record<string, () => Promise<{ default: Component 
 	'jsonpath-tester': () => import('./JsonPathTool.svelte'),
 	'bcrypt-generator': () => import('./BcryptTool.svelte'),
 	'user-agent-parser': () => import('./UaTool.svelte'),
+	'cidr-calculator': () => import('./CidrTool.svelte'),
 	'image-to-base64': () => import('./ImageBase64Tool.svelte'),
 	'image-converter': () => import('./ImageConvertTool.svelte'),
 	'image-resizer': () => import('./ImageResizeTool.svelte'),

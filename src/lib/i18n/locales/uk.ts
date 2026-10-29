@@ -501,6 +501,31 @@ const uk: Messages = {
 		nbDec: 'Десяткова',
 		nbHex: 'Шістнадцяткова',
 		nbBits: 'біт',
+		cidrInput: 'CIDR, адреса або діапазон',
+		cidrAddress: 'Адреса',
+		cidrNetwork: 'Мережа',
+		cidrBroadcast: 'Широкомовна',
+		cidrLastAddr: 'Остання адреса',
+		cidrNetmask: 'Маска мережі',
+		cidrWildcard: 'Зворотна маска',
+		cidrFirstHost: 'Перший хост',
+		cidrLastHost: 'Останній хост',
+		cidrTotal: 'Адрес',
+		cidrUsable: 'Доступно хостів',
+		cidrScope: 'Тип діапазону',
+		cidrExpanded: 'Повний запис',
+		cidrInteger: 'Ціле число',
+		cidrBinary: 'Двійковий',
+		cidrReverse: 'Зворотний DNS',
+		cidrHostBits: 'Задано біти хоста — адреса мережі {net}',
+		cidrSplit: 'Розбити на',
+		cidrSubnets: 'підмереж: {n}',
+		cidrShowing: 'показано перші {n}',
+		cidrCheck: 'Чи входить адреса?',
+		cidrInside: 'Усередині блоку',
+		cidrOutside: 'Поза блоком',
+		cidrBlocks: 'CIDR-блоків: {n}',
+		cidrEmpty: 'Тут з’являться дані — спробуйте 10.0.0.0/16 або діапазон 10.0.0.1 - 10.0.0.50',
 
 		hbFormat: 'Байти як',
 		hbSep: 'Роздільник',
@@ -744,6 +769,10 @@ const uk: Messages = {
 		'number-base-converter': {
 			name: 'Конвертер систем числення',
 			description: 'Переводьте числа між двійковою, вісімковою, десятковою, шістнадцятковою та будь-якою основою до 36'
+		},
+		'cidr-calculator': {
+			name: 'CIDR / калькулятор підмереж',
+			description: 'Мережа, широкомовна адреса, маска й діапазон хостів для будь-якого блоку IPv4 чи IPv6'
 		},
 		'text-to-hex': {
 			name: 'Конвертер текст ↔ hex / двійковий',

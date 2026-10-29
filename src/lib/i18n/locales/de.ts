@@ -475,6 +475,31 @@ const de: Messages = {
 		nbDec: 'Dezimal',
 		nbHex: 'Hex',
 		nbBits: 'Bit',
+		cidrInput: 'CIDR, Adresse oder Bereich',
+		cidrAddress: 'Adresse',
+		cidrNetwork: 'Netzwerk',
+		cidrBroadcast: 'Broadcast',
+		cidrLastAddr: 'Letzte Adresse',
+		cidrNetmask: 'Netzmaske',
+		cidrWildcard: 'Wildcard-Maske',
+		cidrFirstHost: 'Erster Host',
+		cidrLastHost: 'Letzter Host',
+		cidrTotal: 'Adressen',
+		cidrUsable: 'Nutzbare Hosts',
+		cidrScope: 'Bereichstyp',
+		cidrExpanded: 'Ausgeschrieben',
+		cidrInteger: 'Ganzzahl',
+		cidrBinary: 'Binär',
+		cidrReverse: 'Reverse-DNS',
+		cidrHostBits: 'Host-Bits sind gesetzt — die Netzwerkadresse ist {net}',
+		cidrSplit: 'Aufteilen in',
+		cidrSubnets: '{n} Subnetze',
+		cidrShowing: 'die ersten {n} werden angezeigt',
+		cidrCheck: 'Enthält Adresse?',
+		cidrInside: 'Im Block',
+		cidrOutside: 'Außerhalb des Blocks',
+		cidrBlocks: '{n} CIDR-Blöcke',
+		cidrEmpty: 'Details erscheinen hier — probiere 10.0.0.0/16 oder einen Bereich wie 10.0.0.1 - 10.0.0.50',
 
 		// Text ↔ hex/binary
 		hbFormat: 'Bytes als',
@@ -714,6 +739,10 @@ const de: Messages = {
 		'number-base-converter': {
 			name: 'Zahlenbasis-Konverter',
 			description: 'Zahlen zwischen Binär, Oktal, Dezimal, Hex und jeder Basis bis 36 umrechnen'
+		},
+		'cidr-calculator': {
+			name: 'CIDR- / Subnetzrechner',
+			description: 'Netzwerk, Broadcast, Maske und Hostbereich für jeden IPv4- oder IPv6-CIDR-Block berechnen'
 		},
 		'text-to-hex': {
 			name: 'Text ↔ Hex / Binär-Konverter',

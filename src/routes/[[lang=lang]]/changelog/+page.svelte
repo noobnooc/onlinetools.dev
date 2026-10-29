@@ -16,6 +16,27 @@
 	<div lang="en">
 	<section class="relative border-l border-line pb-8 pl-6">
 		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full bg-accent" aria-hidden="true"></span>
+		<h2 class="text-sm font-medium">Subnets, IPv4 and IPv6</h2>
+		<p class="mt-0.5 font-mono text-xs text-dim">v2026.10.29</p>
+		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
+			<li>
+				New <a href={lp('/t/cidr-calculator')} class="text-accent hover:underline">CIDR / Subnet
+				Calculator</a>: network and broadcast address, netmask and wildcard, usable host range,
+				exact address counts and the special-purpose range a block belongs to — for IPv4 and IPv6.
+			</li>
+			<li>
+				Paste a range like 10.0.0.1 - 10.0.0.200 to get the fewest CIDR blocks that cover it
+				exactly, split a block into equal subnets, or check whether an address falls inside.
+			</li>
+			<li>
+				Smart Paste now recognizes CIDR blocks and IP ranges. Your network layout stays in the
+				browser, like everything else here.
+			</li>
+		</ul>
+	</section>
+
+	<section class="relative border-l border-line pb-8 pl-6">
+		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
 		<h2 class="text-sm font-medium">Remove a background without uploading the photo</h2>
 		<p class="mt-0.5 font-mono text-xs text-dim">v2026.09.14</p>
 		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">

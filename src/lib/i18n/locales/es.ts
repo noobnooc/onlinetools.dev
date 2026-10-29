@@ -473,6 +473,31 @@ const es: Messages = {
 		nbDec: 'Decimal',
 		nbHex: 'Hex',
 		nbBits: 'bits',
+		cidrInput: 'CIDR, dirección o rango',
+		cidrAddress: 'Dirección',
+		cidrNetwork: 'Red',
+		cidrBroadcast: 'Broadcast',
+		cidrLastAddr: 'Última dirección',
+		cidrNetmask: 'Máscara de red',
+		cidrWildcard: 'Máscara comodín',
+		cidrFirstHost: 'Primer host',
+		cidrLastHost: 'Último host',
+		cidrTotal: 'Direcciones',
+		cidrUsable: 'Hosts utilizables',
+		cidrScope: 'Tipo de rango',
+		cidrExpanded: 'Expandida',
+		cidrInteger: 'Entero',
+		cidrBinary: 'Binario',
+		cidrReverse: 'DNS inverso',
+		cidrHostBits: 'Hay bits de host activos — la dirección de red es {net}',
+		cidrSplit: 'Dividir en',
+		cidrSubnets: '{n} subredes',
+		cidrShowing: 'se muestran las primeras {n}',
+		cidrCheck: '¿Contiene la dirección?',
+		cidrInside: 'Dentro del bloque',
+		cidrOutside: 'Fuera del bloque',
+		cidrBlocks: '{n} bloques CIDR',
+		cidrEmpty: 'Los detalles aparecen aquí — prueba 10.0.0.0/16 o un rango como 10.0.0.1 - 10.0.0.50',
 
 		// Text ↔ hex/binary
 		hbFormat: 'Bytes como',
@@ -709,6 +734,10 @@ const es: Messages = {
 		'number-base-converter': {
 			name: 'Conversor de bases numéricas',
 			description: 'Convierte números entre binario, octal, decimal, hex y cualquier base hasta 36'
+		},
+		'cidr-calculator': {
+			name: 'Calculadora CIDR / de subredes',
+			description: 'Calcula red, broadcast, máscara y rango de hosts de cualquier bloque CIDR IPv4 o IPv6'
 		},
 		'text-to-hex': {
 			name: 'Conversor texto ↔ hex / binario',

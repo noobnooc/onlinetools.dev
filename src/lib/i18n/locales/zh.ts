@@ -472,6 +472,31 @@ const zh: Messages = {
 		nbDec: '十进制',
 		nbHex: '十六进制',
 		nbBits: '位',
+		cidrInput: 'CIDR、地址或范围',
+		cidrAddress: '地址',
+		cidrNetwork: '网络地址',
+		cidrBroadcast: '广播地址',
+		cidrLastAddr: '末地址',
+		cidrNetmask: '子网掩码',
+		cidrWildcard: '反掩码',
+		cidrFirstHost: '首个主机',
+		cidrLastHost: '末个主机',
+		cidrTotal: '地址总数',
+		cidrUsable: '可用主机数',
+		cidrScope: '地址类型',
+		cidrExpanded: '完整写法',
+		cidrInteger: '整数',
+		cidrBinary: '二进制',
+		cidrReverse: '反向 DNS',
+		cidrHostBits: '主机位不为零 — 网络地址应为 {net}',
+		cidrSplit: '拆分为',
+		cidrSubnets: '{n} 个子网',
+		cidrShowing: '仅显示前 {n} 个',
+		cidrCheck: '包含此地址?',
+		cidrInside: '在该网段内',
+		cidrOutside: '不在该网段内',
+		cidrBlocks: '{n} 个 CIDR 块',
+		cidrEmpty: '结果会显示在这里 — 试试 10.0.0.0/16 或 10.0.0.1 - 10.0.0.50 这样的范围',
 
 		// Text ↔ hex/binary
 		hbFormat: '字节表示为',
@@ -711,6 +736,10 @@ const zh: Messages = {
 		'number-base-converter': {
 			name: '进制转换器',
 			description: '在二、八、十、十六进制及至多 36 的任意进制之间转换数字'
+		},
+		'cidr-calculator': {
+			name: 'CIDR / 子网计算器',
+			description: '计算任意 IPv4 或 IPv6 CIDR 网段的网络地址、广播地址、掩码与主机范围'
 		},
 		'text-to-hex': {
 			name: '文本 ↔ 十六进制 / 二进制转换',

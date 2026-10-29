@@ -11,6 +11,29 @@ the footer badge and every `<lastmod>` in the sitemap.
 
 ---
 
+## [2026.10.29] — Subnets, IPv4 and IPv6
+
+### Added
+
+- **CIDR / Subnet Calculator** — type a block like `10.20.0.0/16` or
+  `2001:db8::/48` and get the network and broadcast (or last) address,
+  netmask and wildcard mask, first and last usable host, exact address
+  counts, the special-purpose range it belongs to (RFC 1918, CGNAT,
+  link-local, documentation…), and the integer, hex, binary and reverse-DNS
+  forms of the address.
+- Paste a range (`10.0.0.1 - 10.0.0.200`) to get the fewest CIDR blocks that
+  cover it exactly; split a block into equal subnets; check whether an
+  address falls inside. Netmask and Cisco wildcard notation are accepted.
+- Smart Paste recognizes CIDR blocks and IPv4 ranges.
+- About & FAQ copy in English and Chinese; the tool's name, description and
+  labels in all eighteen languages.
+
+### Notes
+
+- Addresses with leading zeros (`010.0.0.1`) are rejected with an
+  explanation rather than guessed at, since parsers disagree on octal.
+- The social preview image now shows the current tool count.
+
 ## [2026.09.14] — Remove a background without uploading the photo
 
 ### Added

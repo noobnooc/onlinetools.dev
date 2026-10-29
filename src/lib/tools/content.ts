@@ -726,6 +726,36 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
 		]
 	},
 
+	'cidr-calculator': {
+		about: [
+			'Type a CIDR block such as 10.20.0.0/16 or 2001:db8::/48 and read everything about it at once: network address, broadcast (or last address for IPv6), netmask and wildcard mask, first and last usable host, address count, and which special-purpose range it sits in — RFC 1918 private space, carrier-grade NAT, link-local, documentation, multicast and the rest. A bare address works too, as does netmask notation (192.168.1.0 255.255.255.0) and the Cisco wildcard form (0.0.0.255).',
+			'Paste a range instead — 10.0.0.1 - 10.0.0.200 — and you get the smallest list of CIDR blocks that covers it exactly, which is what firewall rules, security groups and allow-lists actually accept. The split view divides a block into equal subnets (a /16 into /24s, a /32 into /48s) for planning VPCs and VLANs, and the membership check tells you whether a given address falls inside.',
+			'All arithmetic uses BigInt, so IPv6 counts are exact rather than rounded to floating point: a /64 has 18446744073709551616 addresses, not "1.8e19". Nothing is looked up online — the tool knows the IANA special-purpose ranges, not who owns an address — and your internal network layout never leaves the browser.'
+		],
+		faqs: [
+			{
+				q: 'Why does a /24 have 254 usable hosts and not 256?',
+				a: 'In IPv4 the first address of a subnet names the network itself and the last is the broadcast address, so neither can be given to a host. The exceptions are /31, which RFC 3021 lets point-to-point links use in full (two hosts), and /32, a single address. IPv6 has no broadcast, so every address in an IPv6 block counts as usable.'
+			},
+			{
+				q: 'What does "host bits are set" mean?',
+				a: 'You typed an address that is not the start of its block, such as 10.1.2.3/8. Most tools silently round it down to 10.0.0.0/8; some, like Python\'s ipaddress module in strict mode or certain cloud consoles, reject it. The calculator shows the real network address so you can paste the canonical form.'
+			},
+			{
+				q: 'Why are addresses with leading zeros rejected?',
+				a: 'Because systems disagree on what they mean. The classic inet_aton parser reads 010 as octal (8), while most others read it as decimal (10) — a mismatch that has caused real access-control bypasses. Rather than guess, the calculator asks you to write the number without the leading zero.'
+			},
+			{
+				q: 'How is a range turned into CIDR blocks?',
+				a: 'Greedily from the start: at each step it takes the largest block that is aligned on the current address and does not run past the end of the range, then moves on. That yields the minimum number of blocks. An aligned range like 192.168.0.0 – 192.168.255.255 collapses to a single /16; an awkward one like .1 – .10 needs five.'
+			},
+			{
+				q: 'What is the wildcard mask for?',
+				a: 'It is the netmask inverted — 0.0.0.255 for a /24 — and it is how Cisco IOS access lists and OSPF network statements express a range. You can paste either form into the calculator; it recognizes a wildcard mask and converts it to the prefix length.'
+			}
+		]
+	},
+
 	'color-converter': {
 		about: [
 			'Enter a color in any common notation — #hex, rgb(), hsl(), or a CSS named color — and get all formats at once: HEX, RGB, HSL and OKLCH, next to a live swatch. Alpha channels are preserved across formats, and output uses modern CSS syntax (space-separated channels) that pastes cleanly into current stylesheets.',

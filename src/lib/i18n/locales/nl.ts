@@ -501,6 +501,31 @@ const nl: Messages = {
 		nbDec: 'Decimaal',
 		nbHex: 'Hex',
 		nbBits: 'bits',
+		cidrInput: 'CIDR, adres of bereik',
+		cidrAddress: 'Adres',
+		cidrNetwork: 'Netwerk',
+		cidrBroadcast: 'Broadcast',
+		cidrLastAddr: 'Laatste adres',
+		cidrNetmask: 'Netmasker',
+		cidrWildcard: 'Wildcardmasker',
+		cidrFirstHost: 'Eerste host',
+		cidrLastHost: 'Laatste host',
+		cidrTotal: 'Adressen',
+		cidrUsable: 'Bruikbare hosts',
+		cidrScope: 'Soort bereik',
+		cidrExpanded: 'Uitgeschreven',
+		cidrInteger: 'Geheel getal',
+		cidrBinary: 'Binair',
+		cidrReverse: 'Reverse DNS',
+		cidrHostBits: 'Er zijn hostbits gezet — het netwerkadres is {net}',
+		cidrSplit: 'Opsplitsen in',
+		cidrSubnets: '{n} subnetten',
+		cidrShowing: 'de eerste {n} getoond',
+		cidrCheck: 'Bevat adres?',
+		cidrInside: 'Binnen het blok',
+		cidrOutside: 'Buiten het blok',
+		cidrBlocks: '{n} CIDR-blokken',
+		cidrEmpty: 'Details verschijnen hier — probeer 10.0.0.0/16 of een bereik als 10.0.0.1 - 10.0.0.50',
 
 		hbFormat: 'Bytes als',
 		hbSep: 'Scheidingsteken',
@@ -744,6 +769,10 @@ const nl: Messages = {
 		'number-base-converter': {
 			name: 'Talstelselconverter',
 			description: 'Converteer getallen tussen binair, octaal, decimaal, hex en elk grondtal tot 36'
+		},
+		'cidr-calculator': {
+			name: 'CIDR- / subnetcalculator',
+			description: 'Bereken netwerk, broadcast, masker en hostbereik van elk IPv4- of IPv6-CIDR-blok'
 		},
 		'text-to-hex': {
 			name: 'Tekst ↔ hex-/binairconverter',
