@@ -7,6 +7,7 @@
 	import { pushRecentTool } from '$lib/state/app.svelte';
 	import { issueUrl } from '$lib/links';
 	import { t, lt, ltCategory, lp, canonical, locale } from '$lib/i18n';
+	import { joinSentences } from '$lib/i18n/codes';
 	import ToolCard from './ToolCard.svelte';
 	import FavoriteButton from './FavoriteButton.svelte';
 	import PlusCorners from './PlusCorners.svelte';
@@ -85,7 +86,7 @@
 <SeoHead
 	{path}
 	title={t('toolTitle', { name: l10n.name })}
-	description="{l10n.description}. {t('toolMetaSuffix')}"
+	description={joinSentences(l10n.description, t('toolMetaSuffix'), locale())}
 />
 
 <svelte:head>

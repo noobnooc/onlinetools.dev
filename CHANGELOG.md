@@ -11,6 +11,18 @@ the footer badge and every `<lastmod>` in the sitemap.
 
 ---
 
+## [2026.10.30] — Every tool explained in every language
+
+### Changed
+
+- About & FAQ copy for the **CIDR / Subnet Calculator** and the **Background
+  Remover** translated into the sixteen languages that lacked it; every tool
+  page is now fully localized in all eighteen languages, including the
+  `FAQPage` structured data.
+- Tool meta descriptions join the tagline and the privacy note with the
+  locale's own sentence stop (`。` in Chinese and Japanese, `।` in Hindi, a
+  space in Thai) instead of an English `. `.
+
 ## [2026.10.29] — Subnets, IPv4 and IPv6
 
 ### Added

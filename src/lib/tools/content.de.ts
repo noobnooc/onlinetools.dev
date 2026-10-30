@@ -1156,6 +1156,66 @@ const TOOL_CONTENT_DE: Record<string, ToolContent> = {
 				a: 'Das ICC-Profil sagt Software, wie die Farben zu interpretieren sind — es zu entfernen kann sie sichtbar verschieben, und es enthält keine persönlichen Informationen. Die Bereinigung entfernt identifizierende Metadaten (EXIF, XMP, IPTC, Kommentare, Zeitstempel) und behält, was das Bild zum korrekten Rendern braucht.'
 			}
 		]
+	},
+
+	'cidr-calculator': {
+		about: [
+			'Gib einen CIDR-Block wie 10.20.0.0/16 oder 2001:db8::/48 ein und lies alles darüber auf einen Blick ab: Netzwerkadresse, Broadcast (bzw. letzte Adresse bei IPv6), Netzmaske und Wildcard-Maske, erster und letzter nutzbarer Host, Anzahl der Adressen und in welchem Sonderbereich er liegt — privater Adressraum nach RFC 1918, Carrier-Grade-NAT, Link-Local, Dokumentation, Multicast und der Rest. Eine einzelne Adresse funktioniert ebenfalls, genauso wie die Netzmasken-Schreibweise (192.168.1.0 255.255.255.0) und die Cisco-Wildcard-Form (0.0.0.255).',
+			'Füge stattdessen einen Bereich ein — 10.0.0.1 - 10.0.0.200 — und du bekommst die kürzeste Liste von CIDR-Blöcken, die ihn exakt abdeckt; genau das akzeptieren Firewall-Regeln, Security Groups und Allow-Lists tatsächlich. Die Aufteilungsansicht zerlegt einen Block in gleich große Subnetze (ein /16 in /24er, ein /32 in /48er) für die Planung von VPCs und VLANs, und die Zugehörigkeitsprüfung sagt dir, ob eine bestimmte Adresse darin liegt.',
+			'Sämtliche Arithmetik nutzt BigInt, daher sind IPv6-Anzahlen exakt statt auf Gleitkommawerte gerundet: Ein /64 hat 18446744073709551616 Adressen, nicht „1.8e19“. Nichts wird online nachgeschlagen — das Tool kennt die IANA-Sonderbereiche, nicht aber, wem eine Adresse gehört — und dein internes Netzwerklayout verlässt nie den Browser.'
+		],
+		faqs: [
+			{
+				q: 'Warum hat ein /24 254 nutzbare Hosts und nicht 256?',
+				a: 'Bei IPv4 bezeichnet die erste Adresse eines Subnetzes das Netzwerk selbst und die letzte ist die Broadcast-Adresse, daher kann keine der beiden einem Host zugewiesen werden. Ausnahmen sind /31, das Punkt-zu-Punkt-Verbindungen laut RFC 3021 vollständig nutzen dürfen (zwei Hosts), und /32, eine einzelne Adresse. IPv6 kennt keinen Broadcast, daher zählt jede Adresse in einem IPv6-Block als nutzbar.'
+			},
+			{
+				q: 'Was bedeutet „Host-Bits sind gesetzt“?',
+				a: 'Du hast eine Adresse eingegeben, die nicht der Anfang ihres Blocks ist, etwa 10.1.2.3/8. Die meisten Tools runden sie stillschweigend auf 10.0.0.0/8 ab; manche, wie Pythons ipaddress-Modul im Strict-Modus oder bestimmte Cloud-Konsolen, lehnen sie ab. Der Rechner zeigt die tatsächliche Netzwerkadresse an, damit du die kanonische Form einfügen kannst.'
+			},
+			{
+				q: 'Warum werden Adressen mit führenden Nullen abgelehnt?',
+				a: 'Weil Systeme sich nicht einig sind, was sie bedeuten. Der klassische inet_aton-Parser liest 010 als Oktalzahl (8), die meisten anderen lesen es als Dezimalzahl (10) — eine Diskrepanz, die schon zu echten Umgehungen von Zugriffskontrollen geführt hat. Statt zu raten, bittet dich der Rechner, die Zahl ohne führende Null zu schreiben.'
+			},
+			{
+				q: 'Wie wird ein Bereich in CIDR-Blöcke umgewandelt?',
+				a: 'Gierig vom Anfang her: Bei jedem Schritt wird der größte Block genommen, der an der aktuellen Adresse ausgerichtet ist und nicht über das Ende des Bereichs hinausreicht, dann geht es weiter. Das ergibt die minimale Anzahl an Blöcken. Ein ausgerichteter Bereich wie 192.168.0.0 – 192.168.255.255 schrumpft auf ein einziges /16 zusammen; ein ungünstiger wie .1 – .10 braucht fünf.'
+			},
+			{
+				q: 'Wofür ist die Wildcard-Maske da?',
+				a: 'Sie ist die invertierte Netzmaske — 0.0.0.255 bei einem /24 — und so drücken Access-Listen in Cisco IOS und network-Anweisungen in OSPF einen Bereich aus. Du kannst beide Formen in den Rechner einfügen; er erkennt eine Wildcard-Maske und rechnet sie in die Präfixlänge um.'
+			}
+		]
+	},
+
+	'background-remover': {
+		about: [
+			'Zieh ein Foto hinein und das Motiv wird automatisch freigestellt — kein Pinsel, kein Herumklicken an den Kanten. Lade es als transparentes PNG oder WebP herunter oder setze es auf eine Volltonfarbe (Weiß für ein Produktinserat, eine Markenfarbe für ein Thumbnail) und exportiere ein JPEG. Der Freisteller entsteht in Originalauflösung, ein 4000-Pixel-Foto bleibt also ein 4000-Pixel-Foto.',
+			'Unter der Haube arbeitet U²-Net, das Netzwerk zur Segmentierung auffälliger Objekte hinter dem beliebten Kommandozeilen-Tool rembg, ausgeführt über ONNX Runtime, kompiliert zu WebAssembly. Beim ersten Einsatz werden die Runtime und das 4.6 MB große Modell von dieser Website geladen (insgesamt etwa 19 MB); danach speichert dein Browser beides im Cache, und spätere Durchläufe brauchen überhaupt kein Netzwerk mehr. Die Inferenz dauert auf einem typischen Laptop ein bis drei Sekunden.',
+			'Dein Foto verlässt die Seite nie — kein Upload, keine Warteschlange, kein Konto. Das zählt hier mehr als bei den meisten Tools: Die Bilder, die Leute freistellen, sind Produktfotos vor dem Launch, Ausweisfotos und Familienporträts. Es bedeutet auch keine Credits pro Bild und keine Auflösungsgrenze — das Tool ist in jeder Größe kostenlos, die dein Browser dekodieren kann.'
+		],
+		faqs: [
+			{
+				q: 'Ist das eine kostenlose Alternative zu remove.bg?',
+				a: 'Für den Normalfall — ein klares Motiv, ein transparentes PNG in voller Auflösung — ja, ohne Anmeldung, Credits oder Wasserzeichen, weil kein Server die Arbeit erledigt. Der Kompromiss ist die Qualität in schwierigen Fällen: Haare, Fell, Glas und Bewegungsunschärfe geraten gröber als bei einem Cloud-Dienst mit einem viel größeren Modell, und die Maske wird mit 320 px berechnet und dann wieder hochskaliert, sehr feine Details sind also nur angenähert.'
+			},
+			{
+				q: 'Warum dauert der erste Durchlauf eine Weile?',
+				a: 'Die Seite muss ONNX Runtime (etwa 14 MB WebAssembly) und das Modell (4.6 MB) von dieser Website laden, bevor sie irgendetwas tun kann — der Fortschrittsbalken zeigt genau diesen Download. Beides wird vom Browser zwischengespeichert, daher startet das zweite Bild, und jedes Bild nach einem Neuladen, sofort. Der Durchlauf des Netzes selbst dauert auf einem Laptop ein bis drei Sekunden und auf einem Handy länger.'
+			},
+			{
+				q: 'Mit welchen Bildern funktioniert es am besten?',
+				a: 'Mit Fotos, auf denen sich ein Motiv vom Hintergrund abhebt: eine Person vor einer Wand, ein Produkt auf einem Tisch, ein Haustier auf dem Boden. Das Modell sucht nach dem, was visuell hervorsticht, und tut sich daher schwer, wenn das Motiv das ganze Bild ausfüllt, wenn mehrere Dinge um Aufmerksamkeit konkurrieren oder wenn Motiv und Hintergrund Farben und Textur teilen. Das Bild vor dem Hineinziehen enger auf ein einzelnes Motiv zuzuschneiden, behebt ein schlechtes Ergebnis oft.'
+			},
+			{
+				q: 'Wie bekomme ich einen weißen statt eines transparenten Hintergrunds?',
+				a: 'Stell Hintergrund auf Farbe und wähle Weiß (oder eine beliebige Farbe) — der Freisteller wird darauf montiert, und JPEG wird als Ausgabeformat verfügbar. Bleib bei Transparent, wenn das Bild später auf einer farbigen oder gemusterten Fläche sitzen soll; PNG und WebP speichern beide den Alphakanal, WebP bei einem Bruchteil der Größe.'
+			},
+			{
+				q: 'Behält das Ergebnis die EXIF-Daten meines Fotos?',
+				a: 'Nein. Die Ausgabe wird aus Pixeln auf einem Canvas gerendert, daher werden Kameramodell, Zeitstempel und GPS-Koordinaten nicht übernommen — meist genau das, was man für ein Bild will, das in ein Inserat oder ein Social-Media-Profil wandert. Wenn du die Metadaten brauchst, bewahre das Original daneben auf; der EXIF-Viewer hier zeigt, was es enthält.'
+			}
+		]
 	}
 };
 

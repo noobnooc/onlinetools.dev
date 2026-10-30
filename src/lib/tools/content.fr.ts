@@ -1156,6 +1156,66 @@ const TOOL_CONTENT_FR: Record<string, ToolContent> = {
 				a: 'Le profil ICC dit aux logiciels comment interpréter les couleurs — le retirer peut les décaler visiblement, et il ne contient aucune information personnelle. Le nettoyeur retire les métadonnées identifiantes (EXIF, XMP, IPTC, commentaires, horodatages) et garde ce dont l’image a besoin pour s’afficher correctement.'
 			}
 		]
+	},
+
+	'cidr-calculator': {
+		about: [
+			'Saisissez un bloc CIDR comme 10.20.0.0/16 ou 2001:db8::/48 et lisez tout à son sujet d’un seul coup d’œil : adresse réseau, broadcast (ou dernière adresse en IPv6), masque de sous-réseau et masque générique, premier et dernier hôte utilisable, nombre d’adresses, et la plage à usage spécial dans laquelle il se trouve — espace privé RFC 1918, NAT de niveau opérateur (CGNAT), link-local, documentation, multicast et le reste. Une adresse seule fonctionne aussi, de même que la notation avec masque (192.168.1.0 255.255.255.0) et la forme générique de Cisco (0.0.0.255).',
+			'Collez plutôt une plage — 10.0.0.1 - 10.0.0.200 — et vous obtenez la plus courte liste de blocs CIDR qui la couvre exactement, ce que les règles de pare-feu, les security groups et les listes d’autorisation acceptent réellement. La vue de découpage divise un bloc en sous-réseaux égaux (un /16 en /24, un /32 en /48) pour planifier des VPC et des VLAN, et le test d’appartenance vous indique si une adresse donnée s’y trouve.',
+			'Tous les calculs utilisent BigInt, si bien que les décomptes IPv6 sont exacts au lieu d’être arrondis en virgule flottante : un /64 compte 18446744073709551616 adresses, pas "1.8e19". Rien n’est consulté en ligne — l’outil connaît les plages à usage spécial de l’IANA, pas le propriétaire d’une adresse — et le plan de votre réseau interne ne quitte jamais le navigateur.'
+		],
+		faqs: [
+			{
+				q: 'Pourquoi un /24 a-t-il 254 hôtes utilisables et non 256 ?',
+				a: 'En IPv4, la première adresse d’un sous-réseau désigne le réseau lui-même et la dernière est l’adresse de broadcast, donc aucune des deux ne peut être attribuée à un hôte. Les exceptions sont le /31, que la RFC 3021 permet aux liaisons point à point d’utiliser entièrement (deux hôtes), et le /32, une adresse unique. IPv6 n’a pas de broadcast, donc chaque adresse d’un bloc IPv6 compte comme utilisable.'
+			},
+			{
+				q: 'Que signifie "des bits d’hôte sont définis" ?',
+				a: 'Vous avez saisi une adresse qui n’est pas le début de son bloc, comme 10.1.2.3/8. La plupart des outils l’arrondissent silencieusement à 10.0.0.0/8 ; certains, comme le module ipaddress de Python en mode strict ou certaines consoles cloud, la rejettent. Le calculateur affiche la véritable adresse réseau pour que vous puissiez coller la forme canonique.'
+			},
+			{
+				q: 'Pourquoi les adresses avec des zéros en tête sont-elles rejetées ?',
+				a: 'Parce que les systèmes ne s’accordent pas sur leur signification. Le parseur classique inet_aton lit 010 en octal (8), alors que la plupart des autres le lisent en décimal (10) — un désaccord qui a déjà permis de vrais contournements de contrôles d’accès. Plutôt que de deviner, le calculateur vous demande d’écrire le nombre sans le zéro initial.'
+			},
+			{
+				q: 'Comment une plage est-elle convertie en blocs CIDR ?',
+				a: 'De façon gloutonne, depuis le début : à chaque étape, il prend le plus grand bloc aligné sur l’adresse courante qui ne dépasse pas la fin de la plage, puis passe à la suite. On obtient ainsi le nombre minimal de blocs. Une plage alignée comme 192.168.0.0 – 192.168.255.255 se réduit à un seul /16 ; une plage malcommode comme .1 – .10 en nécessite cinq.'
+			},
+			{
+				q: 'À quoi sert le masque générique ?',
+				a: 'C’est le masque de sous-réseau inversé — 0.0.0.255 pour un /24 — et c’est ainsi que les listes d’accès de Cisco IOS et les instructions network d’OSPF expriment une plage. Vous pouvez coller l’une ou l’autre forme dans le calculateur ; il reconnaît un masque générique et le convertit en longueur de préfixe.'
+			}
+		]
+	},
+
+	'background-remover': {
+		about: [
+			'Déposez une photo et le sujet est détouré automatiquement — pas de pinceau, pas de clics tout autour des contours. Téléchargez-le en PNG ou WebP transparent, ou aplatissez-le sur une couleur unie (du blanc pour une fiche produit, une couleur de marque pour une miniature) et exportez un JPEG. Le détourage est produit à la résolution d’origine : une photo de 4000 pixels reste une photo de 4000 pixels.',
+			'Sous le capot tourne U²-Net, le réseau de segmentation d’objets saillants derrière l’outil en ligne de commande populaire rembg, exécuté via ONNX Runtime compilé en WebAssembly. La première utilisation télécharge le runtime et le modèle de 4,6 Mo depuis ce site (environ 19 Mo au total), après quoi votre navigateur met les deux en cache et les utilisations suivantes n’ont plus du tout besoin du réseau. L’inférence prend une à trois secondes sur un ordinateur portable classique.',
+			'Votre photo ne quitte jamais la page — pas d’envoi, pas de file d’attente, pas de compte. C’est plus important ici que pour la plupart des outils : les images que l’on détoure sont des photos de produits avant leur lancement, des photos d’identité et des portraits de famille. Cela signifie aussi aucun crédit par image et aucune limite de résolution — l’outil est gratuit à toute taille que votre navigateur peut décoder.'
+		],
+		faqs: [
+			{
+				q: 'Est-ce une alternative gratuite à remove.bg ?',
+				a: 'Pour le cas courant — un sujet net, un PNG transparent en pleine résolution — oui, sans inscription, sans crédits ni filigrane, puisqu’aucun serveur ne fait le travail. La contrepartie, c’est la qualité sur les cas difficiles : cheveux, fourrure, verre et flou de bougé ressortent plus grossiers qu’avec un service cloud qui exécute un modèle bien plus gros, et le masque est prédit à 320 px avant d’être remis à l’échelle, donc les détails très fins sont approximatifs.'
+			},
+			{
+				q: 'Pourquoi la première exécution prend-elle un moment ?',
+				a: 'La page doit télécharger ONNX Runtime (environ 14 Mo de WebAssembly) et le modèle (4,6 Mo) depuis ce site avant de pouvoir faire quoi que ce soit — la barre de progression montre exactement ce téléchargement. Les deux sont mis en cache par le navigateur, donc la deuxième image, et chaque image après un rechargement, démarre immédiatement. L’exécution du réseau elle-même prend une à trois secondes sur un portable, et plus longtemps sur un téléphone.'
+			},
+			{
+				q: 'Quelles images donnent les meilleurs résultats ?',
+				a: 'Les photos avec un seul sujet qui se détache de son arrière-plan : une personne devant un mur, un produit sur une table, un animal sur le sol. Le modèle cherche ce qui est visuellement saillant, il a donc du mal quand le sujet remplit tout le cadre, quand plusieurs éléments se disputent l’attention, ou quand le sujet et l’arrière-plan partagent couleurs et texture. Recadrer plus serré autour d’un seul sujet avant de déposer le fichier corrige souvent un mauvais résultat.'
+			},
+			{
+				q: 'Comment obtenir un fond blanc plutôt que transparent ?',
+				a: 'Passez Arrière-plan sur Couleur et choisissez le blanc (ou n’importe quelle couleur) — le détourage est composité dessus et le JPEG devient disponible comme format de sortie. Gardez Transparent si l’image doit ensuite être posée sur une surface colorée ou à motif ; PNG et WebP conservent tous deux le canal alpha, WebP pour une fraction de la taille.'
+			},
+			{
+				q: 'Le résultat conserve-t-il les données EXIF de ma photo ?',
+				a: 'Non. La sortie est rendue à partir des pixels d’un canvas, donc le modèle d’appareil, les horodatages et les coordonnées GPS ne sont pas repris — en général ce que l’on veut pour une image destinée à une annonce ou à un profil sur les réseaux sociaux. Si vous avez besoin des métadonnées, conservez l’original à côté ; la visionneuse EXIF de ce site montre ce qu’il contient.'
+			}
+		]
 	}
 };
 

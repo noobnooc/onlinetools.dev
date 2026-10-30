@@ -1155,6 +1155,66 @@ const TOOL_CONTENT_NL: Record<string, ToolContent> = {
 				a: 'Het ICC-profiel vertelt software hoe de kleuren geïnterpreteerd moeten worden — het weghalen kan ze zichtbaar verschuiven, en het bevat geen persoonsgegevens. De cleaner verwijdert identificerende metadata (EXIF, XMP, IPTC, commentaren, tijdstempels) en behoudt wat de afbeelding nodig heeft om correct weergegeven te worden.'
 			}
 		]
+	},
+
+	'cidr-calculator': {
+		about: [
+			'Typ een CIDR-blok zoals 10.20.0.0/16 of 2001:db8::/48 en lees alles erover in één keer af: netwerkadres, broadcast (of laatste adres bij IPv6), netmasker en wildcardmasker, eerste en laatste bruikbare host, aantal adressen, en in welk bereik voor speciaal gebruik het valt — RFC 1918-privéruimte, carrier-grade NAT, link-local, documentatie, multicast en de rest. Een los adres werkt ook, net als netmasknotatie (192.168.1.0 255.255.255.0) en de wildcardvorm van Cisco (0.0.0.255).',
+			'Plak in plaats daarvan een bereik — 10.0.0.1 - 10.0.0.200 — en je krijgt de kortste lijst CIDR-blokken die het exact afdekt, en dat is wat firewallregels, security groups en allowlists daadwerkelijk accepteren. De splitsweergave deelt een blok op in gelijke subnetten (een /16 in /24’s, een /32 in /48’s) voor het plannen van VPC’s en VLAN’s, en de lidmaatschapscontrole vertelt je of een bepaald adres erbinnen valt.',
+			'Al het rekenwerk gebruikt BigInt, dus IPv6-aantallen zijn exact in plaats van afgerond op floating point: een /64 heeft 18446744073709551616 adressen, niet “1.8e19”. Er wordt niets online opgezocht — de tool kent de IANA-bereiken voor speciaal gebruik, niet wie een adres bezit — en de indeling van je interne netwerk verlaat de browser nooit.'
+		],
+		faqs: [
+			{
+				q: 'Waarom heeft een /24 254 bruikbare hosts en geen 256?',
+				a: 'Bij IPv4 benoemt het eerste adres van een subnet het netwerk zelf en is het laatste het broadcastadres, dus geen van beide kan aan een host worden gegeven. De uitzonderingen zijn /31, dat point-to-point-verbindingen volgens RFC 3021 volledig mogen gebruiken (twee hosts), en /32, één enkel adres. IPv6 kent geen broadcast, dus elk adres in een IPv6-blok telt als bruikbaar.'
+			},
+			{
+				q: 'Wat betekent “er zijn hostbits gezet”?',
+				a: 'Je hebt een adres getypt dat niet het begin van zijn blok is, zoals 10.1.2.3/8. De meeste tools ronden dat stilletjes af naar 10.0.0.0/8; sommige, zoals de ipaddress-module van Python in strikte modus of bepaalde cloudconsoles, weigeren het. De calculator toont het echte netwerkadres, zodat je de canonieke vorm kunt plakken.'
+			},
+			{
+				q: 'Waarom worden adressen met voorloopnullen geweigerd?',
+				a: 'Omdat systemen het oneens zijn over wat ze betekenen. De klassieke inet_aton-parser leest 010 als octaal (8), terwijl de meeste andere het als decimaal (10) lezen — een verschil dat al tot echte omzeilingen van toegangscontrole heeft geleid. In plaats van te gokken vraagt de calculator je het getal zonder voorloopnul te schrijven.'
+			},
+			{
+				q: 'Hoe wordt een bereik omgezet in CIDR-blokken?',
+				a: 'Gretig, vanaf het begin: bij elke stap wordt het grootste blok genomen dat uitgelijnd is op het huidige adres en niet voorbij het einde van het bereik loopt, waarna het verdergaat. Dat levert het minimale aantal blokken op. Een uitgelijnd bereik als 192.168.0.0 – 192.168.255.255 valt samen tot één /16; een onhandig bereik als .1 – .10 heeft er vijf nodig.'
+			},
+			{
+				q: 'Waar is het wildcardmasker voor?',
+				a: 'Het is het omgekeerde netmasker — 0.0.0.255 voor een /24 — en zo drukken access lists in Cisco IOS en network-statements in OSPF een bereik uit. Je kunt beide vormen in de calculator plakken; hij herkent een wildcardmasker en zet het om naar de prefixlengte.'
+			}
+		]
+	},
+
+	'background-remover': {
+		about: [
+			'Sleep een foto erin en het onderwerp wordt automatisch uitgesneden — geen penseel, geen geklik langs de randen. Download het als transparante PNG of WebP, of plaats het op een effen kleur (wit voor een productvermelding, een merkkleur voor een thumbnail) en exporteer een JPEG. De uitsnede wordt op de originele resolutie gemaakt, dus een foto van 4000 pixels blijft een foto van 4000 pixels.',
+			'Onder de motorkap zit U²-Net, het netwerk voor segmentatie van opvallende objecten achter de populaire commandlinetool rembg, dat draait via ONNX Runtime, gecompileerd naar WebAssembly. Bij het eerste gebruik worden de runtime en het model van 4.6 MB van deze site opgehaald (ongeveer 19 MB in totaal); daarna cachet je browser beide en hebben latere runs helemaal geen netwerk meer nodig. Inferentie duurt één tot drie seconden op een gemiddelde laptop.',
+			'Je foto verlaat de pagina nooit — geen upload, geen wachtrij en geen account. Dat telt hier zwaarder dan bij de meeste tools: wat mensen uitsnijden zijn productfoto’s vóór de lancering, pasfoto’s en familieportretten. Het betekent ook geen credits per afbeelding en geen resolutielimiet — de tool is gratis op elk formaat dat je browser kan decoderen.'
+		],
+		faqs: [
+			{
+				q: 'Is dit een gratis alternatief voor remove.bg?',
+				a: 'Voor het gewone geval — één duidelijk onderwerp, een transparante PNG op volle resolutie — ja, zonder aanmelding, credits of watermerk, omdat er geen server is die het werk doet. De keerzijde is de kwaliteit bij lastige gevallen: haar, vacht, glas en bewegingsonscherpte komen ruwer uit dan bij een clouddienst die een veel groter model draait, en het masker wordt op 320 px voorspeld voordat het weer wordt opgeschaald, dus heel fijne details zijn bij benadering.'
+			},
+			{
+				q: 'Waarom duurt de eerste run even?',
+				a: 'De pagina moet eerst ONNX Runtime (ongeveer 14 MB WebAssembly) en het model (4.6 MB) van deze site ophalen voordat ze iets kan doen — de voortgangsbalk toont precies die download. Beide worden door de browser gecachet, dus de tweede afbeelding, en elke afbeelding na het herladen, begint meteen. De run van het netwerk zelf duurt één tot drie seconden op een laptop en langer op een telefoon.'
+			},
+			{
+				q: 'Welke afbeeldingen werken het best?',
+				a: 'Foto’s met één onderwerp dat afsteekt tegen de achtergrond: een persoon voor een muur, een product op een tafel, een huisdier op de vloer. Het model zoekt naar wat visueel opvalt, dus het heeft moeite wanneer het onderwerp het hele beeld vult, wanneer meerdere dingen om aandacht strijden, of wanneer onderwerp en achtergrond kleuren en textuur delen. Dichter op één onderwerp bijsnijden voordat je het bestand erin sleept, lost een slecht resultaat vaak op.'
+			},
+			{
+				q: 'Hoe krijg ik een witte achtergrond in plaats van transparant?',
+				a: 'Zet Achtergrond op Kleur en kies wit (of een andere kleur) — de uitsnede wordt daarop samengevoegd en JPEG wordt beschikbaar als uitvoerformaat. Houd Transparant aan als de afbeelding later op een gekleurd of gedessineerd oppervlak komt; PNG en WebP slaan allebei het alfakanaal op, WebP op een fractie van de grootte.'
+			},
+			{
+				q: 'Behoudt het resultaat de EXIF-gegevens van mijn foto?',
+				a: 'Nee. De uitvoer wordt vanuit pixels op een canvas gerenderd, dus cameramodel, tijdstempels en GPS-coördinaten gaan niet mee — meestal precies wat je wilt voor een afbeelding die naar een advertentie of een socialemediaprofiel gaat. Heb je de metadata nodig, bewaar het origineel dan ernaast; de EXIF-viewer op deze site laat zien wat erin staat.'
+			}
+		]
 	}
 };
 

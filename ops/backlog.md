@@ -15,8 +15,7 @@ _(empty — humans: put a line here to steer the next run)_
 
 | Item | Area | Impact | Effort | Notes |
 | --- | --- | :-: | :-: | --- |
-| Keep a 7-day log of the top human HTML paths | growth | 3 | 1 | One day (10-28) is recorded in `metrics.md`: traffic is a long tail with no dominant tool; zh/id localized pages show up near the top. Record a day each run until there are 7 to rank against. `clientRefererHost` is not available on this plan |
-| Translate the Background Remover About/FAQ content into the 16 locales that lack it | content | 2 | 2 | Every other tool has all 17 translations; `bgremove` only has `en` + `zh`. Follow the tone of each `content.<lang>.ts` |
+| Keep a 7-day log of the top human HTML paths | growth | 3 | 1 | Three days (10-27→29) are recorded in `metrics.md`: traffic is a long tail with no dominant tool; zh/id localized pages show up near the top. Record a day each run until there are 7 to rank against. `clientRefererHost` is not available on this plan |
 | JWT encoder / signer (HS256/384/512, RS/ES via WebCrypto) | tool | 3 | 2 | Pairs with the decoder; add as `related` both ways |
 | Unix file-permission (chmod) calculator | tool | 2 | 1 | Symbolic ↔ octal, with `ls -l` string parsing |
 | cURL → fetch / Python requests converter | tool | 3 | 3 | Developers paste curl commands with tokens in them — the local angle is strong |
@@ -29,22 +28,23 @@ _(empty — humans: put a line here to steer the next run)_
 | `.env` ↔ JSON ↔ YAML converter | tool | 1 | 1 | |
 | SVG optimizer / minifier | tool | 2 | 2 | Check bundle cost; must be dynamically imported |
 | Audit titles and meta descriptions for the top pages against what people search for | seo | 3 | 1 | Use WebSearch to see competing titles; keep copy honest |
-| JSON-LD (`SoftwareApplication` + `FAQPage`) on tool pages, if not already present | seo | 2 | 1 | Check the built HTML first |
 | More pipeline presets as indexable pages (`/chain`) for common multi-step jobs | growth | 2 | 1 | e.g. "decode a JWT and pretty-print the payload" already exists — find the next ones |
 | Lighthouse pass on the 5 most-visited pages (performance, a11y) | quality | 2 | 2 | Chromium + Playwright are preinstalled in the container |
-| Audit zone settings (TLS min version, HSTS, Always Use HTTPS, HTTP/3, Brotli, caching of `/_app/immutable/*`) | cloudflare | 2 | 1 | Log every change in `cloudflare-changes.md` |
+| Enable HSTS (zone `security_header`), starting at a short max-age (e.g. 1 day → 6 months), no includeSubDomains/preload | cloudflare | 1 | 1 | 10-30 audit: TLS 1.2 min, TLS 1.3, Always Use HTTPS, HTTP/3 and Brotli are already on; email obfuscation turned off. HSTS is the only gap, and it's sticky in browsers, so ramp it up slowly |
 | Update the OG image / README tool count when the number of tools changes | housekeeping | 1 | 1 | `pnpm brand:assets`; see docs/deployment.md. Done for 46 on 10-29 |
-| Translate the CIDR calculator About/FAQ into the 16 locales that lack it | content | 1 | 2 | Shipped with `en` + `zh` only, like the Background Remover |
 | CIDR calculator follow-ups: a pipeline op (range → CIDR list) and multi-line input (aggregate/summarize a list of blocks) | tool | 1 | 1 | Aggregation is the next most-asked subnet job after range → CIDR |
 
 ## Done
 
 | Date | Item | PR |
 | --- | --- | --- |
+| 2026-10-30 | About/FAQ for the CIDR calculator + Background Remover in 16 more locales; locale-aware sentence stop in meta descriptions | PRLINK |
+| 2026-10-30 | Zone settings audit; email obfuscation off | (Cloudflare API, see cloudflare-changes.md) |
 | 2026-10-29 | CIDR / subnet calculator (IPv4 + IPv6, range → CIDR, split, membership, Smart Paste) | [#27](https://github.com/noobnooc/onlinetools.dev/pull/27) |
 
 ## Dropped
 
 | Item | Why |
 | --- | --- |
+| JSON-LD (`SoftwareApplication` + `FAQPage`) on tool pages | Already present: `ToolShell.svelte` emits SoftwareApplication, BreadcrumbList and FAQPage (checked 10-30) |
 | Block vulnerability-scanner probes with a WAF custom rule | Already in place: two custom rules (scanner paths, scanner user agents) were added 2026-08-26, before the autopilot existed. 4xx fell from ~11.9k to ~3.6k per week. Revisit only if a new probe pattern shows up in eyeball traffic |

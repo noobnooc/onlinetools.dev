@@ -1156,6 +1156,66 @@ const TOOL_CONTENT_PT: Record<string, ToolContent> = {
 				a: 'O perfil ICC diz ao software como interpretar as cores — removê-lo pode alterá-las visivelmente, e ele não contém informação pessoal. O limpador remove metadados identificadores (EXIF, XMP, IPTC, comentários, timestamps) e mantém o que a imagem precisa para renderizar corretamente.'
 			}
 		]
+	},
+
+	'cidr-calculator': {
+		about: [
+			'Digite um bloco CIDR como 10.20.0.0/16 ou 2001:db8::/48 e veja tudo sobre ele de uma vez: endereço de rede, broadcast (ou último endereço, no IPv6), máscara de rede e máscara curinga, primeiro e último host utilizável, quantidade de endereços e em qual intervalo de uso especial ele se encaixa — espaço privado da RFC 1918, NAT de nível de operadora, link-local, documentação, multicast e os demais. Um endereço isolado também funciona, assim como a notação de máscara (192.168.1.0 255.255.255.0) e a forma curinga da Cisco (0.0.0.255).',
+			'Ou cole um intervalo — 10.0.0.1 - 10.0.0.200 — e você recebe a menor lista de blocos CIDR que o cobre exatamente, que é o que regras de firewall, security groups e listas de permissão de fato aceitam. A visão de divisão separa um bloco em sub-redes iguais (um /16 em /24s, um /32 em /48s) para planejar VPCs e VLANs, e a verificação de pertencimento diz se um determinado endereço está dentro dele.',
+			'Toda a aritmética usa BigInt, então as contagens de IPv6 são exatas em vez de arredondadas para ponto flutuante: um /64 tem 18446744073709551616 endereços, não "1.8e19". Nada é consultado online — a ferramenta conhece os intervalos de uso especial da IANA, não quem é dono de um endereço — e o layout da sua rede interna nunca sai do navegador.'
+		],
+		faqs: [
+			{
+				q: 'Por que um /24 tem 254 hosts utilizáveis e não 256?',
+				a: 'No IPv4, o primeiro endereço de uma sub-rede identifica a própria rede e o último é o endereço de broadcast, então nenhum dos dois pode ser atribuído a um host. As exceções são o /31, que a RFC 3021 permite que links ponto a ponto usem por inteiro (dois hosts), e o /32, um único endereço. O IPv6 não tem broadcast, então todo endereço de um bloco IPv6 conta como utilizável.'
+			},
+			{
+				q: 'O que significa "há bits de host definidos"?',
+				a: 'Você digitou um endereço que não é o início do seu bloco, como 10.1.2.3/8. A maioria das ferramentas o arredonda silenciosamente para 10.0.0.0/8; algumas, como o módulo ipaddress do Python em modo estrito ou certos consoles de nuvem, o rejeitam. A calculadora mostra o endereço de rede real para você colar a forma canônica.'
+			},
+			{
+				q: 'Por que endereços com zeros à esquerda são rejeitados?',
+				a: 'Porque os sistemas discordam sobre o que eles significam. O clássico parser inet_aton lê 010 como octal (8), enquanto a maioria dos outros o lê como decimal (10) — uma divergência que já causou casos reais de burla de controle de acesso. Em vez de adivinhar, a calculadora pede que você escreva o número sem o zero à esquerda.'
+			},
+			{
+				q: 'Como um intervalo é transformado em blocos CIDR?',
+				a: 'De forma gulosa, a partir do início: a cada passo, pega o maior bloco que esteja alinhado no endereço atual e não ultrapasse o fim do intervalo, e então segue adiante. Isso resulta no número mínimo de blocos. Um intervalo alinhado como 192.168.0.0 – 192.168.255.255 se reduz a um único /16; um irregular como .1 – .10 precisa de cinco.'
+			},
+			{
+				q: 'Para que serve a máscara curinga?',
+				a: 'É a máscara de rede invertida — 0.0.0.255 para um /24 — e é assim que as listas de acesso do Cisco IOS e as instruções network do OSPF expressam um intervalo. Você pode colar qualquer uma das formas na calculadora; ela reconhece uma máscara curinga e a converte no comprimento de prefixo.'
+			}
+		]
+	},
+
+	'background-remover': {
+		about: [
+			'Solte uma foto e o assunto é recortado automaticamente — sem pincel, sem ficar clicando em volta das bordas. Baixe como PNG ou WebP transparente, ou aplique sobre uma cor sólida (branco para um anúncio de produto, a cor da marca para uma miniatura) e exporte em JPEG. O recorte é gerado na resolução original, então uma foto de 4000 pixels continua sendo uma foto de 4000 pixels.',
+			'Por baixo dos panos está o U²-Net, a rede de segmentação de objetos salientes por trás da popular ferramenta de linha de comando rembg, rodando via ONNX Runtime compilado para WebAssembly. O primeiro uso baixa o runtime e o modelo de 4.6 MB deste site (cerca de 19 MB no total); depois disso o navegador guarda ambos em cache e as execuções seguintes não precisam de rede alguma. A inferência leva de um a três segundos em um notebook típico.',
+			'Sua foto nunca sai da página — sem upload, sem fila e sem conta. Isso importa mais aqui do que na maioria das ferramentas: as imagens que as pessoas recortam são fotos de produtos antes do lançamento, fotos para documentos e retratos de família. Também significa nada de créditos por imagem nem limite de resolução — a ferramenta é gratuita em qualquer tamanho que o seu navegador consiga decodificar.'
+		],
+		faqs: [
+			{
+				q: 'É uma alternativa gratuita ao remove.bg?',
+				a: 'Para o caso comum — um assunto bem definido, um PNG transparente em resolução total — sim, sem cadastro, créditos ou marca d\'água, porque não há servidor fazendo o trabalho. A contrapartida é a qualidade nos casos difíceis: cabelo, pelos, vidro e desfoque de movimento saem mais grosseiros do que em um serviço na nuvem que roda um modelo muito maior, e a máscara é prevista a 320 px antes de ser ampliada de volta, então detalhes muito finos são aproximados.'
+			},
+			{
+				q: 'Por que a primeira execução demora um pouco?',
+				a: 'A página precisa baixar o ONNX Runtime (cerca de 14 MB de WebAssembly) e o modelo (4.6 MB) deste site antes de poder fazer qualquer coisa — a barra de progresso mostra exatamente esse download. Ambos ficam no cache do navegador, então a segunda imagem, e toda imagem depois de recarregar a página, começa imediatamente. A execução da rede em si leva de um a três segundos em um notebook e mais em um celular.'
+			},
+			{
+				q: 'Que tipo de imagem funciona melhor?',
+				a: 'Fotos com um assunto que se destaca do fundo: uma pessoa diante de uma parede, um produto sobre uma mesa, um animal de estimação no chão. O modelo procura o que for visualmente saliente, então tem dificuldade quando o assunto ocupa o quadro inteiro, quando várias coisas disputam a atenção ou quando assunto e fundo compartilham cores e texturas. Enquadrar mais perto de um único assunto antes de soltar o arquivo muitas vezes corrige um resultado ruim.'
+			},
+			{
+				q: 'Como obtenho um fundo branco em vez de transparente?',
+				a: 'Mude Fundo para Cor e escolha branco (ou qualquer cor) — o recorte é composto sobre ela e o JPEG passa a estar disponível como formato de saída. Mantenha Transparente quando a imagem for ficar depois sobre uma superfície colorida ou estampada; PNG e WebP armazenam o canal alfa, o WebP com uma fração do tamanho.'
+			},
+			{
+				q: 'O resultado mantém os dados EXIF da minha foto?',
+				a: 'Não. A saída é renderizada a partir dos pixels em um canvas, então modelo da câmera, timestamps e coordenadas GPS não são levados junto — geralmente o que você quer para uma imagem destinada a um anúncio ou a um perfil em rede social. Se precisar dos metadados, guarde o original junto; o visualizador de EXIF daqui mostra o que ele contém.'
+			}
+		]
 	}
 };
 

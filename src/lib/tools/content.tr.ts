@@ -1155,6 +1155,66 @@ const TOOL_CONTENT_TR: Record<string, ToolContent> = {
 				a: 'ICC profili, yazılıma renklerin nasıl yorumlanacağını söyler — onu sıyırmak renkleri gözle görülür biçimde kaydırabilir ve içinde kişisel bilgi yoktur. Temizleyici kimlik belirleyici meta veriyi (EXIF, XMP, IPTC, yorumlar, zaman damgaları) kaldırır ve görselin doğru görünmesi için gerekeni bırakır.'
 			}
 		]
+	},
+
+	'cidr-calculator': {
+		about: [
+			'10.20.0.0/16 ya da 2001:db8::/48 gibi bir CIDR bloğu yazın ve onunla ilgili her şeyi tek seferde görün: ağ adresi, yayın adresi (IPv6’da son adres), ağ maskesi ve joker maske (wildcard), kullanılabilir ilk ve son host, adres sayısı ve bloğun hangi özel amaçlı aralığa düştüğü — RFC 1918 özel adres alanı, carrier-grade NAT, link-local, dokümantasyon, multicast ve diğerleri. Yalnızca bir adres de girebilirsiniz; ağ maskesi gösterimi (192.168.1.0 255.255.255.0) ve Cisco joker maske biçimi (0.0.0.255) de çalışır.',
+			'Bunun yerine bir aralık yapıştırın — 10.0.0.1 - 10.0.0.200 — ve onu tam olarak kapsayan en kısa CIDR bloğu listesini alın; güvenlik duvarı kuralları, güvenlik grupları ve izin listelerinin gerçekte kabul ettiği de budur. Bölme görünümü, VPC ve VLAN planlamak için bir bloğu eşit alt ağlara ayırır (bir /16’yı /24’lere, bir /32’yi /48’lere); üyelik denetimi ise verilen bir adresin bloğun içine düşüp düşmediğini söyler.',
+			'Tüm aritmetik BigInt ile yapılır, bu yüzden IPv6 sayıları kayan noktaya yuvarlanmaz, tamdır: bir /64’te “1.8e19” değil, 18446744073709551616 adres vardır. Hiçbir şey çevrimiçi sorgulanmaz — araç IANA’nın özel amaçlı aralıklarını bilir, bir adresin kime ait olduğunu bilmez — ve iç ağ düzeniniz tarayıcıdan hiç çıkmaz.'
+		],
+		faqs: [
+			{
+				q: 'Bir /24’te neden 256 değil de 254 kullanılabilir host var?',
+				a: 'IPv4’te bir alt ağın ilk adresi ağın kendisini, son adresi ise yayın adresini belirtir; bu yüzden ikisi de bir host’a atanamaz. İstisnalar, RFC 3021’in noktadan noktaya bağlantılarda tamamen kullanılmasına izin verdiği /31 (iki host) ve tek bir adres olan /32’dir. IPv6’da yayın yoktur, bu yüzden bir IPv6 bloğundaki her adres kullanılabilir sayılır.'
+			},
+			{
+				q: '“Host bitleri ayarlı” ne demek?',
+				a: 'Bloğunun başlangıcı olmayan bir adres yazdınız, örneğin 10.1.2.3/8. Çoğu araç bunu sessizce 10.0.0.0/8’e aşağı yuvarlar; katı moddaki Python’un ipaddress modülü ya da bazı bulut konsolları gibi bazıları ise reddeder. Hesaplayıcı gerçek ağ adresini gösterir, böylece kanonik biçimi yapıştırabilirsiniz.'
+			},
+			{
+				q: 'Başında sıfır olan adresler neden reddediliyor?',
+				a: 'Çünkü sistemler bunların ne anlama geldiği konusunda anlaşamıyor. Klasik inet_aton ayrıştırıcısı 010’u sekizlik (8) olarak okurken diğerlerinin çoğu onluk (10) olarak okur — bu uyuşmazlık gerçek erişim denetimi atlatmalarına yol açmıştır. Hesaplayıcı tahmin yürütmek yerine sayıyı baştaki sıfır olmadan yazmanızı ister.'
+			},
+			{
+				q: 'Bir aralık nasıl CIDR bloklarına dönüştürülür?',
+				a: 'Baştan başlayarak açgözlü biçimde: her adımda, geçerli adrese hizalı olan ve aralığın sonunu aşmayan en büyük bloğu alır, sonra devam eder. Böylece en az sayıda blok elde edilir. 192.168.0.0 – 192.168.255.255 gibi hizalı bir aralık tek bir /16’ya iner; .1 – .10 gibi elverişsiz bir aralık ise beş blok gerektirir.'
+			},
+			{
+				q: 'Joker maske (wildcard) ne işe yarar?',
+				a: 'Ağ maskesinin tersidir — bir /24 için 0.0.0.255 — ve Cisco IOS erişim listeleri ile OSPF network komutları bir aralığı bu şekilde ifade eder. Hesaplayıcıya iki biçimden herhangi birini yapıştırabilirsiniz; joker maskeyi tanır ve önek uzunluğuna dönüştürür.'
+			}
+		]
+	},
+
+	'background-remover': {
+		about: [
+			'Bir fotoğraf bırakın, konu otomatik olarak kesilip çıkarılsın — fırça yok, kenarlar boyunca tıklamak yok. Sonucu saydam bir PNG ya da WebP olarak indirin veya düz bir rengin üzerine yerleştirip (ürün ilanı için beyaz, küçük resim için marka rengi) JPEG olarak dışa aktarın. Kesim orijinal çözünürlükte üretilir; yani 4000 piksellik bir fotoğraf 4000 piksel olarak kalır.',
+			'Arka planda, popüler rembg komut satırı aracının temelindeki belirgin nesne segmentasyon ağı U²-Net çalışır; WebAssembly’ye derlenmiş ONNX Runtime üzerinden yürütülür. İlk kullanımda çalışma zamanı ve 4.6 MB’lık model bu siteden indirilir (toplamda yaklaşık 19 MB); ardından tarayıcınız ikisini de önbelleğe alır ve sonraki çalıştırmalar hiç ağ gerektirmez. Çıkarım tipik bir dizüstü bilgisayarda bir ila üç saniye sürer.',
+			'Fotoğrafınız sayfadan hiç çıkmaz — yükleme yok, kuyruk yok, hesap yok. Bu, burada çoğu araçtan daha önemlidir: insanların kesip çıkardığı görseller lansman öncesi ürün çekimleri, kimlik fotoğrafları ve aile portreleridir. Ayrıca görsel başına kredi ve çözünürlük sınırı da yok demektir — araç, tarayıcınızın çözebildiği her boyutta ücretsizdir.'
+		],
+		faqs: [
+			{
+				q: 'Bu, remove.bg’ye ücretsiz bir alternatif mi?',
+				a: 'Yaygın durum için — tek ve net bir konu, tam çözünürlükte saydam bir PNG — evet; kayıt, kredi ya da filigran olmadan, çünkü işi yapan bir sunucu yok. Bedeli zor durumlardaki kalitedir: saç, kürk, cam ve hareket bulanıklığı, çok daha büyük bir model çalıştıran bir bulut hizmetine göre daha kaba çıkar; maske de 320 px’te tahmin edilip sonra yeniden büyütüldüğünden çok ince ayrıntılar yaklaşıktır.'
+			},
+			{
+				q: 'İlk çalıştırma neden biraz zaman alıyor?',
+				a: 'Sayfa herhangi bir şey yapabilmeden önce ONNX Runtime’ı (yaklaşık 14 MB WebAssembly) ve modeli (4.6 MB) bu siteden indirmek zorundadır — ilerleme çubuğu tam olarak bu indirmeyi gösterir. İkisi de tarayıcı tarafından önbelleğe alınır; böylece ikinci görsel ve sayfa yenilendikten sonraki her görsel hemen başlar. Ağın kendisinin çalışması bir dizüstünde bir ila üç saniye sürer, telefonda daha uzun.'
+			},
+			{
+				q: 'En iyi hangi tür görseller sonuç verir?',
+				a: 'Arka planından belirgin biçimde ayrılan tek bir konunun olduğu fotoğraflar: duvar önünde bir kişi, masada bir ürün, yerde bir evcil hayvan. Model görsel olarak en çok göze çarpan şeyi aradığından, konu tüm kareyi kapladığında, birden fazla şey dikkat için yarıştığında ya da konu ile arka plan aynı renk ve dokuyu paylaştığında zorlanır. Dosyayı bırakmadan önce tek bir konuya daha yakından kırpmak çoğu zaman kötü bir sonucu düzeltir.'
+			},
+			{
+				q: 'Saydam yerine beyaz arka planı nasıl elde ederim?',
+				a: '“Arka plan” seçeneğini “Renk” olarak değiştirip beyazı (ya da herhangi bir rengi) seçin — kesim bunun üzerine yerleştirilir ve JPEG bir çıktı biçimi olarak kullanılabilir hâle gelir. Görsel daha sonra renkli ya da desenli bir yüzeyin üzerinde duracaksa “Saydam”ı koruyun; PNG ve WebP ikisi de alfa kanalını saklar, WebP bunu boyutun çok küçük bir kısmıyla yapar.'
+			},
+			{
+				q: 'Sonuç, fotoğrafımın EXIF verisini koruyor mu?',
+				a: 'Hayır. Çıktı bir canvas üzerindeki piksellerden oluşturulur; bu yüzden kamera modeli, zaman damgaları ve GPS koordinatları aktarılmaz — bu, bir ilana ya da sosyal medya profiline gidecek bir görsel için genellikle istediğiniz şeydir. Meta veriye ihtiyacınız varsa orijinali de saklayın; buradaki EXIF görüntüleyici neler içerdiğini gösterir.'
+			}
+		]
 	}
 };
 

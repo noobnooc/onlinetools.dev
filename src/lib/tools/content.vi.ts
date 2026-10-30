@@ -1155,6 +1155,66 @@ const TOOL_CONTENT_VI: Record<string, ToolContent> = {
 				a: 'Hồ sơ ICC cho phần mềm biết phải diễn giải màu sắc ra sao — gỡ nó đi có thể làm màu lệch thấy rõ, mà bản thân nó lại không chứa thông tin cá nhân nào. Phần làm sạch chỉ gỡ những siêu dữ liệu có tính nhận dạng (EXIF, XMP, IPTC, chú thích, dấu thời gian) và giữ lại những gì tấm ảnh cần để hiển thị đúng.'
 			}
 		]
+	},
+
+	'cidr-calculator': {
+		about: [
+			'Nhập một khối CIDR như 10.20.0.0/16 hay 2001:db8::/48 và xem mọi thông tin về nó cùng lúc: địa chỉ mạng, địa chỉ broadcast (hoặc địa chỉ cuối với IPv6), netmask và wildcard mask, host dùng được đầu tiên và cuối cùng, số lượng địa chỉ, và khối đó nằm trong dải địa chỉ dùng cho mục đích đặc biệt nào — không gian riêng RFC 1918, carrier-grade NAT, link-local, dải dành cho tài liệu, multicast và các dải khác. Chỉ nhập một địa chỉ cũng được, ký hiệu netmask (192.168.1.0 255.255.255.0) hay dạng wildcard kiểu Cisco (0.0.0.255) cũng vậy.',
+			'Hoặc dán một dải địa chỉ — 10.0.0.1 - 10.0.0.200 — và bạn sẽ nhận được danh sách khối CIDR ngắn nhất phủ đúng chính xác dải đó, cũng chính là thứ mà quy tắc tường lửa, security group và danh sách cho phép thực sự chấp nhận. Chế độ chia tách khối thành các mạng con bằng nhau (một /16 thành các /24, một /32 thành các /48) để quy hoạch VPC và VLAN, còn phần kiểm tra thành viên cho biết một địa chỉ cụ thể có nằm trong khối hay không.',
+			'Mọi phép tính đều dùng BigInt, nên số lượng địa chỉ IPv6 là chính xác chứ không bị làm tròn thành số dấu phẩy động: một /64 có 18446744073709551616 địa chỉ, không phải “1.8e19”. Không có gì được tra cứu trực tuyến — công cụ biết các dải dùng cho mục đích đặc biệt của IANA, không biết ai sở hữu một địa chỉ — và sơ đồ mạng nội bộ của bạn không bao giờ rời khỏi trình duyệt.'
+		],
+		faqs: [
+			{
+				q: 'Vì sao một /24 có 254 host dùng được chứ không phải 256?',
+				a: 'Trong IPv4, địa chỉ đầu tiên của một mạng con đại diện cho chính mạng đó, còn địa chỉ cuối là địa chỉ broadcast, nên không địa chỉ nào trong hai địa chỉ này gán được cho host. Ngoại lệ là /31, mà RFC 3021 cho phép các liên kết điểm-điểm dùng trọn vẹn (hai host), và /32, tức một địa chỉ duy nhất. IPv6 không có broadcast, nên mọi địa chỉ trong một khối IPv6 đều được tính là dùng được.'
+			},
+			{
+				q: '“Bit host khác 0” nghĩa là gì?',
+				a: 'Bạn đã nhập một địa chỉ không phải là điểm bắt đầu của khối, chẳng hạn 10.1.2.3/8. Phần lớn công cụ âm thầm làm tròn xuống thành 10.0.0.0/8; một số khác, như module ipaddress của Python ở chế độ strict hay một vài bảng điều khiển đám mây, sẽ từ chối. Công cụ tính toán hiển thị địa chỉ mạng thực sự để bạn dán dạng chuẩn.'
+			},
+			{
+				q: 'Vì sao địa chỉ có số 0 đứng đầu bị từ chối?',
+				a: 'Vì các hệ thống không thống nhất về ý nghĩa của chúng. Bộ phân tích inet_aton cổ điển đọc 010 là số bát phân (8), trong khi phần lớn các bộ khác đọc là thập phân (10) — một sự lệch nhau đã từng gây ra những vụ vượt qua kiểm soát truy cập trên thực tế. Thay vì đoán, công cụ yêu cầu bạn viết số đó không có số 0 đứng đầu.'
+			},
+			{
+				q: 'Một dải được chuyển thành các khối CIDR như thế nào?',
+				a: 'Theo kiểu tham lam từ điểm đầu: ở mỗi bước, công cụ lấy khối lớn nhất căn thẳng hàng với địa chỉ hiện tại và không vượt quá điểm cuối của dải, rồi đi tiếp. Cách này cho ra số khối ít nhất. Một dải căn thẳng hàng như 192.168.0.0 – 192.168.255.255 gộp lại thành một /16 duy nhất; một dải lệch như .1 – .10 thì cần năm khối.'
+			},
+			{
+				q: 'Wildcard mask dùng để làm gì?',
+				a: 'Đó là netmask đảo ngược — 0.0.0.255 cho một /24 — và là cách mà access list của Cisco IOS và câu lệnh network của OSPF biểu diễn một dải. Bạn có thể dán dạng nào vào công cụ cũng được; nó nhận ra wildcard mask và chuyển thành độ dài prefix.'
+			}
+		]
+	},
+
+	'background-remover': {
+		about: [
+			'Thả một bức ảnh vào và chủ thể được tách ra tự động — không cần cọ, không cần bấm quanh các đường viền. Tải xuống dưới dạng PNG hoặc WebP trong suốt, hoặc đặt lên một nền màu đơn sắc (trắng cho ảnh sản phẩm, màu thương hiệu cho ảnh thu nhỏ) rồi xuất ra JPEG. Ảnh tách nền được tạo ở độ phân giải gốc, nên ảnh 4000 pixel vẫn là ảnh 4000 pixel.',
+			'Bên dưới là U²-Net, mạng phân đoạn đối tượng nổi bật đứng sau công cụ dòng lệnh rembg nổi tiếng, chạy qua ONNX Runtime được biên dịch sang WebAssembly. Lần dùng đầu tiên sẽ tải runtime và mô hình 4.6 MB từ chính trang này (tổng cộng khoảng 19 MB), sau đó trình duyệt lưu đệm cả hai và những lần chạy sau hoàn toàn không cần mạng. Quá trình suy luận mất từ một đến ba giây trên một chiếc laptop thông thường.',
+			'Ảnh của bạn không bao giờ rời khỏi trang — không tải lên, không hàng đợi, không tài khoản. Điều này ở đây quan trọng hơn so với phần lớn công cụ khác: những bức ảnh người ta tách nền là ảnh sản phẩm trước khi ra mắt, ảnh thẻ và ảnh chân dung gia đình. Nó cũng có nghĩa là không tính credit theo từng ảnh và không giới hạn độ phân giải — công cụ miễn phí ở mọi kích thước mà trình duyệt của bạn giải mã được.'
+		],
+		faqs: [
+			{
+				q: 'Đây có phải là lựa chọn miễn phí thay cho remove.bg không?',
+				a: 'Với trường hợp phổ biến — một chủ thể rõ ràng, PNG trong suốt ở độ phân giải đầy đủ — thì có, không cần đăng ký, credit hay watermark, vì không có máy chủ nào làm việc đó. Cái giá phải trả là chất lượng ở các ca khó: tóc, lông thú, kính và vệt mờ chuyển động sẽ thô hơn so với một dịch vụ đám mây chạy mô hình lớn hơn nhiều, và mặt nạ được dự đoán ở 320 px trước khi phóng to trở lại, nên các chi tiết rất nhỏ chỉ mang tính gần đúng.'
+			},
+			{
+				q: 'Vì sao lần chạy đầu tiên mất một lúc?',
+				a: 'Trang phải tải ONNX Runtime (khoảng 14 MB WebAssembly) và mô hình (4.6 MB) từ trang này trước khi làm được bất cứ việc gì — thanh tiến trình hiển thị chính quá trình tải đó. Cả hai đều được trình duyệt lưu đệm, nên ảnh thứ hai, và mọi ảnh sau khi tải lại trang, bắt đầu ngay lập tức. Bản thân việc chạy mạng nơ-ron mất từ một đến ba giây trên laptop và lâu hơn trên điện thoại.'
+			},
+			{
+				q: 'Loại ảnh nào cho kết quả tốt nhất?',
+				a: 'Ảnh có một chủ thể nổi bật so với nền: một người đứng trước bức tường, một sản phẩm trên bàn, một thú cưng trên sàn. Mô hình tìm thứ nổi bật nhất về mặt thị giác, nên sẽ gặp khó khi chủ thể chiếm toàn bộ khung hình, khi nhiều thứ cùng tranh sự chú ý, hoặc khi chủ thể và nền có chung màu sắc và kết cấu. Cắt ảnh sát hơn vào một chủ thể trước khi thả tệp vào thường sẽ sửa được kết quả kém.'
+			},
+			{
+				q: 'Làm sao để có nền trắng thay vì trong suốt?',
+				a: 'Chuyển “Nền” sang “Màu” và chọn trắng (hoặc bất kỳ màu nào) — ảnh tách nền được ghép lên đó và JPEG trở thành một định dạng đầu ra khả dụng. Hãy giữ “Trong suốt” khi ảnh sau này sẽ được đặt trên một bề mặt có màu hoặc có hoa văn; cả PNG và WebP đều lưu kênh alpha, WebP với dung lượng chỉ bằng một phần nhỏ.'
+			},
+			{
+				q: 'Kết quả có giữ dữ liệu EXIF của ảnh không?',
+				a: 'Không. Đầu ra được kết xuất từ các pixel trên canvas, nên dòng máy ảnh, dấu thời gian và tọa độ GPS không được mang theo — thường đó chính là điều bạn muốn cho một bức ảnh sắp đăng lên trang rao bán hay hồ sơ mạng xã hội. Nếu cần siêu dữ liệu, hãy giữ lại bản gốc bên cạnh; trình xem EXIF trên trang này sẽ cho thấy bản gốc chứa những gì.'
+			}
+		]
 	}
 };
 
