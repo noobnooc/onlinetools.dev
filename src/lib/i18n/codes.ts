@@ -72,3 +72,25 @@ export const LOCALE_NAMES: Record<Locale, string> = {
 	uk: 'Українська',
 	hi: 'हिन्दी'
 };
+
+/**
+ * Sentence terminators per script. CJK uses a full-width stop with no space,
+ * Hindi the danda, Thai separates sentences with a space alone.
+ */
+const SENTENCE_END: Partial<Record<Locale, { stop: string; gap: string }>> = {
+	zh: { stop: '。', gap: '' },
+	ja: { stop: '。', gap: '' },
+	hi: { stop: '।', gap: ' ' },
+	th: { stop: '', gap: ' ' }
+};
+
+/**
+ * Join a sentence fragment (like a tool tagline, which carries no final
+ * punctuation) to the sentence that follows, using the locale's own stop.
+ */
+export function joinSentences(first: string, next: string, loc: Locale): string {
+	const { stop, gap } = SENTENCE_END[loc] ?? { stop: '.', gap: ' ' };
+	const head = first.trimEnd();
+	const ended = /[.!?。!?।]$/u.test(head);
+	return `${head}${ended ? '' : stop}${gap}${next}`;
+}

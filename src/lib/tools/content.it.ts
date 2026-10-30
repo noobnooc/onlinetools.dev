@@ -1156,6 +1156,66 @@ const TOOL_CONTENT_IT: Record<string, ToolContent> = {
 				a: 'Il profilo ICC dice al software come interpretare i colori — rimuoverlo può alterarli visibilmente, e non contiene informazioni personali. Il pulitore rimuove i metadati identificativi (EXIF, XMP, IPTC, commenti, timestamp) e conserva ciò che serve all’immagine per essere resa correttamente.'
 			}
 		]
+	},
+
+	'cidr-calculator': {
+		about: [
+			'Digita un blocco CIDR come 10.20.0.0/16 o 2001:db8::/48 e leggi tutto ciò che lo riguarda in un colpo d’occhio: indirizzo di rete, broadcast (o ultimo indirizzo per IPv6), netmask e wildcard mask, primo e ultimo host utilizzabile, numero di indirizzi e l’intervallo a uso speciale in cui ricade — spazio privato RFC 1918, NAT di livello carrier (CGNAT), link-local, documentazione, multicast e il resto. Funziona anche un indirizzo singolo, così come la notazione con netmask (192.168.1.0 255.255.255.0) e la forma wildcard di Cisco (0.0.0.255).',
+			'Incolla invece un intervallo — 10.0.0.1 - 10.0.0.200 — e ottieni l’elenco più corto di blocchi CIDR che lo copre esattamente, ovvero ciò che regole firewall, security group e allow-list accettano davvero. La vista di suddivisione divide un blocco in subnet uguali (un /16 in /24, un /32 in /48) per pianificare VPC e VLAN, e il controllo di appartenenza ti dice se un dato indirizzo vi ricade.',
+			'Tutta l’aritmetica usa BigInt, quindi i conteggi IPv6 sono esatti invece che arrotondati in virgola mobile: un /64 ha 18446744073709551616 indirizzi, non "1.8e19". Nulla viene cercato online — lo strumento conosce gli intervalli a uso speciale IANA, non chi possiede un indirizzo — e la struttura della tua rete interna non lascia mai il browser.'
+		],
+		faqs: [
+			{
+				q: 'Perché un /24 ha 254 host utilizzabili e non 256?',
+				a: 'In IPv4 il primo indirizzo di una subnet identifica la rete stessa e l’ultimo è l’indirizzo di broadcast, quindi nessuno dei due può essere assegnato a un host. Le eccezioni sono /31, che la RFC 3021 consente ai collegamenti punto-punto di usare per intero (due host), e /32, un singolo indirizzo. IPv6 non ha broadcast, quindi ogni indirizzo di un blocco IPv6 conta come utilizzabile.'
+			},
+			{
+				q: 'Cosa significa "ci sono bit host impostati"?',
+				a: 'Hai digitato un indirizzo che non è l’inizio del suo blocco, come 10.1.2.3/8. La maggior parte degli strumenti lo arrotonda silenziosamente per difetto a 10.0.0.0/8; alcuni, come il modulo ipaddress di Python in modalità strict o certe console cloud, lo rifiutano. Il calcolatore mostra il vero indirizzo di rete così puoi incollare la forma canonica.'
+			},
+			{
+				q: 'Perché gli indirizzi con zeri iniziali vengono rifiutati?',
+				a: 'Perché i sistemi non concordano sul loro significato. Il classico parser inet_aton legge 010 come ottale (8), mentre la maggior parte degli altri lo legge come decimale (10) — una discrepanza che ha causato reali aggiramenti dei controlli di accesso. Invece di tirare a indovinare, il calcolatore ti chiede di scrivere il numero senza lo zero iniziale.'
+			},
+			{
+				q: 'Come viene trasformato un intervallo in blocchi CIDR?',
+				a: 'In modo greedy a partire dall’inizio: a ogni passo prende il blocco più grande allineato sull’indirizzo corrente che non supera la fine dell’intervallo, poi prosegue. Così si ottiene il numero minimo di blocchi. Un intervallo allineato come 192.168.0.0 – 192.168.255.255 si riduce a un singolo /16; uno scomodo come .1 – .10 ne richiede cinque.'
+			},
+			{
+				q: 'A cosa serve la wildcard mask?',
+				a: 'È la netmask invertita — 0.0.0.255 per un /24 — ed è il modo in cui le access list di Cisco IOS e le istruzioni network di OSPF esprimono un intervallo. Puoi incollare l’una o l’altra forma nel calcolatore; riconosce una wildcard mask e la converte nella lunghezza del prefisso.'
+			}
+		]
+	},
+
+	'background-remover': {
+		about: [
+			'Trascina una foto e il soggetto viene scontornato automaticamente — niente pennello, niente clic tutt’intorno ai bordi. Scaricalo come PNG o WebP trasparente, oppure appiattiscilo su un colore pieno (bianco per una scheda prodotto, un colore del brand per una miniatura) ed esporta un JPEG. Il ritaglio viene prodotto alla risoluzione originale, quindi una foto da 4000 pixel resta una foto da 4000 pixel.',
+			'Dietro le quinte c’è U²-Net, la rete di segmentazione degli oggetti salienti alla base del popolare strumento da riga di comando rembg, eseguita tramite ONNX Runtime compilato in WebAssembly. Il primo utilizzo scarica il runtime e il modello da 4.6 MB da questo sito (circa 19 MB in totale), dopodiché il browser li mette entrambi in cache e gli utilizzi successivi non richiedono alcuna rete. L’inferenza richiede da uno a tre secondi su un normale portatile.',
+			'La tua foto non lascia mai la pagina — nessun upload, nessuna coda, nessun account. Qui conta più che per la maggior parte degli strumenti: le immagini che le persone scontornano sono foto di prodotti prima del lancio, foto per documenti e ritratti di famiglia. Significa anche niente crediti per immagine e nessun limite di risoluzione — lo strumento è gratuito a qualsiasi dimensione che il tuo browser riesca a decodificare.'
+		],
+		faqs: [
+			{
+				q: 'È un’alternativa gratuita a remove.bg?',
+				a: 'Per il caso comune — un soggetto ben definito, un PNG trasparente a piena risoluzione — sì, senza registrazione, crediti o filigrana, perché non c’è alcun server a fare il lavoro. Il compromesso è la qualità nei casi difficili: capelli, pelo, vetro e mosso risultano più grossolani rispetto a un servizio cloud che esegue un modello molto più grande, e la maschera viene stimata a 320 px prima di essere riportata alla dimensione originale, quindi i dettagli molto fini sono approssimativi.'
+			},
+			{
+				q: 'Perché la prima esecuzione richiede un po’ di tempo?',
+				a: 'La pagina deve scaricare ONNX Runtime (circa 14 MB di WebAssembly) e il modello (4.6 MB) da questo sito prima di poter fare qualsiasi cosa — la barra di avanzamento mostra proprio quel download. Entrambi vengono messi in cache dal browser, quindi la seconda immagine, e ogni immagine dopo un ricaricamento, parte subito. L’esecuzione della rete in sé richiede da uno a tre secondi su un portatile, di più su un telefono.'
+			},
+			{
+				q: 'Con quali immagini funziona meglio?',
+				a: 'Con foto in cui un soggetto si stacca dallo sfondo: una persona davanti a un muro, un prodotto su un tavolo, un animale sul pavimento. Il modello cerca ciò che è visivamente saliente, quindi fatica quando il soggetto riempie l’intera inquadratura, quando più elementi competono per l’attenzione o quando soggetto e sfondo condividono colori e texture. Ritagliare più stretto attorno a un singolo soggetto prima di trascinare il file spesso risolve un risultato scadente.'
+			},
+			{
+				q: 'Come ottengo uno sfondo bianco invece che trasparente?',
+				a: 'Imposta Sfondo su Colore e scegli il bianco (o qualsiasi colore) — il ritaglio viene composto sopra di esso e JPEG diventa disponibile come formato di output. Mantieni Trasparente se l’immagine andrà poi su una superficie colorata o con motivi; PNG e WebP memorizzano entrambi il canale alfa, WebP con una frazione della dimensione.'
+			},
+			{
+				q: 'Il risultato conserva i dati EXIF della mia foto?',
+				a: 'No. L’output viene generato dai pixel di un canvas, quindi modello della fotocamera, timestamp e coordinate GPS non vengono trasferiti — di solito proprio ciò che vuoi per un’immagine destinata a un annuncio o a un profilo social. Se ti servono i metadati, conserva l’originale accanto al risultato; il visualizzatore EXIF di questo sito mostra cosa contiene.'
+			}
+		]
 	}
 };
 

@@ -1155,6 +1155,66 @@ const TOOL_CONTENT_ID: Record<string, ToolContent> = {
 				a: 'Profil ICC memberi tahu perangkat lunak cara menafsirkan warnanya — membuangnya bisa menggeser warna secara kasatmata, dan ia sendiri tidak memuat informasi pribadi. Pembersihnya menyingkirkan metadata yang mengidentifikasi (EXIF, XMP, IPTC, komentar, stempel waktu) dan mempertahankan apa yang dibutuhkan gambar agar tampil benar.'
 			}
 		]
+	},
+
+	'cidr-calculator': {
+		about: [
+			'Ketik blok CIDR seperti 10.20.0.0/16 atau 2001:db8::/48 dan baca semua tentangnya sekaligus: alamat jaringan, broadcast (atau alamat terakhir untuk IPv6), netmask dan wildcard mask, host pertama dan terakhir yang bisa dipakai, jumlah alamat, serta rentang khusus mana yang mencakupnya — ruang privat RFC 1918, carrier-grade NAT, link-local, dokumentasi, multicast, dan lainnya. Alamat tunggal juga bisa, begitu pula notasi netmask (192.168.1.0 255.255.255.0) dan bentuk wildcard ala Cisco (0.0.0.255).',
+			'Atau tempel sebuah rentang — 10.0.0.1 - 10.0.0.200 — dan Anda mendapat daftar blok CIDR terkecil yang mencakupnya secara persis, yang memang diterima oleh aturan firewall, security group, dan allow-list. Tampilan pembagian memecah sebuah blok menjadi subnet yang sama besar (/16 menjadi /24, /32 menjadi /48) untuk merencanakan VPC dan VLAN, dan pemeriksaan keanggotaan memberi tahu apakah suatu alamat berada di dalamnya.',
+			'Semua aritmetika memakai BigInt, sehingga jumlah alamat IPv6 eksak alih-alih dibulatkan ke floating point: sebuah /64 memiliki 18446744073709551616 alamat, bukan “1.8e19”. Tidak ada yang dicari secara online — alat ini mengenal rentang khusus IANA, bukan siapa pemilik suatu alamat — dan tata letak jaringan internal Anda tidak pernah meninggalkan browser.'
+		],
+		faqs: [
+			{
+				q: 'Kenapa /24 punya 254 host yang bisa dipakai, bukan 256?',
+				a: 'Di IPv4, alamat pertama sebuah subnet menamai jaringan itu sendiri dan alamat terakhir adalah alamat broadcast, sehingga keduanya tidak bisa diberikan ke host. Pengecualiannya adalah /31, yang menurut RFC 3021 boleh dipakai seluruhnya oleh tautan point-to-point (dua host), dan /32, satu alamat tunggal. IPv6 tidak punya broadcast, jadi setiap alamat dalam blok IPv6 dihitung bisa dipakai.'
+			},
+			{
+				q: 'Apa arti “bit host terisi”?',
+				a: 'Anda mengetik alamat yang bukan awal dari bloknya, misalnya 10.1.2.3/8. Sebagian besar alat diam-diam membulatkannya ke bawah menjadi 10.0.0.0/8; beberapa, seperti modul ipaddress milik Python dalam mode ketat atau konsol cloud tertentu, menolaknya. Kalkulator menampilkan alamat jaringan yang sebenarnya agar Anda bisa menempel bentuk kanoniknya.'
+			},
+			{
+				q: 'Kenapa alamat dengan nol di depan ditolak?',
+				a: 'Karena sistem-sistem tidak sepakat tentang artinya. Pengurai klasik inet_aton membaca 010 sebagai oktal (8), sementara kebanyakan yang lain membacanya sebagai desimal (10) — ketidakcocokan yang pernah menyebabkan pembobolan kontrol akses sungguhan. Alih-alih menebak, kalkulator meminta Anda menulis angkanya tanpa nol di depan.'
+			},
+			{
+				q: 'Bagaimana sebuah rentang diubah menjadi blok CIDR?',
+				a: 'Secara greedy dari awal: di setiap langkah diambil blok terbesar yang sejajar dengan alamat saat ini dan tidak melewati ujung rentang, lalu lanjut ke berikutnya. Hasilnya adalah jumlah blok paling sedikit. Rentang yang sejajar seperti 192.168.0.0 – 192.168.255.255 menyusut menjadi satu /16; rentang yang janggal seperti .1 – .10 butuh lima.'
+			},
+			{
+				q: 'Untuk apa wildcard mask?',
+				a: 'Itu adalah netmask yang dibalik — 0.0.0.255 untuk /24 — dan begitulah access list Cisco IOS serta pernyataan network OSPF menyatakan sebuah rentang. Anda bisa menempel bentuk mana pun ke kalkulator; kalkulator mengenali wildcard mask dan mengubahnya menjadi panjang prefiks.'
+			}
+		]
+	},
+
+	'background-remover': {
+		about: [
+			'Jatuhkan foto dan subjeknya terpotong otomatis — tanpa kuas, tanpa mengeklik di sepanjang tepinya. Unduh sebagai PNG atau WebP transparan, atau ratakan di atas warna solid (putih untuk listing produk, warna merek untuk thumbnail) dan ekspor sebagai JPEG. Hasil potong dibuat pada resolusi asli, jadi foto 4000 piksel tetap menjadi foto 4000 piksel.',
+			'Di balik layar ada U²-Net, jaringan segmentasi objek menonjol yang menjadi dasar alat baris perintah populer rembg, dijalankan lewat ONNX Runtime yang dikompilasi ke WebAssembly. Penggunaan pertama mengambil runtime dan model 4.6 MB dari situs ini (sekitar 19 MB total); setelah itu browser Anda menyimpan keduanya di cache dan penggunaan berikutnya sama sekali tidak butuh jaringan. Inferensi memakan satu hingga tiga detik di laptop biasa.',
+			'Foto Anda tidak pernah meninggalkan halaman — tanpa unggah, tanpa antrean, dan tanpa akun. Hal itu lebih penting di sini daripada di kebanyakan alat: gambar yang dipotong orang adalah foto produk sebelum peluncuran, pasfoto, dan potret keluarga. Ini juga berarti tidak ada kredit per gambar dan tidak ada batas resolusi — alat ini gratis pada ukuran berapa pun yang bisa didekode browser Anda.'
+		],
+		faqs: [
+			{
+				q: 'Apakah ini alternatif gratis untuk remove.bg?',
+				a: 'Untuk kasus umum — satu subjek yang jelas, PNG transparan beresolusi penuh — ya, tanpa daftar, kredit, atau watermark, karena tidak ada server yang mengerjakannya. Komprominya adalah kualitas pada kasus sulit: rambut, bulu, kaca, dan blur gerakan hasilnya lebih kasar dibanding layanan cloud yang menjalankan model jauh lebih besar, dan masker diprediksi pada 320 px sebelum diskalakan kembali, sehingga detail yang sangat halus hanya perkiraan.'
+			},
+			{
+				q: 'Kenapa penggunaan pertama agak lama?',
+				a: 'Halaman harus mengambil ONNX Runtime (sekitar 14 MB WebAssembly) dan modelnya (4.6 MB) dari situs ini sebelum bisa melakukan apa pun — bilah kemajuan menunjukkan persis unduhan itu. Keduanya disimpan di cache browser, jadi gambar kedua, dan setiap gambar setelah halaman dimuat ulang, langsung dimulai. Proses jaringannya sendiri memakan satu hingga tiga detik di laptop dan lebih lama di ponsel.'
+			},
+			{
+				q: 'Gambar seperti apa yang paling cocok?',
+				a: 'Foto dengan satu subjek yang menonjol dari latar belakangnya: orang di depan dinding, produk di atas meja, hewan peliharaan di lantai. Model mencari apa pun yang secara visual menonjol, jadi ia kesulitan ketika subjek memenuhi seluruh bingkai, ketika beberapa hal bersaing merebut perhatian, atau ketika subjek dan latar belakang berbagi warna dan tekstur. Memotong lebih dekat ke satu subjek sebelum menjatuhkan berkas sering kali memperbaiki hasil yang buruk.'
+			},
+			{
+				q: 'Bagaimana cara mendapatkan latar belakang putih alih-alih transparan?',
+				a: 'Ubah Latar belakang ke Warna dan pilih putih (atau warna apa pun) — hasil potong digabungkan di atasnya dan JPEG menjadi tersedia sebagai format keluaran. Biarkan Transparan jika gambar nantinya akan diletakkan di atas permukaan berwarna atau bermotif; PNG dan WebP sama-sama menyimpan kanal alfa, WebP dengan ukuran yang jauh lebih kecil.'
+			},
+			{
+				q: 'Apakah hasilnya menyimpan data EXIF foto saya?',
+				a: 'Tidak. Keluaran dirender dari piksel di sebuah canvas, jadi model kamera, stempel waktu, dan koordinat GPS tidak ikut terbawa — biasanya memang itu yang Anda inginkan untuk gambar yang akan dipasang di listing atau profil media sosial. Jika Anda butuh metadatanya, simpan berkas aslinya berdampingan; penampil EXIF di sini menunjukkan isinya.'
+			}
+		]
 	}
 };
 

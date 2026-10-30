@@ -16,6 +16,24 @@
 	<div lang="en">
 	<section class="relative border-l border-line pb-8 pl-6">
 		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full bg-accent" aria-hidden="true"></span>
+		<h2 class="text-sm font-medium">Every tool explained in every language</h2>
+		<p class="mt-0.5 font-mono text-xs text-dim">v2026.10.30</p>
+		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
+			<li>
+				The About and FAQ sections of the <a href={lp('/t/cidr-calculator')} class="text-accent hover:underline">CIDR
+				/ Subnet Calculator</a> and the <a href={lp('/t/background-remover')} class="text-accent hover:underline">Background
+				Remover</a> are now translated into all eighteen languages, so every tool page reads in
+				one language from top to bottom.
+			</li>
+			<li>
+				Search-result descriptions now end sentences the way each language does — a full-width
+				stop in Chinese and Japanese, the danda in Hindi — instead of an English period.
+			</li>
+		</ul>
+	</section>
+
+	<section class="relative border-l border-line pb-8 pl-6">
+		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
 		<h2 class="text-sm font-medium">Subnets, IPv4 and IPv6</h2>
 		<p class="mt-0.5 font-mono text-xs text-dim">v2026.10.29</p>
 		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">

@@ -1155,6 +1155,66 @@ const TOOL_CONTENT_PL: Record<string, ToolContent> = {
 				a: 'Profil ICC mówi oprogramowaniu, jak interpretować kolory — usunięcie go potrafi je widocznie przesunąć, a sam profil nie zawiera żadnych informacji osobowych. Czyszczenie usuwa metadane identyfikujące (EXIF, XMP, IPTC, komentarze, znaczniki czasu) i zostawia to, czego obraz potrzebuje do poprawnego wyświetlenia.'
 			}
 		]
+	},
+
+	'cidr-calculator': {
+		about: [
+			'Wpisz blok CIDR, np. 10.20.0.0/16 lub 2001:db8::/48, i odczytaj wszystko na jego temat naraz: adres sieci, broadcast (lub ostatni adres w IPv6), maskę sieci i maskę wildcard, pierwszy i ostatni dostępny host, liczbę adresów oraz to, do którego zakresu specjalnego przeznaczenia należy — prywatna przestrzeń RFC 1918, carrier-grade NAT, link-local, dokumentacja, multicast i pozostałe. Działa też sam adres, zapis z maską sieci (192.168.1.0 255.255.255.0) oraz ciscowa postać wildcard (0.0.0.255).',
+			'Możesz też wkleić zakres — 10.0.0.1 - 10.0.0.200 — a dostaniesz najkrótszą listę bloków CIDR, która pokrywa go dokładnie, czyli to, co faktycznie przyjmują reguły firewalla, security groups i listy dozwolonych adresów. Widok podziału dzieli blok na równe podsieci (/16 na /24, /32 na /48) przy planowaniu VPC i VLAN-ów, a sprawdzanie przynależności mówi, czy dany adres mieści się w bloku.',
+			'Cała arytmetyka używa BigInt, więc liczby adresów IPv6 są dokładne, a nie zaokrąglone do liczb zmiennoprzecinkowych: /64 ma 18446744073709551616 adresów, a nie „1.8e19”. Nic nie jest sprawdzane online — narzędzie zna zakresy specjalnego przeznaczenia IANA, a nie to, kto jest właścicielem adresu — a układ Twojej sieci wewnętrznej nigdy nie opuszcza przeglądarki.'
+		],
+		faqs: [
+			{
+				q: 'Dlaczego /24 ma 254 dostępne hosty, a nie 256?',
+				a: 'W IPv4 pierwszy adres podsieci oznacza samą sieć, a ostatni jest adresem rozgłoszeniowym (broadcast), więc żadnego z nich nie można przydzielić hostowi. Wyjątkami są /31, który RFC 3021 pozwala w całości wykorzystać na łączach punkt–punkt (dwa hosty), oraz /32, czyli pojedynczy adres. IPv6 nie ma broadcastu, więc każdy adres w bloku IPv6 liczy się jako dostępny.'
+			},
+			{
+				q: 'Co oznacza komunikat „ustawione są bity hosta”?',
+				a: 'Wpisany adres nie jest początkiem swojego bloku, np. 10.1.2.3/8. Większość narzędzi po cichu zaokrągla go w dół do 10.0.0.0/8; niektóre, jak moduł ipaddress Pythona w trybie ścisłym czy część konsol chmurowych, go odrzucają. Kalkulator pokazuje prawdziwy adres sieci, żebyś mógł wkleić postać kanoniczną.'
+			},
+			{
+				q: 'Dlaczego adresy z zerami wiodącymi są odrzucane?',
+				a: 'Bo systemy nie zgadzają się co do ich znaczenia. Klasyczny parser inet_aton czyta 010 jako liczbę ósemkową (8), a większość pozostałych jako dziesiętną (10) — ta rozbieżność prowadziła już do realnych obejść kontroli dostępu. Zamiast zgadywać, kalkulator prosi o zapisanie liczby bez wiodącego zera.'
+			},
+			{
+				q: 'Jak zakres zamienia się na bloki CIDR?',
+				a: 'Zachłannie, od początku: w każdym kroku bierze największy blok wyrównany do bieżącego adresu, który nie wychodzi poza koniec zakresu, i przechodzi dalej. Daje to minimalną liczbę bloków. Wyrównany zakres, taki jak 192.168.0.0 – 192.168.255.255, zwija się do jednego /16; niewygodny, jak .1 – .10, wymaga pięciu.'
+			},
+			{
+				q: 'Do czego służy maska wildcard?',
+				a: 'To odwrócona maska sieci — 0.0.0.255 dla /24 — i właśnie tak zakres wyrażają listy dostępu w Cisco IOS oraz polecenia network w OSPF. Do kalkulatora możesz wkleić dowolną z tych postaci; rozpozna maskę wildcard i przeliczy ją na długość prefiksu.'
+			}
+		]
+	},
+
+	'background-remover': {
+		about: [
+			'Upuść zdjęcie, a obiekt zostanie wycięty automatycznie — bez pędzla i bez klikania wzdłuż krawędzi. Pobierz go jako przezroczysty PNG lub WebP albo umieść na jednolitym kolorze (białym do oferty produktu, firmowym do miniatury) i wyeksportuj JPEG. Wycinek powstaje w oryginalnej rozdzielczości, więc zdjęcie 4000-pikselowe pozostaje 4000-pikselowe.',
+			'Pod maską działa U²-Net — sieć do segmentacji obiektów wyróżniających się na obrazie, na której opiera się popularne narzędzie wiersza poleceń rembg — uruchamiana przez ONNX Runtime skompilowany do WebAssembly. Przy pierwszym użyciu z tej strony pobierane są środowisko uruchomieniowe i model o rozmiarze 4.6 MB (łącznie ok. 19 MB), po czym przeglądarka trzyma oba w pamięci podręcznej i kolejne uruchomienia w ogóle nie potrzebują sieci. Wnioskowanie trwa od jednej do trzech sekund na typowym laptopie.',
+			'Twoje zdjęcie nigdy nie opuszcza strony — nie ma wysyłania, kolejki ani konta. Tutaj ma to większe znaczenie niż w przypadku większości narzędzi: ludzie wycinają zdjęcia produktów przed premierą, zdjęcia do dokumentów i portrety rodzinne. Oznacza to też brak kredytów za obraz i brak limitu rozdzielczości — narzędzie jest darmowe przy każdym rozmiarze, który Twoja przeglądarka potrafi zdekodować.'
+		],
+		faqs: [
+			{
+				q: 'Czy to darmowa alternatywa dla remove.bg?',
+				a: 'W typowym przypadku — jeden wyraźny obiekt, przezroczysty PNG w pełnej rozdzielczości — tak, bez rejestracji, kredytów i znaku wodnego, bo pracy nie wykonuje żaden serwer. Ceną jest jakość w trudnych przypadkach: włosy, sierść, szkło i rozmycie ruchu wychodzą bardziej poszarpane niż w usłudze chmurowej z dużo większym modelem, a maska jest przewidywana przy 320 px, zanim zostanie z powrotem przeskalowana, więc bardzo drobne szczegóły są przybliżone.'
+			},
+			{
+				q: 'Dlaczego pierwsze uruchomienie trochę trwa?',
+				a: 'Zanim strona cokolwiek zrobi, musi pobrać z tej witryny ONNX Runtime (ok. 14 MB WebAssembly) i model (4.6 MB) — pasek postępu pokazuje dokładnie to pobieranie. Oba trafiają do pamięci podręcznej przeglądarki, więc drugi obraz, i każdy obraz po przeładowaniu strony, startuje natychmiast. Samo działanie sieci trwa od jednej do trzech sekund na laptopie i dłużej na telefonie.'
+			},
+			{
+				q: 'Jakie obrazy sprawdzają się najlepiej?',
+				a: 'Zdjęcia z jednym obiektem, który odcina się od tła: osoba na tle ściany, produkt na stole, zwierzak na podłodze. Model szuka tego, co wizualnie się wyróżnia, więc ma kłopot, gdy obiekt wypełnia cały kadr, gdy kilka rzeczy rywalizuje o uwagę albo gdy obiekt i tło mają wspólne kolory i fakturę. Przycięcie kadru bliżej jednego obiektu przed upuszczeniem pliku często naprawia słaby wynik.'
+			},
+			{
+				q: 'Jak uzyskać białe tło zamiast przezroczystego?',
+				a: 'Przełącz Tło na Kolor i wybierz biały (lub dowolny inny) — wycinek zostanie na nim osadzony, a JPEG stanie się dostępny jako format wyjściowy. Zostaw Przezroczyste, jeśli obraz trafi później na kolorową lub wzorzystą powierzchnię; PNG i WebP przechowują kanał alfa, przy czym WebP zajmuje ułamek rozmiaru.'
+			},
+			{
+				q: 'Czy wynik zachowuje dane EXIF mojego zdjęcia?',
+				a: 'Nie. Wynik jest renderowany z pikseli na canvasie, więc model aparatu, znaczniki czasu i współrzędne GPS nie są przenoszone — zwykle właśnie tego chcesz od obrazu, który trafi do ogłoszenia lub na profil w mediach społecznościowych. Jeśli potrzebujesz metadanych, zachowaj oryginał obok; dostępna tu przeglądarka EXIF pokazuje, co zawiera.'
+			}
+		]
 	}
 };
 
