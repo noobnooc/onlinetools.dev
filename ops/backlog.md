@@ -38,7 +38,7 @@ _(empty — humans: put a line here to steer the next run)_
 
 | Date | Item | PR |
 | --- | --- | --- |
-| 2026-10-30 | About/FAQ for the CIDR calculator + Background Remover in 16 more locales; locale-aware sentence stop in meta descriptions | PRLINK |
+| 2026-10-30 | About/FAQ for the CIDR calculator + Background Remover in 16 more locales; locale-aware sentence stop in meta descriptions | [#29](https://github.com/noobnooc/onlinetools.dev/pull/29) |
 | 2026-10-30 | Zone settings audit; email obfuscation off | (Cloudflare API, see cloudflare-changes.md) |
 | 2026-10-29 | CIDR / subnet calculator (IPv4 + IPv6, range → CIDR, split, membership, Smart Paste) | [#27](https://github.com/noobnooc/onlinetools.dev/pull/27) |
 
