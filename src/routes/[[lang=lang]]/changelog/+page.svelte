@@ -16,6 +16,29 @@
 	<div lang="en">
 	<section class="relative border-l border-line pb-8 pl-6">
 		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full bg-accent" aria-hidden="true"></span>
+		<h2 class="text-sm font-medium">Sign and verify JWTs with real keys</h2>
+		<p class="mt-0.5 font-mono text-xs text-dim">v2026.10.31</p>
+		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
+			<li>
+				The <a href={lp('/t/jwt-decoder')} class="text-accent hover:underline">JWT Decoder &amp;
+				Encoder</a> now verifies with a JWK or a whole JWKS — paste the JSON from your issuer's
+				jwks_uri and the token's kid picks the key — and reports whether exp and nbf pass.
+			</li>
+			<li>
+				New algorithms: PS256/384/512, ES512 and EdDSA (Ed25519), alongside HS, RS and ES.
+				Sign mode takes extra header fields like kid, stamps iat and exp in one click, and can
+				generate a random secret or a test key pair, then hand the token to Verify.
+			</li>
+			<li>
+				Verify refuses a public key for an HS token instead of quietly reporting a mismatch —
+				that "algorithm confusion" is a classic JWT vulnerability. The page copy, which still
+				said the tool couldn't verify, is rewritten in all eighteen languages.
+			</li>
+		</ul>
+	</section>
+
+	<section class="relative border-l border-line pb-8 pl-6">
+		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
 		<h2 class="text-sm font-medium">Every tool explained in every language</h2>
 		<p class="mt-0.5 font-mono text-xs text-dim">v2026.10.30</p>
 		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">

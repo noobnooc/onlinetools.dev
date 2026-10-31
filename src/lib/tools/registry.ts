@@ -126,11 +126,11 @@ export const TOOLS: ToolMeta[] = [
 	{
 		slug: 'jwt-decoder',
 		accepts: ['jwt'],
-		name: 'JWT Decoder',
-		description: 'Decode JWT header and payload, check expiry — fully offline',
+		name: 'JWT Decoder & Encoder',
+		description: 'Decode, sign and verify JWTs — HS, RS, PS, ES, EdDSA and JWKS — fully offline',
 		category: 'encoding',
-		aliases: ['jwt', 'json web token', 'jwt decode', 'jwt debugger'],
-		keywords: ['jwt decoder', 'decode jwt', 'jwt debugger', 'json web token'],
+		aliases: ['jwt', 'json web token', 'jwt decode', 'jwt debugger', 'jwt encoder', 'jwt generator', 'jwt signer', 'jwt verifier', 'jws', 'jwks'],
+		keywords: ['jwt decoder', 'decode jwt', 'jwt debugger', 'json web token', 'jwt encoder', 'generate jwt', 'verify jwt signature', 'jwt jwks verify'],
 		related: ['base64-decode', 'json-formatter', 'timestamp-converter', 'hash-generator', 'url-encode-decode', 'uuid-generator']
 	},
 	{

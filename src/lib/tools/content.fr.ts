@@ -86,26 +86,31 @@ const TOOL_CONTENT_FR: Record<string, ToolContent> = {
 
 	'jwt-decoder': {
 		about: [
-			'Un JSON Web Token, ce sont trois segments Base64URL — en-tête, charge utile, signature — reliés par des points. Ce décodeur découpe le jeton et affiche l’en-tête et la charge utile en JSON formaté, met en évidence les claims temporels normalisés (iat, exp, nbf) sous forme de dates lisibles, et vous dit d’un coup d’œil si le jeton a expiré.',
-			'Décoder n’est pas vérifier : la charge utile de n’importe quel JWT peut être lue par quiconque le détient, car Base64URL est un encodage, pas un chiffrement. C’est aussi pourquoi coller un jeton sur un site web quelconque est en général une mauvaise idée — cette page est l’exception, car le décodage se fait entièrement dans votre navigateur et le jeton n’est jamais transmis. La vérification de signature contre un secret ou une clé publique est délibérément hors du périmètre de ce décodeur hors ligne.',
-			'Un préfixe "Bearer " en tête est supprimé automatiquement : vous pouvez coller directement depuis un en-tête Authorization.'
+			'Un JSON Web Token, ce sont trois segments Base64URL — en-tête, charge utile, signature — reliés par des points. Le mode Décoder découpe le jeton, affiche l’en-tête et la charge utile en JSON formaté, convertit les claims temporels normalisés (iat, exp, nbf) en dates lisibles et indique combien de temps il reste sur la durée de vie du jeton.',
+			'Décoder n’est pas vérifier : la charge utile de n’importe quel JWT peut être lue par quiconque le détient, car Base64URL est un encodage, pas un chiffrement. Le mode Vérifier contrôle la signature avec WebCrypto à partir de ce que vous collez — le secret partagé pour HS256/384/512, ou pour RS, PS, ES et EdDSA une clé publique en PEM, un JWK seul ou un JWKS complet, où le kid du jeton désigne la clé. Il contrôle aussi exp et nbf par rapport à votre horloge et refuse une clé publique pour un jeton HS — l’erreur de "confusion d’algorithme" à l’origine de plusieurs vraies vulnérabilités de bibliothèques.',
+			'Le mode Signer construit un jeton à partir d’une charge utile JSON et de champs d’en-tête supplémentaires facultatifs comme kid, avec des boutons pour apposer iat et exp. Il peut générer un secret aléatoire ou une paire de clés jetable, puis transmettre directement le jeton signé à Vérifier avec la clé publique correspondante — pratique pour tester une API ou une configuration JWKS sans écrire de script.',
+			'Les jetons, secrets et clés privées ne quittent jamais la page : décodage, signature et vérification s’exécutent tous dans votre navigateur, et un préfixe "Bearer " en tête est supprimé, pour que vous puissiez coller directement depuis un en-tête Authorization.'
 		],
 		faqs: [
 			{
-				q: 'Est-il prudent de coller ici un jeton de production ?',
-				a: 'Le jeton reste dans votre navigateur — cette page n’effectue aucune requête réseau avec votre saisie, ce que vous pouvez vérifier dans l’onglet réseau des outils de développement. Gardez tout de même l’habitude de traiter les jetons actifs comme des mots de passe : préférez des jetons expirés ou de test pour les captures d’écran.'
+				q: 'Est-il prudent de coller ici un jeton ou une clé de production ?',
+				a: 'Rien de ce que vous collez n’est transmis — la page n’effectue aucune requête réseau avec votre saisie, ce que vous pouvez vérifier dans l’onglet réseau des outils de développement, et rien n’est enregistré. Gardez tout de même l’habitude de traiter les jetons actifs et les clés de signature comme des mots de passe : préférez des jetons expirés et des clés de test quand c’est possible, et remplacez toute clé collée dans un endroit que vous ne contrôlez pas.'
+			},
+			{
+				q: 'Comment vérifier un jeton d’Auth0, Cognito, Google ou Keycloak ?',
+				a: 'Trouvez le jwks_uri de l’émetteur (il figure dans /.well-known/openid-configuration), ouvrez-le dans un onglet et collez le JSON complet dans le champ de clé du mode Vérifier. L’outil choisit la clé dont le kid correspond à l’en-tête du jeton. Il ne récupère pas l’URL lui-même, afin que rien de votre jeton n’atteigne le réseau.'
 			},
 			{
 				q: 'Pourquoi mon jeton ne se décode-t-il pas ?',
-				a: 'Vérifiez qu’il comporte exactement trois segments séparés par des points et aucun saut de ligne introduit par le copier-coller. Les jetons d’accès opaques (par exemple beaucoup de jetons GitHub ou Google) ne sont pas du tout des JWT — aucun décodage n’ouvrira une chaîne aléatoire qui n’a jamais contenu de JSON.'
+				a: 'Vérifiez qu’il comporte exactement trois segments séparés par des points et aucun saut de ligne introduit par le copier-coller. Les jetons d’accès opaques (par exemple beaucoup de jetons OAuth GitHub ou Google) ne sont pas du tout des JWT — aucun décodage n’ouvrira une chaîne aléatoire qui n’a jamais contenu de JSON. Un jeton à cinq segments est un JWE : il est chiffré et nécessite la clé privée du destinataire.'
 			},
 			{
 				q: 'Que signifient iat, exp et nbf ?',
-				a: 'Ce sont des claims normalisés par la RFC 7519, tous en secondes Unix : iat est l’instant d’émission du jeton, exp le moment où il cesse d’être valide, et nbf ("not before") le premier instant où il peut être accepté. Cet outil convertit chacun en date lisible et compare exp à votre horloge.'
+				a: 'Ce sont des claims normalisés par la RFC 7519, tous en secondes Unix : iat est l’instant d’émission du jeton, exp le moment où il cesse d’être valide, et nbf ("not before") le premier instant où il peut être accepté. Le mode Décoder affiche chacun sous forme de date ; le mode Vérifier signale un jeton expiré ou pas encore valide à côté du résultat de la signature, car un jeton expiré doit être rejeté même si sa signature est bonne.'
 			},
 			{
-				q: 'Cet outil peut-il vérifier la signature ?',
-				a: 'Non — et une coche verte affichée par un outil en ligne ne devrait de toute façon pas fonder une décision de sécurité. Vérifiez les signatures côté backend avec une bibliothèque maintenue (jose, jsonwebtoken, PyJWT) contre les vraies clés de l’émetteur.'
+				q: 'Quels formats de clé sont acceptés, et que faire si la mienne est refusée ?',
+				a: 'Clés privées en PEM PKCS#8 ("BEGIN PRIVATE KEY") ou en JWK avec son "d" privé ; clés publiques en PEM SPKI ("BEGIN PUBLIC KEY"), en JWK ou en JWKS. Les formats plus anciens reçoivent un message spécifique : convertissez les clés PKCS#1 ("BEGIN RSA PRIVATE KEY") et SEC1 ("BEGIN EC PRIVATE KEY") avec openssl pkcs8 -topk8 -nocrypt, et extrayez la clé publique d’un certificat avec openssl x509 -pubkey -noout.'
 			}
 		]
 	},

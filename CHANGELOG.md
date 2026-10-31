@@ -11,6 +11,28 @@ the footer badge and every `<lastmod>` in the sitemap.
 
 ---
 
+## [2026.10.31] — Sign and verify JWTs with real keys
+
+### Added
+
+- **JWT Decoder & Encoder** (was "JWT Decoder"): Verify mode accepts a JWK or
+  a whole JWKS as well as a PEM; the token's `kid` picks the key, and every
+  compatible key is tried when there is no `kid`. It also reports whether
+  `exp` and `nbf` pass against the local clock.
+- PS256/384/512, ES512 and EdDSA (Ed25519) for signing and verifying.
+- Sign mode: extra header fields (e.g. `kid`; a JWK's `kid` is copied in
+  automatically), private keys as JWK, one-click `iat`/`exp` stamps, a random
+  secret or test key-pair generator, and "Verify this token" with the
+  matching public key.
+
+### Changed
+
+- Verifying an HS token with a public key is refused with an explanation of
+  algorithm confusion instead of reporting a plain mismatch; `alg: "NONE"` is
+  treated as unsigned in any letter case.
+- The tool's About & FAQ copy, which still said signature verification was
+  out of scope, is rewritten (with a JWKS how-to) in all eighteen languages.
+
 ## [2026.10.30] — Every tool explained in every language
 
 ### Changed

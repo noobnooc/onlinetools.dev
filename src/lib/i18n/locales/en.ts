@@ -376,7 +376,7 @@ const en = {
 		jwtNotBefore: 'Not before',
 		jwtLifetime: 'Lifetime',
 		jwtNote:
-			"Decoding only reads the token — it does not verify the signature. Verify signatures server-side with the issuer's keys.",
+			'Decoding only reads the token — anyone can do that. Switch to Verify to check the signature against a secret, a public key or a JWKS.',
 
 		// Lorem
 		loremUnit: 'Unit',
@@ -635,12 +635,19 @@ const en = {
 		jwtAlg: 'Algorithm',
 		jwtPayloadLbl: 'Payload (JSON object)',
 		jwtSecret: 'Secret',
-		jwtPrivKey: 'Private key (PKCS#8 PEM)',
-		jwtPubKey: 'Secret (HS) or public key PEM (RS/ES)',
+		jwtPrivKey: 'Private key (PKCS#8 PEM or JWK)',
+		jwtPubKey: 'Secret (HS) or public key — PEM, JWK or JWKS',
+		jwtHeaderLbl: 'Extra header fields (optional JSON, e.g. kid)',
+		jwtSetIat: 'Set iat to now',
+		jwtExpIn: 'Expire in',
+		jwtGenSecret: 'Generate secret',
+		jwtGenPair: 'Generate test key pair',
+		jwtPubForVerify: 'Matching public key',
+		jwtVerifyThis: 'Verify this token →',
 		jwtSignNote:
-			'Signing runs on WebCrypto in your browser — the key never leaves this page. For HS algorithms use a long random secret; short ones are brute-forceable no matter where you sign.',
+			'Signing runs on WebCrypto in your browser — the key never leaves this page, and generated keys are not stored anywhere. For HS algorithms use a long random secret; short ones are brute-forceable no matter where you sign.',
 		jwtVerifyNote:
-			'Verification checks the signature against the key you supply, locally. It does not fetch JWKS endpoints or validate claims like aud/iss — do that server-side.',
+			"Verification checks the signature against the key you supply, plus exp and nbf against your clock, all locally. It does not fetch JWKS URLs — open the issuer's jwks_uri and paste the JSON. Check aud and iss in your backend.",
 
 		// Timestamp extras
 		tsDiff: 'Difference between two dates',

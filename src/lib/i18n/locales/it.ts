@@ -309,7 +309,7 @@ const it: Messages = {
 		jwtExpires: 'Scade',
 		jwtNotBefore: 'Non prima di',
 		jwtLifetime: 'Durata',
-		jwtNote: 'La decodifica legge soltanto il token — non verifica la firma. Verifica le firme lato server con le chiavi dell’emittente.',
+		jwtNote: 'La decodifica legge soltanto il token — chiunque può farlo. Passa a Verifica per controllare la firma con un segreto, una chiave pubblica o un JWKS.',
 		loremUnit: 'Unità',
 		loremWords: 'Parole',
 		loremSentences: 'Frasi',
@@ -546,10 +546,17 @@ const it: Messages = {
 		jwtAlg: 'Algoritmo',
 		jwtPayloadLbl: 'Payload (oggetto JSON)',
 		jwtSecret: 'Segreto',
-		jwtPrivKey: 'Chiave privata (PEM PKCS#8)',
-		jwtPubKey: 'Segreto (HS) o chiave pubblica PEM (RS/ES)',
-		jwtSignNote: 'La firma gira su WebCrypto nel tuo browser — la chiave non lascia mai questa pagina. Per gli algoritmi HS usa un segreto lungo e casuale; quelli corti si trovano per forza bruta, ovunque tu firmi.',
-		jwtVerifyNote: 'La verifica controlla la firma contro la chiave che fornisci, in locale. Non scarica endpoint JWKS né valida claim come aud/iss — fallo lato server.',
+		jwtPrivKey: 'Chiave privata (PEM PKCS#8 o JWK)',
+		jwtPubKey: 'Segreto (HS) o chiave pubblica — PEM, JWK o JWKS',
+		jwtHeaderLbl: 'Campi header aggiuntivi (JSON opzionale, es. kid)',
+		jwtSetIat: 'Imposta iat ad adesso',
+		jwtExpIn: 'Scade tra',
+		jwtGenSecret: 'Genera segreto',
+		jwtGenPair: 'Genera coppia di chiavi di test',
+		jwtPubForVerify: 'Chiave pubblica corrispondente',
+		jwtVerifyThis: 'Verifica questo token →',
+		jwtSignNote: 'La firma gira su WebCrypto nel tuo browser — la chiave non lascia mai questa pagina e le chiavi generate non vengono salvate da nessuna parte. Per gli algoritmi HS usa un segreto lungo e casuale; quelli corti si trovano per forza bruta, ovunque tu firmi.',
+		jwtVerifyNote: 'La verifica controlla la firma contro la chiave che fornisci, oltre a exp e nbf rispetto al tuo orologio, tutto in locale. Non scarica URL JWKS — apri il jwks_uri dell’emittente e incolla il JSON. Controlla aud e iss nel tuo backend.',
 
 		// Timestamp extras
 		tsDiff: 'Differenza tra due date'
@@ -580,8 +587,8 @@ const it: Messages = {
 			description: 'Converti timestamp Unix in date leggibili e viceversa, con tempo relativo'
 		},
 		'jwt-decoder': {
-			name: 'Decodificatore JWT',
-			description: 'Decodifica header e payload del JWT e controlla la scadenza — tutto offline'
+			name: 'Decodificatore e codificatore JWT',
+			description: 'Decodifica, firma e verifica JWT — HS, RS, PS, ES, EdDSA e JWKS — tutto offline'
 		},
 		'regex-tester': {
 			name: 'Tester di regex',

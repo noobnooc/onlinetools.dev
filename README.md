@@ -63,7 +63,7 @@ That single constraint shapes everything else:
 | Tool | What it does |
 | --- | --- |
 | [Base64 Encode / Decode](https://onlinetools.dev/t/base64-decode) | Encode text to Base64 or decode Base64 to text, URL-safe included |
-| [JWT Decoder](https://onlinetools.dev/t/jwt-decoder) | Decode JWT header and payload, check expiry — fully offline |
+| [JWT Decoder & Encoder](https://onlinetools.dev/t/jwt-decoder) | Decode, sign and verify JWTs — HS, RS, PS, ES, EdDSA and JWKS — fully offline |
 | [URL Encode / Decode](https://onlinetools.dev/t/url-encode-decode) | Percent-encode or decode URL components and query strings |
 | [HTML Entities Encode / Decode](https://onlinetools.dev/t/html-entities) | Escape text for HTML or decode `&`-style entities back to characters |
 | [Unicode Character Inspector](https://onlinetools.dev/t/unicode-inspector) | See code points, UTF-8/UTF-16 bytes and escapes for every character |

@@ -309,7 +309,7 @@ const de: Messages = {
 		jwtExpires: 'Läuft ab',
 		jwtNotBefore: 'Nicht vor',
 		jwtLifetime: 'Lebensdauer',
-		jwtNote: 'Das Dekodieren liest den Token nur — die Signatur wird nicht geprüft. Prüfe Signaturen serverseitig mit den Schlüsseln des Ausstellers.',
+		jwtNote: 'Das Dekodieren liest den Token nur — das kann jeder. Wechsle zu „Verifizieren“, um die Signatur gegen ein Secret, einen Public Key oder ein JWKS zu prüfen.',
 		loremUnit: 'Einheit',
 		loremWords: 'Wörter',
 		loremSentences: 'Sätze',
@@ -549,12 +549,17 @@ const de: Messages = {
 		jwtAlg: 'Algorithmus',
 		jwtPayloadLbl: 'Payload (JSON-Objekt)',
 		jwtSecret: 'Secret',
-		jwtPrivKey: 'Privater Schlüssel (PKCS#8-PEM)',
-		jwtPubKey: 'Secret (HS) oder Public-Key-PEM (RS/ES)',
-		jwtSignNote:
-			'Das Signieren läuft über WebCrypto in deinem Browser — der Schlüssel verlässt diese Seite nie. Nutze für HS-Algorithmen ein langes zufälliges Secret; kurze sind per Brute-Force knackbar, egal wo du signierst.',
-		jwtVerifyNote:
-			'Die Verifikation prüft die Signatur lokal gegen den von dir angegebenen Schlüssel. Sie ruft keine JWKS-Endpoints ab und validiert keine Claims wie aud/iss — erledige das serverseitig.',
+		jwtPrivKey: 'Privater Schlüssel (PKCS#8-PEM oder JWK)',
+		jwtPubKey: 'Secret (HS) oder Public Key — PEM, JWK oder JWKS',
+		jwtHeaderLbl: 'Zusätzliche Header-Felder (optionales JSON, z. B. kid)',
+		jwtSetIat: 'iat auf jetzt setzen',
+		jwtExpIn: 'Läuft ab in',
+		jwtGenSecret: 'Secret generieren',
+		jwtGenPair: 'Test-Schlüsselpaar generieren',
+		jwtPubForVerify: 'Passender Public Key',
+		jwtVerifyThis: 'Diesen Token verifizieren →',
+		jwtSignNote: 'Das Signieren läuft über WebCrypto in deinem Browser — der Schlüssel verlässt diese Seite nie, und generierte Schlüssel werden nirgends gespeichert. Nutze für HS-Algorithmen ein langes zufälliges Secret; kurze sind per Brute-Force knackbar, egal wo du signierst.',
+		jwtVerifyNote: 'Die Verifikation prüft die Signatur gegen den von dir angegebenen Schlüssel sowie exp und nbf gegen deine Uhr, alles lokal. JWKS-URLs werden nicht abgerufen — öffne die jwks_uri des Ausstellers und füge das JSON ein. Prüfe aud und iss in deinem Backend.',
 
 		// Timestamp extras
 		tsDiff: 'Differenz zwischen zwei Datumsangaben'
@@ -585,8 +590,8 @@ const de: Messages = {
 			description: 'Unix-Timestamps in lesbare Daten umwandeln und zurück, mit relativer Zeit'
 		},
 		'jwt-decoder': {
-			name: 'JWT-Decoder',
-			description: 'JWT-Header und -Payload dekodieren, Ablauf prüfen — komplett offline'
+			name: 'JWT-Decoder & -Encoder',
+			description: 'JWTs dekodieren, signieren und verifizieren — HS, RS, PS, ES, EdDSA und JWKS — komplett offline'
 		},
 		'regex-tester': {
 			name: 'Regex-Tester',

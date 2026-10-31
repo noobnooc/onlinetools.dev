@@ -1,13 +1,27 @@
 <script lang="ts">
-	import { tt } from '$lib/i18n';
+	import { t, tt } from '$lib/i18n';
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
 	import Segmented from '../Segmented.svelte';
-	import { decodeJwt, signJwt, verifyJwt, SIGN_ALGS, type JwtAlg, type VerifyOutcome } from '$lib/tools/jwt';
+	import {
+		decodeJwt,
+		signJwt,
+		verifyJwt,
+		stampTimeClaims,
+		generateSecret,
+		generateKeyPair,
+		isHmacAlg,
+		SIGN_ALGS,
+		type JwtAlg,
+		type VerifyOutcome,
+		type GeneratedKeyPair
+	} from '$lib/tools/jwt';
 	import type { ToolResult } from '$lib/tools/types';
 	import { formatRelative } from '$lib/tools/timestamp';
 	import { initFromHash } from '$lib/state/hashstate.svelte';
 	import { currentResult } from '$lib/state/app.svelte';
+	import { copyText } from '$lib/utils/format';
+	import { Copy, Check, KeyRound } from 'lucide-svelte';
 
 	const SAMPLE =
 		'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkFkYSBMb3ZlbGFjZSIsImlhdCI6MTUxNjIzOTAyMiwiZXhwIjoxNzUyMDAwMDAwfQ.4Adcj3UFYzPUVaVF43FmMab6RlaQD8A9V8wFzzht-KQ';
@@ -24,9 +38,21 @@
 	/* ---------- sign ---------- */
 
 	let signPayload = $state('{\n  "sub": "1234567890",\n  "name": "Ada Lovelace"\n}');
+	let signHeader = $state('');
 	let signAlg = $state<JwtAlg>('HS256');
 	let signKey = $state('');
 	let signResult = $state<ToolResult | null>(null);
+	let claimError = $state<string | null>(null);
+	/** The key pair made by "Generate key pair", kept only while it matches the key box. */
+	let generated = $state<{ alg: JwtAlg; pair: GeneratedKeyPair } | null>(null);
+	let genError = $state<string | null>(null);
+	let pubFormat = $state<'pem' | 'jwk'>('pem');
+	let copiedPub = $state(false);
+
+	const hmac = $derived(isHmacAlg(signAlg));
+	const pair = $derived(
+		generated && generated.alg === signAlg && generated.pair.privatePem === signKey ? generated.pair : null
+	);
 
 	$effect(() => {
 		if (mode !== 'sign' || signPayload.trim() === '' || signKey === '') {
@@ -34,11 +60,12 @@
 			return;
 		}
 		const payload = signPayload;
+		const header = signHeader;
 		const alg = signAlg;
 		const key = signKey;
 		let cancelled = false;
 		const timer = setTimeout(() => {
-			void signJwt(payload, alg, key).then((r) => {
+			void signJwt(payload, alg, key, header).then((r) => {
 				if (!cancelled) signResult = r;
 			});
 		}, 200);
@@ -47,6 +74,48 @@
 			clearTimeout(timer);
 		};
 	});
+
+	function stamp(expiresIn: number | null) {
+		const r = stampTimeClaims(signPayload, Date.now(), expiresIn);
+		if (r.ok) {
+			signPayload = r.value;
+			claimError = null;
+		} else {
+			claimError = r.error;
+		}
+	}
+
+	async function generateKey() {
+		genError = null;
+		if (hmac) {
+			signKey = generateSecret(signAlg);
+			return;
+		}
+		const alg = signAlg;
+		const r = await generateKeyPair(alg);
+		if (r.ok) {
+			generated = { alg, pair: r.value };
+			signKey = r.value.privatePem;
+		} else {
+			genError = r.error;
+		}
+	}
+
+	async function copyPub() {
+		if (!pair) return;
+		if (await copyText(pubFormat === 'pem' ? pair.publicPem : pair.publicJwk)) {
+			copiedPub = true;
+			setTimeout(() => (copiedPub = false), 1500);
+		}
+	}
+
+	/** Hand the freshly signed token (and its key) over to Verify mode. */
+	function verifySigned() {
+		if (!signResult?.ok) return;
+		input = signResult.value;
+		verifyKey = hmac ? signKey : pair ? pair.publicPem : '';
+		mode = 'verify';
+	}
 
 	/* ---------- verify ---------- */
 
@@ -71,6 +140,9 @@
 			clearTimeout(timer);
 		};
 	});
+
+	const chip =
+		'rounded-md border border-line bg-surface-2 px-2.5 py-1 font-medium text-fg transition-colors duration-120 hover:border-accent';
 
 	const keyIsPem = $derived(/-----BEGIN/.test(mode === 'sign' ? signKey : verifyKey));
 
@@ -147,8 +219,9 @@
 
 	{#if mode === 'sign'}
 		<div class="flex flex-wrap items-center gap-2 text-sm">
-			<span class="text-dim">{tt('jwtAlg')}</span>
+			<label for="jwt-alg" class="text-dim">{tt('jwtAlg')}</label>
 			<select
+				id="jwt-alg"
 				bind:value={signAlg}
 				class="rounded-lg border border-line bg-surface-2 px-2 py-1.5 font-mono text-sm text-fg focus:border-accent"
 			>
@@ -158,37 +231,110 @@
 			</select>
 		</div>
 		<InputArea
+			bind:value={signHeader}
+			label={tt('jwtHeaderLbl')}
+			placeholder={'{"kid": "key-1"}'}
+			rows={2}
+		/>
+		<InputArea
 			bind:value={signPayload}
 			label={tt('jwtPayloadLbl')}
 			placeholder={'{"sub": "…"}'}
 			rows={6}
-			error={signResult && !signResult.ok ? { message: signResult.error } : null}
+			error={claimError
+				? { message: claimError }
+				: signResult && !signResult.ok && signResult.error.startsWith('Payload')
+					? { message: signResult.error }
+					: null}
 		/>
+		<div class="flex flex-wrap items-center gap-2 text-xs">
+			<button type="button" class={chip} onclick={() => stamp(null)}>{tt('jwtSetIat')}</button>
+			<span class="text-dim">{tt('jwtExpIn')}</span>
+			{#each [['15m', 900], ['1h', 3600], ['24h', 86400], ['30d', 2592000]] as const as [label, secs] (label)}
+				<button type="button" class={chip} onclick={() => stamp(secs)}>+{label}</button>
+			{/each}
+		</div>
 		<InputArea
 			bind:value={signKey}
-			label={signAlg.startsWith('HS') ? tt('jwtSecret') : tt('jwtPrivKey')}
-			placeholder={signAlg.startsWith('HS') ? 'your-256-bit-secret' : '-----BEGIN PRIVATE KEY-----'}
-			rows={signAlg.startsWith('HS') ? 2 : 6}
-			badge={signKey === '' ? [] : signAlg.startsWith('HS') || keyIsPem ? [] : [{ text: 'expects PEM', tone: 'warn' }]}
+			label={hmac ? tt('jwtSecret') : tt('jwtPrivKey')}
+			placeholder={hmac ? 'your-256-bit-secret' : '-----BEGIN PRIVATE KEY----- or {"kty": …, "d": …}'}
+			rows={hmac ? 2 : 6}
+			badge={signKey === '' || hmac || keyIsPem || signKey.trim().startsWith('{')
+				? []
+				: [{ text: 'expects PEM or JWK', tone: 'warn' }]}
+			error={signResult && !signResult.ok && !signResult.error.startsWith('Payload')
+				? { message: signResult.error }
+				: genError
+					? { message: genError }
+					: null}
 		/>
+		<div class="flex flex-wrap items-center gap-2 text-xs">
+			<button type="button" class="{chip} flex items-center gap-1.5" onclick={generateKey}>
+				<KeyRound size={13} aria-hidden="true" />
+				{hmac ? tt('jwtGenSecret') : tt('jwtGenPair')}
+			</button>
+			{#if signResult?.ok && (hmac || pair)}
+				<button type="button" class={chip} onclick={verifySigned}>{tt('jwtVerifyThis')}</button>
+			{/if}
+		</div>
+		{#if pair}
+			<div class="rounded-lg border border-line bg-surface">
+				<div class="flex flex-wrap items-center justify-between gap-2 border-b border-line px-3 py-2">
+					<span class="text-xs font-medium tracking-wide text-dim uppercase">{tt('jwtPubForVerify')}</span>
+					<div class="flex shrink-0 items-center gap-2">
+						<Segmented
+							bind:value={pubFormat}
+							label="Format"
+							options={[
+								{ value: 'pem', label: 'PEM' },
+								{ value: 'jwk', label: 'JWK' }
+							]}
+						/>
+						<button
+							type="button"
+							class="rounded-md p-1 text-dim transition-colors duration-120 hover:bg-surface-2 hover:text-fg"
+							aria-label={t('copy')}
+							onclick={copyPub}
+						>
+							{#if copiedPub}<Check size={14} />{:else}<Copy size={14} />{/if}
+						</button>
+					</div>
+				</div>
+				<pre class="px-3 py-2.5 font-mono text-xs leading-relaxed break-all whitespace-pre-wrap">{pubFormat === 'pem'
+						? pair.publicPem
+						: pair.publicJwk}</pre>
+			</div>
+		{/if}
 	{/if}
 
 	{#if mode === 'verify'}
 		<InputArea
 			bind:value={verifyKey}
 			label={tt('jwtPubKey')}
-			placeholder={'your-256-bit-secret — or -----BEGIN PUBLIC KEY-----'}
+			placeholder={'your-256-bit-secret — or -----BEGIN PUBLIC KEY----- — or {"keys": [ … ]}'}
 			rows={4}
 			error={verifyResult && !verifyResult.ok ? { message: verifyResult.error } : null}
 		/>
 		{#if verifyResult?.ok}
-			<div
-				class="flex items-center gap-3 rounded-lg border px-4 py-3 text-sm
-					{verifyResult.value.valid ? 'border-ok/40' : 'border-err/40'}"
-			>
-				<span class="h-2.5 w-2.5 shrink-0 rounded-full {verifyResult.value.valid ? 'bg-ok' : 'bg-err'}"></span>
-				<span class="font-mono text-xs text-dim">{verifyResult.value.alg}</span>
-				<span>{verifyResult.value.detail}</span>
+			{@const v = verifyResult.value}
+			<div class="space-y-2" role="status">
+				<div
+					class="flex items-center gap-3 rounded-lg border px-4 py-3 text-sm
+						{v.valid ? 'border-ok/40' : 'border-err/40'}"
+				>
+					<span class="h-2.5 w-2.5 shrink-0 rounded-full {v.valid ? 'bg-ok' : 'bg-err'}"></span>
+					<span class="font-mono text-xs text-dim">{v.alg}</span>
+					<span>{v.detail}</span>
+				</div>
+				{#if v.time}
+					<div
+						class="flex items-center gap-3 rounded-lg border px-4 py-2.5 text-sm
+							{v.time.status === 'ok' ? 'border-line' : 'border-warn/50'}"
+					>
+						<span class="h-2.5 w-2.5 shrink-0 rounded-full {v.time.status === 'ok' ? 'bg-ok' : 'bg-warn'}"></span>
+						<span class="font-mono text-xs">{v.time.message}</span>
+					</div>
+				{/if}
 			</div>
 		{/if}
 	{/if}

@@ -96,29 +96,35 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
 
 	'jwt-decoder': {
 		about: [
-			'A JSON Web Token is three Base64URL segments — header, payload, signature — joined by dots. This decoder splits a token and renders header and payload as formatted JSON, flags the registered time claims (iat, exp, nbf) as human-readable dates, and tells you at a glance whether the token has expired.',
-			'Decoding is not verification: the payload of any JWT can be read by anyone who holds it, because Base64URL is an encoding, not encryption. That is also why pasting a token into a random website is normally a bad idea — this page is the exception, because decoding happens entirely in your browser and the token is never transmitted. Signature verification against a secret or public key is deliberately out of scope for the offline decoder.',
-			'A leading "Bearer " prefix is stripped automatically, so you can paste straight from an Authorization header.'
+			'A JSON Web Token is three Base64URL segments — header, payload, signature — joined by dots. Decode mode splits a token and renders header and payload as formatted JSON, turns the registered time claims (iat, exp, nbf) into readable dates, and shows how much of the token\'s lifetime is left.',
+			'Decoding is not verification: anyone holding a JWT can read its payload, because Base64URL is an encoding, not encryption. Verify mode checks the signature with WebCrypto against what you paste — the shared secret for HS256/384/512, or for RS, PS, ES and EdDSA a public key as PEM, a single JWK, or a whole JWKS, where the token\'s kid picks the key. It also checks exp and nbf against your clock, and refuses a public key for an HS token, which is the "algorithm confusion" mistake behind several real library vulnerabilities.',
+			'Sign mode builds a token from a JSON payload and optional extra header fields such as kid, with buttons to stamp iat and exp. It can generate a random secret or a throwaway key pair, and hand the signed token straight to Verify with the matching public key — handy for testing an API or a JWKS setup without writing a script.',
+			'Tokens, secrets and private keys never leave the page: decoding, signing and verifying all run in your browser, and a leading "Bearer " prefix is stripped so you can paste straight from an Authorization header.'
 		],
 		faqs: [
 			{
-				q: 'Is it safe to paste a production token here?',
-				a: 'The token stays in your browser — this page performs no network requests with your input, which you can confirm in the developer tools network tab. Still, treat live tokens like passwords as a habit: prefer expired or test tokens when sharing screenshots.'
+				q: 'Is it safe to paste a production token or key here?',
+				a: 'Nothing you paste is transmitted — the page makes no network requests with your input, which you can confirm in the developer tools network tab, and nothing is saved. Still, treat live tokens and signing keys like passwords as a habit: prefer expired tokens and test keys when you can, and rotate a key that has been pasted somewhere you don\'t control.'
+			},
+			{
+				q: 'How do I verify a token from Auth0, Cognito, Google or Keycloak?',
+				a: 'Find the issuer\'s jwks_uri (it is listed in /.well-known/openid-configuration), open it in a tab and paste the whole JSON into the key box in Verify mode. The tool picks the key whose kid matches the token header. It does not fetch the URL itself, so that nothing about your token reaches the network.'
 			},
 			{
 				q: 'Why does my token fail to decode?',
-				a: 'Check that it has exactly three dot-separated segments and no line breaks from copy-wrapping. Opaque access tokens (e.g. many GitHub or Google tokens) are not JWTs at all — no amount of decoding will open a random string that never contained JSON.'
+				a: 'Check that it has exactly three dot-separated segments and no line breaks from copy-wrapping. Opaque access tokens (many GitHub or Google OAuth tokens, for example) are not JWTs at all — no amount of decoding will open a random string that never contained JSON. A five-segment token is a JWE: it is encrypted and needs the recipient\'s private key.'
 			},
 			{
 				q: 'What do iat, exp and nbf mean?',
-				a: 'They are registered claims from RFC 7519, all in unix seconds: iat is when the token was issued, exp is when it stops being valid, and nbf ("not before") is the earliest moment it may be accepted. This tool converts each to a readable date and compares exp against your clock.'
+				a: 'They are registered claims from RFC 7519, all in unix seconds: iat is when the token was issued, exp is when it stops being valid, and nbf ("not before") is the earliest moment it may be accepted. Decode mode shows each as a date; Verify mode reports a token as expired or not yet valid next to the signature result, since a good signature on an expired token should still be rejected.'
 			},
 			{
-				q: 'Can this tool verify the signature?',
-				a: 'No — and a green checkmark from an online tool should not be trusted for security decisions anyway. Verify signatures in your backend with a maintained library (jose, jsonwebtoken, PyJWT) against the issuer\'s actual keys.'
+				q: 'Which key formats work, and what if mine is rejected?',
+				a: 'Private keys as PKCS#8 PEM ("BEGIN PRIVATE KEY") or a JWK with its private "d"; public keys as SPKI PEM ("BEGIN PUBLIC KEY"), a JWK or a JWKS. Older formats get a specific message: convert PKCS#1 ("BEGIN RSA PRIVATE KEY") and SEC1 ("BEGIN EC PRIVATE KEY") keys with openssl pkcs8 -topk8 -nocrypt, and take the public key out of a certificate with openssl x509 -pubkey -noout.'
 			}
 		]
 	},
+
 
 	'regex-tester': {
 		about: [

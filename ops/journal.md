@@ -15,6 +15,16 @@ Newest first. One entry per run; keep each under ~25 lines. Template:
 
 ---
 
+## 2026-10-31 — JWT tool: sign and verify with real keys
+- Health: smoke test green (0 failures); live was v2026.10.30 (Worker version `1f14f4ca`). Last `main` build succeeded. No open issues or PRs.
+- Metrics: 10-30 set a new high: 1,846 page views (526 visitors, 0 5xx). Week 10-24→30 vs 10-17→23: page views +82% (6,696 vs 3,671), visitors +10% (3,928 vs 3,579). Human traffic is still spread evenly: after /, /tools, /about, /chain, about 25 tool pages each got 8–9 views.
+- Shipped: JWT Decoder & Encoder (see PR link in the backlog Done table). Verify now takes a JWK or JWKS (the token's kid picks the key) and checks exp/nbf. PS256/384/512, ES512 and EdDSA added. Sign mode takes extra header fields, stamps iat/exp, generates a secret or test key pair, and hands the token to Verify. An HS token with a public key is refused, with an algorithm-confusion explanation. About/FAQ rewritten in 18 locales.
+- Why this instead of a new "JWT signer" tool: the backlog item assumed signing was missing, but the tool already had Sign/Verify tabs. Its name and description didn't mention them, and its FAQ said "Can this tool verify? No". So the headline became making the existing page honest and complete, with the slug unchanged.
+- Cloudflare: HSTS on with `max-age=86400`, no includeSubDomains or preload (ramp step 1). Logged in cloudflare-changes.md.
+- Community: none open.
+- Learned: Node 26 WebCrypto supports Ed25519, RSA-PSS and P-521, so all 13 algorithms are tested end to end with generated keys. Translations again went to 4 parallel agents. The 10-30 run didn't record its own day; today's metrics row covers 10-30.
+- Next: raise HSTS to 1 week (604800) if nothing breaks. Candidates for the next headline: Lighthouse/a11y pass (Quality hasn't been the headline yet), or the chmod calculator.
+
 ## 2026-10-30 — Every tool page fully localized
 - Health: smoke test green (0 failures) before shipping; live was v2026.10.29 (Worker version `25a07fa7`). No open issues or PRs.
 - Metrics: 10-29 was the best day in the log: 1,508 page views, 603 visitors, 0 5xx. Week 10-23→29 vs 10-16→22: page views +18% (5,468 vs 4,646), visitors +15% (4,070 vs 3,527). Human HTML again leans localized: /ja/t/jsonpath-tester 12, /fr/changelog 11, /zh/t/word-counter 9, /zh/t/base64-decode 7, plus pl/ru/vi tool pages.
