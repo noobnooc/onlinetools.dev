@@ -85,26 +85,31 @@ const TOOL_CONTENT_ID: Record<string, ToolContent> = {
 
 	'jwt-decoder': {
 		about: [
-			'Sebuah JSON Web Token terdiri atas tiga segmen Base64URL — header, payload, tanda tangan — yang disambung dengan titik. Pendekode ini memecah token lalu menampilkan header dan payload sebagai JSON yang rapi, menandai klaim waktu baku (iat, exp, nbf) sebagai tanggal yang terbaca, dan langsung memberi tahu apakah tokennya sudah kedaluwarsa.',
-			'Mendekode bukan memverifikasi: payload JWT mana pun bisa dibaca siapa saja yang memegangnya, karena Base64URL adalah pengodean, bukan enkripsi. Itu pula sebabnya menempel token ke situs sembarangan biasanya ide buruk — halaman ini pengecualian, karena pendekodean terjadi sepenuhnya di browser Anda dan tokennya tidak pernah dikirim. Verifikasi tanda tangan terhadap kunci rahasia atau kunci publik sengaja berada di luar cakupan pendekode luring ini.',
-			'Awalan “Bearer ” di depan dibuang otomatis, jadi Anda bisa menempel langsung dari header Authorization.'
+			'Sebuah JSON Web Token terdiri atas tiga segmen Base64URL — header, payload, tanda tangan — yang disambung dengan titik. Mode dekode memecah token lalu menampilkan header dan payload sebagai JSON yang rapi, mengubah klaim waktu baku (iat, exp, nbf) menjadi tanggal yang terbaca, dan menunjukkan berapa lama lagi sisa masa berlaku token.',
+			'Mendekode bukan memverifikasi: payload JWT bisa dibaca siapa saja yang memegangnya, karena Base64URL adalah pengodean, bukan enkripsi. Mode verifikasi memeriksa tanda tangan dengan WebCrypto terhadap apa yang Anda tempel — kunci rahasia bersama untuk HS256/384/512, atau untuk RS, PS, ES, dan EdDSA berupa kunci publik dalam bentuk PEM, satu JWK, atau seluruh JWKS, dengan kid pada token yang menentukan kuncinya. Mode ini juga memeriksa exp dan nbf terhadap jam Anda, dan menolak kunci publik untuk token HS — kesalahan “algorithm confusion” yang menjadi akar beberapa kerentanan pustaka di dunia nyata.',
+			'Mode tanda tangan menyusun token dari payload JSON dan field header tambahan opsional seperti kid, dengan tombol untuk mengisi iat dan exp. Mode ini bisa membuat kunci rahasia acak atau pasangan kunci sekali pakai, lalu meneruskan token yang sudah ditandatangani langsung ke Verifikasi bersama kunci publik pasangannya — praktis untuk menguji API atau penyiapan JWKS tanpa menulis skrip.',
+			'Token, kunci rahasia, dan kunci privat tidak pernah meninggalkan halaman: pendekodean, penandatanganan, dan verifikasi semuanya berjalan di browser Anda, dan awalan “Bearer ” di depan dibuang otomatis sehingga Anda bisa menempel langsung dari header Authorization.'
 		],
 		faqs: [
 			{
-				q: 'Amankah menempel token produksi di sini?',
-				a: 'Token tetap di browser Anda — halaman ini tidak melakukan permintaan jaringan apa pun dengan masukan Anda, dan itu bisa Anda pastikan di tab Network pada DevTools. Meski begitu, biasakan memperlakukan token aktif seperti kata sandi: pakailah token kedaluwarsa atau token uji saat berbagi tangkapan layar.'
+				q: 'Amankah menempel token atau kunci produksi di sini?',
+				a: 'Tidak ada yang Anda tempel dikirim ke mana pun — halaman ini tidak melakukan permintaan jaringan apa pun dengan masukan Anda (bisa Anda pastikan di tab Network pada DevTools), dan tidak ada yang disimpan. Meski begitu, biasakan memperlakukan token aktif dan kunci penandatanganan seperti kata sandi: sebisa mungkin pakailah token kedaluwarsa dan kunci uji, dan ganti kunci yang pernah ditempel di tempat yang tidak Anda kendalikan.'
+			},
+			{
+				q: 'Bagaimana cara memverifikasi token dari Auth0, Cognito, Google, atau Keycloak?',
+				a: 'Cari jwks_uri milik penerbit (tercantum di /.well-known/openid-configuration), buka di sebuah tab, lalu tempel seluruh JSON-nya ke kotak kunci di mode Verifikasi. Alat ini memilih kunci yang kid-nya cocok dengan header token. Alat ini tidak mengambil URL itu sendiri, supaya tidak ada informasi tentang token Anda yang sampai ke jaringan.'
 			},
 			{
 				q: 'Kenapa token saya gagal didekode?',
-				a: 'Periksa apakah ia punya tepat tiga segmen yang dipisahkan titik dan tidak kemasukan ganti baris saat disalin. Token akses buram (misalnya banyak token GitHub atau Google) memang bukan JWT sama sekali — sebanyak apa pun pendekodean tak akan membuka string acak yang tidak pernah memuat JSON.'
+				a: 'Periksa apakah ia punya tepat tiga segmen yang dipisahkan titik dan tidak kemasukan ganti baris saat disalin. Token akses buram (misalnya banyak token OAuth GitHub atau Google) memang bukan JWT sama sekali — sebanyak apa pun pendekodean tak akan membuka string acak yang tidak pernah memuat JSON. Token dengan lima segmen adalah JWE: token itu terenkripsi dan memerlukan kunci privat penerimanya.'
 			},
 			{
 				q: 'Apa arti iat, exp, dan nbf?',
-				a: 'Ketiganya klaim baku dari RFC 7519, semuanya dalam detik Unix: iat adalah kapan token diterbitkan, exp kapan ia berhenti berlaku, dan nbf (“not before”) saat paling awal token boleh diterima. Alat ini mengubah masing-masing menjadi tanggal yang terbaca dan membandingkan exp dengan jam di perangkat Anda.'
+				a: 'Ketiganya klaim baku dari RFC 7519, semuanya dalam detik Unix: iat adalah kapan token diterbitkan, exp kapan ia berhenti berlaku, dan nbf (“not before”) saat paling awal token boleh diterima. Mode dekode menampilkan masing-masing sebagai tanggal; mode Verifikasi melaporkan token yang kedaluwarsa atau belum berlaku di samping hasil tanda tangan, karena token kedaluwarsa tetap harus ditolak meskipun tanda tangannya sah.'
 			},
 			{
-				q: 'Bisakah alat ini memverifikasi tanda tangannya?',
-				a: 'Tidak — lagi pula centang hijau dari alat daring tidak layak dipercaya untuk keputusan keamanan. Verifikasilah tanda tangan di backend Anda dengan pustaka yang terpelihara (jose, jsonwebtoken, PyJWT) memakai kunci penerbit yang sebenarnya.'
+				q: 'Format kunci apa saja yang didukung, dan bagaimana jika kunci saya ditolak?',
+				a: 'Kunci privat berupa PKCS#8 PEM (“BEGIN PRIVATE KEY”) atau JWK dengan “d” privatnya; kunci publik berupa SPKI PEM (“BEGIN PUBLIC KEY”), JWK, atau JWKS. Format lama mendapat pesan khusus: konversikan kunci PKCS#1 (“BEGIN RSA PRIVATE KEY”) dan SEC1 (“BEGIN EC PRIVATE KEY”) dengan openssl pkcs8 -topk8 -nocrypt, dan ambil kunci publik dari sertifikat dengan openssl x509 -pubkey -noout.'
 			}
 		]
 	},

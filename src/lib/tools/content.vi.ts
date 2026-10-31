@@ -85,26 +85,31 @@ const TOOL_CONTENT_VI: Record<string, ToolContent> = {
 
 	'jwt-decoder': {
 		about: [
-			'Một JSON Web Token gồm ba đoạn Base64URL — header, payload, chữ ký — nối với nhau bằng dấu chấm. Công cụ này tách token ra, hiển thị header và payload dưới dạng JSON đã định dạng, đổi các claim thời gian chuẩn (iat, exp, nbf) thành ngày giờ dễ đọc, và cho bạn biết ngay token đã hết hạn hay chưa.',
-			'Giải mã không phải là xác minh: payload của bất kỳ JWT nào cũng đọc được bởi bất cứ ai đang giữ nó, vì Base64URL là phép mã hóa dạng biểu diễn chứ không phải mật mã. Đó cũng là lý do dán token vào một trang web bất kỳ thường là ý tưởng tồi — trang này là ngoại lệ, vì việc giải mã diễn ra hoàn toàn trong trình duyệt của bạn và token không bao giờ được truyền đi. Việc xác minh chữ ký bằng khóa bí mật hay khóa công khai được cố ý để ngoài phạm vi của bộ giải mã ngoại tuyến này.',
-			'Tiền tố “Bearer ” ở đầu sẽ tự động bị cắt bỏ, nên bạn có thể dán thẳng từ một header Authorization.'
+			'Một JSON Web Token gồm ba đoạn Base64URL — header, payload, chữ ký — nối với nhau bằng dấu chấm. Chế độ giải mã tách token ra, hiển thị header và payload dưới dạng JSON đã định dạng, đổi các claim thời gian chuẩn (iat, exp, nbf) thành ngày giờ dễ đọc, và cho biết token còn bao lâu nữa thì hết hiệu lực.',
+			'Giải mã không phải là xác minh: payload của JWT đọc được bởi bất cứ ai đang giữ nó, vì Base64URL là phép mã hóa dạng biểu diễn chứ không phải mật mã. Chế độ xác minh dùng WebCrypto để kiểm tra chữ ký với những gì bạn dán vào — khóa bí mật dùng chung cho HS256/384/512, hoặc với RS, PS, ES và EdDSA là khóa công khai dạng PEM, một JWK đơn lẻ hay cả một JWKS, trong đó kid của token sẽ chọn khóa. Nó cũng kiểm tra exp và nbf theo đồng hồ của bạn, và từ chối dùng khóa công khai cho token HS — chính là lỗi “nhầm lẫn thuật toán” (algorithm confusion) đứng sau một số lỗ hổng có thật trong các thư viện.',
+			'Chế độ ký tạo token từ một payload JSON cùng các trường header bổ sung tùy chọn như kid, với các nút để điền iat và exp. Nó có thể tạo khóa bí mật ngẫu nhiên hoặc một cặp khóa dùng một lần, rồi chuyển thẳng token đã ký sang Xác minh kèm khóa công khai tương ứng — tiện để thử một API hay cấu hình JWKS mà không cần viết script.',
+			'Token, khóa bí mật và khóa riêng tư không bao giờ rời khỏi trang: việc giải mã, ký và xác minh đều chạy trong trình duyệt của bạn, và tiền tố “Bearer ” ở đầu sẽ bị cắt bỏ để bạn có thể dán thẳng từ một header Authorization.'
 		],
 		faqs: [
 			{
-				q: 'Dán token của môi trường production vào đây có an toàn không?',
-				a: 'Token ở lại trong trình duyệt của bạn — trang này không thực hiện bất kỳ yêu cầu mạng nào với dữ liệu bạn nhập, và bạn có thể tự xác nhận điều đó ở tab Network trong DevTools. Dù vậy, hãy tập thói quen coi token đang hoạt động như mật khẩu: khi chia sẻ ảnh chụp màn hình, hãy dùng token đã hết hạn hoặc token thử nghiệm.'
+				q: 'Dán token hoặc khóa của môi trường production vào đây có an toàn không?',
+				a: 'Không có gì bạn dán vào được truyền đi — trang này không thực hiện bất kỳ yêu cầu mạng nào với dữ liệu bạn nhập (bạn có thể tự xác nhận ở tab Network trong DevTools), và không có gì được lưu lại. Dù vậy, hãy tập thói quen coi token đang hoạt động và khóa ký như mật khẩu: khi có thể, hãy dùng token đã hết hạn và khóa thử nghiệm, và thay mới khóa nào đã từng bị dán vào nơi bạn không kiểm soát.'
+			},
+			{
+				q: 'Làm sao xác minh token từ Auth0, Cognito, Google hay Keycloak?',
+				a: 'Tìm jwks_uri của bên phát hành (được liệt kê trong /.well-known/openid-configuration), mở nó trong một tab và dán toàn bộ JSON vào ô khóa ở chế độ Xác minh. Công cụ sẽ chọn khóa có kid khớp với header của token. Nó không tự tải URL đó, để không có thông tin nào về token của bạn đi ra mạng.'
 			},
 			{
 				q: 'Vì sao token của tôi không giải mã được?',
-				a: 'Hãy kiểm tra xem nó có đúng ba đoạn ngăn cách bằng dấu chấm và có bị chèn ngắt dòng khi sao chép hay không. Các access token dạng đục (chẳng hạn nhiều token của GitHub hay Google) vốn không phải JWT — không phép giải mã nào mở được một chuỗi ngẫu nhiên chưa từng chứa JSON.'
+				a: 'Hãy kiểm tra xem nó có đúng ba đoạn ngăn cách bằng dấu chấm và có bị chèn ngắt dòng khi sao chép hay không. Các access token dạng đục (chẳng hạn nhiều OAuth token của GitHub hay Google) vốn không phải JWT — không phép giải mã nào mở được một chuỗi ngẫu nhiên chưa từng chứa JSON. Token có năm đoạn là JWE: nó đã được mã hóa và cần khóa riêng tư của bên nhận.'
 			},
 			{
 				q: 'iat, exp và nbf nghĩa là gì?',
-				a: 'Đó là các claim chuẩn theo RFC 7519, tất cả tính bằng giây Unix: iat là lúc token được phát hành, exp là lúc nó hết hiệu lực, còn nbf (“not before”) là thời điểm sớm nhất token được phép chấp nhận. Công cụ này đổi từng giá trị thành ngày giờ dễ đọc và đối chiếu exp với đồng hồ máy bạn.'
+				a: 'Đó là các claim chuẩn theo RFC 7519, tất cả tính bằng giây Unix: iat là lúc token được phát hành, exp là lúc nó hết hiệu lực, còn nbf (“not before”) là thời điểm sớm nhất token được phép chấp nhận. Chế độ giải mã hiển thị từng giá trị dưới dạng ngày giờ; chế độ Xác minh báo token đã hết hạn hoặc chưa có hiệu lực ngay cạnh kết quả chữ ký, vì token hết hạn vẫn phải bị từ chối dù chữ ký hợp lệ.'
 			},
 			{
-				q: 'Công cụ này có xác minh chữ ký được không?',
-				a: 'Không — và dù sao thì một dấu tích xanh từ công cụ trực tuyến cũng không nên được tin cậy cho các quyết định bảo mật. Hãy xác minh chữ ký ở backend của bạn bằng một thư viện còn được bảo trì (jose, jsonwebtoken, PyJWT) với đúng khóa của bên phát hành.'
+				q: 'Những định dạng khóa nào được hỗ trợ, và nếu khóa của tôi bị từ chối thì sao?',
+				a: 'Khóa riêng tư dạng PKCS#8 PEM (“BEGIN PRIVATE KEY”) hoặc JWK có thành phần riêng tư “d”; khóa công khai dạng SPKI PEM (“BEGIN PUBLIC KEY”), JWK hoặc JWKS. Các định dạng cũ hơn sẽ nhận thông báo riêng: hãy chuyển đổi khóa PKCS#1 (“BEGIN RSA PRIVATE KEY”) và SEC1 (“BEGIN EC PRIVATE KEY”) bằng openssl pkcs8 -topk8 -nocrypt, và lấy khóa công khai ra khỏi chứng chỉ bằng openssl x509 -pubkey -noout.'
 			}
 		]
 	},

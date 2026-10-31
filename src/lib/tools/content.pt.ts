@@ -86,26 +86,31 @@ const TOOL_CONTENT_PT: Record<string, ToolContent> = {
 
 	'jwt-decoder': {
 		about: [
-			'Um JSON Web Token são três segmentos Base64URL — cabeçalho, payload, assinatura — unidos por pontos. Este decodificador separa o token, renderiza cabeçalho e payload como JSON formatado, destaca os claims de tempo registrados (iat, exp, nbf) como datas legíveis e mostra de relance se o token expirou.',
-			'Decodificar não é verificar: o payload de qualquer JWT pode ser lido por quem o tiver em mãos, porque Base64URL é uma codificação, não criptografia. É também por isso que colar um token em um site qualquer normalmente é má ideia — esta página é a exceção, porque a decodificação acontece inteiramente no seu navegador e o token nunca é transmitido. A verificação de assinatura contra um segredo ou chave pública fica deliberadamente fora do escopo do decodificador offline.',
-			'Um prefixo "Bearer " no início é removido automaticamente, então você pode colar direto de um cabeçalho Authorization.'
+			'Um JSON Web Token são três segmentos Base64URL — cabeçalho, payload, assinatura — unidos por pontos. O modo Decodificar separa o token e renderiza cabeçalho e payload como JSON formatado, converte os claims de tempo registrados (iat, exp, nbf) em datas legíveis e mostra quanto da vida útil do token ainda resta.',
+			'Decodificar não é verificar: qualquer pessoa que tenha um JWT pode ler o payload, porque Base64URL é uma codificação, não criptografia. O modo Verificar checa a assinatura com WebCrypto contra o que você colar — o segredo compartilhado para HS256/384/512 ou, para RS, PS, ES e EdDSA, uma chave pública em PEM, um único JWK ou um JWKS inteiro, em que o kid do token escolhe a chave. Ele também confere exp e nbf contra o seu relógio e recusa uma chave pública para um token HS, que é o erro de "confusão de algoritmo" por trás de várias vulnerabilidades reais em bibliotecas.',
+			'O modo Assinar monta um token a partir de um payload JSON e de campos extras opcionais do cabeçalho, como kid, com botões para preencher iat e exp. Ele pode gerar um segredo aleatório ou um par de chaves descartável e passar o token assinado direto para Verificar com a chave pública correspondente — prático para testar uma API ou uma configuração de JWKS sem escrever um script.',
+			'Tokens, segredos e chaves privadas nunca saem da página: decodificar, assinar e verificar acontecem no seu navegador, e um prefixo "Bearer " no início é removido para você poder colar direto de um cabeçalho Authorization.'
 		],
 		faqs: [
 			{
-				q: 'É seguro colar um token de produção aqui?',
-				a: 'O token fica no seu navegador — esta página não faz nenhuma requisição de rede com a sua entrada, o que você pode confirmar na aba de rede das ferramentas de desenvolvedor. Ainda assim, por hábito, trate tokens ativos como senhas: prefira tokens expirados ou de teste ao compartilhar capturas de tela.'
+				q: 'É seguro colar aqui um token ou uma chave de produção?',
+				a: 'Nada do que você cola é transmitido — a página não faz nenhuma requisição de rede com a sua entrada, o que você pode confirmar na aba de rede das ferramentas de desenvolvedor, e nada é salvo. Ainda assim, por hábito, trate tokens ativos e chaves de assinatura como senhas: prefira tokens expirados e chaves de teste quando puder, e troque uma chave que tenha sido colada em algum lugar que você não controla.'
+			},
+			{
+				q: 'Como verifico um token do Auth0, Cognito, Google ou Keycloak?',
+				a: 'Encontre o jwks_uri do emissor (ele aparece em /.well-known/openid-configuration), abra-o em uma aba e cole o JSON inteiro no campo da chave no modo Verificar. A ferramenta escolhe a chave cujo kid corresponde ao cabeçalho do token. Ela mesma não busca a URL, para que nada sobre o seu token chegue à rede.'
 			},
 			{
 				q: 'Por que meu token não decodifica?',
-				a: 'Verifique se ele tem exatamente três segmentos separados por pontos e nenhuma quebra de linha vinda da cópia. Tokens de acesso opacos (por exemplo, muitos tokens do GitHub ou do Google) não são JWTs — nenhuma decodificação vai abrir uma string aleatória que nunca conteve JSON.'
+				a: 'Verifique se ele tem exatamente três segmentos separados por pontos e nenhuma quebra de linha vinda da cópia. Tokens de acesso opacos (por exemplo, muitos tokens OAuth do GitHub ou do Google) nem são JWTs — nenhuma decodificação vai abrir uma string aleatória que nunca conteve JSON. Um token com cinco segmentos é um JWE: ele é criptografado e exige a chave privada do destinatário.'
 			},
 			{
 				q: 'O que significam iat, exp e nbf?',
-				a: 'São claims registrados do RFC 7519, todos em segundos Unix: iat é quando o token foi emitido, exp é quando ele deixa de valer, e nbf ("not before") é o primeiro momento em que ele pode ser aceito. Esta ferramenta converte cada um para uma data legível e compara exp com o seu relógio.'
+				a: 'São claims registrados do RFC 7519, todos em segundos Unix: iat é quando o token foi emitido, exp é quando ele deixa de valer, e nbf ("not before") é o primeiro momento em que ele pode ser aceito. O modo Decodificar mostra cada um como data; o modo Verificar informa se o token está expirado ou ainda não é válido ao lado do resultado da assinatura, já que uma assinatura válida em um token expirado ainda deve ser rejeitada.'
 			},
 			{
-				q: 'Esta ferramenta pode verificar a assinatura?',
-				a: 'Não — e, de qualquer forma, um selo verde de uma ferramenta online não deveria ser confiável para decisões de segurança. Verifique assinaturas no seu backend com uma biblioteca mantida (jose, jsonwebtoken, PyJWT) contra as chaves reais do emissor.'
+				q: 'Quais formatos de chave funcionam, e se a minha for recusada?',
+				a: 'Chaves privadas em PEM PKCS#8 ("BEGIN PRIVATE KEY") ou um JWK com o "d" privado; chaves públicas em PEM SPKI ("BEGIN PUBLIC KEY"), um JWK ou um JWKS. Formatos mais antigos recebem uma mensagem específica: converta chaves PKCS#1 ("BEGIN RSA PRIVATE KEY") e SEC1 ("BEGIN EC PRIVATE KEY") com openssl pkcs8 -topk8 -nocrypt, e extraia a chave pública de um certificado com openssl x509 -pubkey -noout.'
 			}
 		]
 	},

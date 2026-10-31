@@ -334,7 +334,7 @@ const tr: Messages = {
 		jwtNotBefore: 'Şundan önce geçersiz',
 		jwtLifetime: 'Ömür',
 		jwtNote:
-			'Çözme yalnızca token’ı okur — imzayı doğrulamaz. İmzaları sunucu tarafında, veren tarafın anahtarlarıyla doğrulayın.',
+			'Çözme yalnızca token’ı okur — bunu herkes yapabilir. İmzayı bir gizli anahtar, açık anahtar veya JWKS ile denetlemek için Doğrula’ya geçin.',
 		loremUnit: 'Birim',
 		loremWords: 'Kelime',
 		loremSentences: 'Cümle',
@@ -545,12 +545,19 @@ const tr: Messages = {
 		jwtAlg: 'Algoritma',
 		jwtPayloadLbl: 'Yük (JSON nesnesi)',
 		jwtSecret: 'Gizli anahtar',
-		jwtPrivKey: 'Özel anahtar (PKCS#8 PEM)',
-		jwtPubKey: 'Gizli anahtar (HS) veya açık anahtar PEM (RS/ES)',
+		jwtPrivKey: 'Özel anahtar (PKCS#8 PEM veya JWK)',
+		jwtPubKey: 'Gizli anahtar (HS) veya açık anahtar — PEM, JWK ya da JWKS',
+		jwtHeaderLbl: 'Ek başlık alanları (isteğe bağlı JSON, ör. kid)',
+		jwtSetIat: 'iat’i şimdiye ayarla',
+		jwtExpIn: 'Sona erme süresi',
+		jwtGenSecret: 'Gizli anahtar üret',
+		jwtGenPair: 'Test anahtar çifti üret',
+		jwtPubForVerify: 'Eşleşen açık anahtar',
+		jwtVerifyThis: 'Bu token’ı doğrula →',
 		jwtSignNote:
-			'İmzalama tarayıcınızdaki WebCrypto üzerinde çalışır — anahtar bu sayfadan hiç çıkmaz. HS algoritmalarında uzun ve rastgele bir gizli anahtar kullanın; kısa olanlar nerede imzalarsanız imzalayın kaba kuvvetle kırılabilir.',
+			'İmzalama tarayıcınızdaki WebCrypto üzerinde çalışır — anahtar bu sayfadan hiç çıkmaz ve üretilen anahtarlar hiçbir yerde saklanmaz. HS algoritmalarında uzun ve rastgele bir gizli anahtar kullanın; kısa olanlar nerede imzalarsanız imzalayın kaba kuvvetle kırılabilir.',
 		jwtVerifyNote:
-			'Doğrulama, verdiğiniz anahtara karşı imzayı yerelde denetler. JWKS uç noktalarını çekmez, aud/iss gibi iddiaları da doğrulamaz — onu sunucu tarafında yapın.',
+			'Doğrulama, imzayı verdiğiniz anahtara, exp ve nbf değerlerini de saatinize göre denetler; hepsi yerelde. JWKS URL’lerini çekmez — verenin jwks_uri adresini açıp JSON’u yapıştırın. aud ve iss değerlerini arka ucunuzda denetleyin.',
 		tsDiff: 'İki tarih arasındaki fark',
 		wcWords: 'Kelime',
 		wcChars: 'Karakter',
@@ -608,8 +615,8 @@ const tr: Messages = {
 			description: 'Unix zaman damgalarını okunur tarihlere ve geri çevirin, göreli zamanla birlikte'
 		},
 		'jwt-decoder': {
-			name: 'JWT Çözücü',
-			description: 'JWT başlığını ve yükünü çözün, süresini denetleyin — tamamen çevrimdışı'
+			name: 'JWT Çözücü ve Kodlayıcı',
+			description: 'JWT’leri çözün, imzalayın ve doğrulayın — HS, RS, PS, ES, EdDSA ve JWKS — tamamen çevrimdışı'
 		},
 		'regex-tester': {
 			name: 'Regex Test Aracı',

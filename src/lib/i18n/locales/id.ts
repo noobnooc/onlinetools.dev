@@ -337,7 +337,7 @@ const id: Messages = {
 		jwtNotBefore: 'Berlaku mulai',
 		jwtLifetime: 'Masa berlaku',
 		jwtNote:
-			'Pendekodean hanya membaca token — ia tidak memverifikasi tanda tangan. Verifikasi tanda tangan di sisi server dengan kunci milik penerbitnya.',
+			'Pendekodean hanya membaca token — siapa pun bisa melakukannya. Beralihlah ke Verifikasi untuk memeriksa tanda tangan terhadap kunci rahasia, kunci publik, atau JWKS.',
 		loremUnit: 'Satuan',
 		loremWords: 'Kata',
 		loremSentences: 'Kalimat',
@@ -548,12 +548,19 @@ const id: Messages = {
 		jwtAlg: 'Algoritme',
 		jwtPayloadLbl: 'Payload (objek JSON)',
 		jwtSecret: 'Kunci rahasia',
-		jwtPrivKey: 'Kunci privat (PKCS#8 PEM)',
-		jwtPubKey: 'Kunci rahasia (HS) atau kunci publik PEM (RS/ES)',
+		jwtPrivKey: 'Kunci privat (PKCS#8 PEM atau JWK)',
+		jwtPubKey: 'Kunci rahasia (HS) atau kunci publik — PEM, JWK, atau JWKS',
+		jwtHeaderLbl: 'Field header tambahan (JSON opsional, mis. kid)',
+		jwtSetIat: 'Setel iat ke sekarang',
+		jwtExpIn: 'Kedaluwarsa dalam',
+		jwtGenSecret: 'Buat kunci rahasia',
+		jwtGenPair: 'Buat pasangan kunci uji',
+		jwtPubForVerify: 'Kunci publik pasangannya',
+		jwtVerifyThis: 'Verifikasi token ini →',
 		jwtSignNote:
-			'Penandatanganan berjalan di atas WebCrypto di browser Anda — kuncinya tidak pernah meninggalkan halaman ini. Untuk algoritme HS gunakan kunci rahasia yang panjang dan acak; yang pendek bisa ditebak paksa di mana pun Anda menandatanganinya.',
+			'Penandatanganan berjalan di atas WebCrypto di browser Anda — kuncinya tidak pernah meninggalkan halaman ini, dan kunci yang dibuat tidak disimpan di mana pun. Untuk algoritme HS gunakan kunci rahasia yang panjang dan acak; yang pendek bisa ditebak paksa di mana pun Anda menandatanganinya.',
 		jwtVerifyNote:
-			'Verifikasi memeriksa tanda tangan terhadap kunci yang Anda berikan, secara lokal. Ia tidak mengambil endpoint JWKS maupun memeriksa klaim seperti aud/iss — lakukan itu di sisi server.',
+			'Verifikasi memeriksa tanda tangan terhadap kunci yang Anda berikan, serta exp dan nbf terhadap jam Anda, semuanya secara lokal. Ia tidak mengambil URL JWKS — buka jwks_uri milik penerbit lalu tempel JSON-nya. Periksa aud dan iss di backend Anda.',
 		tsDiff: 'Selisih antara dua tanggal',
 		wcWords: 'Kata',
 		wcChars: 'Karakter',
@@ -611,8 +618,8 @@ const id: Messages = {
 			description: 'Ubah stempel waktu unix menjadi tanggal yang terbaca dan sebaliknya, dengan waktu relatif'
 		},
 		'jwt-decoder': {
-			name: 'Dekoder JWT',
-			description: 'Dekode header dan payload JWT, periksa masa berlakunya — sepenuhnya offline'
+			name: 'Dekoder & Enkoder JWT',
+			description: 'Dekode, tanda tangani, dan verifikasi JWT — HS, RS, PS, ES, EdDSA, dan JWKS — sepenuhnya offline'
 		},
 		'regex-tester': {
 			name: 'Penguji Regex',

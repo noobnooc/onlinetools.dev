@@ -338,7 +338,7 @@ const pl: Messages = {
 		jwtNotBefore: 'Ważny od',
 		jwtLifetime: 'Czas życia',
 		jwtNote:
-			'Dekodowanie tylko odczytuje token — nie weryfikuje podpisu. Podpisy sprawdzaj po stronie serwera kluczami wystawcy.',
+			'Dekodowanie tylko odczytuje token — każdy może to zrobić. Przełącz na Zweryfikuj, aby sprawdzić podpis względem sekretu, klucza publicznego lub JWKS.',
 		loremUnit: 'Jednostka',
 		loremWords: 'Słowa',
 		loremSentences: 'Zdania',
@@ -549,12 +549,19 @@ const pl: Messages = {
 		jwtAlg: 'Algorytm',
 		jwtPayloadLbl: 'Ładunek (obiekt JSON)',
 		jwtSecret: 'Sekret',
-		jwtPrivKey: 'Klucz prywatny (PKCS#8 PEM)',
-		jwtPubKey: 'Sekret (HS) lub klucz publiczny PEM (RS/ES)',
+		jwtPrivKey: 'Klucz prywatny (PKCS#8 PEM lub JWK)',
+		jwtPubKey: 'Sekret (HS) lub klucz publiczny — PEM, JWK lub JWKS',
+		jwtHeaderLbl: 'Dodatkowe pola nagłówka (opcjonalny JSON, np. kid)',
+		jwtSetIat: 'Ustaw iat na teraz',
+		jwtExpIn: 'Wygasa za',
+		jwtGenSecret: 'Wygeneruj sekret',
+		jwtGenPair: 'Wygeneruj testową parę kluczy',
+		jwtPubForVerify: 'Pasujący klucz publiczny',
+		jwtVerifyThis: 'Zweryfikuj ten token →',
 		jwtSignNote:
-			'Podpisywanie działa na WebCrypto w Twojej przeglądarce — klucz nigdy nie opuszcza tej strony. Dla algorytmów HS użyj długiego losowego sekretu; krótkie da się złamać siłowo niezależnie od tego, gdzie podpisujesz.',
+			'Podpisywanie działa na WebCrypto w Twojej przeglądarce — klucz nigdy nie opuszcza tej strony, a wygenerowane klucze nie są nigdzie przechowywane. Dla algorytmów HS użyj długiego losowego sekretu; krótkie da się złamać siłowo niezależnie od tego, gdzie podpisujesz.',
 		jwtVerifyNote:
-			'Weryfikacja sprawdza podpis względem podanego klucza, lokalnie. Nie pobiera punktów końcowych JWKS ani nie sprawdza pól takich jak aud/iss — to zrób po stronie serwera.',
+			'Weryfikacja sprawdza podpis względem podanego klucza, a także exp i nbf względem Twojego zegara — wszystko lokalnie. Nie pobiera adresów URL JWKS — otwórz jwks_uri wystawcy i wklej JSON. Pola aud i iss sprawdzaj w swoim backendzie.',
 		tsDiff: 'Różnica między dwiema datami',
 		wcWords: 'Słowa',
 		wcChars: 'Znaki',
@@ -612,8 +619,8 @@ const pl: Messages = {
 			description: 'Zamieniaj znaczniki unix na czytelne daty i z powrotem, z czasem względnym'
 		},
 		'jwt-decoder': {
-			name: 'Dekoder JWT',
-			description: 'Zdekoduj nagłówek i ładunek JWT, sprawdź wygaśnięcie — w pełni offline'
+			name: 'Dekoder i koder JWT',
+			description: 'Dekoduj, podpisuj i weryfikuj JWT — HS, RS, PS, ES, EdDSA i JWKS — w pełni offline'
 		},
 		'regex-tester': {
 			name: 'Tester wyrażeń regularnych',

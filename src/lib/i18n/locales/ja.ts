@@ -309,7 +309,7 @@ const ja: Messages = {
 		jwtExpires: '期限',
 		jwtNotBefore: '有効開始',
 		jwtLifetime: '有効期間',
-		jwtNote: 'デコードはトークンを読むだけで、署名は検証しません。署名は発行者の鍵でサーバー側で検証してください。',
+		jwtNote: 'デコードはトークンを読むだけで、それは誰にでもできます。シークレット、公開鍵、または JWKS で署名を確認するには「検証」に切り替えてください。',
 		loremUnit: '単位',
 		loremWords: '単語',
 		loremSentences: '文',
@@ -546,10 +546,17 @@ const ja: Messages = {
 		jwtAlg: 'アルゴリズム',
 		jwtPayloadLbl: 'ペイロード(JSON オブジェクト)',
 		jwtSecret: 'シークレット',
-		jwtPrivKey: '秘密鍵(PKCS#8 PEM)',
-		jwtPubKey: 'シークレット(HS)または公開鍵 PEM(RS/ES)',
-		jwtSignNote: '署名はブラウザ内の WebCrypto で実行され、鍵がこのページの外に出ることはありません。HS 系アルゴリズムには長いランダムなシークレットを使ってください — 短いシークレットは、どこで署名しようとブルートフォースで破られます。',
-		jwtVerifyNote: '検証は、指定した鍵に対して署名をローカルで確認します。JWKS エンドポイントの取得や aud/iss などのクレームの検証は行いません — それらはサーバー側で行ってください。',
+		jwtPrivKey: '秘密鍵(PKCS#8 PEM または JWK)',
+		jwtPubKey: 'シークレット(HS)または公開鍵 — PEM、JWK、JWKS',
+		jwtHeaderLbl: '追加のヘッダーフィールド(任意の JSON、例: kid)',
+		jwtSetIat: 'iat を現在時刻に設定',
+		jwtExpIn: '有効期限までの時間',
+		jwtGenSecret: 'シークレットを生成',
+		jwtGenPair: 'テスト用の鍵ペアを生成',
+		jwtPubForVerify: '対応する公開鍵',
+		jwtVerifyThis: 'このトークンを検証 →',
+		jwtSignNote: '署名はブラウザ内の WebCrypto で実行され、鍵がこのページの外に出ることはなく、生成した鍵もどこにも保存されません。HS 系アルゴリズムには長いランダムなシークレットを使ってください — 短いシークレットは、どこで署名しようとブルートフォースで破られます。',
+		jwtVerifyNote: '検証では、指定した鍵に対する署名と、あなたの時計に基づく exp と nbf を、すべてローカルで確認します。JWKS の URL は取得しません — 発行者の jwks_uri を開いて JSON を貼り付けてください。aud と iss はバックエンドで確認してください。',
 
 		// Timestamp extras
 		tsDiff: '2 つの日付の差'
@@ -580,8 +587,8 @@ const ja: Messages = {
 			description: 'Unix タイムスタンプと日時の相互変換、相対時間付き'
 		},
 		'jwt-decoder': {
-			name: 'JWTデコーダー',
-			description: 'JWT のヘッダーとペイロードをデコードし有効期限を確認 — 完全オフライン'
+			name: 'JWTデコーダー & エンコーダー',
+			description: 'JWT のデコード・署名・検証 — HS、RS、PS、ES、EdDSA、JWKS に対応 — 完全オフライン'
 		},
 		'regex-tester': {
 			name: '正規表現テスター',

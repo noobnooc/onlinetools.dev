@@ -85,26 +85,31 @@ const TOOL_CONTENT_TR: Record<string, ToolContent> = {
 
 	'jwt-decoder': {
 		about: [
-			'JSON Web Token, noktalarla birleştirilmiş üç Base64URL parçasından oluşur: başlık, yük ve imza. Bu çözücü token’ı parçalarına ayırır, başlık ile yükü biçimlendirilmiş JSON olarak gösterir, kayıtlı zaman iddialarını (iat, exp, nbf) okunabilir tarihlere çevirir ve token’ın süresinin dolup dolmadığını bir bakışta söyler.',
-			'Çözmek doğrulamak değildir: Base64URL bir kodlamadır, şifreleme değil; bu yüzden herhangi bir JWT’nin yükünü, token elinde olan herkes okuyabilir. Bir token’ı rastgele bir siteye yapıştırmanın neden kötü fikir olduğu da budur — bu sayfa istisnadır, çünkü çözme tamamen tarayıcınızda olur ve token hiçbir yere iletilmez. Gizli anahtar ya da açık anahtarla imza doğrulaması, çevrimdışı çözücünün kapsamı dışında bırakılmıştır.',
-			'Baştaki “Bearer ” öneki kendiliğinden kırpılır; yani doğrudan bir Authorization başlığından yapıştırabilirsiniz.'
+			'JSON Web Token, noktalarla birleştirilmiş üç Base64URL parçasından oluşur: başlık, yük ve imza. Çözme modu token’ı parçalarına ayırır, başlık ile yükü biçimlendirilmiş JSON olarak gösterir, kayıtlı zaman iddialarını (iat, exp, nbf) okunabilir tarihlere çevirir ve token’ın ömründen ne kadar kaldığını gösterir.',
+			'Çözmek doğrulamak değildir: Base64URL bir kodlamadır, şifreleme değil; bu yüzden bir JWT’nin yükünü, token elinde olan herkes okuyabilir. Doğrulama modu imzayı WebCrypto ile yapıştırdığınız şeye karşı denetler — HS256/384/512 için paylaşılan gizli anahtar; RS, PS, ES ve EdDSA için ise PEM, tek bir JWK ya da bütün bir JWKS biçiminde açık anahtar (JWKS’de anahtarı token’ın kid değeri seçer). Ayrıca exp ve nbf değerlerini saatinize göre denetler ve bir HS token’ı için açık anahtarı reddeder; bu, gerçek dünyadaki birçok kütüphane güvenlik açığının ardındaki “algoritma karışıklığı” hatasıdır.',
+			'İmzalama modu bir JSON yükünden ve kid gibi isteğe bağlı ek başlık alanlarından token oluşturur; iat ve exp eklemek için düğmeler sunar. Rastgele bir gizli anahtar ya da tek kullanımlık bir anahtar çifti üretebilir ve imzalanan token’ı eşleşen açık anahtarla birlikte doğrudan Doğrula’ya aktarabilir — bir API’yi ya da JWKS kurulumunu betik yazmadan test etmek için kullanışlıdır.',
+			'Token’lar, gizli anahtarlar ve özel anahtarlar sayfadan hiç çıkmaz: çözme, imzalama ve doğrulama tamamen tarayıcınızda çalışır; baştaki “Bearer ” öneki de kırpılır, böylece doğrudan bir Authorization başlığından yapıştırabilirsiniz.'
 		],
 		faqs: [
 			{
-				q: 'Buraya bir üretim token’ı yapıştırmak güvenli mi?',
-				a: 'Token tarayıcınızda kalır — bu sayfa girdinizle hiçbir ağ isteği yapmaz; geliştirici araçlarının Network sekmesinden doğrulayabilirsiniz. Yine de canlı token’lara parola gibi davranmayı alışkanlık edinin: ekran görüntüsü paylaşırken süresi dolmuş ya da test token’larını tercih edin.'
+				q: 'Buraya bir üretim token’ı ya da anahtarı yapıştırmak güvenli mi?',
+				a: 'Yapıştırdığınız hiçbir şey iletilmez — sayfa girdinizle hiçbir ağ isteği yapmaz (bunu geliştirici araçlarının Network sekmesinden doğrulayabilirsiniz) ve hiçbir şey kaydedilmez. Yine de canlı token’lara ve imzalama anahtarlarına parola gibi davranmayı alışkanlık edinin: mümkün olduğunda süresi dolmuş token’ları ve test anahtarlarını tercih edin, kontrolünüzde olmayan bir yere yapıştırılmış bir anahtarı da yenileyin.'
+			},
+			{
+				q: 'Auth0, Cognito, Google veya Keycloak’tan gelen bir token’ı nasıl doğrularım?',
+				a: 'Verenin jwks_uri adresini bulun (/.well-known/openid-configuration içinde listelenir), bir sekmede açın ve JSON’un tamamını Doğrula modundaki anahtar kutusuna yapıştırın. Araç, kid değeri token başlığındakiyle eşleşen anahtarı seçer. Token’ınızla ilgili hiçbir şey ağa ulaşmasın diye URL’yi kendisi çekmez.'
 			},
 			{
 				q: 'Token’ım neden çözülemiyor?',
-				a: 'Nokta ile ayrılmış tam olarak üç parçası olduğunu ve kopyalarken araya satır sonu girmediğini denetleyin. Opak erişim token’ları (örneğin pek çok GitHub veya Google token’ı) zaten JWT değildir — içinde hiç JSON olmayan rastgele bir dizgeyi hiçbir çözme işlemi açamaz.'
+				a: 'Nokta ile ayrılmış tam olarak üç parçası olduğunu ve kopyalarken araya satır sonu girmediğini denetleyin. Opak erişim token’ları (örneğin pek çok GitHub veya Google OAuth token’ı) zaten JWT değildir — içinde hiç JSON olmayan rastgele bir dizgeyi hiçbir çözme işlemi açamaz. Beş parçalı bir token ise JWE’dir: şifrelenmiştir ve alıcının özel anahtarını gerektirir.'
 			},
 			{
 				q: 'iat, exp ve nbf ne anlama geliyor?',
-				a: 'Bunlar RFC 7519’daki kayıtlı iddialardır ve hepsi unix saniyesi cinsindendir: iat token’ın verildiği an, exp geçerliliğinin bittiği an, nbf (“not before”) ise kabul edilebileceği en erken andır. Bu araç her birini okunabilir tarihe çevirir ve exp değerini sizin saatinizle karşılaştırır.'
+				a: 'Bunlar RFC 7519’daki kayıtlı iddialardır ve hepsi unix saniyesi cinsindendir: iat token’ın verildiği an, exp geçerliliğinin bittiği an, nbf (“not before”) ise kabul edilebileceği en erken andır. Çözme modu her birini tarih olarak gösterir; Doğrulama modu ise token’ın süresi dolmuşsa ya da henüz geçerli değilse bunu imza sonucunun yanında bildirir, çünkü süresi dolmuş bir token imzası geçerli olsa bile reddedilmelidir.'
 			},
 			{
-				q: 'Bu araç imzayı doğrulayabilir mi?',
-				a: 'Hayır — zaten çevrimiçi bir aracın gösterdiği yeşil onay işaretine güvenlik kararlarında güvenilmemeli. İmzaları kendi arka ucunuzda, bakımı sürdürülen bir kütüphaneyle (jose, jsonwebtoken, PyJWT) ve verenin gerçek anahtarlarıyla doğrulayın.'
+				q: 'Hangi anahtar biçimleri çalışır, benimki reddedilirse ne yapmalıyım?',
+				a: 'Özel anahtarlar PKCS#8 PEM (“BEGIN PRIVATE KEY”) ya da özel “d” bileşenini içeren bir JWK olarak; açık anahtarlar SPKI PEM (“BEGIN PUBLIC KEY”), JWK veya JWKS olarak kabul edilir. Daha eski biçimler için özel bir mesaj gösterilir: PKCS#1 (“BEGIN RSA PRIVATE KEY”) ve SEC1 (“BEGIN EC PRIVATE KEY”) anahtarlarını openssl pkcs8 -topk8 -nocrypt ile dönüştürün, bir sertifikadaki açık anahtarı da openssl x509 -pubkey -noout ile çıkarın.'
 			}
 		]
 	},

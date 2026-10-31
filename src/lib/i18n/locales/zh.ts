@@ -306,7 +306,7 @@ const zh: Messages = {
 		jwtExpires: '过期时间',
 		jwtNotBefore: '生效时间',
 		jwtLifetime: '有效期',
-		jwtNote: '解码只是读取令牌 — 不会校验签名。请在服务端用签发方的密钥校验签名。',
+		jwtNote: '解码只是读取令牌——任何人都能做到。切换到「校验」即可用密钥、公钥或 JWKS 核对签名。',
 		loremUnit: '单位',
 		loremWords: '单词',
 		loremSentences: '句子',
@@ -546,12 +546,17 @@ const zh: Messages = {
 		jwtAlg: '算法',
 		jwtPayloadLbl: '载荷(JSON 对象)',
 		jwtSecret: '密钥',
-		jwtPrivKey: '私钥(PKCS#8 PEM)',
-		jwtPubKey: '密钥 (HS) 或公钥 PEM (RS/ES)',
-		jwtSignNote:
-			'签名通过浏览器中的 WebCrypto 完成——密钥不会离开本页面。HS 系列算法请使用足够长的随机密钥;短密钥无论在哪里签名都能被暴力破解。',
-		jwtVerifyNote:
-			'校验只在本地用你提供的密钥核对签名,不会请求 JWKS 端点,也不校验 aud/iss 等声明——那些请在服务端完成。',
+		jwtPrivKey: '私钥(PKCS#8 PEM 或 JWK)',
+		jwtPubKey: '密钥 (HS) 或公钥 — PEM、JWK 或 JWKS',
+		jwtHeaderLbl: '额外头部字段(可选 JSON,例如 kid)',
+		jwtSetIat: '将 iat 设为当前时间',
+		jwtExpIn: '多久后过期',
+		jwtGenSecret: '生成密钥',
+		jwtGenPair: '生成测试密钥对',
+		jwtPubForVerify: '对应的公钥',
+		jwtVerifyThis: '校验此令牌 →',
+		jwtSignNote: '签名通过浏览器中的 WebCrypto 完成——密钥不会离开本页面,生成的密钥也不会被保存到任何地方。HS 系列算法请使用足够长的随机密钥;短密钥无论在哪里签名都能被暴力破解。',
+		jwtVerifyNote: '校验全部在本地完成:用你提供的密钥核对签名,并用你的时钟检查 exp 和 nbf。不会请求 JWKS URL——请打开签发方的 jwks_uri 并粘贴其 JSON。aud 和 iss 请在后端检查。',
 
 		// Timestamp extras
 		tsDiff: '两个日期之间的差值'
@@ -582,8 +587,8 @@ const zh: Messages = {
 			description: 'Unix 时间戳与日期互转,附相对时间'
 		},
 		'jwt-decoder': {
-			name: 'JWT 解码器',
-			description: '解码 JWT 头部与载荷、检查过期时间 — 完全离线'
+			name: 'JWT 解码器与编码器',
+			description: '解码、签名和校验 JWT — HS、RS、PS、ES、EdDSA 与 JWKS — 完全离线'
 		},
 		'regex-tester': {
 			name: '正则表达式测试',

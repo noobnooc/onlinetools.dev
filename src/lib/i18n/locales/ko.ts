@@ -309,7 +309,7 @@ const ko: Messages = {
 		jwtExpires: '만료',
 		jwtNotBefore: '유효 시작',
 		jwtLifetime: '수명',
-		jwtNote: '디코딩은 토큰을 읽기만 하며 서명을 검증하지 않습니다. 서명은 발급자의 키로 서버에서 검증하세요.',
+		jwtNote: '디코딩은 토큰을 읽기만 하며, 이는 누구나 할 수 있습니다. 비밀 키, 공개 키 또는 JWKS로 서명을 확인하려면 검증으로 전환하세요.',
 		loremUnit: '단위',
 		loremWords: '단어',
 		loremSentences: '문장',
@@ -546,10 +546,17 @@ const ko: Messages = {
 		jwtAlg: '알고리즘',
 		jwtPayloadLbl: '페이로드 (JSON 객체)',
 		jwtSecret: '비밀 키',
-		jwtPrivKey: '개인 키 (PKCS#8 PEM)',
-		jwtPubKey: '비밀 키(HS) 또는 공개 키 PEM(RS/ES)',
-		jwtSignNote: '서명은 브라우저의 WebCrypto에서 실행됩니다 — 키는 이 페이지를 벗어나지 않습니다. HS 알고리즘에는 길고 무작위한 비밀 키를 쓰세요. 짧은 키는 어디서 서명하든 무차별 대입으로 뚫립니다.',
-		jwtVerifyNote: '검증은 입력한 키로 서명을 로컬에서 확인합니다. JWKS 엔드포인트를 가져오거나 aud/iss 같은 클레임을 검사하지는 않습니다 — 그것은 서버에서 하세요.',
+		jwtPrivKey: '개인 키 (PKCS#8 PEM 또는 JWK)',
+		jwtPubKey: '비밀 키(HS) 또는 공개 키 — PEM, JWK 또는 JWKS',
+		jwtHeaderLbl: '추가 헤더 필드 (선택 사항, JSON, 예: kid)',
+		jwtSetIat: 'iat를 현재 시각으로 설정',
+		jwtExpIn: '만료까지',
+		jwtGenSecret: '비밀 키 생성',
+		jwtGenPair: '테스트 키 쌍 생성',
+		jwtPubForVerify: '대응하는 공개 키',
+		jwtVerifyThis: '이 토큰 검증 →',
+		jwtSignNote: '서명은 브라우저의 WebCrypto에서 실행됩니다 — 키는 이 페이지를 벗어나지 않으며, 생성된 키는 어디에도 저장되지 않습니다. HS 알고리즘에는 길고 무작위한 비밀 키를 쓰세요. 짧은 키는 어디서 서명하든 무차별 대입으로 뚫립니다.',
+		jwtVerifyNote: '검증은 입력한 키로 서명을 확인하고 현재 시각으로 exp와 nbf를 확인하며, 모두 로컬에서 이루어집니다. JWKS URL을 가져오지는 않습니다 — 발급자의 jwks_uri를 열어 JSON을 붙여넣으세요. aud와 iss는 백엔드에서 확인하세요.',
 
 		// Timestamp extras
 		tsDiff: '두 날짜 사이의 차이'
@@ -580,8 +587,8 @@ const ko: Messages = {
 			description: 'Unix 타임스탬프와 날짜를 상호 변환, 상대 시간 표시'
 		},
 		'jwt-decoder': {
-			name: 'JWT 디코더',
-			description: 'JWT 헤더와 페이로드 디코딩, 만료 확인 — 완전 오프라인'
+			name: 'JWT 디코더 & 인코더',
+			description: 'JWT 디코딩, 서명, 검증 — HS, RS, PS, ES, EdDSA, JWKS 지원 — 완전 오프라인'
 		},
 		'regex-tester': {
 			name: '정규식 테스터',
