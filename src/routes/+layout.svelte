@@ -64,7 +64,7 @@
 					{@render children()}
 				</main>
 				<footer class="border-t border-line">
-					<div class="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-6 gap-y-2 px-6 py-4 font-mono text-[11px] text-dim/70">
+					<div class="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-6 gap-y-2 px-6 py-4 font-mono text-[11px] text-dim">
 						<span class="flex items-center gap-1.5">
 							<span class="inline-block h-1.5 w-1.5 rounded-full bg-ok" aria-hidden="true"></span>
 							{t('footerPrivacy')}
@@ -82,7 +82,7 @@
 								<CodeXml size={12} />
 								{t('aboutViewSource')}
 							</a>
-							<a href={lp('/changelog')} class="text-dim/50 transition-colors duration-120 hover:text-fg" title={t('releaseDate')}>v{SITE_VERSION}</a>
+							<a href={lp('/changelog')} class="text-dim transition-colors duration-120 hover:text-fg" title={t('releaseDate')}>v{SITE_VERSION}</a>
 							<LanguageSwitcher path={page.url.pathname} />
 						</nav>
 					</div>

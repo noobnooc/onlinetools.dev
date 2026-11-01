@@ -109,7 +109,7 @@
 
 		{#each categories as cat (cat)}
 			<div class="mt-5">
-				<span class="block px-2.5 pb-1.5 text-[10px] font-semibold tracking-[0.1em] text-dim/60 uppercase">
+				<span class="block px-2.5 pb-1.5 text-[10px] font-semibold tracking-[0.1em] text-dim uppercase">
 					{ltCategory(cat)}
 				</span>
 				<ul class="space-y-px">

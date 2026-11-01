@@ -11,8 +11,8 @@
 {#key data.tool.slug}
 	<ToolShell tool={data.tool} content={data.content} contentLocale={data.contentLocale}>
 		{#await loader()}
-			<div class="flex min-h-40 items-center justify-center rounded-lg border border-line bg-surface">
-				<span class="font-mono text-sm text-dim/60">loading…</span>
+			<div class="flex min-h-72 items-center justify-center rounded-lg border border-line bg-surface">
+				<span class="font-mono text-sm text-dim">loading…</span>
 			</div>
 		{:then module}
 			{@const ToolComponent = module.default}

@@ -11,6 +11,20 @@ the footer badge and every `<lastmod>` in the sitemap.
 
 ---
 
+## [2026.11.01] — Easier to read, steadier to load
+
+### Fixed
+
+- Light theme: footer, breadcrumbs, the "report a problem" link, the
+  Smart Paste file details, empty-state hints and sidebar category headings
+  used faded `dim` text below the WCAG AA 4.5:1 contrast ratio; they now use
+  full `dim`.
+- Links inside running text are underlined (WCAG 1.4.1, no color-only cue).
+- The language menu button's accessible name now contains the visible
+  language name ("Language: English"), not just "Language" (WCAG 2.5.3).
+- The tool loading placeholder reserves 18rem instead of 10rem, close to
+  the smaller tools' height, which reduces layout shift as the tool mounts.
+
 ## [2026.10.31] — Sign and verify JWTs with real keys
 
 ### Added

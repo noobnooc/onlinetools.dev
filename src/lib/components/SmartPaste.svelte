@@ -163,9 +163,9 @@
 			<span class="font-mono text-xs text-dim">
 				{t('detected')} <span class="text-accent">{detectedLabel}</span>
 				{#if file}
-					<span class="text-dim/50">· {file.name}</span>
+					<span class="text-dim">· {file.name}</span>
 				{:else}
-					<span class="text-dim/50">· {content.length.toLocaleString()} {t('chars')}</span>
+					<span class="text-dim">· {content.length.toLocaleString()} {t('chars')}</span>
 				{/if}
 			</span>
 			<button type="button" class="text-xs text-dim hover:text-fg" onclick={dismiss}>esc</button>

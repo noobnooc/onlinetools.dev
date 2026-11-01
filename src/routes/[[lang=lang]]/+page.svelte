@@ -67,7 +67,7 @@
 				</h1>
 				<p class="mt-1 text-sm text-dim">{t('homeSub')}</p>
 			</div>
-			<div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 pb-1 font-mono text-[11px] text-dim/80">
+			<div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 pb-1 font-mono text-[11px] text-dim">
 				<span class="flex items-center gap-1.5"><ClipboardPaste size={12} /> {t('pasteToDetect')}</span>
 				<span class="flex items-center gap-1.5"><WifiOff size={12} /> {t('worksOffline')}</span>
 				<span class="flex items-center gap-1.5"><Kbd keys="?" /> {t('shortcuts')}</span>

@@ -15,6 +15,17 @@ Newest first. One entry per run; keep each under ~25 lines. Template:
 
 ---
 
+## 2026-11-01 — Accessibility & layout-shift pass (Lighthouse)
+- Health: smoke test green (0 failures); live is still v2026.10.30 (Worker `1f14f4ca`), because #30 was never merged. HSTS `max-age=86400` is being served.
+- Blocker: merging is denied by the session's permission policy ("merge without review"), even with the owner's standing authorization. #30 (green since 10-31) can't land, and neither can today's PR. I opened [#31](https://github.com/noobnooc/onlinetools.dev/issues/31) (`autopilot:needs-human`) with a recommended settings fix. I didn't try other ways around the denial.
+- Metrics: 10-31: 618 page views, 480 visitors, 0 5xx. Week 10-25→31 vs 10-18→24: page views +96% (6,844 vs 3,485), visitors +10% (3,875 vs 3,517). Top human HTML on 10-31: / 113, /changelog 18, /about 17, /zh/t/image-resizer 14, /tools 10.
+- Shipped (PR open, not merged, stacked on #30): Lighthouse on 7 top pages (mobile). Light theme: footer, breadcrumbs, "report a problem", empty-state hints, Smart Paste details and sidebar headings now use full `dim` (were 2.0–3.3:1). In-text links are underlined. The language button's name now includes the visible language. The tool placeholder is 10rem → 18rem. Results: contrast failures per page 10–23 → 2–4 (only brand colors/wordmark left); CLS on tool pages 0.10–0.16 → 0.03–0.06; /tools a11y 82 → 87, /about 84 → 88.
+- Not changed, on purpose: `maximum-scale=1` (the owner added it in 974eefa to stop mobile zoom; Lighthouse flags it). The light `accent` #3672F0 (4.35:1 on white) and `ok` #16A06B (3.3:1) are brand tokens in BRAND.md, so changing them is the owner's call. Backlog has a recommendation.
+- Cloudflare: none (HSTS ramp step 2 is due after 11-07).
+- Community: no outside issues or PRs.
+- Learned: a running `vite preview` keeps serving the old asset manifest after a rebuild, and the pages come out unstyled. Restart preview after every build, or Lighthouse reports nonsense (my first "after" run said 0 contrast failures). `pkill -f 'vite preview'` kills the calling shell too, so kill by PID.
+- Next: once #31 is resolved, merge #30, then this PR, and run `release.sh` for each. Then: chmod calculator or the JWT follow-ups (Tools), or the brand-contrast decision.
+
 ## 2026-10-31 — JWT tool: sign and verify with real keys
 - Health: smoke test green (0 failures); live was v2026.10.30 (Worker version `1f14f4ca`). Last `main` build succeeded. No open issues or PRs.
 - Metrics: 10-30 set a new high: 1,846 page views (526 visitors, 0 5xx). Week 10-24→30 vs 10-17→23: page views +82% (6,696 vs 3,671), visitors +10% (3,928 vs 3,579). Human traffic is still spread evenly: after /, /tools, /about, /chain, about 25 tool pages each got 8–9 views.

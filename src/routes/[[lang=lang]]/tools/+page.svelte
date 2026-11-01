@@ -46,7 +46,7 @@
 	<h1 class="mb-1 text-xl font-semibold tracking-tight">{t('allTools')}</h1>
 	<p class="mb-8 text-sm text-dim">
 		{t('toolsBlurb', { n: TOOLS.length })}
-		<a href={lp('/changelog')} class="text-accent hover:underline">{t('changelog').toLowerCase()}</a>.
+		<a href={lp('/changelog')} class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">{t('changelog').toLowerCase()}</a>.
 	</p>
 	{#if favoriteTools.length > 0}
 		<section class="mb-9" aria-labelledby="favorites-heading">

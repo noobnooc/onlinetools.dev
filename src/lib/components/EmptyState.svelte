@@ -17,5 +17,5 @@
 	>
 		<SquareDashed size={16} />
 	</span>
-	<p class="font-mono text-xs text-dim/60">{hint ?? t('emptyHint')}</p>
+	<p class="font-mono text-xs text-dim">{hint ?? t('emptyHint')}</p>
 </div>
