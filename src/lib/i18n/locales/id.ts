@@ -509,6 +509,34 @@ const id: Messages = {
 		cidrOutside: 'Di luar blok',
 		cidrBlocks: '{n} blok CIDR',
 		cidrEmpty: 'Detail muncul di sini — coba 10.0.0.0/16 atau rentang seperti 10.0.0.1 - 10.0.0.50',
+
+		// Chmod calculator
+		chmInput: 'Mode, string ls -l, perintah chmod, atau umask',
+		chmGrid: 'Bit izin',
+		chmOwner: 'Pemilik (u)',
+		chmGroup: 'Grup (g)',
+		chmOther: 'Lainnya (o)',
+		chmRead: 'Baca',
+		chmWrite: 'Tulis',
+		chmExec: 'Eksekusi',
+		chmSpecial: 'Khusus',
+		chmSetuid: 'Setuid',
+		chmSetgid: 'Setgid',
+		chmSticky: 'Sticky',
+		chmOctal: 'Oktal',
+		chmSymbolic: 'Simbolik',
+		chmCommand: 'Perintah',
+		chmCommandSym: 'Perintah (simbolik)',
+		chmBase: 'Mulai dari',
+		chmDirectory: 'Target berupa direktori',
+		chmUmaskFile: 'File baru',
+		chmUmaskDir: 'Direktori baru',
+		chmWarnWorld: 'Lainnya bisa menulis: pengguna mana pun di sistem dapat mengubah atau mengganti file ini.',
+		chmWarnSetuid: 'Setuid: file executable berjalan dengan hak pemiliknya, bukan pemanggilnya.',
+		chmWarnSetgid: 'Setgid: berjalan dengan grup file; pada direktori, file baru mewarisi grupnya.',
+		chmWarnSpecialNoExec: 'Bit khusus aktif tanpa izin eksekusi (ditampilkan sebagai S atau T), biasanya ini kesalahan.',
+		chmWarnOwnerLess: 'Pemilik punya izin lebih sedikit daripada grup atau lainnya. Periksa urutan digit.',
+		chmEmpty: 'Ketik 755, rwxr-xr-x atau g+w, atau centang kotak di atas',
 		hbFormat: 'Bita sebagai',
 		hbSep: 'Pemisah',
 		hbSpace: 'Spasi',
@@ -752,6 +780,10 @@ const id: Messages = {
 		'number-base-converter': {
 			name: 'Konverter Basis Bilangan',
 			description: 'Konversi bilangan antara biner, oktal, desimal, heksadesimal, dan basis apa pun hingga 36'
+		},
+		'chmod-calculator': {
+			name: 'Kalkulator Chmod',
+			description: 'Konversi izin Unix antara oktal, rwx, dan chmod simbolik, dengan grid yang bisa diklik'
 		},
 		'cidr-calculator': {
 			name: 'Kalkulator CIDR / Subnet',

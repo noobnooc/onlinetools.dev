@@ -510,6 +510,34 @@ const pl: Messages = {
 		cidrOutside: 'Poza blokiem',
 		cidrBlocks: 'bloki CIDR: {n}',
 		cidrEmpty: 'Tu pojawią się szczegóły — spróbuj 10.0.0.0/16 lub zakresu 10.0.0.1 - 10.0.0.50',
+
+		// Chmod calculator
+		chmInput: 'Tryb, ciąg ls -l, polecenie chmod lub umask',
+		chmGrid: 'Bity uprawnień',
+		chmOwner: 'Właściciel (u)',
+		chmGroup: 'Grupa (g)',
+		chmOther: 'Pozostali (o)',
+		chmRead: 'Odczyt',
+		chmWrite: 'Zapis',
+		chmExec: 'Wykonanie',
+		chmSpecial: 'Specjalne',
+		chmSetuid: 'Setuid',
+		chmSetgid: 'Setgid',
+		chmSticky: 'Sticky bit',
+		chmOctal: 'Ósemkowy',
+		chmSymbolic: 'Symboliczny',
+		chmCommand: 'Polecenie',
+		chmCommandSym: 'Polecenie (symboliczne)',
+		chmBase: 'Wychodząc od',
+		chmDirectory: 'Cel jest katalogiem',
+		chmUmaskFile: 'Nowe pliki',
+		chmUmaskDir: 'Nowe katalogi',
+		chmWarnWorld: 'Pozostali mogą zapisywać: każdy użytkownik systemu może zmienić lub podmienić ten plik.',
+		chmWarnSetuid: 'Setuid: plik wykonywalny działa z uprawnieniami właściciela, a nie wywołującego.',
+		chmWarnSetgid: 'Setgid: działa z grupą pliku; w katalogu nowe pliki dziedziczą jego grupę.',
+		chmWarnSpecialNoExec: 'Bit specjalny jest ustawiony bez wykonania (widoczny jako S lub T), co zwykle jest błędem.',
+		chmWarnOwnerLess: 'Właściciel ma mniej uprawnień niż grupa lub pozostali. Sprawdź kolejność cyfr.',
+		chmEmpty: 'Wpisz 755, rwxr-xr-x lub g+w albo zaznacz pola powyżej',
 		hbFormat: 'Bajty jako',
 		hbSep: 'Separator',
 		hbSpace: 'Spacja',
@@ -753,6 +781,10 @@ const pl: Messages = {
 		'number-base-converter': {
 			name: 'Konwerter systemów liczbowych',
 			description: 'Zamieniaj liczby między systemem binarnym, ósemkowym, dziesiętnym, szesnastkowym i dowolnym do 36'
+		},
+		'chmod-calculator': {
+			name: 'Kalkulator chmod',
+			description: 'Przeliczaj uprawnienia Unix między zapisem ósemkowym, rwx i symbolicznym chmod, z klikalną siatką'
 		},
 		'cidr-calculator': {
 			name: 'Kalkulator CIDR / podsieci',

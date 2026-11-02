@@ -498,6 +498,34 @@ const zh: Messages = {
 		cidrBlocks: '{n} 个 CIDR 块',
 		cidrEmpty: '结果会显示在这里 — 试试 10.0.0.0/16 或 10.0.0.1 - 10.0.0.50 这样的范围',
 
+		// Chmod calculator
+		chmInput: '模式、ls -l 字符串、chmod 命令或 umask',
+		chmGrid: '权限位',
+		chmOwner: '属主 (u)',
+		chmGroup: '属组 (g)',
+		chmOther: '其他用户 (o)',
+		chmRead: '读',
+		chmWrite: '写',
+		chmExec: '执行',
+		chmSpecial: '特殊位',
+		chmSetuid: 'Setuid',
+		chmSetgid: 'Setgid',
+		chmSticky: '粘滞位',
+		chmOctal: '八进制',
+		chmSymbolic: '符号形式',
+		chmCommand: '命令',
+		chmCommandSym: '命令 (符号形式)',
+		chmBase: '起始权限',
+		chmDirectory: '目标是目录',
+		chmUmaskFile: '新建文件',
+		chmUmaskDir: '新建目录',
+		chmWarnWorld: '其他用户可写:系统上的任何用户都能修改或替换此文件。',
+		chmWarnSetuid: 'Setuid:可执行文件以其属主的权限运行,而非调用者的权限。',
+		chmWarnSetgid: 'Setgid:以文件的属组运行;用于目录时,新建文件会继承该目录的属组。',
+		chmWarnSpecialNoExec: '设置了特殊位但没有执行权限 (显示为 S 或 T),这通常是个错误。',
+		chmWarnOwnerLess: '属主的权限少于属组或其他用户。请检查数字顺序。',
+		chmEmpty: '输入 755、rwxr-xr-x 或 g+w,或勾选上方的复选框',
+
 		// Text ↔ hex/binary
 		hbFormat: '字节表示为',
 		hbSep: '分隔符',
@@ -741,6 +769,10 @@ const zh: Messages = {
 		'number-base-converter': {
 			name: '进制转换器',
 			description: '在二、八、十、十六进制及至多 36 的任意进制之间转换数字'
+		},
+		'chmod-calculator': {
+			name: 'Chmod 权限计算器',
+			description: '在八进制、rwx 与 chmod 符号表达式之间换算 Unix 文件权限,可直接勾选'
 		},
 		'cidr-calculator': {
 			name: 'CIDR / 子网计算器',

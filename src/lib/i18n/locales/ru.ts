@@ -499,6 +499,34 @@ const ru: Messages = {
 		cidrBlocks: 'CIDR-блоков: {n}',
 		cidrEmpty: 'Здесь появятся данные — попробуйте 10.0.0.0/16 или диапазон 10.0.0.1 - 10.0.0.50',
 
+		// Chmod calculator
+		chmInput: 'Режим, строка ls -l, команда chmod или umask',
+		chmGrid: 'Биты прав',
+		chmOwner: 'Владелец (u)',
+		chmGroup: 'Группа (g)',
+		chmOther: 'Остальные (o)',
+		chmRead: 'Чтение',
+		chmWrite: 'Запись',
+		chmExec: 'Выполнение',
+		chmSpecial: 'Специальные',
+		chmSetuid: 'Setuid',
+		chmSetgid: 'Setgid',
+		chmSticky: 'Sticky',
+		chmOctal: 'Восьмеричное',
+		chmSymbolic: 'Символьное',
+		chmCommand: 'Команда',
+		chmCommandSym: 'Команда (символьная)',
+		chmBase: 'Исходные права',
+		chmDirectory: 'Цель — каталог',
+		chmUmaskFile: 'Новые файлы',
+		chmUmaskDir: 'Новые каталоги',
+		chmWarnWorld: 'Остальные могут писать: любой пользователь системы может изменить или заменить этот файл.',
+		chmWarnSetuid: 'Setuid: исполняемый файл запускается с правами владельца, а не вызывающего.',
+		chmWarnSetgid: 'Setgid: запуск с группой файла; в каталоге новые файлы наследуют его группу.',
+		chmWarnSpecialNoExec: 'Специальный бит установлен без права выполнения (отображается как S или T) — обычно это ошибка.',
+		chmWarnOwnerLess: 'У владельца меньше прав, чем у группы или остальных. Проверьте порядок цифр.',
+		chmEmpty: 'Введите 755, rwxr-xr-x или g+w либо отметьте флажки выше',
+
 		// Text ↔ hex/binary
 		hbFormat: 'Байты как',
 		hbSep: 'Разделитель',
@@ -741,6 +769,10 @@ const ru: Messages = {
 		'number-base-converter': {
 			name: 'Конвертер систем счисления',
 			description: 'Переводите числа между двоичной, восьмеричной, десятичной, шестнадцатеричной и любой системой до основания 36'
+		},
+		'chmod-calculator': {
+			name: 'Калькулятор Chmod',
+			description: 'Переводите права Unix между восьмеричной записью, rwx и символьным chmod с помощью кликабельной сетки'
 		},
 		'cidr-calculator': {
 			name: 'CIDR / калькулятор подсетей',

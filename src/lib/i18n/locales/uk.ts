@@ -527,6 +527,34 @@ const uk: Messages = {
 		cidrBlocks: 'CIDR-блоків: {n}',
 		cidrEmpty: 'Тут з’являться дані — спробуйте 10.0.0.0/16 або діапазон 10.0.0.1 - 10.0.0.50',
 
+		// Chmod calculator
+		chmInput: 'Режим, рядок ls -l, команда chmod або umask',
+		chmGrid: 'Біти прав',
+		chmOwner: 'Власник (u)',
+		chmGroup: 'Група (g)',
+		chmOther: 'Інші (o)',
+		chmRead: 'Читання',
+		chmWrite: 'Запис',
+		chmExec: 'Виконання',
+		chmSpecial: 'Спеціальні',
+		chmSetuid: 'Setuid',
+		chmSetgid: 'Setgid',
+		chmSticky: 'Sticky',
+		chmOctal: 'Вісімкова',
+		chmSymbolic: 'Символьна',
+		chmCommand: 'Команда',
+		chmCommandSym: 'Команда (символьна)',
+		chmBase: 'Початкові права',
+		chmDirectory: 'Ціль — каталог',
+		chmUmaskFile: 'Нові файли',
+		chmUmaskDir: 'Нові каталоги',
+		chmWarnWorld: 'Інші можуть записувати: будь-який користувач системи може змінити або замінити цей файл.',
+		chmWarnSetuid: 'Setuid: виконуваний файл запускається з правами власника, а не того, хто його викликає.',
+		chmWarnSetgid: 'Setgid: запуск із групою файлу; у каталозі нові файли успадковують його групу.',
+		chmWarnSpecialNoExec: 'Спеціальний біт встановлено без права виконання (показано як S або T) — зазвичай це помилка.',
+		chmWarnOwnerLess: 'Власник має менше прав, ніж група чи інші. Перевірте порядок цифр.',
+		chmEmpty: 'Введіть 755, rwxr-xr-x або g+w чи позначте прапорці вище',
+
 		hbFormat: 'Байти як',
 		hbSep: 'Роздільник',
 		hbSpace: 'Пробіл',
@@ -776,6 +804,10 @@ const uk: Messages = {
 		'number-base-converter': {
 			name: 'Конвертер систем числення',
 			description: 'Переводьте числа між двійковою, вісімковою, десятковою, шістнадцятковою та будь-якою основою до 36'
+		},
+		'chmod-calculator': {
+			name: 'Калькулятор Chmod',
+			description: 'Перетворюйте права Unix між вісімковим записом, rwx і символьним chmod за допомогою клікабельної сітки'
 		},
 		'cidr-calculator': {
 			name: 'CIDR / калькулятор підмереж',

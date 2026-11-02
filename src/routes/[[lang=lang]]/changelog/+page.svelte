@@ -15,6 +15,27 @@
 	<!-- Release notes are English-only content; the surrounding page chrome is localized. -->
 	<div lang="en">
 	<section class="relative border-l border-line pb-8 pl-6">
+		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
+		<h2 class="text-sm font-medium">File permissions, every way they are written</h2>
+		<p class="mt-0.5 font-mono text-xs text-dim">v2026.11.02</p>
+		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
+			<li>
+				New <a href={lp('/t/chmod-calculator')} class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">Chmod
+				Calculator</a>: 755, rwxr-xr-x, an <code>ls -l</code> line or a whole chmod command, converted to
+				every other form, with a clickable grid for owner, group, others and the special bits.
+			</li>
+			<li>
+				Relative expressions like g+w or a+X are applied to a starting mode, following GNU chmod,
+				and <code>umask 027</code> shows what new files and directories will get.
+			</li>
+			<li>
+				Warnings for world-writable modes, setuid/setgid and a capital S or T. Smart Paste now
+				recognizes <code>ls -l</code> columns and chmod commands.
+			</li>
+		</ul>
+	</section>
+
+	<section class="relative border-l border-line pb-8 pl-6">
 		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full bg-accent" aria-hidden="true"></span>
 		<h2 class="text-sm font-medium">Easier to read, steadier to load</h2>
 		<p class="mt-0.5 font-mono text-xs text-dim">v2026.11.01</p>

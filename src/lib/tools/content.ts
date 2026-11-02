@@ -732,6 +732,36 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
 		]
 	},
 
+	'chmod-calculator': {
+		about: [
+			'Type a mode the way you have it — 755, 0644, rwxr-xr-x, a whole `ls -l` line, u=rwx,g=rx,o=rx, or a full command like chmod -R 750 /srv/app — and see it in every other form: octal, the rwx string, the ls -l column, and both chmod commands ready to copy. The grid shows read, write and execute for owner, group and others; tick a box and the mode updates.',
+			'Each octal digit is the sum of read (4), write (2) and execute (1) for one class, so 7 is rwx, 5 is r-x and 4 is r--. An optional fourth digit in front holds the special bits: 4 for setuid, 2 for setgid and 1 for the sticky bit. That is why /tmp is 1777 and shows as rwxrwxrwt, and passwd is 4755 and shows as rwsr-xr-x. A capital S or T means the special bit is set but execute is not, which is almost always a mistake.',
+			'Relative expressions such as g+w, go-rwx or a+X depend on what the file already has, so the calculator applies them to a starting mode you choose (644 by default) and follows GNU chmod: X adds execute only for directories or files that already have it, u=g copies one class to another, and = on a directory keeps setuid and setgid. Type umask 027 to see which modes new files and directories will get. Nothing you paste — paths, user names, server layouts — leaves the page.'
+		],
+		faqs: [
+			{
+				q: 'What is the difference between 755 and 644?',
+				a: '755 (rwxr-xr-x) lets the owner read, write and execute, and everyone else read and execute. It is the usual mode for directories and scripts. 644 (rw-r--r--) drops execute for everyone, which is the usual mode for ordinary files. A directory needs execute (x) to be entered at all, so a directory set to 644 cannot be opened even by its owner.'
+			},
+			{
+				q: 'Why does SSH reject my private key with "permissions are too open"?',
+				a: 'OpenSSH refuses to use a private key that the group or other users can read. Set it to 600 (rw-------), or 400 for read-only, with chmod 600 ~/.ssh/id_ed25519. The ~/.ssh directory itself should be 700, and authorized_keys 600 or 644.'
+			},
+			{
+				q: 'Is chmod 777 ever a good idea?',
+				a: 'Rarely. 777 lets every account on the machine, including any compromised web process, change or replace the file. When "permission denied" goes away with 777, the real fix is usually ownership (chown the file to the user that runs the service) or group membership with 770 or 775. Shared scratch directories that really do need world write access should also get the sticky bit (1777), so users cannot delete each other\'s files.'
+			},
+			{
+				q: 'What does chmod +x do without u, g or o?',
+				a: 'Real chmod applies it to all three classes, except for bits your umask masks out. With the common umask 022 that makes no difference for +x, but +w becomes u+w only. The calculator treats a missing class as a (all) and does not apply a umask, so type u+w or a+w explicitly if the difference matters.'
+			},
+			{
+				q: 'How does umask relate to these numbers?',
+				a: 'umask lists the bits to remove from new files and directories. Programs usually create files as 666 and directories as 777, and the umask is subtracted from that: 022 gives 644 and 755, 027 gives 640 and 750, and 077 gives 600 and 700. Execute is never added to new files by the umask, which is why a fresh script needs chmod +x.'
+			}
+		]
+	},
+
 	'cidr-calculator': {
 		about: [
 			'Type a CIDR block such as 10.20.0.0/16 or 2001:db8::/48 and read everything about it at once: network address, broadcast (or last address for IPv6), netmask and wildcard mask, first and last usable host, address count, and which special-purpose range it sits in — RFC 1918 private space, carrier-grade NAT, link-local, documentation, multicast and the rest. A bare address works too, as does netmask notation (192.168.1.0 255.255.255.0) and the Cisco wildcard form (0.0.0.255).',

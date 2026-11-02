@@ -89,6 +89,13 @@ describe('smart paste detection', () => {
 		expect(detect('1/2').some((d) => d.type === 'cidr')).toBe(false);
 		expect(detect('2024-01-01').some((d) => d.type === 'cidr')).toBe(false);
 	});
+
+	it('detects ls -l permission columns and chmod commands', () => {
+		expect(detect('-rwxr-xr-x')[0]?.type).toBe('permissions');
+		expect(detect('drwxr-x---  4 deploy deploy 4096 Nov  2 08:00 releases')[0]?.type).toBe('permissions');
+		expect(detect('chmod 600 ~/.ssh/id_ed25519')[0]?.type).toBe('permissions');
+		expect(detect('755').some((d) => d.type === 'permissions')).toBe(false);
+	});
 	it('detects YAML documents', () => {
 		expect(detect('name: demo\nversion: 2\nitems:\n  - a\n  - b')[0]?.type).toBe('yaml');
 	});

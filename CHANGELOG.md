@@ -11,6 +11,21 @@ the footer badge and every `<lastmod>` in the sitemap.
 
 ---
 
+## [2026.11.02] — File permissions, every way they are written
+
+### Added
+
+- **Chmod Calculator**: type 755, 0644, rwxr-xr-x, a whole `ls -l` line,
+  u=rwx,g=rx,o=rx or a full `chmod -R 750 dir` command and get the octal
+  value, the rwx string, the `ls -l` column and both chmod commands. A
+  clickable owner/group/others grid with setuid, setgid and sticky bits.
+- Relative expressions (g+w, go-rwx, a+X, g=u) are applied to a starting
+  mode you choose, following GNU chmod (X, class copies, `=` on directories).
+- `umask 027` shows the modes new files and directories will get.
+- Warnings for world-writable modes, setuid/setgid, special bits without
+  execute (S/T), and owners with fewer rights than group or others.
+- Smart Paste recognizes `ls -l` permission columns and chmod commands.
+
 ## [2026.11.01] — Easier to read, steadier to load
 
 ### Fixed

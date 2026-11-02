@@ -526,6 +526,34 @@ const th: Messages = {
 		cidrBlocks: '{n} บล็อก CIDR',
 		cidrEmpty: 'รายละเอียดจะแสดงที่นี่ — ลอง 10.0.0.0/16 หรือช่วงอย่าง 10.0.0.1 - 10.0.0.50',
 
+		// Chmod calculator
+		chmInput: 'โหมด, สตริง ls -l, คำสั่ง chmod หรือ umask',
+		chmGrid: 'บิตสิทธิ์',
+		chmOwner: 'เจ้าของ (u)',
+		chmGroup: 'กลุ่ม (g)',
+		chmOther: 'ผู้อื่น (o)',
+		chmRead: 'อ่าน',
+		chmWrite: 'เขียน',
+		chmExec: 'รัน',
+		chmSpecial: 'บิตพิเศษ',
+		chmSetuid: 'Setuid',
+		chmSetgid: 'Setgid',
+		chmSticky: 'Sticky',
+		chmOctal: 'ฐานแปด',
+		chmSymbolic: 'แบบสัญลักษณ์',
+		chmCommand: 'คำสั่ง',
+		chmCommandSym: 'คำสั่ง (แบบสัญลักษณ์)',
+		chmBase: 'สิทธิ์เริ่มต้น',
+		chmDirectory: 'เป้าหมายเป็นไดเรกทอรี',
+		chmUmaskFile: 'ไฟล์ใหม่',
+		chmUmaskDir: 'ไดเรกทอรีใหม่',
+		chmWarnWorld: 'ผู้อื่นเขียนได้: ผู้ใช้ทุกคนในระบบสามารถแก้ไขหรือแทนที่ไฟล์นี้ได้',
+		chmWarnSetuid: 'Setuid: ไฟล์ที่รันได้จะทำงานด้วยสิทธิ์ของเจ้าของ ไม่ใช่ของผู้เรียกใช้',
+		chmWarnSetgid: 'Setgid: ทำงานด้วยกลุ่มของไฟล์ ส่วนบนไดเรกทอรี ไฟล์ใหม่จะได้กลุ่มเดียวกันตาม',
+		chmWarnSpecialNoExec: 'มีการตั้งบิตพิเศษโดยไม่มีสิทธิ์รัน (แสดงเป็น S หรือ T) ซึ่งมักเป็นความผิดพลาด',
+		chmWarnOwnerLess: 'เจ้าของมีสิทธิ์น้อยกว่ากลุ่มหรือผู้อื่น ตรวจสอบลำดับตัวเลขอีกครั้ง',
+		chmEmpty: 'พิมพ์ 755, rwxr-xr-x หรือ g+w หรือติ๊กช่องด้านบน',
+
 		hbFormat: 'แสดงไบต์เป็น',
 		hbSep: 'ตัวคั่น',
 		hbSpace: 'ช่องว่าง',
@@ -775,6 +803,10 @@ const th: Messages = {
 		'number-base-converter': {
 			name: 'ตัวแปลงฐานเลข',
 			description: 'แปลงตัวเลขระหว่างฐานสอง ฐานแปด ฐานสิบ ฐานสิบหก และฐานใดก็ได้ถึง 36'
+		},
+		'chmod-calculator': {
+			name: 'เครื่องคำนวณ Chmod',
+			description: 'แปลงสิทธิ์ Unix ระหว่างฐานแปด, rwx และ chmod แบบสัญลักษณ์ พร้อมตารางที่คลิกเลือกได้'
 		},
 		'cidr-calculator': {
 			name: 'เครื่องคำนวณ CIDR / ซับเน็ต',

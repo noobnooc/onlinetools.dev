@@ -499,6 +499,34 @@ const ko: Messages = {
 		cidrBlocks: 'CIDR 블록 {n}개',
 		cidrEmpty: '여기에 결과가 표시됩니다 — 10.0.0.0/16 또는 10.0.0.1 - 10.0.0.50 같은 범위를 입력해 보세요',
 
+		// Chmod calculator
+		chmInput: '모드, ls -l 문자열, chmod 명령 또는 umask',
+		chmGrid: '권한 비트',
+		chmOwner: '소유자 (u)',
+		chmGroup: '그룹 (g)',
+		chmOther: '기타 사용자 (o)',
+		chmRead: '읽기',
+		chmWrite: '쓰기',
+		chmExec: '실행',
+		chmSpecial: '특수 비트',
+		chmSetuid: 'Setuid',
+		chmSetgid: 'Setgid',
+		chmSticky: 'Sticky',
+		chmOctal: '8진수',
+		chmSymbolic: '기호 표기',
+		chmCommand: '명령',
+		chmCommandSym: '명령 (기호 표기)',
+		chmBase: '기준 권한',
+		chmDirectory: '대상이 디렉터리임',
+		chmUmaskFile: '새 파일',
+		chmUmaskDir: '새 디렉터리',
+		chmWarnWorld: '기타 사용자에게 쓰기 권한이 있습니다. 시스템의 모든 사용자가 이 파일을 변경하거나 교체할 수 있습니다.',
+		chmWarnSetuid: 'Setuid: 실행 파일이 호출한 사용자가 아닌 소유자의 권한으로 실행됩니다.',
+		chmWarnSetgid: 'Setgid: 파일의 그룹 권한으로 실행됩니다. 디렉터리에서는 새 파일이 해당 그룹을 상속합니다.',
+		chmWarnSpecialNoExec: '실행 권한 없이 특수 비트가 설정되어 있습니다 (S 또는 T로 표시). 보통 실수입니다.',
+		chmWarnOwnerLess: '소유자의 권한이 그룹이나 기타 사용자보다 적습니다. 숫자 순서를 확인하세요.',
+		chmEmpty: '755, rwxr-xr-x 또는 g+w를 입력하거나 위의 체크박스를 선택하세요',
+
 		// Text ↔ hex/binary
 		hbFormat: '바이트 표기',
 		hbSep: '구분자',
@@ -741,6 +769,10 @@ const ko: Messages = {
 		'number-base-converter': {
 			name: '진법 변환기',
 			description: '2·8·10·16진수와 최대 36진법 사이의 숫자 변환'
+		},
+		'chmod-calculator': {
+			name: 'Chmod 계산기',
+			description: 'Unix 권한을 8진수, rwx, 기호 표기 chmod 사이에서 변환하고 클릭 가능한 표로 설정'
 		},
 		'cidr-calculator': {
 			name: 'CIDR / 서브넷 계산기',

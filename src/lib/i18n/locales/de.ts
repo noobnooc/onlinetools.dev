@@ -501,6 +501,34 @@ const de: Messages = {
 		cidrBlocks: '{n} CIDR-Blöcke',
 		cidrEmpty: 'Details erscheinen hier — probiere 10.0.0.0/16 oder einen Bereich wie 10.0.0.1 - 10.0.0.50',
 
+		// Chmod calculator
+		chmInput: 'Modus, ls -l-Zeichenkette, chmod-Befehl oder umask',
+		chmGrid: 'Berechtigungsbits',
+		chmOwner: 'Besitzer (u)',
+		chmGroup: 'Gruppe (g)',
+		chmOther: 'Andere (o)',
+		chmRead: 'Lesen',
+		chmWrite: 'Schreiben',
+		chmExec: 'Ausführen',
+		chmSpecial: 'Spezial',
+		chmSetuid: 'Setuid',
+		chmSetgid: 'Setgid',
+		chmSticky: 'Sticky-Bit',
+		chmOctal: 'Oktal',
+		chmSymbolic: 'Symbolisch',
+		chmCommand: 'Befehl',
+		chmCommandSym: 'Befehl (symbolisch)',
+		chmBase: 'Ausgehend von',
+		chmDirectory: 'Ziel ist ein Verzeichnis',
+		chmUmaskFile: 'Neue Dateien',
+		chmUmaskDir: 'Neue Verzeichnisse',
+		chmWarnWorld: 'Andere dürfen schreiben: Jeder Benutzer im System kann diese Datei ändern oder ersetzen.',
+		chmWarnSetuid: 'Setuid: Eine ausführbare Datei läuft mit den Rechten ihres Besitzers, nicht des Aufrufers.',
+		chmWarnSetgid: 'Setgid: läuft mit der Gruppe der Datei; bei einem Verzeichnis erben neue Dateien dessen Gruppe.',
+		chmWarnSpecialNoExec: 'Ein Spezialbit ist ohne Ausführen gesetzt (als S oder T angezeigt), meist ein Versehen.',
+		chmWarnOwnerLess: 'Der Besitzer hat weniger Rechte als Gruppe oder andere. Prüfe die Reihenfolge der Ziffern.',
+		chmEmpty: 'Gib 755, rwxr-xr-x oder g+w ein oder setze oben die Häkchen',
+
 		// Text ↔ hex/binary
 		hbFormat: 'Bytes als',
 		hbSep: 'Trennzeichen',
@@ -744,6 +772,10 @@ const de: Messages = {
 		'number-base-converter': {
 			name: 'Zahlenbasis-Konverter',
 			description: 'Zahlen zwischen Binär, Oktal, Dezimal, Hex und jeder Basis bis 36 umrechnen'
+		},
+		'chmod-calculator': {
+			name: 'Chmod-Rechner',
+			description: 'Unix-Berechtigungen zwischen oktal, rwx und symbolischem chmod umrechnen, mit anklickbarem Raster'
 		},
 		'cidr-calculator': {
 			name: 'CIDR- / Subnetzrechner',

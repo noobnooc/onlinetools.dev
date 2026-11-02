@@ -527,6 +527,34 @@ const nl: Messages = {
 		cidrBlocks: '{n} CIDR-blokken',
 		cidrEmpty: 'Details verschijnen hier — probeer 10.0.0.0/16 of een bereik als 10.0.0.1 - 10.0.0.50',
 
+		// Chmod calculator
+		chmInput: 'Modus, ls -l-string, chmod-commando of umask',
+		chmGrid: 'Rechtenbits',
+		chmOwner: 'Eigenaar (u)',
+		chmGroup: 'Groep (g)',
+		chmOther: 'Overigen (o)',
+		chmRead: 'Lezen',
+		chmWrite: 'Schrijven',
+		chmExec: 'Uitvoeren',
+		chmSpecial: 'Speciaal',
+		chmSetuid: 'Setuid',
+		chmSetgid: 'Setgid',
+		chmSticky: 'Sticky bit',
+		chmOctal: 'Octaal',
+		chmSymbolic: 'Symbolisch',
+		chmCommand: 'Commando',
+		chmCommandSym: 'Commando (symbolisch)',
+		chmBase: 'Uitgaande van',
+		chmDirectory: 'Doel is een map',
+		chmUmaskFile: 'Nieuwe bestanden',
+		chmUmaskDir: 'Nieuwe mappen',
+		chmWarnWorld: 'Overigen kunnen schrijven: elke gebruiker op het systeem kan dit bestand wijzigen of vervangen.',
+		chmWarnSetuid: 'Setuid: een uitvoerbaar bestand draait met de rechten van de eigenaar, niet van de aanroeper.',
+		chmWarnSetgid: 'Setgid: draait met de groep van het bestand; bij een map erven nieuwe bestanden de groep.',
+		chmWarnSpecialNoExec: 'Er is een speciale bit gezet zonder uitvoeren (weergegeven als S of T), meestal een vergissing.',
+		chmWarnOwnerLess: 'De eigenaar heeft minder rechten dan groep of overigen. Controleer de volgorde van de cijfers.',
+		chmEmpty: 'Typ 755, rwxr-xr-x of g+w, of vink de vakjes hierboven aan',
+
 		hbFormat: 'Bytes als',
 		hbSep: 'Scheidingsteken',
 		hbSpace: 'Spatie',
@@ -776,6 +804,10 @@ const nl: Messages = {
 		'number-base-converter': {
 			name: 'Talstelselconverter',
 			description: 'Converteer getallen tussen binair, octaal, decimaal, hex en elk grondtal tot 36'
+		},
+		'chmod-calculator': {
+			name: 'Chmod-calculator',
+			description: 'Zet Unix-rechten om tussen octaal, rwx en symbolische chmod, met een klikbaar raster'
 		},
 		'cidr-calculator': {
 			name: 'CIDR- / subnetcalculator',

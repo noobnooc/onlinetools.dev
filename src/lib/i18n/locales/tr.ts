@@ -506,6 +506,34 @@ const tr: Messages = {
 		cidrOutside: 'Blok dışında',
 		cidrBlocks: '{n} CIDR bloğu',
 		cidrEmpty: 'Ayrıntılar burada görünür — 10.0.0.0/16 veya 10.0.0.1 - 10.0.0.50 gibi bir aralık deneyin',
+
+		// Chmod calculator
+		chmInput: 'Mod, ls -l dizesi, chmod komutu veya umask',
+		chmGrid: 'İzin bitleri',
+		chmOwner: 'Sahip (u)',
+		chmGroup: 'Grup (g)',
+		chmOther: 'Diğerleri (o)',
+		chmRead: 'Okuma',
+		chmWrite: 'Yazma',
+		chmExec: 'Çalıştırma',
+		chmSpecial: 'Özel',
+		chmSetuid: 'Setuid',
+		chmSetgid: 'Setgid',
+		chmSticky: 'Sticky',
+		chmOctal: 'Sekizli',
+		chmSymbolic: 'Sembolik',
+		chmCommand: 'Komut',
+		chmCommandSym: 'Komut (sembolik)',
+		chmBase: 'Başlangıç',
+		chmDirectory: 'Hedef bir dizin',
+		chmUmaskFile: 'Yeni dosyalar',
+		chmUmaskDir: 'Yeni dizinler',
+		chmWarnWorld: 'Diğerleri yazabilir: sistemdeki her kullanıcı bu dosyayı değiştirebilir veya yerine başkasını koyabilir.',
+		chmWarnSetuid: 'Setuid: çalıştırılabilir dosya, çağıranın değil sahibinin yetkileriyle çalışır.',
+		chmWarnSetgid: 'Setgid: dosyanın grubuyla çalışır; bir dizinde yeni dosyalar dizinin grubunu devralır.',
+		chmWarnSpecialNoExec: 'Çalıştırma izni olmadan özel bir bit ayarlanmış (S veya T olarak gösterilir); bu genellikle bir hatadır.',
+		chmWarnOwnerLess: 'Sahibin izinleri grup veya diğerlerinden az. Rakam sırasını kontrol edin.',
+		chmEmpty: '755, rwxr-xr-x veya g+w yazın ya da yukarıdaki kutuları işaretleyin',
 		hbFormat: 'Baytlar şu biçimde',
 		hbSep: 'Ayırıcı',
 		hbSpace: 'Boşluk',
@@ -749,6 +777,10 @@ const tr: Messages = {
 		'number-base-converter': {
 			name: 'Sayı Tabanı Dönüştürücü',
 			description: 'Sayıları ikili, sekizli, ondalık, onaltılı ve 36’ya kadar her taban arasında çevirin'
+		},
+		'chmod-calculator': {
+			name: 'Chmod Hesaplayıcı',
+			description: 'Unix izinlerini sekizli, rwx ve sembolik chmod arasında tıklanabilir bir tabloyla dönüştürün'
 		},
 		'cidr-calculator': {
 			name: 'CIDR / Alt Ağ Hesaplayıcı',

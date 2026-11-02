@@ -525,6 +525,34 @@ const hi: Messages = {
 		cidrBlocks: '{n} CIDR ब्लॉक',
 		cidrEmpty: 'विवरण यहाँ दिखेगा — 10.0.0.0/16 या 10.0.0.1 - 10.0.0.50 जैसी रेंज आज़माएँ',
 
+		// Chmod calculator
+		chmInput: 'मोड, ls -l स्ट्रिंग, chmod कमांड या umask',
+		chmGrid: 'अनुमति बिट',
+		chmOwner: 'स्वामी (u)',
+		chmGroup: 'समूह (g)',
+		chmOther: 'अन्य (o)',
+		chmRead: 'पढ़ना',
+		chmWrite: 'लिखना',
+		chmExec: 'चलाना',
+		chmSpecial: 'विशेष',
+		chmSetuid: 'Setuid',
+		chmSetgid: 'Setgid',
+		chmSticky: 'Sticky',
+		chmOctal: 'अष्टाधारी',
+		chmSymbolic: 'सांकेतिक',
+		chmCommand: 'कमांड',
+		chmCommandSym: 'कमांड (सांकेतिक)',
+		chmBase: 'शुरुआती मोड',
+		chmDirectory: 'लक्ष्य एक डायरेक्टरी है',
+		chmUmaskFile: 'नई फ़ाइलें',
+		chmUmaskDir: 'नई डायरेक्टरी',
+		chmWarnWorld: 'अन्य लिख सकते हैं: सिस्टम का कोई भी उपयोगकर्ता इस फ़ाइल को बदल या हटाकर नई रख सकता है।',
+		chmWarnSetuid: 'Setuid: एक्ज़ीक्यूटेबल चलाने वाले के नहीं, बल्कि अपने स्वामी के अधिकारों से चलता है।',
+		chmWarnSetgid: 'Setgid: फ़ाइल के समूह के साथ चलता है; डायरेक्टरी पर, नई फ़ाइलें उसका समूह अपनाती हैं।',
+		chmWarnSpecialNoExec: 'execute के बिना विशेष बिट सेट है (S या T के रूप में दिखता है), जो आमतौर पर गलती होती है।',
+		chmWarnOwnerLess: 'स्वामी के पास समूह या अन्य से कम अनुमतियाँ हैं। अंकों का क्रम जाँचें।',
+		chmEmpty: '755, rwxr-xr-x या g+w लिखें, या ऊपर के बॉक्स चुनें',
+
 		hbFormat: 'बाइट इस रूप में',
 		hbSep: 'विभाजक',
 		hbSpace: 'स्पेस',
@@ -772,6 +800,10 @@ const hi: Messages = {
 		'number-base-converter': {
 			name: 'संख्या आधार कनवर्टर',
 			description: 'संख्याओं को द्विआधारी, अष्टाधारी, दशमलव, षोडश आधारी और 36 तक किसी भी आधार में बदलिए'
+		},
+		'chmod-calculator': {
+			name: 'Chmod कैलकुलेटर',
+			description: 'Unix अनुमतियों को अष्टाधारी, rwx और सांकेतिक chmod के बीच बदलें, क्लिक करने योग्य ग्रिड के साथ'
 		},
 		'cidr-calculator': {
 			name: 'CIDR / सबनेट कैलकुलेटर',

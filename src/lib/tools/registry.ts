@@ -280,7 +280,7 @@ export const TOOLS: ToolMeta[] = [
 		category: 'time',
 		aliases: ['cron', 'crontab', 'cron schedule', 'cron expression'],
 		keywords: ['cron parser', 'cron expression', 'crontab generator', 'cron next run'],
-		related: ['timestamp-converter', 'regex-tester', 'json-formatter', 'uuid-generator', 'hash-generator', 'sort-lines']
+		related: ['timestamp-converter', 'regex-tester', 'json-formatter', 'uuid-generator', 'hash-generator', 'chmod-calculator']
 	},
 	{
 		slug: 'password-generator',
@@ -449,7 +449,7 @@ export const TOOLS: ToolMeta[] = [
 		category: 'encoding',
 		aliases: ['base converter', 'hex to decimal', 'binary to decimal', 'radix', 'dec to hex'],
 		keywords: ['number base converter', 'hex to decimal', 'decimal to binary', 'base conversion online'],
-		related: ['text-to-hex', 'unicode-inspector', 'base64-decode', 'hash-generator', 'timestamp-converter', 'cidr-calculator']
+		related: ['text-to-hex', 'unicode-inspector', 'base64-decode', 'chmod-calculator', 'timestamp-converter', 'cidr-calculator']
 	},
 	{
 		slug: 'text-to-hex',
@@ -499,7 +499,17 @@ export const TOOLS: ToolMeta[] = [
 		category: 'web',
 		aliases: ['cidr', 'subnet', 'subnet calculator', 'ip calculator', 'netmask', 'ipv6 subnet', 'ip range to cidr'],
 		keywords: ['cidr calculator', 'subnet calculator', 'ipv4 subnet calculator', 'ipv6 cidr calculator', 'ip range to cidr', 'netmask calculator'],
-		related: ['number-base-converter', 'url-parser', 'user-agent-parser', 'text-to-hex', 'regex-tester', 'url-encode-decode']
+		related: ['number-base-converter', 'url-parser', 'user-agent-parser', 'text-to-hex', 'regex-tester', 'chmod-calculator']
+	},
+	{
+		slug: 'chmod-calculator',
+		accepts: ['permissions'],
+		name: 'Chmod Calculator',
+		description: 'Convert Unix permissions between octal, rwx and symbolic chmod, with a clickable grid',
+		category: 'web',
+		aliases: ['chmod', 'permissions', 'file permissions', 'unix permissions', 'umask', 'rwx', '755', '644', 'octal permissions'],
+		keywords: ['chmod calculator', 'chmod 755', 'chmod 644', 'linux file permissions calculator', 'rwx to octal', 'umask calculator', 'symbolic to octal permissions'],
+		related: ['cron-parser', 'number-base-converter', 'cidr-calculator', 'regex-tester', 'string-escape', 'hash-generator']
 	}
 ];
 

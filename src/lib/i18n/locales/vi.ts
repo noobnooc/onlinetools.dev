@@ -510,6 +510,34 @@ const vi: Messages = {
 		cidrOutside: 'Nằm ngoài khối',
 		cidrBlocks: '{n} khối CIDR',
 		cidrEmpty: 'Chi tiết hiện ở đây — thử 10.0.0.0/16 hoặc dải 10.0.0.1 - 10.0.0.50',
+
+		// Chmod calculator
+		chmInput: 'Mode, chuỗi ls -l, lệnh chmod hoặc umask',
+		chmGrid: 'Các bit quyền',
+		chmOwner: 'Chủ sở hữu (u)',
+		chmGroup: 'Nhóm (g)',
+		chmOther: 'Người khác (o)',
+		chmRead: 'Đọc',
+		chmWrite: 'Ghi',
+		chmExec: 'Thực thi',
+		chmSpecial: 'Đặc biệt',
+		chmSetuid: 'Setuid',
+		chmSetgid: 'Setgid',
+		chmSticky: 'Sticky',
+		chmOctal: 'Bát phân',
+		chmSymbolic: 'Ký hiệu',
+		chmCommand: 'Lệnh',
+		chmCommandSym: 'Lệnh (ký hiệu)',
+		chmBase: 'Bắt đầu từ',
+		chmDirectory: 'Đích là thư mục',
+		chmUmaskFile: 'Tệp mới',
+		chmUmaskDir: 'Thư mục mới',
+		chmWarnWorld: 'Người khác có quyền ghi: bất kỳ người dùng nào trên hệ thống cũng có thể sửa hoặc thay thế tệp này.',
+		chmWarnSetuid: 'Setuid: tệp thực thi chạy với quyền của chủ sở hữu, không phải của người gọi.',
+		chmWarnSetgid: 'Setgid: chạy với nhóm của tệp; với thư mục, tệp mới kế thừa nhóm của thư mục.',
+		chmWarnSpecialNoExec: 'Bit đặc biệt được bật mà không có quyền thực thi (hiện là S hoặc T), thường là nhầm lẫn.',
+		chmWarnOwnerLess: 'Chủ sở hữu có ít quyền hơn nhóm hoặc người khác. Hãy kiểm tra thứ tự chữ số.',
+		chmEmpty: 'Nhập 755, rwxr-xr-x hoặc g+w, hoặc đánh dấu các ô ở trên',
 		hbFormat: 'Byte dạng',
 		hbSep: 'Ký tự phân tách',
 		hbSpace: 'Dấu cách',
@@ -753,6 +781,10 @@ const vi: Messages = {
 		'number-base-converter': {
 			name: 'Chuyển đổi hệ cơ số',
 			description: 'Đổi số giữa nhị phân, bát phân, thập phân, thập lục phân và mọi cơ số tới 36'
+		},
+		'chmod-calculator': {
+			name: 'Máy tính Chmod',
+			description: 'Chuyển quyền Unix giữa bát phân, rwx và chmod ký hiệu, kèm lưới có thể nhấp'
 		},
 		'cidr-calculator': {
 			name: 'Máy tính CIDR / Subnet',

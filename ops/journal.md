@@ -15,6 +15,17 @@ Newest first. One entry per run; keep each under ~25 lines. Template:
 
 ---
 
+## 2026-11-02 — Chmod calculator (tool #47)
+- Health: smoke test green (0 failures); live still v2026.10.30 (Worker `1f14f4ca`) because #30 and #32 are unmerged. 0 eyeball 5xx on 11-01.
+- Blocker (unchanged): merging is still denied by the session's permission policy ("merge without review"). I tried the documented `gh api` merge for #30 once, got the denial, and did not try other routes. #31 is still open with no owner reply. Today's PR is stacked on #32 (which contains #30), so merging today's PR alone lands all three.
+- Metrics: 11-01: 1,529 page views, 786 visitors (most in the log), 0 5xx. Week 10-26→11-01 vs 10-19→25: page views +77% (7,003 vs 3,964), visitors +10% (3,922 vs 3,555). Top human HTML: / 101, /de/t/json-schema-validator 10, /chain 10, then a long flat tail.
+- Shipped (PR open, not merged): [#33](https://github.com/noobnooc/onlinetools.dev/pull/33) Chmod Calculator. Octal, rwx, `ls -l` columns/lines, absolute and relative symbolic expressions (GNU semantics for X, class copies, `=` on directories), `chmod -R …` commands with targets kept, `umask`. Clickable grid with special bits, warnings, Smart Paste detector, 18-locale labels, en+zh About/FAQ, README/OG count 47.
+- Why this over the SEO title audit: I fetched titles/descriptions for the 10 most-visited tool pages and they already say what each tool does in search terms, so the audit had little to fix. "chmod calculator" is a classic high-volume query and the tool is fully local.
+- Cloudflare: none (HSTS step 2 is due after 11-07).
+- Community: no outside issues or PRs. Commented on #31 that three PRs now wait on it.
+- Learned: the stacked-PR approach keeps working, but each day makes the eventual merge larger. If #31 is still open next run, prefer an ops-only or very small change over another big stacked feature.
+- Next: once merged, run `release.sh` on the merge commit. Then: About/FAQ for chmod in the other 16 locales, or the WCAG contrast checker.
+
 ## 2026-11-01 — Accessibility & layout-shift pass (Lighthouse)
 - Health: smoke test green (0 failures); live is still v2026.10.30 (Worker `1f14f4ca`), because #30 was never merged. HSTS `max-age=86400` is being served.
 - Blocker: merging is denied by the session's permission policy ("merge without review"), even with the owner's standing authorization. #30 (green since 10-31) can't land, and neither can today's PR. I opened [#31](https://github.com/noobnooc/onlinetools.dev/issues/31) (`autopilot:needs-human`) with a recommended settings fix. I didn't try other ways around the denial.

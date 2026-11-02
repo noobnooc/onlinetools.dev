@@ -10,6 +10,7 @@ import { isLikelyCsv } from '$lib/tools/dataconvert';
 import { isLikelyMarkdown } from '$lib/tools/markdown';
 import { isLikelyHexDump } from '$lib/tools/hexbin';
 import { isLikelyCidr } from '$lib/tools/cidr';
+import { isLikelyPermissions } from '$lib/tools/chmod';
 import type { DataFormat } from './formats';
 
 export interface Detection {
@@ -144,6 +145,20 @@ export const DETECTORS: Detector[] = [
 				confidence: 0.9,
 				tool: 'cidr-calculator',
 				actions: [{ label: 'Calculate subnet', tool: 'cidr-calculator' }]
+			};
+		}
+	},
+	{
+		id: 'permissions',
+		detect(input) {
+			if (!isLikelyPermissions(input)) return null;
+			return {
+				type: 'permissions',
+				format: 'permissions',
+				label: 'Unix permissions',
+				confidence: 0.85,
+				tool: 'chmod-calculator',
+				actions: [{ label: 'Explain permissions', tool: 'chmod-calculator' }]
 			};
 		}
 	},

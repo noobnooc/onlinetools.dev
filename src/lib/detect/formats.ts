@@ -31,6 +31,7 @@ export type DataFormat =
 	| 'cron'
 	| 'useragent'
 	| 'cidr'
+	| 'permissions'
 	| 'image-data-url'
 	| 'image'
 	| 'text';
@@ -62,6 +63,7 @@ export const FORMAT_FALLBACKS: Record<DataFormat, DataFormat[]> = {
 	cron: ['text'],
 	useragent: ['text'],
 	cidr: ['text'],
+	permissions: ['text'],
 	'image-data-url': ['base64', 'text'],
 	image: [],
 	text: []

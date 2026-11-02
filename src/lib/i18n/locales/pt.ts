@@ -499,6 +499,34 @@ const pt: Messages = {
 		cidrBlocks: '{n} blocos CIDR',
 		cidrEmpty: 'Os detalhes aparecem aqui — experimente 10.0.0.0/16 ou um intervalo como 10.0.0.1 - 10.0.0.50',
 
+		// Chmod calculator
+		chmInput: 'Modo, string do ls -l, comando chmod ou umask',
+		chmGrid: 'Bits de permissão',
+		chmOwner: 'Dono (u)',
+		chmGroup: 'Grupo (g)',
+		chmOther: 'Outros (o)',
+		chmRead: 'Leitura',
+		chmWrite: 'Escrita',
+		chmExec: 'Execução',
+		chmSpecial: 'Especiais',
+		chmSetuid: 'Setuid',
+		chmSetgid: 'Setgid',
+		chmSticky: 'Sticky',
+		chmOctal: 'Octal',
+		chmSymbolic: 'Simbólico',
+		chmCommand: 'Comando',
+		chmCommandSym: 'Comando (simbólico)',
+		chmBase: 'A partir de',
+		chmDirectory: 'O alvo é um diretório',
+		chmUmaskFile: 'Novos arquivos',
+		chmUmaskDir: 'Novos diretórios',
+		chmWarnWorld: 'Outros podem escrever: qualquer usuário do sistema pode alterar ou substituir este arquivo.',
+		chmWarnSetuid: 'Setuid: o executável roda com os privilégios do dono, não de quem o chama.',
+		chmWarnSetgid: 'Setgid: roda com o grupo do arquivo; em um diretório, novos arquivos herdam o grupo dele.',
+		chmWarnSpecialNoExec: 'Um bit especial está ativo sem execução (exibido como S ou T), o que geralmente é um erro.',
+		chmWarnOwnerLess: 'O dono tem menos permissões que o grupo ou os outros. Confira a ordem dos dígitos.',
+		chmEmpty: 'Digite 755, rwxr-xr-x ou g+w, ou marque as caixas acima',
+
 		// Text ↔ hex/binary
 		hbFormat: 'Bytes como',
 		hbSep: 'Separador',
@@ -741,6 +769,10 @@ const pt: Messages = {
 		'number-base-converter': {
 			name: 'Conversor de bases numéricas',
 			description: 'Converta números entre binário, octal, decimal, hex e qualquer base até 36'
+		},
+		'chmod-calculator': {
+			name: 'Calculadora Chmod',
+			description: 'Converta permissões Unix entre octal, rwx e chmod simbólico, com uma grade clicável'
 		},
 		'cidr-calculator': {
 			name: 'Calculadora CIDR / de sub-rede',
