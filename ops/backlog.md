@@ -15,7 +15,7 @@ _(empty — humans: put a line here to steer the next run)_
 
 | Item | Area | Impact | Effort | Notes |
 | --- | --- | :-: | :-: | --- |
-| Keep a 7-day log of the top human HTML paths | growth | 3 | 1 | Six days (10-27→11-01) are recorded in `metrics.md`: traffic is a long tail with no dominant tool; zh/id localized pages show up near the top. Record a day each run until there are 7 to rank against. `clientRefererHost` is not available on this plan |
+| Keep a 7-day log of the top human HTML paths | growth | 3 | 1 | Seven days (10-27→11-02) now recorded in `metrics.md`: traffic is a long tail with no dominant tool; localized pages (zh, uk, pl, id, de) regularly make the top 10, and the CIDR calculator led on 11-02. Next step: rank tools over the 7 days and pick depth work for the top 5 |
 | cURL → fetch / Python requests converter | tool | 3 | 3 | Developers paste curl commands with tokens in them — the local angle is strong |
 | JSON diff (semantic, key-order-insensitive) | tool | 2 | 2 | The text differ already exists; reuse its rendering |
 | Timezone converter / meeting planner | tool | 2 | 2 | `Intl` does the work; no tz database needed |
@@ -34,14 +34,15 @@ _(empty — humans: put a line here to steer the next run)_
 | Sidebar header targets (logo link, language/theme/GitHub buttons) under 24px in Lighthouse `target-size` | quality | 1 | 1 | 11-01; they measure 30×23 |
 | Update the OG image / README tool count when the number of tools changes | housekeeping | 1 | 1 | `pnpm brand:assets`; see docs/deployment.md. Done for 46 on 10-29 |
 | JWT follow-ups: decode JWE headers (5 segments) with a clear message; a `/chain` preset "verify a JWT against a JWKS" is not possible (ops are single-input) — instead consider an `aud`/`iss` expectation field in Verify | tool | 1 | 1 | From building the 10-31 change |
-| CIDR calculator follow-ups: a pipeline op (range → CIDR list) and multi-line input (aggregate/summarize a list of blocks) | tool | 1 | 1 | Aggregation is the next most-asked subnet job after range → CIDR |
+| CIDR calculator follow-ups: a pipeline op (list → aggregated CIDRs, now that `aggregateCidrs` exists); show which input lines were absorbed by others | tool | 1 | 1 | List mode + exclusions shipped 11-03. CIDR pages were the top tool pages on 11-02 (26 human views across 5 locales) |
 
 ## Done
 
 | Date | Item | PR |
 | --- | --- | --- |
-| 2026-11-02 | Chmod calculator (octal/rwx/ls -l/symbolic/umask, grid, warnings, Smart Paste) — open, waiting on #31 | [#33](https://github.com/noobnooc/onlinetools.dev/pull/33) |
-| 2026-11-01 | Lighthouse/a11y pass on 7 top pages: light-theme contrast, in-text link underlines, language button name, smaller tool-load layout shift | [#32](https://github.com/noobnooc/onlinetools.dev/pull/32) (open, stacked on #30, waiting on #31) |
+| 2026-11-03 | CIDR calculator list mode: merge blocks/addresses/ranges, Exclude box (WireGuard AllowedIPs), per-line errors, Smart Paste for lists, 18-locale strings + FAQ | (this run's PR) |
+| 2026-11-02 | Chmod calculator (octal/rwx/ls -l/symbolic/umask, grid, warnings, Smart Paste) — merged by the owner 11-03 together with #30 and #32 | [#33](https://github.com/noobnooc/onlinetools.dev/pull/33) |
+| 2026-11-01 | Lighthouse/a11y pass on 7 top pages: light-theme contrast, in-text link underlines, language button name, smaller tool-load layout shift | [#32](https://github.com/noobnooc/onlinetools.dev/pull/32) (landed via #33) |
 | 2026-10-31 | JWT tool: JWK/JWKS verify, exp/nbf check, PS/ES512/EdDSA, header fields, key generation, algorithm-confusion guard; honest copy in 18 locales | [#30](https://github.com/noobnooc/onlinetools.dev/pull/30) |
 | 2026-10-31 | HSTS step 1 (max-age 1 day) | (Cloudflare API, see cloudflare-changes.md) |
 | 2026-10-30 | About/FAQ for the CIDR calculator + Background Remover in 16 more locales; locale-aware sentence stop in meta descriptions | [#29](https://github.com/noobnooc/onlinetools.dev/pull/29) |
