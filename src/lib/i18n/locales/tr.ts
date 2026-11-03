@@ -334,7 +334,7 @@ const tr: Messages = {
 		jwtNotBefore: 'Şundan önce geçersiz',
 		jwtLifetime: 'Ömür',
 		jwtNote:
-			'Çözme yalnızca token’ı okur — imzayı doğrulamaz. İmzaları sunucu tarafında, veren tarafın anahtarlarıyla doğrulayın.',
+			'Çözme yalnızca token’ı okur — bunu herkes yapabilir. İmzayı bir gizli anahtar, açık anahtar veya JWKS ile denetlemek için Doğrula’ya geçin.',
 		loremUnit: 'Birim',
 		loremWords: 'Kelime',
 		loremSentences: 'Cümle',
@@ -506,6 +506,34 @@ const tr: Messages = {
 		cidrOutside: 'Blok dışında',
 		cidrBlocks: '{n} CIDR bloğu',
 		cidrEmpty: 'Ayrıntılar burada görünür — 10.0.0.0/16 veya 10.0.0.1 - 10.0.0.50 gibi bir aralık deneyin',
+
+		// Chmod calculator
+		chmInput: 'Mod, ls -l dizesi, chmod komutu veya umask',
+		chmGrid: 'İzin bitleri',
+		chmOwner: 'Sahip (u)',
+		chmGroup: 'Grup (g)',
+		chmOther: 'Diğerleri (o)',
+		chmRead: 'Okuma',
+		chmWrite: 'Yazma',
+		chmExec: 'Çalıştırma',
+		chmSpecial: 'Özel',
+		chmSetuid: 'Setuid',
+		chmSetgid: 'Setgid',
+		chmSticky: 'Sticky',
+		chmOctal: 'Sekizli',
+		chmSymbolic: 'Sembolik',
+		chmCommand: 'Komut',
+		chmCommandSym: 'Komut (sembolik)',
+		chmBase: 'Başlangıç',
+		chmDirectory: 'Hedef bir dizin',
+		chmUmaskFile: 'Yeni dosyalar',
+		chmUmaskDir: 'Yeni dizinler',
+		chmWarnWorld: 'Diğerleri yazabilir: sistemdeki her kullanıcı bu dosyayı değiştirebilir veya yerine başkasını koyabilir.',
+		chmWarnSetuid: 'Setuid: çalıştırılabilir dosya, çağıranın değil sahibinin yetkileriyle çalışır.',
+		chmWarnSetgid: 'Setgid: dosyanın grubuyla çalışır; bir dizinde yeni dosyalar dizinin grubunu devralır.',
+		chmWarnSpecialNoExec: 'Çalıştırma izni olmadan özel bir bit ayarlanmış (S veya T olarak gösterilir); bu genellikle bir hatadır.',
+		chmWarnOwnerLess: 'Sahibin izinleri grup veya diğerlerinden az. Rakam sırasını kontrol edin.',
+		chmEmpty: '755, rwxr-xr-x veya g+w yazın ya da yukarıdaki kutuları işaretleyin',
 		hbFormat: 'Baytlar şu biçimde',
 		hbSep: 'Ayırıcı',
 		hbSpace: 'Boşluk',
@@ -545,12 +573,19 @@ const tr: Messages = {
 		jwtAlg: 'Algoritma',
 		jwtPayloadLbl: 'Yük (JSON nesnesi)',
 		jwtSecret: 'Gizli anahtar',
-		jwtPrivKey: 'Özel anahtar (PKCS#8 PEM)',
-		jwtPubKey: 'Gizli anahtar (HS) veya açık anahtar PEM (RS/ES)',
+		jwtPrivKey: 'Özel anahtar (PKCS#8 PEM veya JWK)',
+		jwtPubKey: 'Gizli anahtar (HS) veya açık anahtar — PEM, JWK ya da JWKS',
+		jwtHeaderLbl: 'Ek başlık alanları (isteğe bağlı JSON, ör. kid)',
+		jwtSetIat: 'iat’i şimdiye ayarla',
+		jwtExpIn: 'Sona erme süresi',
+		jwtGenSecret: 'Gizli anahtar üret',
+		jwtGenPair: 'Test anahtar çifti üret',
+		jwtPubForVerify: 'Eşleşen açık anahtar',
+		jwtVerifyThis: 'Bu token’ı doğrula →',
 		jwtSignNote:
-			'İmzalama tarayıcınızdaki WebCrypto üzerinde çalışır — anahtar bu sayfadan hiç çıkmaz. HS algoritmalarında uzun ve rastgele bir gizli anahtar kullanın; kısa olanlar nerede imzalarsanız imzalayın kaba kuvvetle kırılabilir.',
+			'İmzalama tarayıcınızdaki WebCrypto üzerinde çalışır — anahtar bu sayfadan hiç çıkmaz ve üretilen anahtarlar hiçbir yerde saklanmaz. HS algoritmalarında uzun ve rastgele bir gizli anahtar kullanın; kısa olanlar nerede imzalarsanız imzalayın kaba kuvvetle kırılabilir.',
 		jwtVerifyNote:
-			'Doğrulama, verdiğiniz anahtara karşı imzayı yerelde denetler. JWKS uç noktalarını çekmez, aud/iss gibi iddiaları da doğrulamaz — onu sunucu tarafında yapın.',
+			'Doğrulama, imzayı verdiğiniz anahtara, exp ve nbf değerlerini de saatinize göre denetler; hepsi yerelde. JWKS URL’lerini çekmez — verenin jwks_uri adresini açıp JSON’u yapıştırın. aud ve iss değerlerini arka ucunuzda denetleyin.',
 		tsDiff: 'İki tarih arasındaki fark',
 		wcWords: 'Kelime',
 		wcChars: 'Karakter',
@@ -608,8 +643,8 @@ const tr: Messages = {
 			description: 'Unix zaman damgalarını okunur tarihlere ve geri çevirin, göreli zamanla birlikte'
 		},
 		'jwt-decoder': {
-			name: 'JWT Çözücü',
-			description: 'JWT başlığını ve yükünü çözün, süresini denetleyin — tamamen çevrimdışı'
+			name: 'JWT Çözücü ve Kodlayıcı',
+			description: 'JWT’leri çözün, imzalayın ve doğrulayın — HS, RS, PS, ES, EdDSA ve JWKS — tamamen çevrimdışı'
 		},
 		'regex-tester': {
 			name: 'Regex Test Aracı',
@@ -742,6 +777,10 @@ const tr: Messages = {
 		'number-base-converter': {
 			name: 'Sayı Tabanı Dönüştürücü',
 			description: 'Sayıları ikili, sekizli, ondalık, onaltılı ve 36’ya kadar her taban arasında çevirin'
+		},
+		'chmod-calculator': {
+			name: 'Chmod Hesaplayıcı',
+			description: 'Unix izinlerini sekizli, rwx ve sembolik chmod arasında tıklanabilir bir tabloyla dönüştürün'
 		},
 		'cidr-calculator': {
 			name: 'CIDR / Alt Ağ Hesaplayıcı',

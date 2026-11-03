@@ -85,26 +85,31 @@ const TOOL_CONTENT_PL: Record<string, ToolContent> = {
 
 	'jwt-decoder': {
 		about: [
-			'JSON Web Token to trzy segmenty Base64URL — nagłówek, ładunek, podpis — połączone kropkami. Ten dekoder rozdziela token i pokazuje nagłówek oraz ładunek jako sformatowany JSON, zamienia zarejestrowane pola czasowe (iat, exp, nbf) na czytelne daty i od razu mówi, czy token już wygasł.',
-			'Dekodowanie to nie weryfikacja: ładunek dowolnego JWT może odczytać każdy, kto go ma, bo Base64URL jest kodowaniem, a nie szyfrowaniem. To także powód, dla którego wklejanie tokenu na przypadkową stronę jest zwykle złym pomysłem — ta strona stanowi wyjątek, bo dekodowanie odbywa się w całości w Twojej przeglądarce, a token nie jest nigdzie wysyłany. Weryfikacja podpisu kluczem tajnym lub publicznym celowo pozostaje poza zakresem dekodera offline.',
-			'Wiodący przedrostek „Bearer ” jest usuwany automatycznie, więc możesz wkleić token prosto z nagłówka Authorization.'
+			'JSON Web Token to trzy segmenty Base64URL — nagłówek, ładunek, podpis — połączone kropkami. Tryb Dekoduj rozdziela token i pokazuje nagłówek oraz ładunek jako sformatowany JSON, zamienia zarejestrowane pola czasowe (iat, exp, nbf) na czytelne daty i pokazuje, ile z czasu życia tokenu jeszcze zostało.',
+			'Dekodowanie to nie weryfikacja: ładunek JWT może odczytać każdy, kto go ma, bo Base64URL jest kodowaniem, a nie szyfrowaniem. Tryb Zweryfikuj sprawdza podpis za pomocą WebCrypto względem tego, co wkleisz — wspólnego sekretu dla HS256/384/512 albo, dla RS, PS, ES i EdDSA, klucza publicznego jako PEM, pojedynczego JWK lub całego JWKS, w którym klucz wybiera kid tokenu. Sprawdza też exp i nbf względem Twojego zegara i odrzuca klucz publiczny dla tokenu HS — to błąd „pomylenia algorytmów” (algorithm confusion), który stał za kilkoma prawdziwymi podatnościami w bibliotekach.',
+			'Tryb Podpisz buduje token z ładunku JSON i opcjonalnych dodatkowych pól nagłówka, takich jak kid, z przyciskami do wstawienia iat i exp. Potrafi wygenerować losowy sekret lub jednorazową parę kluczy i przekazać podpisany token prosto do weryfikacji razem z pasującym kluczem publicznym — wygodne do testowania API albo konfiguracji JWKS bez pisania skryptu.',
+			'Tokeny, sekrety i klucze prywatne nigdy nie opuszczają strony: dekodowanie, podpisywanie i weryfikacja działają w Twojej przeglądarce, a wiodący przedrostek „Bearer ” jest usuwany, więc możesz wkleić token prosto z nagłówka Authorization.'
 		],
 		faqs: [
 			{
-				q: 'Czy wklejanie tu produkcyjnego tokenu jest bezpieczne?',
-				a: 'Token zostaje w Twojej przeglądarce — ta strona nie wykonuje z Twoimi danymi żadnych żądań sieciowych, co potwierdzisz w zakładce Network w narzędziach deweloperskich. Mimo to przyzwyczaj się traktować żywe tokeny jak hasła: do zrzutów ekranu używaj tokenów wygasłych albo testowych.'
+				q: 'Czy wklejanie tu produkcyjnego tokenu lub klucza jest bezpieczne?',
+				a: 'Nic, co wklejasz, nie jest wysyłane — strona nie wykonuje z Twoimi danymi żadnych żądań sieciowych, co potwierdzisz w zakładce Network w narzędziach deweloperskich, i nic nie jest zapisywane. Mimo to przyzwyczaj się traktować żywe tokeny i klucze do podpisywania jak hasła: gdy to możliwe, używaj tokenów wygasłych i kluczy testowych, a klucz wklejony gdzieś, nad czym nie masz kontroli, wymień na nowy.'
+			},
+			{
+				q: 'Jak zweryfikować token z Auth0, Cognito, Google lub Keycloak?',
+				a: 'Znajdź jwks_uri wystawcy (jest podany w /.well-known/openid-configuration), otwórz go w karcie i wklej cały JSON do pola klucza w trybie Zweryfikuj. Narzędzie wybierze klucz, którego kid pasuje do nagłówka tokenu. Samo nie pobiera tego adresu, żeby nic o Twoim tokenie nie trafiło do sieci.'
 			},
 			{
 				q: 'Dlaczego mój token się nie dekoduje?',
-				a: 'Sprawdź, czy ma dokładnie trzy segmenty rozdzielone kropkami i czy przy kopiowaniu nie wpadły w niego łamania wierszy. Nieprzezroczyste tokeny dostępu (na przykład wiele tokenów GitHuba czy Google) w ogóle nie są JWT — żadne dekodowanie nie otworzy losowego ciągu, który nigdy nie zawierał JSON-a.'
+				a: 'Sprawdź, czy ma dokładnie trzy segmenty rozdzielone kropkami i czy przy kopiowaniu nie wpadły w niego łamania wierszy. Nieprzezroczyste tokeny dostępu (na przykład wiele tokenów OAuth GitHuba czy Google) w ogóle nie są JWT — żadne dekodowanie nie otworzy losowego ciągu, który nigdy nie zawierał JSON-a. Token z pięcioma segmentami to JWE: jest zaszyfrowany i wymaga klucza prywatnego odbiorcy.'
 			},
 			{
 				q: 'Co oznaczają iat, exp i nbf?',
-				a: 'To zarejestrowane pola z RFC 7519, wszystkie w sekundach uniksowych: iat to moment wystawienia tokenu, exp moment, w którym przestaje być ważny, a nbf („not before”) najwcześniejsza chwila, w której wolno go przyjąć. To narzędzie zamienia każde z nich na czytelną datę i porównuje exp z Twoim zegarem.'
+				a: 'To zarejestrowane pola z RFC 7519, wszystkie w sekundach uniksowych: iat to moment wystawienia tokenu, exp moment, w którym przestaje być ważny, a nbf („not before”) najwcześniejsza chwila, w której wolno go przyjąć. Tryb Dekoduj pokazuje każde z nich jako datę; tryb Zweryfikuj obok wyniku sprawdzenia podpisu informuje, że token wygasł lub nie jest jeszcze ważny, bo poprawny podpis na wygasłym tokenie i tak powinien zostać odrzucony.'
 			},
 			{
-				q: 'Czy to narzędzie może zweryfikować podpis?',
-				a: 'Nie — a zielonemu znaczkowi z narzędzia online i tak nie należy ufać przy decyzjach dotyczących bezpieczeństwa. Podpisy weryfikuj w swoim backendzie za pomocą utrzymywanej biblioteki (jose, jsonwebtoken, PyJWT) i rzeczywistych kluczy wystawcy.'
+				q: 'Jakie formaty kluczy działają i co, jeśli mój zostanie odrzucony?',
+				a: 'Klucze prywatne jako PKCS#8 PEM („BEGIN PRIVATE KEY”) lub JWK z prywatnym „d”; klucze publiczne jako SPKI PEM („BEGIN PUBLIC KEY”), JWK lub JWKS. Starsze formaty dostają konkretny komunikat: klucze PKCS#1 („BEGIN RSA PRIVATE KEY”) i SEC1 („BEGIN EC PRIVATE KEY”) przekonwertuj poleceniem openssl pkcs8 -topk8 -nocrypt, a klucz publiczny z certyfikatu wyciągnij poleceniem openssl x509 -pubkey -noout.'
 			}
 		]
 	},

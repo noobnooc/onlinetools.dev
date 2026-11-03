@@ -338,7 +338,7 @@ const pl: Messages = {
 		jwtNotBefore: 'Ważny od',
 		jwtLifetime: 'Czas życia',
 		jwtNote:
-			'Dekodowanie tylko odczytuje token — nie weryfikuje podpisu. Podpisy sprawdzaj po stronie serwera kluczami wystawcy.',
+			'Dekodowanie tylko odczytuje token — każdy może to zrobić. Przełącz na Zweryfikuj, aby sprawdzić podpis względem sekretu, klucza publicznego lub JWKS.',
 		loremUnit: 'Jednostka',
 		loremWords: 'Słowa',
 		loremSentences: 'Zdania',
@@ -510,6 +510,34 @@ const pl: Messages = {
 		cidrOutside: 'Poza blokiem',
 		cidrBlocks: 'bloki CIDR: {n}',
 		cidrEmpty: 'Tu pojawią się szczegóły — spróbuj 10.0.0.0/16 lub zakresu 10.0.0.1 - 10.0.0.50',
+
+		// Chmod calculator
+		chmInput: 'Tryb, ciąg ls -l, polecenie chmod lub umask',
+		chmGrid: 'Bity uprawnień',
+		chmOwner: 'Właściciel (u)',
+		chmGroup: 'Grupa (g)',
+		chmOther: 'Pozostali (o)',
+		chmRead: 'Odczyt',
+		chmWrite: 'Zapis',
+		chmExec: 'Wykonanie',
+		chmSpecial: 'Specjalne',
+		chmSetuid: 'Setuid',
+		chmSetgid: 'Setgid',
+		chmSticky: 'Sticky bit',
+		chmOctal: 'Ósemkowy',
+		chmSymbolic: 'Symboliczny',
+		chmCommand: 'Polecenie',
+		chmCommandSym: 'Polecenie (symboliczne)',
+		chmBase: 'Wychodząc od',
+		chmDirectory: 'Cel jest katalogiem',
+		chmUmaskFile: 'Nowe pliki',
+		chmUmaskDir: 'Nowe katalogi',
+		chmWarnWorld: 'Pozostali mogą zapisywać: każdy użytkownik systemu może zmienić lub podmienić ten plik.',
+		chmWarnSetuid: 'Setuid: plik wykonywalny działa z uprawnieniami właściciela, a nie wywołującego.',
+		chmWarnSetgid: 'Setgid: działa z grupą pliku; w katalogu nowe pliki dziedziczą jego grupę.',
+		chmWarnSpecialNoExec: 'Bit specjalny jest ustawiony bez wykonania (widoczny jako S lub T), co zwykle jest błędem.',
+		chmWarnOwnerLess: 'Właściciel ma mniej uprawnień niż grupa lub pozostali. Sprawdź kolejność cyfr.',
+		chmEmpty: 'Wpisz 755, rwxr-xr-x lub g+w albo zaznacz pola powyżej',
 		hbFormat: 'Bajty jako',
 		hbSep: 'Separator',
 		hbSpace: 'Spacja',
@@ -549,12 +577,19 @@ const pl: Messages = {
 		jwtAlg: 'Algorytm',
 		jwtPayloadLbl: 'Ładunek (obiekt JSON)',
 		jwtSecret: 'Sekret',
-		jwtPrivKey: 'Klucz prywatny (PKCS#8 PEM)',
-		jwtPubKey: 'Sekret (HS) lub klucz publiczny PEM (RS/ES)',
+		jwtPrivKey: 'Klucz prywatny (PKCS#8 PEM lub JWK)',
+		jwtPubKey: 'Sekret (HS) lub klucz publiczny — PEM, JWK lub JWKS',
+		jwtHeaderLbl: 'Dodatkowe pola nagłówka (opcjonalny JSON, np. kid)',
+		jwtSetIat: 'Ustaw iat na teraz',
+		jwtExpIn: 'Wygasa za',
+		jwtGenSecret: 'Wygeneruj sekret',
+		jwtGenPair: 'Wygeneruj testową parę kluczy',
+		jwtPubForVerify: 'Pasujący klucz publiczny',
+		jwtVerifyThis: 'Zweryfikuj ten token →',
 		jwtSignNote:
-			'Podpisywanie działa na WebCrypto w Twojej przeglądarce — klucz nigdy nie opuszcza tej strony. Dla algorytmów HS użyj długiego losowego sekretu; krótkie da się złamać siłowo niezależnie od tego, gdzie podpisujesz.',
+			'Podpisywanie działa na WebCrypto w Twojej przeglądarce — klucz nigdy nie opuszcza tej strony, a wygenerowane klucze nie są nigdzie przechowywane. Dla algorytmów HS użyj długiego losowego sekretu; krótkie da się złamać siłowo niezależnie od tego, gdzie podpisujesz.',
 		jwtVerifyNote:
-			'Weryfikacja sprawdza podpis względem podanego klucza, lokalnie. Nie pobiera punktów końcowych JWKS ani nie sprawdza pól takich jak aud/iss — to zrób po stronie serwera.',
+			'Weryfikacja sprawdza podpis względem podanego klucza, a także exp i nbf względem Twojego zegara — wszystko lokalnie. Nie pobiera adresów URL JWKS — otwórz jwks_uri wystawcy i wklej JSON. Pola aud i iss sprawdzaj w swoim backendzie.',
 		tsDiff: 'Różnica między dwiema datami',
 		wcWords: 'Słowa',
 		wcChars: 'Znaki',
@@ -612,8 +647,8 @@ const pl: Messages = {
 			description: 'Zamieniaj znaczniki unix na czytelne daty i z powrotem, z czasem względnym'
 		},
 		'jwt-decoder': {
-			name: 'Dekoder JWT',
-			description: 'Zdekoduj nagłówek i ładunek JWT, sprawdź wygaśnięcie — w pełni offline'
+			name: 'Dekoder i koder JWT',
+			description: 'Dekoduj, podpisuj i weryfikuj JWT — HS, RS, PS, ES, EdDSA i JWKS — w pełni offline'
 		},
 		'regex-tester': {
 			name: 'Tester wyrażeń regularnych',
@@ -746,6 +781,10 @@ const pl: Messages = {
 		'number-base-converter': {
 			name: 'Konwerter systemów liczbowych',
 			description: 'Zamieniaj liczby między systemem binarnym, ósemkowym, dziesiętnym, szesnastkowym i dowolnym do 36'
+		},
+		'chmod-calculator': {
+			name: 'Kalkulator chmod',
+			description: 'Przeliczaj uprawnienia Unix między zapisem ósemkowym, rwx i symbolicznym chmod, z klikalną siatką'
 		},
 		'cidr-calculator': {
 			name: 'Kalkulator CIDR / podsieci',

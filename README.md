@@ -4,7 +4,7 @@
 
 # onlinetools.dev
 
-**46 developer tools that run entirely in your browser.**
+**47 developer tools that run entirely in your browser.**
 No upload, no login, no ads, no trackers — and you can verify it.
 
 [**onlinetools.dev**](https://onlinetools.dev) · [Why this exists](https://onlinetools.dev/about) · [Changelog](https://onlinetools.dev/changelog) · [Contributing](CONTRIBUTING.md)
@@ -63,7 +63,7 @@ That single constraint shapes everything else:
 | Tool | What it does |
 | --- | --- |
 | [Base64 Encode / Decode](https://onlinetools.dev/t/base64-decode) | Encode text to Base64 or decode Base64 to text, URL-safe included |
-| [JWT Decoder](https://onlinetools.dev/t/jwt-decoder) | Decode JWT header and payload, check expiry — fully offline |
+| [JWT Decoder & Encoder](https://onlinetools.dev/t/jwt-decoder) | Decode, sign and verify JWTs — HS, RS, PS, ES, EdDSA and JWKS — fully offline |
 | [URL Encode / Decode](https://onlinetools.dev/t/url-encode-decode) | Percent-encode or decode URL components and query strings |
 | [HTML Entities Encode / Decode](https://onlinetools.dev/t/html-entities) | Escape text for HTML or decode `&`-style entities back to characters |
 | [Unicode Character Inspector](https://onlinetools.dev/t/unicode-inspector) | See code points, UTF-8/UTF-16 bytes and escapes for every character |
@@ -116,7 +116,7 @@ That single constraint shapes everything else:
 </details>
 
 <details>
-<summary><b>Web</b> (5)</summary>
+<summary><b>Web</b> (6)</summary>
 
 | Tool | What it does |
 | --- | --- |
@@ -125,6 +125,7 @@ That single constraint shapes everything else:
 | [Color Converter](https://onlinetools.dev/t/color-converter) | Convert colors between HEX, RGB, HSL and OKLCH with live preview |
 | [User-Agent Parser](https://onlinetools.dev/t/user-agent-parser) | Identify browser, engine, OS and device from a User-Agent string |
 | [CIDR / Subnet Calculator](https://onlinetools.dev/t/cidr-calculator) | Work out network, broadcast, mask and host range for any IPv4 or IPv6 CIDR block |
+| [Chmod Calculator](https://onlinetools.dev/t/chmod-calculator) | Convert Unix permissions between octal, rwx and symbolic chmod, with a clickable grid |
 
 </details>
 

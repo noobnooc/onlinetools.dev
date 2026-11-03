@@ -309,7 +309,7 @@ const fr: Messages = {
 		jwtExpires: 'Expire',
 		jwtNotBefore: 'Pas avant',
 		jwtLifetime: 'Durée de vie',
-		jwtNote: 'Le décodage ne fait que lire le jeton — il ne vérifie pas la signature. Vérifiez les signatures côté serveur avec les clés de l’émetteur.',
+		jwtNote: 'Le décodage ne fait que lire le jeton — n’importe qui peut le faire. Passez à Vérifier pour contrôler la signature avec un secret, une clé publique ou un JWKS.',
 		loremUnit: 'Unité',
 		loremWords: 'Mots',
 		loremSentences: 'Phrases',
@@ -499,6 +499,34 @@ const fr: Messages = {
 		cidrBlocks: '{n} blocs CIDR',
 		cidrEmpty: 'Les détails s’affichent ici — essayez 10.0.0.0/16 ou une plage comme 10.0.0.1 - 10.0.0.50',
 
+		// Chmod calculator
+		chmInput: 'Mode, chaîne ls -l, commande chmod ou umask',
+		chmGrid: 'Bits de permission',
+		chmOwner: 'Propriétaire (u)',
+		chmGroup: 'Groupe (g)',
+		chmOther: 'Autres (o)',
+		chmRead: 'Lecture',
+		chmWrite: 'Écriture',
+		chmExec: 'Exécution',
+		chmSpecial: 'Spéciaux',
+		chmSetuid: 'Setuid',
+		chmSetgid: 'Setgid',
+		chmSticky: 'Sticky bit',
+		chmOctal: 'Octal',
+		chmSymbolic: 'Symbolique',
+		chmCommand: 'Commande',
+		chmCommandSym: 'Commande (symbolique)',
+		chmBase: 'À partir de',
+		chmDirectory: 'La cible est un répertoire',
+		chmUmaskFile: 'Nouveaux fichiers',
+		chmUmaskDir: 'Nouveaux répertoires',
+		chmWarnWorld: 'Les autres peuvent écrire : n’importe quel utilisateur du système peut modifier ou remplacer ce fichier.',
+		chmWarnSetuid: 'Setuid : un exécutable s’exécute avec les privilèges de son propriétaire, pas de l’appelant.',
+		chmWarnSetgid: 'Setgid : s’exécute avec le groupe du fichier ; sur un répertoire, les nouveaux fichiers héritent de son groupe.',
+		chmWarnSpecialNoExec: 'Un bit spécial est activé sans exécution (affiché S ou T), ce qui est généralement une erreur.',
+		chmWarnOwnerLess: 'Le propriétaire a moins de permissions que le groupe ou les autres. Vérifiez l’ordre des chiffres.',
+		chmEmpty: 'Saisissez 755, rwxr-xr-x ou g+w, ou cochez les cases ci-dessus',
+
 		// Text ↔ hex/binary
 		hbFormat: 'Octets en',
 		hbSep: 'Séparateur',
@@ -546,10 +574,17 @@ const fr: Messages = {
 		jwtAlg: 'Algorithme',
 		jwtPayloadLbl: 'Payload (objet JSON)',
 		jwtSecret: 'Secret',
-		jwtPrivKey: 'Clé privée (PEM PKCS#8)',
-		jwtPubKey: 'Secret (HS) ou clé publique PEM (RS/ES)',
-		jwtSignNote: 'La signature s’exécute sur WebCrypto dans votre navigateur — la clé ne quitte jamais cette page. Pour les algorithmes HS, utilisez un long secret aléatoire ; les secrets courts se cassent par force brute, où que vous signiez.',
-		jwtVerifyNote: 'La vérification contrôle la signature contre la clé fournie, localement. Elle n’interroge pas de points de terminaison JWKS et ne valide pas les claims comme aud/iss — faites-le côté serveur.',
+		jwtPrivKey: 'Clé privée (PEM PKCS#8 ou JWK)',
+		jwtPubKey: 'Secret (HS) ou clé publique — PEM, JWK ou JWKS',
+		jwtHeaderLbl: 'Champs d’en-tête supplémentaires (JSON facultatif, p. ex. kid)',
+		jwtSetIat: 'Définir iat à maintenant',
+		jwtExpIn: 'Expire dans',
+		jwtGenSecret: 'Générer un secret',
+		jwtGenPair: 'Générer une paire de clés de test',
+		jwtPubForVerify: 'Clé publique correspondante',
+		jwtVerifyThis: 'Vérifier ce jeton →',
+		jwtSignNote: 'La signature s’exécute sur WebCrypto dans votre navigateur — la clé ne quitte jamais cette page, et les clés générées ne sont stockées nulle part. Pour les algorithmes HS, utilisez un long secret aléatoire ; les secrets courts se cassent par force brute, où que vous signiez.',
+		jwtVerifyNote: 'La vérification contrôle la signature contre la clé fournie, ainsi que exp et nbf par rapport à votre horloge, le tout localement. Elle ne récupère pas les URL JWKS — ouvrez le jwks_uri de l’émetteur et collez le JSON. Vérifiez aud et iss dans votre backend.',
 
 		// Timestamp extras
 		tsDiff: 'Différence entre deux dates'
@@ -580,8 +615,8 @@ const fr: Messages = {
 			description: 'Convertissez les timestamps Unix en dates lisibles et inversement, avec temps relatif'
 		},
 		'jwt-decoder': {
-			name: 'Décodeur JWT',
-			description: 'Décodez l’en-tête et la charge utile d’un JWT, vérifiez l’expiration — hors ligne'
+			name: 'Décodeur et encodeur JWT',
+			description: 'Décodez, signez et vérifiez des JWT — HS, RS, PS, ES, EdDSA et JWKS — hors ligne'
 		},
 		'regex-tester': {
 			name: 'Testeur de regex',
@@ -734,6 +769,10 @@ const fr: Messages = {
 		'number-base-converter': {
 			name: 'Convertisseur de bases numériques',
 			description: 'Convertissez des nombres entre binaire, octal, décimal, hex et toute base jusqu’à 36'
+		},
+		'chmod-calculator': {
+			name: 'Calculateur chmod',
+			description: 'Convertissez les permissions Unix entre octal, rwx et chmod symbolique, avec une grille cliquable'
 		},
 		'cidr-calculator': {
 			name: 'Calculateur CIDR / de sous-réseau',

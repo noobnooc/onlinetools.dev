@@ -103,7 +103,7 @@ describe('isLikelyJwt', () => {
 
 /* ---------- sign & verify ---------- */
 
-import { signJwt, verifyJwt } from './jwt';
+import { signJwt, verifyJwt, stampTimeClaims, generateSecret, generateKeyPair, parseJwks, SIGN_ALGS, isHmacAlg } from './jwt';
 
 const PAYLOAD = '{"sub": "123", "name": "Ada"}';
 
@@ -121,7 +121,7 @@ describe('signJwt / verifyJwt HS*', () => {
 			const good = await verifyJwt(signed.value, 'secret');
 			expect(good).toEqual({
 				ok: true,
-				value: { valid: true, alg: 'HS256', detail: 'Signature is valid for the supplied key' }
+				value: { valid: true, alg: 'HS256', time: null, detail: 'Signature is valid for the supplied key' }
 			});
 			const bad = await verifyJwt(signed.value, 'wrong');
 			expect(bad.ok && bad.value.valid === false).toBe(true);
@@ -193,5 +193,203 @@ describe('signJwt / verifyJwt asymmetric', () => {
 			const r = await verifyJwt(`${header.value}.${payload.value}.`, 'x');
 			expect(r.ok && r.value.valid === false && r.value.detail.includes('none')).toBe(true);
 		}
+	});
+});
+
+describe('signJwt header', () => {
+	it('merges a custom header and keeps alg first', async () => {
+		const signed = await signJwt(PAYLOAD, 'HS256', 'secret', '{"kid": "key-1", "typ": "at+jwt"}');
+		expect(signed.ok).toBe(true);
+		if (signed.ok) {
+			const d = decodeJwt(signed.value);
+			expect(d.ok && d.value.header).toEqual({ alg: 'HS256', typ: 'at+jwt', kid: 'key-1' });
+			expect(d.ok && Object.keys(d.value.header)[0]).toBe('alg');
+		}
+	});
+	it('rejects a header whose alg disagrees with the selected one', async () => {
+		const r = await signJwt(PAYLOAD, 'HS256', 'secret', '{"alg": "RS256"}');
+		expect(r.ok).toBe(false);
+		if (!r.ok) expect(r.error).toContain('RS256');
+	});
+	it('rejects a header that is not a JSON object', async () => {
+		expect((await signJwt(PAYLOAD, 'HS256', 'secret', '[1]')).ok).toBe(false);
+		expect((await signJwt(PAYLOAD, 'HS256', 'secret', '{nope')).ok).toBe(false);
+	});
+	it('signs non-ASCII claims as UTF-8', async () => {
+		const signed = await signJwt('{"name": "李雷 🎉"}', 'HS256', 'secret');
+		expect(signed.ok).toBe(true);
+		if (signed.ok) {
+			const d = decodeJwt(signed.value);
+			expect(d.ok && d.value.payload.name).toBe('李雷 🎉');
+		}
+	});
+});
+
+describe('every asymmetric algorithm round-trips', () => {
+	for (const alg of SIGN_ALGS.filter((a) => !isHmacAlg(a))) {
+		it(`${alg}: PEM sign, PEM and JWK verify`, async () => {
+			const pair = await generateKeyPair(alg);
+			expect(pair.ok).toBe(true);
+			if (!pair.ok) return;
+			expect(pair.value.privatePem).toMatch(/^-----BEGIN PRIVATE KEY-----\n/);
+			expect(pair.value.publicPem).toMatch(/-----END PUBLIC KEY-----$/);
+			const signed = await signJwt(PAYLOAD, alg, pair.value.privatePem);
+			expect(signed.ok).toBe(true);
+			if (!signed.ok) return;
+			const viaPem = await verifyJwt(signed.value, pair.value.publicPem);
+			expect(viaPem.ok && viaPem.value.valid).toBe(true);
+			const viaJwk = await verifyJwt(signed.value, pair.value.publicJwk);
+			expect(viaJwk.ok && viaJwk.value.valid).toBe(true);
+			const other = await generateKeyPair(alg);
+			if (other.ok) {
+				const wrong = await verifyJwt(signed.value, other.value.publicPem);
+				expect(wrong.ok && wrong.value.valid).toBe(false);
+			}
+		});
+	}
+	it('refuses to generate a key pair for HS algorithms', async () => {
+		expect((await generateKeyPair('HS256')).ok).toBe(false);
+	});
+});
+
+describe('JWK and JWKS keys', () => {
+	async function ecPair(kid?: string) {
+		const pair = await crypto.subtle.generateKey({ name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign', 'verify']);
+		const priv = { ...(await crypto.subtle.exportKey('jwk', pair.privateKey)), ...(kid ? { kid } : {}) };
+		const pub = { ...(await crypto.subtle.exportKey('jwk', pair.publicKey)), ...(kid ? { kid } : {}) };
+		return { priv, pub };
+	}
+
+	it('signs with a private JWK and copies its kid into the header', async () => {
+		const { priv, pub } = await ecPair('k1');
+		const signed = await signJwt(PAYLOAD, 'ES256', JSON.stringify(priv));
+		expect(signed.ok).toBe(true);
+		if (!signed.ok) return;
+		const d = decodeJwt(signed.value);
+		expect(d.ok && d.value.header.kid).toBe('k1');
+		const v = await verifyJwt(signed.value, JSON.stringify(pub));
+		expect(v.ok && v.value.valid && v.value.kid).toBe('k1');
+	});
+	it('picks the JWKS key by kid', async () => {
+		const a = await ecPair('a');
+		const b = await ecPair('b');
+		const signed = await signJwt(PAYLOAD, 'ES256', JSON.stringify(b.priv));
+		expect(signed.ok).toBe(true);
+		if (!signed.ok) return;
+		const v = await verifyJwt(signed.value, JSON.stringify({ keys: [a.pub, b.pub] }));
+		expect(v.ok && v.value.valid).toBe(true);
+		expect(v.ok && v.value.detail).toContain('kid "b"');
+	});
+	it('reports a kid that is not in the JWKS', async () => {
+		const a = await ecPair('a');
+		const b = await ecPair('b');
+		const c = await ecPair('c');
+		const signed = await signJwt(PAYLOAD, 'ES256', JSON.stringify(c.priv));
+		if (!signed.ok) throw new Error(signed.error);
+		const v = await verifyJwt(signed.value, JSON.stringify({ keys: [a.pub, b.pub] }));
+		expect(v.ok).toBe(false);
+		if (!v.ok) expect(v.error).toContain('"c"');
+	});
+	it('tries every compatible key when the token has no kid', async () => {
+		const a = await ecPair();
+		const b = await ecPair();
+		const signed = await signJwt(PAYLOAD, 'ES256', JSON.stringify(b.priv));
+		if (!signed.ok) throw new Error(signed.error);
+		const v = await verifyJwt(signed.value, JSON.stringify({ keys: [a.pub, b.pub] }));
+		expect(v.ok && v.value.valid).toBe(true);
+	});
+	it('verifies with a private JWK by using only its public half', async () => {
+		const { priv } = await ecPair();
+		const signed = await signJwt(PAYLOAD, 'ES256', JSON.stringify(priv));
+		if (!signed.ok) throw new Error(signed.error);
+		const v = await verifyJwt(signed.value, JSON.stringify(priv));
+		expect(v.ok && v.value.valid).toBe(true);
+	});
+	it('explains a public JWK used for signing', async () => {
+		const { pub } = await ecPair();
+		const r = await signJwt(PAYLOAD, 'ES256', JSON.stringify(pub));
+		expect(r.ok).toBe(false);
+		if (!r.ok) expect(r.error).toContain('"d"');
+	});
+	it('explains a key of the wrong type or curve', async () => {
+		const { priv } = await ecPair();
+		const rsa = await signJwt(PAYLOAD, 'RS256', JSON.stringify(priv));
+		expect(!rsa.ok && rsa.error).toContain('"RSA"');
+		const curve = await signJwt(PAYLOAD, 'ES384', JSON.stringify(priv));
+		expect(!curve.ok && curve.error).toContain('P-384');
+	});
+	it('signs and verifies HS256 with an oct JWK', async () => {
+		const k = { kty: 'oct', k: 'c2VjcmV0' }; // "secret"
+		const signed = await signJwt(PAYLOAD, 'HS256', JSON.stringify(k));
+		if (!signed.ok) throw new Error(signed.error);
+		const v = await verifyJwt(signed.value, 'secret');
+		expect(v.ok && v.value.valid).toBe(true);
+	});
+	it('treats JSON-looking text without kty as a plain HS secret', async () => {
+		const signed = await signJwt(PAYLOAD, 'HS256', '{"not":"a jwk"}');
+		if (!signed.ok) throw new Error(signed.error);
+		const v = await verifyJwt(signed.value, '{"not":"a jwk"}');
+		expect(v.ok && v.value.valid).toBe(true);
+	});
+	it('parseJwks distinguishes JWK, JWKS, and non-JSON', () => {
+		expect(parseJwks('-----BEGIN PUBLIC KEY-----')).toBeNull();
+		expect(parseJwks('{"kty":"EC"}')).toEqual({ ok: true, value: [{ kty: 'EC' }] });
+		expect(parseJwks('{"keys":[{"kty":"RSA"},{"x":1}]}')).toEqual({ ok: true, value: [{ kty: 'RSA' }] });
+		expect(parseJwks('{"keys":[]}')?.ok).toBe(false);
+		expect(parseJwks('{"foo":1}')?.ok).toBe(false);
+	});
+});
+
+describe('verifyJwt safety checks', () => {
+	it('refuses a public key for an HS token (algorithm confusion)', async () => {
+		const signed = await signJwt(PAYLOAD, 'HS256', 'secret');
+		if (!signed.ok) throw new Error(signed.error);
+		const r = await verifyJwt(signed.value, '-----BEGIN PUBLIC KEY-----\nAAAA\n-----END PUBLIC KEY-----');
+		expect(r.ok).toBe(false);
+		if (!r.ok) expect(r.error).toContain('algorithm confusion');
+	});
+	it('treats alg "NONE" in any case as unsigned', async () => {
+		const header = encodeBase64(JSON.stringify({ alg: 'NONE' }), true);
+		const payload = encodeBase64('{}', true);
+		if (!header.ok || !payload.ok) throw new Error('encode');
+		const r = await verifyJwt(`${header.value}.${payload.value}.`, 'x');
+		expect(r.ok && r.value.valid).toBe(false);
+	});
+	it('checks exp and nbf against the injected clock, with leeway', async () => {
+		const signed = await signJwt('{"nbf": 1000, "exp": 2000}', 'HS256', 'secret');
+		if (!signed.ok) throw new Error(signed.error);
+		const early = await verifyJwt(signed.value, 'secret', 999_000);
+		expect(early.ok && early.value.valid && early.value.time?.status).toBe('not-yet-valid');
+		const during = await verifyJwt(signed.value, 'secret', 1500_000);
+		expect(during.ok && during.value.time).toEqual({ status: 'ok', message: 'exp: valid until 1970-01-01T00:33:20Z' });
+		const late = await verifyJwt(signed.value, 'secret', 2001_000);
+		expect(late.ok && late.value.valid && late.value.time?.status).toBe('expired');
+		const lenient = await verifyJwt(signed.value, 'secret', 2001_000, 60);
+		expect(lenient.ok && lenient.value.time?.status).toBe('ok');
+	});
+});
+
+describe('stampTimeClaims', () => {
+	it('sets iat and exp from the clock and keeps other claims', () => {
+		const r = stampTimeClaims('{"sub":"1","iat":1}', 1_700_000_000_500, 3600);
+		expect(r.ok && JSON.parse(r.value)).toEqual({ sub: '1', iat: 1_700_000_000, exp: 1_700_003_600 });
+	});
+	it('can set only iat, and starts from {} when empty', () => {
+		const r = stampTimeClaims('', 1_000_000, null);
+		expect(r.ok && JSON.parse(r.value)).toEqual({ iat: 1000 });
+	});
+	it('rejects invalid JSON', () => {
+		expect(stampTimeClaims('{', 0, null).ok).toBe(false);
+	});
+});
+
+describe('generateSecret', () => {
+	it('uses as many random bytes as the hash output', () => {
+		const zeros = () => {};
+		expect(generateSecret('HS256', zeros)).toBe('A'.repeat(43));
+		expect(generateSecret('HS512', zeros)).toHaveLength(86);
+		const a = generateSecret('HS256');
+		expect(a).toMatch(/^[A-Za-z0-9_-]{43}$/);
+		expect(generateSecret('HS256')).not.toBe(a);
 	});
 });

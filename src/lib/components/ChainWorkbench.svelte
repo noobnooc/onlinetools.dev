@@ -337,7 +337,7 @@
 	<div class="relative min-h-32 rounded-(--radius-lg) border border-line bg-surface p-4">
 		<PlusCorners />
 		{#if steps.length === 0}
-			<p class="font-mono text-[13px] text-dim/60">{t('chainEmpty')}</p>
+			<p class="font-mono text-[13px] text-dim">{t('chainEmpty')}</p>
 		{:else}
 			<pre
 				class="overflow-x-auto font-mono text-[13px] leading-6 whitespace-pre-wrap text-fg">{run.output}</pre>

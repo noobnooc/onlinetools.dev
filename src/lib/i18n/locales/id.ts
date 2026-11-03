@@ -337,7 +337,7 @@ const id: Messages = {
 		jwtNotBefore: 'Berlaku mulai',
 		jwtLifetime: 'Masa berlaku',
 		jwtNote:
-			'Pendekodean hanya membaca token — ia tidak memverifikasi tanda tangan. Verifikasi tanda tangan di sisi server dengan kunci milik penerbitnya.',
+			'Pendekodean hanya membaca token — siapa pun bisa melakukannya. Beralihlah ke Verifikasi untuk memeriksa tanda tangan terhadap kunci rahasia, kunci publik, atau JWKS.',
 		loremUnit: 'Satuan',
 		loremWords: 'Kata',
 		loremSentences: 'Kalimat',
@@ -509,6 +509,34 @@ const id: Messages = {
 		cidrOutside: 'Di luar blok',
 		cidrBlocks: '{n} blok CIDR',
 		cidrEmpty: 'Detail muncul di sini — coba 10.0.0.0/16 atau rentang seperti 10.0.0.1 - 10.0.0.50',
+
+		// Chmod calculator
+		chmInput: 'Mode, string ls -l, perintah chmod, atau umask',
+		chmGrid: 'Bit izin',
+		chmOwner: 'Pemilik (u)',
+		chmGroup: 'Grup (g)',
+		chmOther: 'Lainnya (o)',
+		chmRead: 'Baca',
+		chmWrite: 'Tulis',
+		chmExec: 'Eksekusi',
+		chmSpecial: 'Khusus',
+		chmSetuid: 'Setuid',
+		chmSetgid: 'Setgid',
+		chmSticky: 'Sticky',
+		chmOctal: 'Oktal',
+		chmSymbolic: 'Simbolik',
+		chmCommand: 'Perintah',
+		chmCommandSym: 'Perintah (simbolik)',
+		chmBase: 'Mulai dari',
+		chmDirectory: 'Target berupa direktori',
+		chmUmaskFile: 'File baru',
+		chmUmaskDir: 'Direktori baru',
+		chmWarnWorld: 'Lainnya bisa menulis: pengguna mana pun di sistem dapat mengubah atau mengganti file ini.',
+		chmWarnSetuid: 'Setuid: file executable berjalan dengan hak pemiliknya, bukan pemanggilnya.',
+		chmWarnSetgid: 'Setgid: berjalan dengan grup file; pada direktori, file baru mewarisi grupnya.',
+		chmWarnSpecialNoExec: 'Bit khusus aktif tanpa izin eksekusi (ditampilkan sebagai S atau T), biasanya ini kesalahan.',
+		chmWarnOwnerLess: 'Pemilik punya izin lebih sedikit daripada grup atau lainnya. Periksa urutan digit.',
+		chmEmpty: 'Ketik 755, rwxr-xr-x atau g+w, atau centang kotak di atas',
 		hbFormat: 'Bita sebagai',
 		hbSep: 'Pemisah',
 		hbSpace: 'Spasi',
@@ -548,12 +576,19 @@ const id: Messages = {
 		jwtAlg: 'Algoritme',
 		jwtPayloadLbl: 'Payload (objek JSON)',
 		jwtSecret: 'Kunci rahasia',
-		jwtPrivKey: 'Kunci privat (PKCS#8 PEM)',
-		jwtPubKey: 'Kunci rahasia (HS) atau kunci publik PEM (RS/ES)',
+		jwtPrivKey: 'Kunci privat (PKCS#8 PEM atau JWK)',
+		jwtPubKey: 'Kunci rahasia (HS) atau kunci publik — PEM, JWK, atau JWKS',
+		jwtHeaderLbl: 'Field header tambahan (JSON opsional, mis. kid)',
+		jwtSetIat: 'Setel iat ke sekarang',
+		jwtExpIn: 'Kedaluwarsa dalam',
+		jwtGenSecret: 'Buat kunci rahasia',
+		jwtGenPair: 'Buat pasangan kunci uji',
+		jwtPubForVerify: 'Kunci publik pasangannya',
+		jwtVerifyThis: 'Verifikasi token ini →',
 		jwtSignNote:
-			'Penandatanganan berjalan di atas WebCrypto di browser Anda — kuncinya tidak pernah meninggalkan halaman ini. Untuk algoritme HS gunakan kunci rahasia yang panjang dan acak; yang pendek bisa ditebak paksa di mana pun Anda menandatanganinya.',
+			'Penandatanganan berjalan di atas WebCrypto di browser Anda — kuncinya tidak pernah meninggalkan halaman ini, dan kunci yang dibuat tidak disimpan di mana pun. Untuk algoritme HS gunakan kunci rahasia yang panjang dan acak; yang pendek bisa ditebak paksa di mana pun Anda menandatanganinya.',
 		jwtVerifyNote:
-			'Verifikasi memeriksa tanda tangan terhadap kunci yang Anda berikan, secara lokal. Ia tidak mengambil endpoint JWKS maupun memeriksa klaim seperti aud/iss — lakukan itu di sisi server.',
+			'Verifikasi memeriksa tanda tangan terhadap kunci yang Anda berikan, serta exp dan nbf terhadap jam Anda, semuanya secara lokal. Ia tidak mengambil URL JWKS — buka jwks_uri milik penerbit lalu tempel JSON-nya. Periksa aud dan iss di backend Anda.',
 		tsDiff: 'Selisih antara dua tanggal',
 		wcWords: 'Kata',
 		wcChars: 'Karakter',
@@ -611,8 +646,8 @@ const id: Messages = {
 			description: 'Ubah stempel waktu unix menjadi tanggal yang terbaca dan sebaliknya, dengan waktu relatif'
 		},
 		'jwt-decoder': {
-			name: 'Dekoder JWT',
-			description: 'Dekode header dan payload JWT, periksa masa berlakunya — sepenuhnya offline'
+			name: 'Dekoder & Enkoder JWT',
+			description: 'Dekode, tanda tangani, dan verifikasi JWT — HS, RS, PS, ES, EdDSA, dan JWKS — sepenuhnya offline'
 		},
 		'regex-tester': {
 			name: 'Penguji Regex',
@@ -745,6 +780,10 @@ const id: Messages = {
 		'number-base-converter': {
 			name: 'Konverter Basis Bilangan',
 			description: 'Konversi bilangan antara biner, oktal, desimal, heksadesimal, dan basis apa pun hingga 36'
+		},
+		'chmod-calculator': {
+			name: 'Kalkulator Chmod',
+			description: 'Konversi izin Unix antara oktal, rwx, dan chmod simbolik, dengan grid yang bisa diklik'
 		},
 		'cidr-calculator': {
 			name: 'Kalkulator CIDR / Subnet',

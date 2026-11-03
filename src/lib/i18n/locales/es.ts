@@ -309,7 +309,7 @@ const es: Messages = {
 		jwtExpires: 'Expira',
 		jwtNotBefore: 'No antes de',
 		jwtLifetime: 'Vida útil',
-		jwtNote: 'Decodificar solo lee el token — no verifica la firma. Verifica las firmas en el servidor con las claves del emisor.',
+		jwtNote: 'Decodificar solo lee el token — cualquiera puede hacerlo. Cambia a Verificar para comprobar la firma con un secreto, una clave pública o un JWKS.',
 		loremUnit: 'Unidad',
 		loremWords: 'Palabras',
 		loremSentences: 'Frases',
@@ -499,6 +499,34 @@ const es: Messages = {
 		cidrBlocks: '{n} bloques CIDR',
 		cidrEmpty: 'Los detalles aparecen aquí — prueba 10.0.0.0/16 o un rango como 10.0.0.1 - 10.0.0.50',
 
+		// Chmod calculator
+		chmInput: 'Modo, cadena de ls -l, comando chmod o umask',
+		chmGrid: 'Bits de permiso',
+		chmOwner: 'Propietario (u)',
+		chmGroup: 'Grupo (g)',
+		chmOther: 'Otros (o)',
+		chmRead: 'Lectura',
+		chmWrite: 'Escritura',
+		chmExec: 'Ejecución',
+		chmSpecial: 'Especiales',
+		chmSetuid: 'Setuid',
+		chmSetgid: 'Setgid',
+		chmSticky: 'Sticky bit',
+		chmOctal: 'Octal',
+		chmSymbolic: 'Simbólico',
+		chmCommand: 'Comando',
+		chmCommandSym: 'Comando (simbólico)',
+		chmBase: 'Partiendo de',
+		chmDirectory: 'El destino es un directorio',
+		chmUmaskFile: 'Archivos nuevos',
+		chmUmaskDir: 'Directorios nuevos',
+		chmWarnWorld: 'Otros pueden escribir: cualquier usuario del sistema puede modificar o reemplazar este archivo.',
+		chmWarnSetuid: 'Setuid: un ejecutable se ejecuta con los privilegios de su propietario, no de quien lo invoca.',
+		chmWarnSetgid: 'Setgid: se ejecuta con el grupo del archivo; en un directorio, los archivos nuevos heredan su grupo.',
+		chmWarnSpecialNoExec: 'Hay un bit especial activado sin ejecución (se muestra como S o T), lo que suele ser un error.',
+		chmWarnOwnerLess: 'El propietario tiene menos permisos que el grupo u otros. Revisa el orden de los dígitos.',
+		chmEmpty: 'Escribe 755, rwxr-xr-x o g+w, o marca las casillas de arriba',
+
 		// Text ↔ hex/binary
 		hbFormat: 'Bytes como',
 		hbSep: 'Separador',
@@ -546,10 +574,17 @@ const es: Messages = {
 		jwtAlg: 'Algoritmo',
 		jwtPayloadLbl: 'Payload (objeto JSON)',
 		jwtSecret: 'Secreto',
-		jwtPrivKey: 'Clave privada (PEM PKCS#8)',
-		jwtPubKey: 'Secreto (HS) o clave pública PEM (RS/ES)',
-		jwtSignNote: 'La firma corre sobre WebCrypto en tu navegador — la clave nunca sale de esta página. Para los algoritmos HS usa un secreto aleatorio largo; los cortos ceden a la fuerza bruta se firmen donde se firmen.',
-		jwtVerifyNote: 'La verificación comprueba la firma contra la clave que proporcionas, localmente. No consulta endpoints JWKS ni valida claims como aud/iss — hazlo en el servidor.',
+		jwtPrivKey: 'Clave privada (PEM PKCS#8 o JWK)',
+		jwtPubKey: 'Secreto (HS) o clave pública — PEM, JWK o JWKS',
+		jwtHeaderLbl: 'Campos de cabecera adicionales (JSON opcional, p. ej. kid)',
+		jwtSetIat: 'Fijar iat a ahora',
+		jwtExpIn: 'Expira en',
+		jwtGenSecret: 'Generar secreto',
+		jwtGenPair: 'Generar par de claves de prueba',
+		jwtPubForVerify: 'Clave pública correspondiente',
+		jwtVerifyThis: 'Verificar este token →',
+		jwtSignNote: 'La firma corre sobre WebCrypto en tu navegador — la clave nunca sale de esta página, y las claves generadas no se guardan en ningún sitio. Para los algoritmos HS usa un secreto aleatorio largo; los cortos ceden a la fuerza bruta se firmen donde se firmen.',
+		jwtVerifyNote: 'La verificación comprueba la firma contra la clave que proporcionas, además de exp y nbf contra tu reloj, todo localmente. No descarga URLs de JWKS — abre el jwks_uri del emisor y pega el JSON. Comprueba aud e iss en tu backend.',
 
 		// Timestamp extras
 		tsDiff: 'Diferencia entre dos fechas'
@@ -580,8 +615,8 @@ const es: Messages = {
 			description: 'Convierte timestamps Unix a fechas legibles y al revés, con tiempo relativo'
 		},
 		'jwt-decoder': {
-			name: 'Decodificador de JWT',
-			description: 'Decodifica cabecera y payload del JWT y comprueba la expiración — sin conexión'
+			name: 'Decodificador y codificador de JWT',
+			description: 'Decodifica, firma y verifica JWT — HS, RS, PS, ES, EdDSA y JWKS — sin conexión'
 		},
 		'regex-tester': {
 			name: 'Probador de regex',
@@ -734,6 +769,10 @@ const es: Messages = {
 		'number-base-converter': {
 			name: 'Conversor de bases numéricas',
 			description: 'Convierte números entre binario, octal, decimal, hex y cualquier base hasta 36'
+		},
+		'chmod-calculator': {
+			name: 'Calculadora chmod',
+			description: 'Convierte permisos Unix entre octal, rwx y chmod simbólico, con una cuadrícula interactiva'
 		},
 		'cidr-calculator': {
 			name: 'Calculadora CIDR / de subredes',

@@ -15,13 +15,78 @@
 	<!-- Release notes are English-only content; the surrounding page chrome is localized. -->
 	<div lang="en">
 	<section class="relative border-l border-line pb-8 pl-6">
+		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
+		<h2 class="text-sm font-medium">File permissions, every way they are written</h2>
+		<p class="mt-0.5 font-mono text-xs text-dim">v2026.11.02</p>
+		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
+			<li>
+				New <a href={lp('/t/chmod-calculator')} class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">Chmod
+				Calculator</a>: 755, rwxr-xr-x, an <code>ls -l</code> line or a whole chmod command, converted to
+				every other form, with a clickable grid for owner, group, others and the special bits.
+			</li>
+			<li>
+				Relative expressions like g+w or a+X are applied to a starting mode, following GNU chmod,
+				and <code>umask 027</code> shows what new files and directories will get.
+			</li>
+			<li>
+				Warnings for world-writable modes, setuid/setgid and a capital S or T. Smart Paste now
+				recognizes <code>ls -l</code> columns and chmod commands.
+			</li>
+		</ul>
+	</section>
+
+	<section class="relative border-l border-line pb-8 pl-6">
 		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full bg-accent" aria-hidden="true"></span>
+		<h2 class="text-sm font-medium">Easier to read, steadier to load</h2>
+		<p class="mt-0.5 font-mono text-xs text-dim">v2026.11.01</p>
+		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
+			<li>
+				The footer, breadcrumbs, the "report a problem" link, empty-state hints and a few labels used faded grey
+				text that fell below the WCAG AA contrast ratio in the light theme. They now use the
+				regular secondary color.
+			</li>
+			<li>
+				Links inside sentences are underlined, so they don't rely on color alone, and the
+				language menu's accessible name now includes the language it shows.
+			</li>
+			<li>
+				While a tool loads, its placeholder reserves about as much room as most tools need,
+				so the page below jumps less when the tool appears.
+			</li>
+		</ul>
+	</section>
+
+	<section class="relative border-l border-line pb-8 pl-6">
+		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
+		<h2 class="text-sm font-medium">Sign and verify JWTs with real keys</h2>
+		<p class="mt-0.5 font-mono text-xs text-dim">v2026.10.31</p>
+		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
+			<li>
+				The <a href={lp('/t/jwt-decoder')} class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">JWT Decoder &amp;
+				Encoder</a> now verifies with a JWK or a whole JWKS — paste the JSON from your issuer's
+				jwks_uri and the token's kid picks the key — and reports whether exp and nbf pass.
+			</li>
+			<li>
+				New algorithms: PS256/384/512, ES512 and EdDSA (Ed25519), alongside HS, RS and ES.
+				Sign mode takes extra header fields like kid, stamps iat and exp in one click, and can
+				generate a random secret or a test key pair, then hand the token to Verify.
+			</li>
+			<li>
+				Verify refuses a public key for an HS token instead of quietly reporting a mismatch —
+				that "algorithm confusion" is a classic JWT vulnerability. The page copy, which still
+				said the tool couldn't verify, is rewritten in all eighteen languages.
+			</li>
+		</ul>
+	</section>
+
+	<section class="relative border-l border-line pb-8 pl-6">
+		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
 		<h2 class="text-sm font-medium">Every tool explained in every language</h2>
 		<p class="mt-0.5 font-mono text-xs text-dim">v2026.10.30</p>
 		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
 			<li>
-				The About and FAQ sections of the <a href={lp('/t/cidr-calculator')} class="text-accent hover:underline">CIDR
-				/ Subnet Calculator</a> and the <a href={lp('/t/background-remover')} class="text-accent hover:underline">Background
+				The About and FAQ sections of the <a href={lp('/t/cidr-calculator')} class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">CIDR
+				/ Subnet Calculator</a> and the <a href={lp('/t/background-remover')} class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">Background
 				Remover</a> are now translated into all eighteen languages, so every tool page reads in
 				one language from top to bottom.
 			</li>
@@ -38,7 +103,7 @@
 		<p class="mt-0.5 font-mono text-xs text-dim">v2026.10.29</p>
 		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
 			<li>
-				New <a href={lp('/t/cidr-calculator')} class="text-accent hover:underline">CIDR / Subnet
+				New <a href={lp('/t/cidr-calculator')} class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">CIDR / Subnet
 				Calculator</a>: network and broadcast address, netmask and wildcard, usable host range,
 				exact address counts and the special-purpose range a block belongs to — for IPv4 and IPv6.
 			</li>
@@ -59,7 +124,7 @@
 		<p class="mt-0.5 font-mono text-xs text-dim">v2026.09.14</p>
 		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
 			<li>
-				New <a href={lp('/t/background-remover')} class="text-accent hover:underline">Background
+				New <a href={lp('/t/background-remover')} class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">Background
 				Remover</a>: drop a photo and the subject is cut out automatically — download a transparent
 				PNG or WebP, or flatten it onto a color and export a JPEG, all at the original resolution.
 			</li>
@@ -82,7 +147,7 @@
 		<p class="mt-0.5 font-mono text-xs text-dim">v2026.07.28</p>
 		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
 			<li>
-				New <a href={lp('/t/qr-code-decoder')} class="text-accent hover:underline">QR Code
+				New <a href={lp('/t/qr-code-decoder')} class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">QR Code
 				Decoder</a>: drop, paste or pick any image with a QR code — a screenshot, a ticket, a
 				photo of a poster — and see what's inside, without pointing a phone at your own screen.
 			</li>
@@ -110,7 +175,7 @@
 		<p class="mt-0.5 font-mono text-xs text-dim">v2026.07.24</p>
 		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
 			<li>
-				New <a href={lp('/about')} class="text-accent hover:underline">About</a> page: why this thing
+				New <a href={lp('/about')} class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">About</a> page: why this thing
 				exists, in plain terms — every tool runs in your browser, nothing you paste is uploaded, no
 				ads, no trackers, no login. It has a voice, because a person made it.
 			</li>

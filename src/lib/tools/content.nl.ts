@@ -85,26 +85,31 @@ const TOOL_CONTENT_NL: Record<string, ToolContent> = {
 
 	'jwt-decoder': {
 		about: [
-			'Een JSON Web Token bestaat uit drie Base64URL-segmenten — header, payload, handtekening — verbonden door punten. Deze decoder splitst een token, toont header en payload als geformatteerde JSON, markeert de geregistreerde tijdclaims (iat, exp, nbf) als leesbare datums en vertelt je in één oogopslag of het token verlopen is.',
-			'Decoderen is geen verifiëren: de payload van elk JWT is leesbaar voor wie het token heeft, want Base64URL is een codering, geen versleuteling. Precies daarom is een token in een willekeurige website plakken normaal gesproken een slecht idee — deze pagina is de uitzondering, omdat het decoderen volledig in je browser gebeurt en het token nooit wordt verstuurd. Handtekeningverificatie tegen een geheim of publieke sleutel valt bewust buiten het bestek van de offline decoder.',
-			'Een voorloopvoorvoegsel “Bearer ” wordt automatisch verwijderd, zodat je direct uit een Authorization-header kunt plakken.'
+			'Een JSON Web Token bestaat uit drie Base64URL-segmenten — header, payload, handtekening — verbonden door punten. De modus Decoderen splitst een token, toont header en payload als geformatteerde JSON, zet de geregistreerde tijdclaims (iat, exp, nbf) om in leesbare datums en laat zien hoeveel van de levensduur van het token nog over is.',
+			'Decoderen is geen verifiëren: iedereen die een JWT heeft, kan de payload lezen, want Base64URL is een codering, geen versleuteling. De modus Verifiëren controleert de handtekening met WebCrypto tegen wat je plakt — het gedeelde geheim voor HS256/384/512, of voor RS, PS, ES en EdDSA een publieke sleutel als PEM, één JWK of een hele JWKS, waarbij de kid van het token de sleutel kiest. Daarnaast controleert hij exp en nbf tegen je klok en weigert hij een publieke sleutel voor een HS-token: dat is de “algorithm confusion”-fout achter meerdere echte kwetsbaarheden in bibliotheken.',
+			'De modus Ondertekenen bouwt een token uit een JSON-payload en optionele extra headervelden zoals kid, met knoppen om iat en exp in te vullen. Hij kan een willekeurig geheim of een wegwerpsleutelpaar genereren en het ondertekende token met de bijbehorende publieke sleutel direct doorgeven aan Verifiëren — handig om een API of een JWKS-opzet te testen zonder een script te schrijven.',
+			'Tokens, geheimen en privésleutels verlaten de pagina nooit: decoderen, ondertekenen en verifiëren gebeuren allemaal in je browser, en een voorvoegsel “Bearer ” wordt verwijderd, zodat je direct uit een Authorization-header kunt plakken.'
 		],
 		faqs: [
 			{
-				q: 'Is het veilig om hier een productietoken te plakken?',
-				a: 'Het token blijft in je browser — deze pagina doet geen enkel netwerkverzoek met je invoer, wat je in het netwerktabblad van de developer tools kunt bevestigen. Behandel levende tokens toch als wachtwoorden: gebruik bij voorkeur verlopen of testtokens als je schermafbeeldingen deelt.'
+				q: 'Is het veilig om hier een productietoken of -sleutel te plakken?',
+				a: 'Niets wat je plakt wordt verstuurd — de pagina doet geen enkel netwerkverzoek met je invoer, wat je in het netwerktabblad van de developer tools kunt bevestigen, en er wordt niets opgeslagen. Behandel levende tokens en ondertekeningssleutels toch uit gewoonte als wachtwoorden: gebruik waar mogelijk verlopen tokens en testsleutels, en vervang een sleutel die ergens is geplakt waar je geen controle over hebt.'
+			},
+			{
+				q: 'Hoe verifieer ik een token van Auth0, Cognito, Google of Keycloak?',
+				a: 'Zoek de jwks_uri van de uitgever op (die staat in /.well-known/openid-configuration), open hem in een tabblad en plak de hele JSON in het sleutelveld in de modus Verifiëren. De tool kiest de sleutel waarvan de kid overeenkomt met de header van het token. Hij haalt de URL zelf niet op, zodat niets over je token het netwerk bereikt.'
 			},
 			{
 				q: 'Waarom laat mijn token zich niet decoderen?',
-				a: 'Controleer of het precies drie door punten gescheiden segmenten heeft en geen regeleinden uit een geknipte kopie. Opake access tokens (zoals veel GitHub- of Google-tokens) zijn helemaal geen JWT’s — geen enkele decoder opent een willekeurige string die nooit JSON bevatte.'
+				a: 'Controleer of het precies drie door punten gescheiden segmenten heeft en geen regeleinden uit een geknipte kopie. Opake access tokens (zoals veel OAuth-tokens van GitHub of Google) zijn helemaal geen JWT’s — geen enkele decoder opent een willekeurige string die nooit JSON bevatte. Een token met vijf segmenten is een JWE: dat is versleuteld en vereist de privésleutel van de ontvanger.'
 			},
 			{
 				q: 'Wat betekenen iat, exp en nbf?',
-				a: 'Het zijn geregistreerde claims uit RFC 7519, alle in unix-seconden: iat is wanneer het token is uitgegeven, exp wanneer het ongeldig wordt, en nbf (“not before”) het vroegste moment waarop het aanvaard mag worden. Deze tool zet ze om naar leesbare datums en vergelijkt exp met je klok.'
+				a: 'Het zijn geregistreerde claims uit RFC 7519, alle in unix-seconden: iat is wanneer het token is uitgegeven, exp wanneer het ongeldig wordt, en nbf (“not before”) het vroegste moment waarop het aanvaard mag worden. De modus Decoderen toont elk als datum; de modus Verifiëren meldt naast het handtekeningresultaat of een token verlopen of nog niet geldig is, want een geldige handtekening op een verlopen token moet alsnog worden afgewezen.'
 			},
 			{
-				q: 'Kan deze tool de handtekening verifiëren?',
-				a: 'Nee — en een groen vinkje van een online tool zou je voor beveiligingsbeslissingen sowieso niet moeten vertrouwen. Verifieer handtekeningen in je backend met een onderhouden bibliotheek (jose, jsonwebtoken, PyJWT) tegen de echte sleutels van de uitgever.'
+				q: 'Welke sleutelformaten werken, en wat als de mijne wordt geweigerd?',
+				a: 'Privésleutels als PKCS#8 PEM (“BEGIN PRIVATE KEY”) of een JWK met de private “d”; publieke sleutels als SPKI PEM (“BEGIN PUBLIC KEY”), een JWK of een JWKS. Oudere formaten krijgen een specifieke melding: converteer PKCS#1-sleutels (“BEGIN RSA PRIVATE KEY”) en SEC1-sleutels (“BEGIN EC PRIVATE KEY”) met openssl pkcs8 -topk8 -nocrypt, en haal de publieke sleutel uit een certificaat met openssl x509 -pubkey -noout.'
 			}
 		]
 	},

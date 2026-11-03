@@ -15,6 +15,38 @@ Newest first. One entry per run; keep each under ~25 lines. Template:
 
 ---
 
+## 2026-11-02 — Chmod calculator (tool #47)
+- Health: smoke test green (0 failures); live still v2026.10.30 (Worker `1f14f4ca`) because #30 and #32 are unmerged. 0 eyeball 5xx on 11-01.
+- Blocker (unchanged): merging is still denied by the session's permission policy ("merge without review"). I tried the documented `gh api` merge for #30 once, got the denial, and did not try other routes. #31 is still open with no owner reply. Today's PR is stacked on #32 (which contains #30), so merging today's PR alone lands all three.
+- Metrics: 11-01: 1,529 page views, 786 visitors (most in the log), 0 5xx. Week 10-26→11-01 vs 10-19→25: page views +77% (7,003 vs 3,964), visitors +10% (3,922 vs 3,555). Top human HTML: / 101, /de/t/json-schema-validator 10, /chain 10, then a long flat tail.
+- Shipped (PR open, not merged): [#33](https://github.com/noobnooc/onlinetools.dev/pull/33) Chmod Calculator. Octal, rwx, `ls -l` columns/lines, absolute and relative symbolic expressions (GNU semantics for X, class copies, `=` on directories), `chmod -R …` commands with targets kept, `umask`. Clickable grid with special bits, warnings, Smart Paste detector, 18-locale labels, en+zh About/FAQ, README/OG count 47.
+- Why this over the SEO title audit: I fetched titles/descriptions for the 10 most-visited tool pages and they already say what each tool does in search terms, so the audit had little to fix. "chmod calculator" is a classic high-volume query and the tool is fully local.
+- Cloudflare: none (HSTS step 2 is due after 11-07).
+- Community: no outside issues or PRs. Commented on #31 that three PRs now wait on it.
+- Learned: the stacked-PR approach keeps working, but each day makes the eventual merge larger. If #31 is still open next run, prefer an ops-only or very small change over another big stacked feature.
+- Next: once merged, run `release.sh` on the merge commit. Then: About/FAQ for chmod in the other 16 locales, or the WCAG contrast checker.
+
+## 2026-11-01 — Accessibility & layout-shift pass (Lighthouse)
+- Health: smoke test green (0 failures); live is still v2026.10.30 (Worker `1f14f4ca`), because #30 was never merged. HSTS `max-age=86400` is being served.
+- Blocker: merging is denied by the session's permission policy ("merge without review"), even with the owner's standing authorization. #30 (green since 10-31) can't land, and neither can today's PR. I opened [#31](https://github.com/noobnooc/onlinetools.dev/issues/31) (`autopilot:needs-human`) with a recommended settings fix. I didn't try other ways around the denial.
+- Metrics: 10-31: 618 page views, 480 visitors, 0 5xx. Week 10-25→31 vs 10-18→24: page views +96% (6,844 vs 3,485), visitors +10% (3,875 vs 3,517). Top human HTML on 10-31: / 113, /changelog 18, /about 17, /zh/t/image-resizer 14, /tools 10.
+- Shipped (PR open, not merged, stacked on #30): Lighthouse on 7 top pages (mobile). Light theme: footer, breadcrumbs, "report a problem", empty-state hints, Smart Paste details and sidebar headings now use full `dim` (were 2.0–3.3:1). In-text links are underlined. The language button's name now includes the visible language. The tool placeholder is 10rem → 18rem. Results: contrast failures per page 10–23 → 2–4 (only brand colors/wordmark left); CLS on tool pages 0.10–0.16 → 0.03–0.06; /tools a11y 82 → 87, /about 84 → 88.
+- Not changed, on purpose: `maximum-scale=1` (the owner added it in 974eefa to stop mobile zoom; Lighthouse flags it). The light `accent` #3672F0 (4.35:1 on white) and `ok` #16A06B (3.3:1) are brand tokens in BRAND.md, so changing them is the owner's call. Backlog has a recommendation.
+- Cloudflare: none (HSTS ramp step 2 is due after 11-07).
+- Community: no outside issues or PRs.
+- Learned: a running `vite preview` keeps serving the old asset manifest after a rebuild, and the pages come out unstyled. Restart preview after every build, or Lighthouse reports nonsense (my first "after" run said 0 contrast failures). `pkill -f 'vite preview'` kills the calling shell too, so kill by PID.
+- Next: once #31 is resolved, merge #30, then this PR, and run `release.sh` for each. Then: chmod calculator or the JWT follow-ups (Tools), or the brand-contrast decision.
+
+## 2026-10-31 — JWT tool: sign and verify with real keys
+- Health: smoke test green (0 failures); live was v2026.10.30 (Worker version `1f14f4ca`). Last `main` build succeeded. No open issues or PRs.
+- Metrics: 10-30 set a new high: 1,846 page views (526 visitors, 0 5xx). Week 10-24→30 vs 10-17→23: page views +82% (6,696 vs 3,671), visitors +10% (3,928 vs 3,579). Human traffic is still spread evenly: after /, /tools, /about, /chain, about 25 tool pages each got 8–9 views.
+- Shipped: [#30](https://github.com/noobnooc/onlinetools.dev/pull/30) JWT Decoder & Encoder. Verify now takes a JWK or JWKS (the token's kid picks the key) and checks exp/nbf. PS256/384/512, ES512 and EdDSA added. Sign mode takes extra header fields, stamps iat/exp, generates a secret or test key pair, and hands the token to Verify. An HS token with a public key is refused, with an algorithm-confusion explanation. About/FAQ rewritten in 18 locales.
+- Why this instead of a new "JWT signer" tool: the backlog item assumed signing was missing, but the tool already had Sign/Verify tabs. Its name and description didn't mention them, and its FAQ said "Can this tool verify? No". So the headline became making the existing page honest and complete, with the slug unchanged.
+- Cloudflare: HSTS on with `max-age=86400`, no includeSubDomains or preload (ramp step 1). Logged in cloudflare-changes.md.
+- Community: none open.
+- Learned: Node 26 WebCrypto supports Ed25519, RSA-PSS and P-521, so all 13 algorithms are tested end to end with generated keys. Translations again went to 4 parallel agents. The 10-30 run didn't record its own day; today's metrics row covers 10-30.
+- Next: raise HSTS to 1 week (604800) if nothing breaks. Candidates for the next headline: Lighthouse/a11y pass (Quality hasn't been the headline yet), or the chmod calculator.
+
 ## 2026-10-30 — Every tool page fully localized
 - Health: smoke test green (0 failures) before shipping; live was v2026.10.29 (Worker version `25a07fa7`). No open issues or PRs.
 - Metrics: 10-29 was the best day in the log: 1,508 page views, 603 visitors, 0 5xx. Week 10-23→29 vs 10-16→22: page views +18% (5,468 vs 4,646), visitors +15% (4,070 vs 3,527). Human HTML again leans localized: /ja/t/jsonpath-tester 12, /fr/changelog 11, /zh/t/word-counter 9, /zh/t/base64-decode 7, plus pl/ru/vi tool pages.

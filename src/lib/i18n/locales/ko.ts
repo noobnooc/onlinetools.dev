@@ -309,7 +309,7 @@ const ko: Messages = {
 		jwtExpires: '만료',
 		jwtNotBefore: '유효 시작',
 		jwtLifetime: '수명',
-		jwtNote: '디코딩은 토큰을 읽기만 하며 서명을 검증하지 않습니다. 서명은 발급자의 키로 서버에서 검증하세요.',
+		jwtNote: '디코딩은 토큰을 읽기만 하며, 이는 누구나 할 수 있습니다. 비밀 키, 공개 키 또는 JWKS로 서명을 확인하려면 검증으로 전환하세요.',
 		loremUnit: '단위',
 		loremWords: '단어',
 		loremSentences: '문장',
@@ -499,6 +499,34 @@ const ko: Messages = {
 		cidrBlocks: 'CIDR 블록 {n}개',
 		cidrEmpty: '여기에 결과가 표시됩니다 — 10.0.0.0/16 또는 10.0.0.1 - 10.0.0.50 같은 범위를 입력해 보세요',
 
+		// Chmod calculator
+		chmInput: '모드, ls -l 문자열, chmod 명령 또는 umask',
+		chmGrid: '권한 비트',
+		chmOwner: '소유자 (u)',
+		chmGroup: '그룹 (g)',
+		chmOther: '기타 사용자 (o)',
+		chmRead: '읽기',
+		chmWrite: '쓰기',
+		chmExec: '실행',
+		chmSpecial: '특수 비트',
+		chmSetuid: 'Setuid',
+		chmSetgid: 'Setgid',
+		chmSticky: 'Sticky',
+		chmOctal: '8진수',
+		chmSymbolic: '기호 표기',
+		chmCommand: '명령',
+		chmCommandSym: '명령 (기호 표기)',
+		chmBase: '기준 권한',
+		chmDirectory: '대상이 디렉터리임',
+		chmUmaskFile: '새 파일',
+		chmUmaskDir: '새 디렉터리',
+		chmWarnWorld: '기타 사용자에게 쓰기 권한이 있습니다. 시스템의 모든 사용자가 이 파일을 변경하거나 교체할 수 있습니다.',
+		chmWarnSetuid: 'Setuid: 실행 파일이 호출한 사용자가 아닌 소유자의 권한으로 실행됩니다.',
+		chmWarnSetgid: 'Setgid: 파일의 그룹 권한으로 실행됩니다. 디렉터리에서는 새 파일이 해당 그룹을 상속합니다.',
+		chmWarnSpecialNoExec: '실행 권한 없이 특수 비트가 설정되어 있습니다 (S 또는 T로 표시). 보통 실수입니다.',
+		chmWarnOwnerLess: '소유자의 권한이 그룹이나 기타 사용자보다 적습니다. 숫자 순서를 확인하세요.',
+		chmEmpty: '755, rwxr-xr-x 또는 g+w를 입력하거나 위의 체크박스를 선택하세요',
+
 		// Text ↔ hex/binary
 		hbFormat: '바이트 표기',
 		hbSep: '구분자',
@@ -546,10 +574,17 @@ const ko: Messages = {
 		jwtAlg: '알고리즘',
 		jwtPayloadLbl: '페이로드 (JSON 객체)',
 		jwtSecret: '비밀 키',
-		jwtPrivKey: '개인 키 (PKCS#8 PEM)',
-		jwtPubKey: '비밀 키(HS) 또는 공개 키 PEM(RS/ES)',
-		jwtSignNote: '서명은 브라우저의 WebCrypto에서 실행됩니다 — 키는 이 페이지를 벗어나지 않습니다. HS 알고리즘에는 길고 무작위한 비밀 키를 쓰세요. 짧은 키는 어디서 서명하든 무차별 대입으로 뚫립니다.',
-		jwtVerifyNote: '검증은 입력한 키로 서명을 로컬에서 확인합니다. JWKS 엔드포인트를 가져오거나 aud/iss 같은 클레임을 검사하지는 않습니다 — 그것은 서버에서 하세요.',
+		jwtPrivKey: '개인 키 (PKCS#8 PEM 또는 JWK)',
+		jwtPubKey: '비밀 키(HS) 또는 공개 키 — PEM, JWK 또는 JWKS',
+		jwtHeaderLbl: '추가 헤더 필드 (선택 사항, JSON, 예: kid)',
+		jwtSetIat: 'iat를 현재 시각으로 설정',
+		jwtExpIn: '만료까지',
+		jwtGenSecret: '비밀 키 생성',
+		jwtGenPair: '테스트 키 쌍 생성',
+		jwtPubForVerify: '대응하는 공개 키',
+		jwtVerifyThis: '이 토큰 검증 →',
+		jwtSignNote: '서명은 브라우저의 WebCrypto에서 실행됩니다 — 키는 이 페이지를 벗어나지 않으며, 생성된 키는 어디에도 저장되지 않습니다. HS 알고리즘에는 길고 무작위한 비밀 키를 쓰세요. 짧은 키는 어디서 서명하든 무차별 대입으로 뚫립니다.',
+		jwtVerifyNote: '검증은 입력한 키로 서명을 확인하고 현재 시각으로 exp와 nbf를 확인하며, 모두 로컬에서 이루어집니다. JWKS URL을 가져오지는 않습니다 — 발급자의 jwks_uri를 열어 JSON을 붙여넣으세요. aud와 iss는 백엔드에서 확인하세요.',
 
 		// Timestamp extras
 		tsDiff: '두 날짜 사이의 차이'
@@ -580,8 +615,8 @@ const ko: Messages = {
 			description: 'Unix 타임스탬프와 날짜를 상호 변환, 상대 시간 표시'
 		},
 		'jwt-decoder': {
-			name: 'JWT 디코더',
-			description: 'JWT 헤더와 페이로드 디코딩, 만료 확인 — 완전 오프라인'
+			name: 'JWT 디코더 & 인코더',
+			description: 'JWT 디코딩, 서명, 검증 — HS, RS, PS, ES, EdDSA, JWKS 지원 — 완전 오프라인'
 		},
 		'regex-tester': {
 			name: '정규식 테스터',
@@ -734,6 +769,10 @@ const ko: Messages = {
 		'number-base-converter': {
 			name: '진법 변환기',
 			description: '2·8·10·16진수와 최대 36진법 사이의 숫자 변환'
+		},
+		'chmod-calculator': {
+			name: 'Chmod 계산기',
+			description: 'Unix 권한을 8진수, rwx, 기호 표기 chmod 사이에서 변환하고 클릭 가능한 표로 설정'
 		},
 		'cidr-calculator': {
 			name: 'CIDR / 서브넷 계산기',

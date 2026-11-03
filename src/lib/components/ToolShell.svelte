@@ -94,7 +94,7 @@
 </svelte:head>
 
 <article class="mx-auto max-w-4xl px-6 py-8">
-	<nav class="mb-4 flex items-center gap-1.5 font-mono text-[11px] text-dim/80" aria-label="Breadcrumb">
+	<nav class="mb-4 flex items-center gap-1.5 font-mono text-[11px] text-dim" aria-label="Breadcrumb">
 		<a href={lp('/tools')} class="hover:text-fg">{t('breadcrumbTools')}</a>
 		<span aria-hidden="true">/</span>
 		<a href="{lp('/tools')}#cat-{tool.category}" class="hover:text-fg"
@@ -150,7 +150,7 @@
 			target="_blank"
 			rel="noopener noreferrer"
 			title={t('reportIssueTitle', { name: l10n.name })}
-			class="inline-flex items-center gap-1.5 font-mono text-[11px] text-dim/70 transition-colors duration-120 hover:text-fg"
+			class="inline-flex items-center gap-1.5 font-mono text-[11px] text-dim transition-colors duration-120 hover:text-fg"
 		>
 			<Bug size={12} aria-hidden="true" />
 			{t('reportIssue')}

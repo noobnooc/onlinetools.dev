@@ -338,7 +338,7 @@ const nl: Messages = {
 		jwtNotBefore: 'Niet vóór',
 		jwtLifetime: 'Levensduur',
 		jwtNote:
-			'Decoderen leest het token alleen — het verifieert de handtekening niet. Verifieer handtekeningen server-side met de sleutels van de uitgever.',
+			'Decoderen leest het token alleen — dat kan iedereen. Schakel over naar Verifiëren om de handtekening te controleren tegen een geheim, een publieke sleutel of een JWKS.',
 
 		loremUnit: 'Eenheid',
 		loremWords: 'Woorden',
@@ -527,6 +527,34 @@ const nl: Messages = {
 		cidrBlocks: '{n} CIDR-blokken',
 		cidrEmpty: 'Details verschijnen hier — probeer 10.0.0.0/16 of een bereik als 10.0.0.1 - 10.0.0.50',
 
+		// Chmod calculator
+		chmInput: 'Modus, ls -l-string, chmod-commando of umask',
+		chmGrid: 'Rechtenbits',
+		chmOwner: 'Eigenaar (u)',
+		chmGroup: 'Groep (g)',
+		chmOther: 'Overigen (o)',
+		chmRead: 'Lezen',
+		chmWrite: 'Schrijven',
+		chmExec: 'Uitvoeren',
+		chmSpecial: 'Speciaal',
+		chmSetuid: 'Setuid',
+		chmSetgid: 'Setgid',
+		chmSticky: 'Sticky bit',
+		chmOctal: 'Octaal',
+		chmSymbolic: 'Symbolisch',
+		chmCommand: 'Commando',
+		chmCommandSym: 'Commando (symbolisch)',
+		chmBase: 'Uitgaande van',
+		chmDirectory: 'Doel is een map',
+		chmUmaskFile: 'Nieuwe bestanden',
+		chmUmaskDir: 'Nieuwe mappen',
+		chmWarnWorld: 'Overigen kunnen schrijven: elke gebruiker op het systeem kan dit bestand wijzigen of vervangen.',
+		chmWarnSetuid: 'Setuid: een uitvoerbaar bestand draait met de rechten van de eigenaar, niet van de aanroeper.',
+		chmWarnSetgid: 'Setgid: draait met de groep van het bestand; bij een map erven nieuwe bestanden de groep.',
+		chmWarnSpecialNoExec: 'Er is een speciale bit gezet zonder uitvoeren (weergegeven als S of T), meestal een vergissing.',
+		chmWarnOwnerLess: 'De eigenaar heeft minder rechten dan groep of overigen. Controleer de volgorde van de cijfers.',
+		chmEmpty: 'Typ 755, rwxr-xr-x of g+w, of vink de vakjes hierboven aan',
+
 		hbFormat: 'Bytes als',
 		hbSep: 'Scheidingsteken',
 		hbSpace: 'Spatie',
@@ -570,12 +598,19 @@ const nl: Messages = {
 		jwtAlg: 'Algoritme',
 		jwtPayloadLbl: 'Payload (JSON-object)',
 		jwtSecret: 'Geheim',
-		jwtPrivKey: 'Privésleutel (PKCS#8 PEM)',
-		jwtPubKey: 'Geheim (HS) of publieke sleutel in PEM (RS/ES)',
+		jwtPrivKey: 'Privésleutel (PKCS#8 PEM of JWK)',
+		jwtPubKey: 'Geheim (HS) of publieke sleutel — PEM, JWK of JWKS',
+		jwtHeaderLbl: 'Extra headervelden (optionele JSON, bv. kid)',
+		jwtSetIat: 'iat op nu zetten',
+		jwtExpIn: 'Verloopt over',
+		jwtGenSecret: 'Geheim genereren',
+		jwtGenPair: 'Testsleutelpaar genereren',
+		jwtPubForVerify: 'Bijbehorende publieke sleutel',
+		jwtVerifyThis: 'Dit token verifiëren →',
 		jwtSignNote:
-			'Het ondertekenen draait op WebCrypto in je browser — de sleutel verlaat deze pagina nooit. Gebruik voor HS-algoritmen een lang willekeurig geheim; korte zijn te brute-forcen, waar je ook ondertekent.',
+			'Het ondertekenen draait op WebCrypto in je browser — de sleutel verlaat deze pagina nooit, en gegenereerde sleutels worden nergens opgeslagen. Gebruik voor HS-algoritmen een lang willekeurig geheim; korte zijn te brute-forcen, waar je ook ondertekent.',
 		jwtVerifyNote:
-			'De verificatie controleert de handtekening lokaal tegen de sleutel die je opgeeft. Ze haalt geen JWKS-endpoints op en valideert geen claims als aud/iss — doe dat server-side.',
+			'De verificatie controleert de handtekening tegen de sleutel die je opgeeft, plus exp en nbf tegen je klok, allemaal lokaal. Ze haalt geen JWKS-URL’s op — open de jwks_uri van de uitgever en plak de JSON. Controleer aud en iss in je backend.',
 
 		tsDiff: 'Verschil tussen twee datums',
 
@@ -635,8 +670,8 @@ const nl: Messages = {
 			description: 'Zet unix-tijdstempels om naar leesbare datums en terug, met relatieve tijd'
 		},
 		'jwt-decoder': {
-			name: 'JWT-decoder',
-			description: 'Decodeer JWT-header en -payload, controleer de vervaldatum — volledig offline'
+			name: 'JWT-decoder en -encoder',
+			description: 'Decodeer, onderteken en verifieer JWT’s — HS, RS, PS, ES, EdDSA en JWKS — volledig offline'
 		},
 		'regex-tester': {
 			name: 'Regex-tester',
@@ -769,6 +804,10 @@ const nl: Messages = {
 		'number-base-converter': {
 			name: 'Talstelselconverter',
 			description: 'Converteer getallen tussen binair, octaal, decimaal, hex en elk grondtal tot 36'
+		},
+		'chmod-calculator': {
+			name: 'Chmod-calculator',
+			description: 'Zet Unix-rechten om tussen octaal, rwx en symbolische chmod, met een klikbaar raster'
 		},
 		'cidr-calculator': {
 			name: 'CIDR- / subnetcalculator',

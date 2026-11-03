@@ -102,7 +102,7 @@
 			</div>
 			<p class="mt-2 border-t border-line/50 pt-2 text-[11px] text-dim">
 				{tt('jfTreeHint')}
-				<a href="/t/jsonpath-tester" class="text-accent hover:underline">{tt('jfTreeLink')}</a>.
+				<a href="/t/jsonpath-tester" class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">{tt('jfTreeLink')}</a>.
 			</p>
 		{:else if output !== ''}
 			<pre class="max-h-[32rem] overflow-auto font-mono text-sm leading-relaxed whitespace-pre-wrap break-all">{output}</pre>

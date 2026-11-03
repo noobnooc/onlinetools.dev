@@ -309,7 +309,7 @@ const pt: Messages = {
 		jwtExpires: 'Expira',
 		jwtNotBefore: 'Não antes de',
 		jwtLifetime: 'Vida útil',
-		jwtNote: 'A decodificação apenas lê o token — não verifica a assinatura. Verifique assinaturas no servidor com as chaves do emissor.',
+		jwtNote: 'A decodificação apenas lê o token — qualquer pessoa pode fazer isso. Mude para Verificar para checar a assinatura contra um segredo, uma chave pública ou um JWKS.',
 		loremUnit: 'Unidade',
 		loremWords: 'Palavras',
 		loremSentences: 'Frases',
@@ -499,6 +499,34 @@ const pt: Messages = {
 		cidrBlocks: '{n} blocos CIDR',
 		cidrEmpty: 'Os detalhes aparecem aqui — experimente 10.0.0.0/16 ou um intervalo como 10.0.0.1 - 10.0.0.50',
 
+		// Chmod calculator
+		chmInput: 'Modo, string do ls -l, comando chmod ou umask',
+		chmGrid: 'Bits de permissão',
+		chmOwner: 'Dono (u)',
+		chmGroup: 'Grupo (g)',
+		chmOther: 'Outros (o)',
+		chmRead: 'Leitura',
+		chmWrite: 'Escrita',
+		chmExec: 'Execução',
+		chmSpecial: 'Especiais',
+		chmSetuid: 'Setuid',
+		chmSetgid: 'Setgid',
+		chmSticky: 'Sticky',
+		chmOctal: 'Octal',
+		chmSymbolic: 'Simbólico',
+		chmCommand: 'Comando',
+		chmCommandSym: 'Comando (simbólico)',
+		chmBase: 'A partir de',
+		chmDirectory: 'O alvo é um diretório',
+		chmUmaskFile: 'Novos arquivos',
+		chmUmaskDir: 'Novos diretórios',
+		chmWarnWorld: 'Outros podem escrever: qualquer usuário do sistema pode alterar ou substituir este arquivo.',
+		chmWarnSetuid: 'Setuid: o executável roda com os privilégios do dono, não de quem o chama.',
+		chmWarnSetgid: 'Setgid: roda com o grupo do arquivo; em um diretório, novos arquivos herdam o grupo dele.',
+		chmWarnSpecialNoExec: 'Um bit especial está ativo sem execução (exibido como S ou T), o que geralmente é um erro.',
+		chmWarnOwnerLess: 'O dono tem menos permissões que o grupo ou os outros. Confira a ordem dos dígitos.',
+		chmEmpty: 'Digite 755, rwxr-xr-x ou g+w, ou marque as caixas acima',
+
 		// Text ↔ hex/binary
 		hbFormat: 'Bytes como',
 		hbSep: 'Separador',
@@ -546,10 +574,17 @@ const pt: Messages = {
 		jwtAlg: 'Algoritmo',
 		jwtPayloadLbl: 'Payload (objeto JSON)',
 		jwtSecret: 'Segredo',
-		jwtPrivKey: 'Chave privada (PEM PKCS#8)',
-		jwtPubKey: 'Segredo (HS) ou chave pública PEM (RS/ES)',
-		jwtSignNote: 'A assinatura roda no WebCrypto do seu navegador — a chave nunca sai desta página. Para algoritmos HS, use um segredo longo e aleatório; segredos curtos são quebráveis por força bruta, não importa onde você assine.',
-		jwtVerifyNote: 'A verificação checa a assinatura contra a chave que você fornece, localmente. Ela não busca endpoints JWKS nem valida claims como aud/iss — faça isso no servidor.',
+		jwtPrivKey: 'Chave privada (PEM PKCS#8 ou JWK)',
+		jwtPubKey: 'Segredo (HS) ou chave pública — PEM, JWK ou JWKS',
+		jwtHeaderLbl: 'Campos extras do cabeçalho (JSON opcional, ex.: kid)',
+		jwtSetIat: 'Definir iat como agora',
+		jwtExpIn: 'Expira em',
+		jwtGenSecret: 'Gerar segredo',
+		jwtGenPair: 'Gerar par de chaves de teste',
+		jwtPubForVerify: 'Chave pública correspondente',
+		jwtVerifyThis: 'Verificar este token →',
+		jwtSignNote: 'A assinatura roda no WebCrypto do seu navegador — a chave nunca sai desta página, e as chaves geradas não são armazenadas em lugar nenhum. Para algoritmos HS, use um segredo longo e aleatório; segredos curtos são quebráveis por força bruta, não importa onde você assine.',
+		jwtVerifyNote: 'A verificação checa a assinatura contra a chave que você fornece, além de exp e nbf contra o seu relógio, tudo localmente. Ela não busca URLs de JWKS — abra o jwks_uri do emissor e cole o JSON. Verifique aud e iss no seu backend.',
 
 		// Timestamp extras
 		tsDiff: 'Diferença entre duas datas'
@@ -580,8 +615,8 @@ const pt: Messages = {
 			description: 'Converta timestamps Unix em datas legíveis e de volta, com tempo relativo'
 		},
 		'jwt-decoder': {
-			name: 'Decodificador de JWT',
-			description: 'Decodifique cabeçalho e payload do JWT e confira a expiração — totalmente offline'
+			name: 'Decodificador e codificador de JWT',
+			description: 'Decodifique, assine e verifique JWTs — HS, RS, PS, ES, EdDSA e JWKS — totalmente offline'
 		},
 		'regex-tester': {
 			name: 'Testador de regex',
@@ -734,6 +769,10 @@ const pt: Messages = {
 		'number-base-converter': {
 			name: 'Conversor de bases numéricas',
 			description: 'Converta números entre binário, octal, decimal, hex e qualquer base até 36'
+		},
+		'chmod-calculator': {
+			name: 'Calculadora Chmod',
+			description: 'Converta permissões Unix entre octal, rwx e chmod simbólico, com uma grade clicável'
 		},
 		'cidr-calculator': {
 			name: 'Calculadora CIDR / de sub-rede',

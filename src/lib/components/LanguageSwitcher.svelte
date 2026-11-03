@@ -23,10 +23,12 @@
 		type="button"
 		onclick={() => (open = !open)}
 		aria-expanded={open}
-		aria-label={t('language')}
+		title={t('language')}
 		class="flex items-center gap-1.5 transition-colors duration-120 hover:text-fg"
 	>
-		<Globe size={12} />
+		<!-- The visible locale name stays in the accessible name (WCAG 2.5.3). -->
+		<Globe size={12} aria-hidden="true" />
+		<span class="sr-only">{t('language')}:</span>
 		{LOCALE_NAMES[locale()]}
 	</button>
 	{#if open}

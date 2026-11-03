@@ -11,6 +11,57 @@ the footer badge and every `<lastmod>` in the sitemap.
 
 ---
 
+## [2026.11.02] — File permissions, every way they are written
+
+### Added
+
+- **Chmod Calculator**: type 755, 0644, rwxr-xr-x, a whole `ls -l` line,
+  u=rwx,g=rx,o=rx or a full `chmod -R 750 dir` command and get the octal
+  value, the rwx string, the `ls -l` column and both chmod commands. A
+  clickable owner/group/others grid with setuid, setgid and sticky bits.
+- Relative expressions (g+w, go-rwx, a+X, g=u) are applied to a starting
+  mode you choose, following GNU chmod (X, class copies, `=` on directories).
+- `umask 027` shows the modes new files and directories will get.
+- Warnings for world-writable modes, setuid/setgid, special bits without
+  execute (S/T), and owners with fewer rights than group or others.
+- Smart Paste recognizes `ls -l` permission columns and chmod commands.
+
+## [2026.11.01] — Easier to read, steadier to load
+
+### Fixed
+
+- Light theme: footer, breadcrumbs, the "report a problem" link, the
+  Smart Paste file details, empty-state hints and sidebar category headings
+  used faded `dim` text below the WCAG AA 4.5:1 contrast ratio; they now use
+  full `dim`.
+- Links inside running text are underlined (WCAG 1.4.1, no color-only cue).
+- The language menu button's accessible name now contains the visible
+  language name ("Language: English"), not just "Language" (WCAG 2.5.3).
+- The tool loading placeholder reserves 18rem instead of 10rem, close to
+  the smaller tools' height, which reduces layout shift as the tool mounts.
+
+## [2026.10.31] — Sign and verify JWTs with real keys
+
+### Added
+
+- **JWT Decoder & Encoder** (was "JWT Decoder"): Verify mode accepts a JWK or
+  a whole JWKS as well as a PEM; the token's `kid` picks the key, and every
+  compatible key is tried when there is no `kid`. It also reports whether
+  `exp` and `nbf` pass against the local clock.
+- PS256/384/512, ES512 and EdDSA (Ed25519) for signing and verifying.
+- Sign mode: extra header fields (e.g. `kid`; a JWK's `kid` is copied in
+  automatically), private keys as JWK, one-click `iat`/`exp` stamps, a random
+  secret or test key-pair generator, and "Verify this token" with the
+  matching public key.
+
+### Changed
+
+- Verifying an HS token with a public key is refused with an explanation of
+  algorithm confusion instead of reporting a plain mismatch; `alg: "NONE"` is
+  treated as unsigned in any letter case.
+- The tool's About & FAQ copy, which still said signature verification was
+  out of scope, is rewritten (with a JWKS how-to) in all eighteen languages.
+
 ## [2026.10.30] — Every tool explained in every language
 
 ### Changed

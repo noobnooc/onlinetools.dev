@@ -86,26 +86,31 @@ const TOOL_CONTENT_IT: Record<string, ToolContent> = {
 
 	'jwt-decoder': {
 		about: [
-			'Un JSON Web Token è composto da tre segmenti Base64URL — header, payload, firma — uniti da punti. Questo decoder divide il token e rende header e payload come JSON formattato, evidenzia i claim temporali registrati (iat, exp, nbf) come date leggibili e ti dice a colpo d’occhio se il token è scaduto.',
-			'Decodificare non è verificare: il payload di qualunque JWT può essere letto da chiunque lo possieda, perché Base64URL è una codifica, non crittografia. È anche il motivo per cui incollare un token in un sito qualsiasi è di norma una pessima idea — questa pagina è l’eccezione, perché la decodifica avviene interamente nel tuo browser e il token non viene mai trasmesso. La verifica della firma con un segreto o una chiave pubblica è deliberatamente fuori dallo scopo del decoder offline.',
-			'Un eventuale prefisso "Bearer " viene rimosso automaticamente, così puoi incollare direttamente da un header Authorization.'
+			'Un JSON Web Token è composto da tre segmenti Base64URL — header, payload, firma — uniti da punti. La modalità Decodifica divide il token e rende header e payload come JSON formattato, trasforma i claim temporali registrati (iat, exp, nbf) in date leggibili e mostra quanta parte della durata del token resta.',
+			'Decodificare non è verificare: il payload di qualunque JWT può essere letto da chiunque lo possieda, perché Base64URL è una codifica, non crittografia. La modalità Verifica controlla la firma con WebCrypto rispetto a ciò che incolli — il segreto condiviso per HS256/384/512 oppure, per RS, PS, ES ed EdDSA, una chiave pubblica in PEM, un singolo JWK o un intero JWKS, in cui il kid del token sceglie la chiave. Controlla inoltre exp e nbf rispetto al tuo orologio e rifiuta una chiave pubblica per un token HS: è l’errore di "algorithm confusion" alla base di diverse vulnerabilità reali di librerie.',
+			'La modalità Firma costruisce un token da un payload JSON e da campi header aggiuntivi opzionali come kid, con pulsanti per impostare iat ed exp. Può generare un segreto casuale o una coppia di chiavi usa e getta e passare il token firmato direttamente a Verifica con la chiave pubblica corrispondente — comodo per testare un’API o una configurazione JWKS senza scrivere uno script.',
+			'Token, segreti e chiavi private non lasciano mai la pagina: decodifica, firma e verifica avvengono tutte nel tuo browser, e un eventuale prefisso "Bearer " viene rimosso, così puoi incollare direttamente da un header Authorization.'
 		],
 		faqs: [
 			{
-				q: 'È sicuro incollare qui un token di produzione?',
-				a: 'Il token resta nel tuo browser — questa pagina non effettua richieste di rete con il tuo input, come puoi verificare nella scheda Network dei developer tools. Comunque, per abitudine tratta i token attivi come password: preferisci token scaduti o di test quando condividi screenshot.'
+				q: 'È sicuro incollare qui un token o una chiave di produzione?',
+				a: 'Nulla di ciò che incolli viene trasmesso — la pagina non effettua richieste di rete con il tuo input, come puoi verificare nella scheda Network dei developer tools, e non viene salvato niente. Comunque, per abitudine tratta i token attivi e le chiavi di firma come password: quando puoi preferisci token scaduti e chiavi di test, e ruota qualsiasi chiave che sia stata incollata in un posto che non controlli.'
+			},
+			{
+				q: 'Come verifico un token di Auth0, Cognito, Google o Keycloak?',
+				a: 'Trova il jwks_uri dell’emittente (è indicato in /.well-known/openid-configuration), aprilo in una scheda e incolla l’intero JSON nel campo della chiave in modalità Verifica. Lo strumento sceglie la chiave il cui kid corrisponde all’header del token. Non scarica l’URL da solo, così nulla del tuo token raggiunge la rete.'
 			},
 			{
 				q: 'Perché il mio token non si decodifica?',
-				a: 'Controlla che abbia esattamente tre segmenti separati da punti e nessun a capo introdotto dal copia-incolla. I token di accesso opachi (per esempio molti token GitHub o Google) non sono affatto JWT — nessuna decodifica aprirà una stringa casuale che non ha mai contenuto JSON.'
+				a: 'Controlla che abbia esattamente tre segmenti separati da punti e nessun a capo introdotto dal copia-incolla. I token di accesso opachi (per esempio molti token OAuth di GitHub o Google) non sono affatto JWT — nessuna decodifica aprirà una stringa casuale che non ha mai contenuto JSON. Un token a cinque segmenti è un JWE: è cifrato e richiede la chiave privata del destinatario.'
 			},
 			{
 				q: 'Cosa significano iat, exp e nbf?',
-				a: 'Sono claim registrati dalla RFC 7519, tutti in secondi Unix: iat è quando il token è stato emesso, exp è quando smette di essere valido e nbf ("not before") è il primo istante in cui può essere accettato. Questo strumento converte ciascuno in una data leggibile e confronta exp con il tuo orologio.'
+				a: 'Sono claim registrati dalla RFC 7519, tutti in secondi Unix: iat è quando il token è stato emesso, exp è quando smette di essere valido e nbf ("not before") è il primo istante in cui può essere accettato. La modalità Decodifica mostra ciascuno come data; la modalità Verifica segnala accanto al risultato della firma se il token è scaduto o non ancora valido, perché un token scaduto va rifiutato anche se la firma è valida.'
 			},
 			{
-				q: 'Questo strumento può verificare la firma?',
-				a: 'No — e in ogni caso una spunta verde di un tool online non andrebbe mai usata per decisioni di sicurezza. Verifica le firme nel tuo backend con una libreria mantenuta (jose, jsonwebtoken, PyJWT) contro le chiavi reali dell’issuer.'
+				q: 'Quali formati di chiave funzionano, e se la mia viene rifiutata?',
+				a: 'Chiavi private come PEM PKCS#8 ("BEGIN PRIVATE KEY") o un JWK con la sua "d" privata; chiavi pubbliche come PEM SPKI ("BEGIN PUBLIC KEY"), un JWK o un JWKS. I formati più vecchi ricevono un messaggio specifico: converti le chiavi PKCS#1 ("BEGIN RSA PRIVATE KEY") e SEC1 ("BEGIN EC PRIVATE KEY") con openssl pkcs8 -topk8 -nocrypt ed estrai la chiave pubblica da un certificato con openssl x509 -pubkey -noout.'
 			}
 		]
 	},

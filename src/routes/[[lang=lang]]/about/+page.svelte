@@ -17,7 +17,7 @@
 	const kbd =
 		'<kbd class="rounded border border-line bg-surface-2 px-1 py-0.5 font-mono text-[0.8em]">⌘K</kbd>';
 	const issue = $derived(
-		`<a href="${REPO_URL}/issues" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline">${t('aboutBugLink')}</a>`
+		`<a href="${REPO_URL}/issues" target="_blank" rel="noopener noreferrer" class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">${t('aboutBugLink')}</a>`
 	);
 
 	const jsonLd = $derived(

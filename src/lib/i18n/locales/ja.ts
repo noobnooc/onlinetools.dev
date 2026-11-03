@@ -309,7 +309,7 @@ const ja: Messages = {
 		jwtExpires: '期限',
 		jwtNotBefore: '有効開始',
 		jwtLifetime: '有効期間',
-		jwtNote: 'デコードはトークンを読むだけで、署名は検証しません。署名は発行者の鍵でサーバー側で検証してください。',
+		jwtNote: 'デコードはトークンを読むだけで、それは誰にでもできます。シークレット、公開鍵、または JWKS で署名を確認するには「検証」に切り替えてください。',
 		loremUnit: '単位',
 		loremWords: '単語',
 		loremSentences: '文',
@@ -499,6 +499,34 @@ const ja: Messages = {
 		cidrBlocks: '{n} 個の CIDR ブロック',
 		cidrEmpty: 'ここに詳細が表示されます — 10.0.0.0/16 や 10.0.0.1 - 10.0.0.50 のような範囲を試してください',
 
+		// Chmod calculator
+		chmInput: 'モード・ls -l 文字列・chmod コマンド・umask',
+		chmGrid: 'パーミッションビット',
+		chmOwner: '所有者 (u)',
+		chmGroup: 'グループ (g)',
+		chmOther: 'その他 (o)',
+		chmRead: '読み取り',
+		chmWrite: '書き込み',
+		chmExec: '実行',
+		chmSpecial: '特殊ビット',
+		chmSetuid: 'Setuid',
+		chmSetgid: 'Setgid',
+		chmSticky: 'スティッキー',
+		chmOctal: '8 進数',
+		chmSymbolic: 'シンボリック',
+		chmCommand: 'コマンド',
+		chmCommandSym: 'コマンド (シンボリック)',
+		chmBase: '変更前のモード',
+		chmDirectory: '対象はディレクトリ',
+		chmUmaskFile: '新規ファイル',
+		chmUmaskDir: '新規ディレクトリ',
+		chmWarnWorld: 'その他に書き込み権限があります。システム上のどのユーザーでもこのファイルを変更・置換できます。',
+		chmWarnSetuid: 'Setuid: 実行ファイルは呼び出し元ではなく所有者の権限で実行されます。',
+		chmWarnSetgid: 'Setgid: ファイルのグループで実行されます。ディレクトリでは、新規ファイルがそのグループを継承します。',
+		chmWarnSpecialNoExec: '実行権限なしで特殊ビットが設定されています (S または T と表示)。通常は誤りです。',
+		chmWarnOwnerLess: '所有者の権限がグループやその他より少なくなっています。数字の順序を確認してください。',
+		chmEmpty: '755、rwxr-xr-x、g+w などを入力するか、上のチェックボックスを選択してください',
+
 		// Text ↔ hex/binary
 		hbFormat: 'バイトの表記',
 		hbSep: '区切り文字',
@@ -546,10 +574,17 @@ const ja: Messages = {
 		jwtAlg: 'アルゴリズム',
 		jwtPayloadLbl: 'ペイロード(JSON オブジェクト)',
 		jwtSecret: 'シークレット',
-		jwtPrivKey: '秘密鍵(PKCS#8 PEM)',
-		jwtPubKey: 'シークレット(HS)または公開鍵 PEM(RS/ES)',
-		jwtSignNote: '署名はブラウザ内の WebCrypto で実行され、鍵がこのページの外に出ることはありません。HS 系アルゴリズムには長いランダムなシークレットを使ってください — 短いシークレットは、どこで署名しようとブルートフォースで破られます。',
-		jwtVerifyNote: '検証は、指定した鍵に対して署名をローカルで確認します。JWKS エンドポイントの取得や aud/iss などのクレームの検証は行いません — それらはサーバー側で行ってください。',
+		jwtPrivKey: '秘密鍵(PKCS#8 PEM または JWK)',
+		jwtPubKey: 'シークレット(HS)または公開鍵 — PEM、JWK、JWKS',
+		jwtHeaderLbl: '追加のヘッダーフィールド(任意の JSON、例: kid)',
+		jwtSetIat: 'iat を現在時刻に設定',
+		jwtExpIn: '有効期限までの時間',
+		jwtGenSecret: 'シークレットを生成',
+		jwtGenPair: 'テスト用の鍵ペアを生成',
+		jwtPubForVerify: '対応する公開鍵',
+		jwtVerifyThis: 'このトークンを検証 →',
+		jwtSignNote: '署名はブラウザ内の WebCrypto で実行され、鍵がこのページの外に出ることはなく、生成した鍵もどこにも保存されません。HS 系アルゴリズムには長いランダムなシークレットを使ってください — 短いシークレットは、どこで署名しようとブルートフォースで破られます。',
+		jwtVerifyNote: '検証では、指定した鍵に対する署名と、あなたの時計に基づく exp と nbf を、すべてローカルで確認します。JWKS の URL は取得しません — 発行者の jwks_uri を開いて JSON を貼り付けてください。aud と iss はバックエンドで確認してください。',
 
 		// Timestamp extras
 		tsDiff: '2 つの日付の差'
@@ -580,8 +615,8 @@ const ja: Messages = {
 			description: 'Unix タイムスタンプと日時の相互変換、相対時間付き'
 		},
 		'jwt-decoder': {
-			name: 'JWTデコーダー',
-			description: 'JWT のヘッダーとペイロードをデコードし有効期限を確認 — 完全オフライン'
+			name: 'JWTデコーダー & エンコーダー',
+			description: 'JWT のデコード・署名・検証 — HS、RS、PS、ES、EdDSA、JWKS に対応 — 完全オフライン'
 		},
 		'regex-tester': {
 			name: '正規表現テスター',
@@ -734,6 +769,10 @@ const ja: Messages = {
 		'number-base-converter': {
 			name: '基数変換',
 			description: '2 進・8 進・10 進・16 進から基数 36 まで、数値を相互変換'
+		},
+		'chmod-calculator': {
+			name: 'Chmod 計算機',
+			description: 'Unix パーミッションを 8 進数・rwx・シンボリック形式の chmod 間で変換。クリックで操作できるグリッド付き'
 		},
 		'cidr-calculator': {
 			name: 'CIDR / サブネット計算機',

@@ -96,29 +96,35 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
 
 	'jwt-decoder': {
 		about: [
-			'A JSON Web Token is three Base64URL segments — header, payload, signature — joined by dots. This decoder splits a token and renders header and payload as formatted JSON, flags the registered time claims (iat, exp, nbf) as human-readable dates, and tells you at a glance whether the token has expired.',
-			'Decoding is not verification: the payload of any JWT can be read by anyone who holds it, because Base64URL is an encoding, not encryption. That is also why pasting a token into a random website is normally a bad idea — this page is the exception, because decoding happens entirely in your browser and the token is never transmitted. Signature verification against a secret or public key is deliberately out of scope for the offline decoder.',
-			'A leading "Bearer " prefix is stripped automatically, so you can paste straight from an Authorization header.'
+			'A JSON Web Token is three Base64URL segments — header, payload, signature — joined by dots. Decode mode splits a token and renders header and payload as formatted JSON, turns the registered time claims (iat, exp, nbf) into readable dates, and shows how much of the token\'s lifetime is left.',
+			'Decoding is not verification: anyone holding a JWT can read its payload, because Base64URL is an encoding, not encryption. Verify mode checks the signature with WebCrypto against what you paste — the shared secret for HS256/384/512, or for RS, PS, ES and EdDSA a public key as PEM, a single JWK, or a whole JWKS, where the token\'s kid picks the key. It also checks exp and nbf against your clock, and refuses a public key for an HS token, which is the "algorithm confusion" mistake behind several real library vulnerabilities.',
+			'Sign mode builds a token from a JSON payload and optional extra header fields such as kid, with buttons to stamp iat and exp. It can generate a random secret or a throwaway key pair, and hand the signed token straight to Verify with the matching public key — handy for testing an API or a JWKS setup without writing a script.',
+			'Tokens, secrets and private keys never leave the page: decoding, signing and verifying all run in your browser, and a leading "Bearer " prefix is stripped so you can paste straight from an Authorization header.'
 		],
 		faqs: [
 			{
-				q: 'Is it safe to paste a production token here?',
-				a: 'The token stays in your browser — this page performs no network requests with your input, which you can confirm in the developer tools network tab. Still, treat live tokens like passwords as a habit: prefer expired or test tokens when sharing screenshots.'
+				q: 'Is it safe to paste a production token or key here?',
+				a: 'Nothing you paste is transmitted — the page makes no network requests with your input, which you can confirm in the developer tools network tab, and nothing is saved. Still, treat live tokens and signing keys like passwords as a habit: prefer expired tokens and test keys when you can, and rotate a key that has been pasted somewhere you don\'t control.'
+			},
+			{
+				q: 'How do I verify a token from Auth0, Cognito, Google or Keycloak?',
+				a: 'Find the issuer\'s jwks_uri (it is listed in /.well-known/openid-configuration), open it in a tab and paste the whole JSON into the key box in Verify mode. The tool picks the key whose kid matches the token header. It does not fetch the URL itself, so that nothing about your token reaches the network.'
 			},
 			{
 				q: 'Why does my token fail to decode?',
-				a: 'Check that it has exactly three dot-separated segments and no line breaks from copy-wrapping. Opaque access tokens (e.g. many GitHub or Google tokens) are not JWTs at all — no amount of decoding will open a random string that never contained JSON.'
+				a: 'Check that it has exactly three dot-separated segments and no line breaks from copy-wrapping. Opaque access tokens (many GitHub or Google OAuth tokens, for example) are not JWTs at all — no amount of decoding will open a random string that never contained JSON. A five-segment token is a JWE: it is encrypted and needs the recipient\'s private key.'
 			},
 			{
 				q: 'What do iat, exp and nbf mean?',
-				a: 'They are registered claims from RFC 7519, all in unix seconds: iat is when the token was issued, exp is when it stops being valid, and nbf ("not before") is the earliest moment it may be accepted. This tool converts each to a readable date and compares exp against your clock.'
+				a: 'They are registered claims from RFC 7519, all in unix seconds: iat is when the token was issued, exp is when it stops being valid, and nbf ("not before") is the earliest moment it may be accepted. Decode mode shows each as a date; Verify mode reports a token as expired or not yet valid next to the signature result, since a good signature on an expired token should still be rejected.'
 			},
 			{
-				q: 'Can this tool verify the signature?',
-				a: 'No — and a green checkmark from an online tool should not be trusted for security decisions anyway. Verify signatures in your backend with a maintained library (jose, jsonwebtoken, PyJWT) against the issuer\'s actual keys.'
+				q: 'Which key formats work, and what if mine is rejected?',
+				a: 'Private keys as PKCS#8 PEM ("BEGIN PRIVATE KEY") or a JWK with its private "d"; public keys as SPKI PEM ("BEGIN PUBLIC KEY"), a JWK or a JWKS. Older formats get a specific message: convert PKCS#1 ("BEGIN RSA PRIVATE KEY") and SEC1 ("BEGIN EC PRIVATE KEY") keys with openssl pkcs8 -topk8 -nocrypt, and take the public key out of a certificate with openssl x509 -pubkey -noout.'
 			}
 		]
 	},
+
 
 	'regex-tester': {
 		about: [
@@ -722,6 +728,36 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
 			{
 				q: 'Should I use UA parsing for feature detection?',
 				a: 'No — sniffing breaks the moment a new browser version ships. Detect the feature itself (if ("clipboard" in navigator)). UA parsing is for analytics, log analysis and reproducing user-reported bugs, where knowing the environment is the whole point.'
+			}
+		]
+	},
+
+	'chmod-calculator': {
+		about: [
+			'Type a mode the way you have it — 755, 0644, rwxr-xr-x, a whole `ls -l` line, u=rwx,g=rx,o=rx, or a full command like chmod -R 750 /srv/app — and see it in every other form: octal, the rwx string, the ls -l column, and both chmod commands ready to copy. The grid shows read, write and execute for owner, group and others; tick a box and the mode updates.',
+			'Each octal digit is the sum of read (4), write (2) and execute (1) for one class, so 7 is rwx, 5 is r-x and 4 is r--. An optional fourth digit in front holds the special bits: 4 for setuid, 2 for setgid and 1 for the sticky bit. That is why /tmp is 1777 and shows as rwxrwxrwt, and passwd is 4755 and shows as rwsr-xr-x. A capital S or T means the special bit is set but execute is not, which is almost always a mistake.',
+			'Relative expressions such as g+w, go-rwx or a+X depend on what the file already has, so the calculator applies them to a starting mode you choose (644 by default) and follows GNU chmod: X adds execute only for directories or files that already have it, u=g copies one class to another, and = on a directory keeps setuid and setgid. Type umask 027 to see which modes new files and directories will get. Nothing you paste — paths, user names, server layouts — leaves the page.'
+		],
+		faqs: [
+			{
+				q: 'What is the difference between 755 and 644?',
+				a: '755 (rwxr-xr-x) lets the owner read, write and execute, and everyone else read and execute. It is the usual mode for directories and scripts. 644 (rw-r--r--) drops execute for everyone, which is the usual mode for ordinary files. A directory needs execute (x) to be entered at all, so a directory set to 644 cannot be opened even by its owner.'
+			},
+			{
+				q: 'Why does SSH reject my private key with "permissions are too open"?',
+				a: 'OpenSSH refuses to use a private key that the group or other users can read. Set it to 600 (rw-------), or 400 for read-only, with chmod 600 ~/.ssh/id_ed25519. The ~/.ssh directory itself should be 700, and authorized_keys 600 or 644.'
+			},
+			{
+				q: 'Is chmod 777 ever a good idea?',
+				a: 'Rarely. 777 lets every account on the machine, including any compromised web process, change or replace the file. When "permission denied" goes away with 777, the real fix is usually ownership (chown the file to the user that runs the service) or group membership with 770 or 775. Shared scratch directories that really do need world write access should also get the sticky bit (1777), so users cannot delete each other\'s files.'
+			},
+			{
+				q: 'What does chmod +x do without u, g or o?',
+				a: 'Real chmod applies it to all three classes, except for bits your umask masks out. With the common umask 022 that makes no difference for +x, but +w becomes u+w only. The calculator treats a missing class as a (all) and does not apply a umask, so type u+w or a+w explicitly if the difference matters.'
+			},
+			{
+				q: 'How does umask relate to these numbers?',
+				a: 'umask lists the bits to remove from new files and directories. Programs usually create files as 666 and directories as 777, and the umask is subtracted from that: 022 gives 644 and 755, 027 gives 640 and 750, and 077 gives 600 and 700. Execute is never added to new files by the umask, which is why a fresh script needs chmod +x.'
 			}
 		]
 	},

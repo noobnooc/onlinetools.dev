@@ -86,26 +86,31 @@ const TOOL_CONTENT_DE: Record<string, ToolContent> = {
 
 	'jwt-decoder': {
 		about: [
-			'Ein JSON Web Token besteht aus drei Base64URL-Segmenten — Header, Payload, Signatur — verbunden durch Punkte. Dieser Decoder zerlegt ein Token, rendert Header und Payload als formatiertes JSON, markiert die registrierten Zeit-Claims (iat, exp, nbf) als menschenlesbare Daten und zeigt dir auf einen Blick, ob das Token abgelaufen ist.',
-			'Dekodieren ist keine Verifikation: Den Payload eines JWT kann jeder lesen, der es in der Hand hat, denn Base64URL ist eine Kodierung, keine Verschlüsselung. Genau deshalb ist es normalerweise eine schlechte Idee, ein Token auf einer beliebigen Website einzufügen — diese Seite ist die Ausnahme, weil das Dekodieren vollständig in deinem Browser stattfindet und das Token nie übertragen wird. Die Signaturprüfung gegen ein Secret oder einen Public Key liegt beim Offline-Decoder bewusst außerhalb des Umfangs.',
-			'Ein führendes „Bearer “-Präfix wird automatisch entfernt, du kannst also direkt aus einem Authorization-Header einfügen.'
+			'Ein JSON Web Token besteht aus drei Base64URL-Segmenten — Header, Payload, Signatur — verbunden durch Punkte. Der Modus „Dekodieren“ zerlegt ein Token, rendert Header und Payload als formatiertes JSON, wandelt die registrierten Zeit-Claims (iat, exp, nbf) in lesbare Daten um und zeigt, wie viel von der Lebensdauer des Tokens noch übrig ist.',
+			'Dekodieren ist keine Verifikation: Den Payload eines JWT kann jeder lesen, der es in der Hand hat, denn Base64URL ist eine Kodierung, keine Verschlüsselung. Der Modus „Verifizieren“ prüft die Signatur per WebCrypto gegen das, was du einfügst — das gemeinsame Secret bei HS256/384/512 oder bei RS, PS, ES und EdDSA einen Public Key als PEM, einen einzelnen JWK oder ein ganzes JWKS, wobei die kid des Tokens den Schlüssel auswählt. Außerdem prüft er exp und nbf gegen deine Uhr und lehnt einen Public Key für ein HS-Token ab — genau der „Algorithm Confusion“-Fehler, der hinter mehreren realen Schwachstellen in Libraries steckt.',
+			'Der Modus „Signieren“ baut ein Token aus einem JSON-Payload und optionalen zusätzlichen Header-Feldern wie kid, mit Buttons zum Setzen von iat und exp. Er kann ein zufälliges Secret oder ein Wegwerf-Schlüsselpaar generieren und das signierte Token samt passendem Public Key direkt an „Verifizieren“ übergeben — praktisch, um eine API oder ein JWKS-Setup zu testen, ohne ein Skript zu schreiben.',
+			'Tokens, Secrets und private Schlüssel verlassen die Seite nie: Dekodieren, Signieren und Verifizieren laufen komplett in deinem Browser, und ein führendes „Bearer “-Präfix wird entfernt, du kannst also direkt aus einem Authorization-Header einfügen.'
 		],
 		faqs: [
 			{
-				q: 'Ist es sicher, hier ein Produktions-Token einzufügen?',
-				a: 'Das Token bleibt in deinem Browser — diese Seite macht keine Netzwerk-Requests mit deiner Eingabe, was du im Network-Tab der Developer Tools nachprüfen kannst. Behandle Live-Tokens aus Gewohnheit trotzdem wie Passwörter: Für Screenshots lieber abgelaufene oder Test-Tokens verwenden.'
+				q: 'Ist es sicher, hier ein Produktions-Token oder einen Schlüssel einzufügen?',
+				a: 'Nichts, was du einfügst, wird übertragen — die Seite macht keine Netzwerk-Requests mit deiner Eingabe, was du im Network-Tab der Developer Tools nachprüfen kannst, und nichts wird gespeichert. Behandle Live-Tokens und Signaturschlüssel aus Gewohnheit trotzdem wie Passwörter: Nimm wenn möglich abgelaufene Tokens und Test-Schlüssel, und rotiere einen Schlüssel, der irgendwo eingefügt wurde, wo du keine Kontrolle hast.'
+			},
+			{
+				q: 'Wie verifiziere ich ein Token von Auth0, Cognito, Google oder Keycloak?',
+				a: 'Such die jwks_uri des Ausstellers (sie steht in /.well-known/openid-configuration), öffne sie in einem Tab und füge das komplette JSON im Modus „Verifizieren“ in das Schlüsselfeld ein. Das Tool wählt den Schlüssel, dessen kid zum Token-Header passt. Die URL ruft es nicht selbst ab, damit nichts über dein Token ins Netzwerk gelangt.'
 			},
 			{
 				q: 'Warum lässt sich mein Token nicht dekodieren?',
-				a: 'Prüfe, ob es genau drei durch Punkte getrennte Segmente hat und keine Zeilenumbrüche vom Kopieren enthält. Opake Access-Tokens (z. B. viele GitHub- oder Google-Tokens) sind gar keine JWTs — kein Dekodieren der Welt öffnet einen Zufallsstring, der nie JSON enthielt.'
+				a: 'Prüfe, ob es genau drei durch Punkte getrennte Segmente hat und keine Zeilenumbrüche vom Kopieren enthält. Opake Access-Tokens (z. B. viele OAuth-Tokens von GitHub oder Google) sind gar keine JWTs — kein Dekodieren der Welt öffnet einen Zufallsstring, der nie JSON enthielt. Ein Token mit fünf Segmenten ist ein JWE: Es ist verschlüsselt und braucht den privaten Schlüssel des Empfängers.'
 			},
 			{
 				q: 'Was bedeuten iat, exp und nbf?',
-				a: 'Das sind registrierte Claims aus RFC 7519, alle in Unix-Sekunden: iat ist der Ausstellungszeitpunkt des Tokens, exp der Zeitpunkt, ab dem es ungültig wird, und nbf („not before“) der früheste Moment, ab dem es akzeptiert werden darf. Dieses Tool wandelt jeden in ein lesbares Datum um und vergleicht exp mit deiner Uhr.'
+				a: 'Das sind registrierte Claims aus RFC 7519, alle in Unix-Sekunden: iat ist der Ausstellungszeitpunkt des Tokens, exp der Zeitpunkt, ab dem es ungültig wird, und nbf („not before“) der früheste Moment, ab dem es akzeptiert werden darf. „Dekodieren“ zeigt jeden als Datum an; „Verifizieren“ meldet neben dem Signaturergebnis, ob ein Token abgelaufen oder noch nicht gültig ist — denn auch ein abgelaufenes Token mit gültiger Signatur sollte abgelehnt werden.'
 			},
 			{
-				q: 'Kann dieses Tool die Signatur verifizieren?',
-				a: 'Nein — und einem grünen Häkchen eines Online-Tools sollte man für Sicherheitsentscheidungen ohnehin nicht vertrauen. Verifiziere Signaturen in deinem Backend mit einer gepflegten Library (jose, jsonwebtoken, PyJWT) gegen die tatsächlichen Keys des Issuers.'
+				q: 'Welche Schlüsselformate funktionieren, und was, wenn meiner abgelehnt wird?',
+				a: 'Private Schlüssel als PKCS#8-PEM („BEGIN PRIVATE KEY“) oder als JWK mit privatem „d“; Public Keys als SPKI-PEM („BEGIN PUBLIC KEY“), als JWK oder als JWKS. Ältere Formate bekommen eine eigene Meldung: Konvertiere PKCS#1- („BEGIN RSA PRIVATE KEY“) und SEC1-Schlüssel („BEGIN EC PRIVATE KEY“) mit openssl pkcs8 -topk8 -nocrypt, und hol den Public Key mit openssl x509 -pubkey -noout aus einem Zertifikat.'
 			}
 		]
 	},

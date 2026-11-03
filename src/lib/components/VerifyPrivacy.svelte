@@ -125,12 +125,12 @@
 		<ul class="mt-3 space-y-1 font-mono text-[11px] text-dim">
 			{#each recent as r, i (i)}
 				<li class="flex items-center gap-2">
-					<span class="shrink-0 rounded-sm border border-line px-1 py-px text-dim/70">{r.type}</span>
+					<span class="shrink-0 rounded-sm border border-line px-1 py-px text-dim">{r.type}</span>
 					<span class="truncate">{r.label}</span>
 				</li>
 			{/each}
 		</ul>
 	{/if}
 
-	<p class="mt-4 text-[11px] leading-relaxed text-dim/70">{t('aboutRequestsNote')}</p>
+	<p class="mt-4 text-[11px] leading-relaxed text-dim">{t('aboutRequestsNote')}</p>
 </div>

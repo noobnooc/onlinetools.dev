@@ -338,7 +338,7 @@ const vi: Messages = {
 		jwtNotBefore: 'Không dùng trước',
 		jwtLifetime: 'Thời hạn',
 		jwtNote:
-			'Việc giải mã chỉ đọc token — nó không xác minh chữ ký. Hãy xác minh chữ ký ở phía máy chủ bằng khóa của bên phát hành.',
+			'Việc giải mã chỉ đọc token — ai cũng làm được. Hãy chuyển sang Xác minh để kiểm tra chữ ký với khóa bí mật, khóa công khai hoặc JWKS.',
 		loremUnit: 'Đơn vị',
 		loremWords: 'Từ',
 		loremSentences: 'Câu',
@@ -510,6 +510,34 @@ const vi: Messages = {
 		cidrOutside: 'Nằm ngoài khối',
 		cidrBlocks: '{n} khối CIDR',
 		cidrEmpty: 'Chi tiết hiện ở đây — thử 10.0.0.0/16 hoặc dải 10.0.0.1 - 10.0.0.50',
+
+		// Chmod calculator
+		chmInput: 'Mode, chuỗi ls -l, lệnh chmod hoặc umask',
+		chmGrid: 'Các bit quyền',
+		chmOwner: 'Chủ sở hữu (u)',
+		chmGroup: 'Nhóm (g)',
+		chmOther: 'Người khác (o)',
+		chmRead: 'Đọc',
+		chmWrite: 'Ghi',
+		chmExec: 'Thực thi',
+		chmSpecial: 'Đặc biệt',
+		chmSetuid: 'Setuid',
+		chmSetgid: 'Setgid',
+		chmSticky: 'Sticky',
+		chmOctal: 'Bát phân',
+		chmSymbolic: 'Ký hiệu',
+		chmCommand: 'Lệnh',
+		chmCommandSym: 'Lệnh (ký hiệu)',
+		chmBase: 'Bắt đầu từ',
+		chmDirectory: 'Đích là thư mục',
+		chmUmaskFile: 'Tệp mới',
+		chmUmaskDir: 'Thư mục mới',
+		chmWarnWorld: 'Người khác có quyền ghi: bất kỳ người dùng nào trên hệ thống cũng có thể sửa hoặc thay thế tệp này.',
+		chmWarnSetuid: 'Setuid: tệp thực thi chạy với quyền của chủ sở hữu, không phải của người gọi.',
+		chmWarnSetgid: 'Setgid: chạy với nhóm của tệp; với thư mục, tệp mới kế thừa nhóm của thư mục.',
+		chmWarnSpecialNoExec: 'Bit đặc biệt được bật mà không có quyền thực thi (hiện là S hoặc T), thường là nhầm lẫn.',
+		chmWarnOwnerLess: 'Chủ sở hữu có ít quyền hơn nhóm hoặc người khác. Hãy kiểm tra thứ tự chữ số.',
+		chmEmpty: 'Nhập 755, rwxr-xr-x hoặc g+w, hoặc đánh dấu các ô ở trên',
 		hbFormat: 'Byte dạng',
 		hbSep: 'Ký tự phân tách',
 		hbSpace: 'Dấu cách',
@@ -549,12 +577,19 @@ const vi: Messages = {
 		jwtAlg: 'Thuật toán',
 		jwtPayloadLbl: 'Payload (đối tượng JSON)',
 		jwtSecret: 'Khóa bí mật',
-		jwtPrivKey: 'Khóa riêng tư (PKCS#8 PEM)',
-		jwtPubKey: 'Khóa bí mật (HS) hoặc khóa công khai PEM (RS/ES)',
+		jwtPrivKey: 'Khóa riêng tư (PKCS#8 PEM hoặc JWK)',
+		jwtPubKey: 'Khóa bí mật (HS) hoặc khóa công khai — PEM, JWK hoặc JWKS',
+		jwtHeaderLbl: 'Trường header bổ sung (JSON tùy chọn, vd. kid)',
+		jwtSetIat: 'Đặt iat là thời điểm hiện tại',
+		jwtExpIn: 'Hết hạn sau',
+		jwtGenSecret: 'Tạo khóa bí mật',
+		jwtGenPair: 'Tạo cặp khóa thử nghiệm',
+		jwtPubForVerify: 'Khóa công khai tương ứng',
+		jwtVerifyThis: 'Xác minh token này →',
 		jwtSignNote:
-			'Việc ký chạy trên WebCrypto trong trình duyệt của bạn — khóa không bao giờ rời khỏi trang này. Với các thuật toán HS, hãy dùng khóa bí mật dài và ngẫu nhiên; khóa ngắn vẫn bị dò ra bằng vét cạn dù bạn ký ở đâu.',
+			'Việc ký chạy trên WebCrypto trong trình duyệt của bạn — khóa không bao giờ rời khỏi trang này, và các khóa được tạo không được lưu ở bất kỳ đâu. Với các thuật toán HS, hãy dùng khóa bí mật dài và ngẫu nhiên; khóa ngắn vẫn bị dò ra bằng vét cạn dù bạn ký ở đâu.',
 		jwtVerifyNote:
-			'Việc xác minh đối chiếu chữ ký với khóa bạn cung cấp, ngay tại máy. Nó không gọi tới endpoint JWKS và không kiểm tra các claim như aud/iss — hãy làm việc đó ở phía máy chủ.',
+			'Việc xác minh đối chiếu chữ ký với khóa bạn cung cấp, cùng exp và nbf với đồng hồ của bạn, tất cả ngay tại máy. Nó không tải JWKS từ URL — hãy mở jwks_uri của bên phát hành và dán JSON vào. Hãy kiểm tra aud và iss ở backend của bạn.',
 		tsDiff: 'Khoảng cách giữa hai mốc thời gian',
 		wcWords: 'Từ',
 		wcChars: 'Ký tự',
@@ -612,8 +647,8 @@ const vi: Messages = {
 			description: 'Đổi dấu thời gian unix sang ngày giờ dễ đọc và ngược lại, kèm thời gian tương đối'
 		},
 		'jwt-decoder': {
-			name: 'Giải mã JWT',
-			description: 'Giải mã header và payload của JWT, kiểm tra hạn dùng — hoàn toàn ngoại tuyến'
+			name: 'Giải mã & mã hóa JWT',
+			description: 'Giải mã, ký và xác minh JWT — HS, RS, PS, ES, EdDSA và JWKS — hoàn toàn ngoại tuyến'
 		},
 		'regex-tester': {
 			name: 'Thử biểu thức chính quy',
@@ -746,6 +781,10 @@ const vi: Messages = {
 		'number-base-converter': {
 			name: 'Chuyển đổi hệ cơ số',
 			description: 'Đổi số giữa nhị phân, bát phân, thập phân, thập lục phân và mọi cơ số tới 36'
+		},
+		'chmod-calculator': {
+			name: 'Máy tính Chmod',
+			description: 'Chuyển quyền Unix giữa bát phân, rwx và chmod ký hiệu, kèm lưới có thể nhấp'
 		},
 		'cidr-calculator': {
 			name: 'Máy tính CIDR / Subnet',
