@@ -1188,6 +1188,10 @@ const TOOL_CONTENT_ID: Record<string, ToolContent> = {
 			{
 				q: 'Untuk apa wildcard mask?',
 				a: 'Itu adalah netmask yang dibalik — 0.0.0.255 untuk /24 — dan begitulah access list Cisco IOS serta pernyataan network OSPF menyatakan sebuah rentang. Anda bisa menempel bentuk mana pun ke kalkulator; kalkulator mengenali wildcard mask dan mengubahnya menjadi panjang prefiks.'
+			},
+			{
+				q: 'Bisakah menggabungkan daftar blok, atau mengurangi satu rentang dari rentang lain?',
+				a: 'Bisa. Tempel beberapa blok, alamat, atau rentang — satu per baris atau dipisahkan koma, komentar # diperbolehkan — dan kalkulator menggabungkan yang tumpang-tindih atau bersebelahan menjadi blok CIDR sesedikit mungkin yang mencakup alamat yang persis sama, IPv4 dulu lalu IPv6. Isi kotak Kecualikan dibuang dari hasil; begitulah cara membuat daftar AllowedIPs WireGuard yang merutekan semuanya kecuali LAN Anda: 0.0.0.0/0 dikurangi 192.168.0.0/16 menghasilkan 16 blok. Baris yang tidak bisa dibaca ditampilkan beserta nomor barisnya lalu dilewati, jadi satu salah ketik tidak menyembunyikan sisanya.'
 			}
 		]
 	},

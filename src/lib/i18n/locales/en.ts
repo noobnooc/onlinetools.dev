@@ -561,7 +561,7 @@ const en = {
 		nbDec: 'Decimal',
 		nbHex: 'Hex',
 		nbBits: 'bits',
-		cidrInput: 'CIDR, address or range',
+		cidrInput: 'CIDR, address, range or list',
 		cidrAddress: 'Address',
 		cidrNetwork: 'Network',
 		cidrBroadcast: 'Broadcast',
@@ -586,6 +586,14 @@ const en = {
 		cidrOutside: 'Outside the block',
 		cidrBlocks: '{n} CIDR blocks',
 		cidrEmpty: 'Details appear here — try 10.0.0.0/16 or a range like 10.0.0.1 - 10.0.0.50',
+		cidrEntries: '{n} entries',
+		cidrSkipped: '{n} skipped',
+		cidrExcludedN: '{n} excluded',
+		cidrNothingLeft: 'Nothing left — the exclusions cover every address',
+		cidrLine: 'Line {n}',
+		cidrExcludeLine: 'Exclude, line {n}',
+		cidrExclude: 'Exclude',
+		cidrExcludeHint: 'Blocks, addresses or ranges to cut out of the result, e.g. your LAN from 0.0.0.0/0 for WireGuard AllowedIPs. One per line or comma-separated.',
 
 		// Chmod calculator
 		chmInput: 'Mode, ls -l string, chmod command or umask',

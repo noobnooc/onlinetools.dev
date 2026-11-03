@@ -1189,6 +1189,10 @@ const TOOL_CONTENT_FR: Record<string, ToolContent> = {
 			{
 				q: 'À quoi sert le masque générique ?',
 				a: 'C’est le masque de sous-réseau inversé — 0.0.0.255 pour un /24 — et c’est ainsi que les listes d’accès de Cisco IOS et les instructions network d’OSPF expriment une plage. Vous pouvez coller l’une ou l’autre forme dans le calculateur ; il reconnaît un masque générique et le convertit en longueur de préfixe.'
+			},
+			{
+				q: 'Peut-il fusionner une liste de blocs, ou soustraire une plage d’une autre ?',
+				a: 'Oui. Collez plusieurs blocs, adresses ou plages — un par ligne ou séparés par des virgules, commentaires # acceptés — et le calculateur fusionne ceux qui se chevauchent ou se touchent en un minimum de blocs CIDR couvrant exactement les mêmes adresses, IPv4 d’abord, puis IPv6. Ce que vous mettez dans le champ Exclure est retiré du résultat : c’est ainsi qu’on construit une liste AllowedIPs WireGuard qui route tout sauf votre réseau local. 0.0.0.0/0 moins 192.168.0.0/16 donne 16 blocs. Les lignes illisibles sont listées avec leur numéro et ignorées, pour qu’une faute de frappe ne masque pas le reste.'
 			}
 		]
 	},

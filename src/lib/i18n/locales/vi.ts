@@ -485,7 +485,7 @@ const vi: Messages = {
 		nbDec: 'Thập phân',
 		nbHex: 'Thập lục phân',
 		nbBits: 'bit',
-		cidrInput: 'CIDR, địa chỉ hoặc dải',
+		cidrInput: 'CIDR, địa chỉ, dải hoặc danh sách',
 		cidrAddress: 'Địa chỉ',
 		cidrNetwork: 'Mạng',
 		cidrBroadcast: 'Broadcast',
@@ -510,6 +510,14 @@ const vi: Messages = {
 		cidrOutside: 'Nằm ngoài khối',
 		cidrBlocks: '{n} khối CIDR',
 		cidrEmpty: 'Chi tiết hiện ở đây — thử 10.0.0.0/16 hoặc dải 10.0.0.1 - 10.0.0.50',
+		cidrEntries: '{n} mục',
+		cidrSkipped: 'bỏ qua {n}',
+		cidrExcludedN: 'loại trừ {n}',
+		cidrNothingLeft: 'Không còn gì — danh sách loại trừ bao phủ mọi địa chỉ',
+		cidrLine: 'Dòng {n}',
+		cidrExcludeLine: 'Loại trừ, dòng {n}',
+		cidrExclude: 'Loại trừ',
+		cidrExcludeHint: 'Khối, địa chỉ hoặc dải cần bỏ khỏi kết quả, ví dụ mạng LAN khỏi 0.0.0.0/0 cho AllowedIPs của WireGuard. Mỗi dòng một mục hoặc cách nhau bằng dấu phẩy.',
 
 		// Chmod calculator
 		chmInput: 'Mode, chuỗi ls -l, lệnh chmod hoặc umask',

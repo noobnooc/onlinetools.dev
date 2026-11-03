@@ -1189,6 +1189,10 @@ const TOOL_CONTENT_ES: Record<string, ToolContent> = {
 			{
 				q: '¿Para qué sirve la máscara comodín?',
 				a: 'Es la máscara de red invertida — 0.0.0.255 para un /24 — y es la forma en que las listas de acceso de Cisco IOS y las sentencias network de OSPF expresan un rango. Puedes pegar cualquiera de las dos formas en la calculadora; reconoce una máscara comodín y la convierte a longitud de prefijo.'
+			},
+			{
+				q: '¿Puede fusionar una lista de bloques o restar un rango de otro?',
+				a: 'Sí. Pega varios bloques, direcciones o rangos —uno por línea o separados por comas, con comentarios # permitidos— y la calculadora fusiona los que se solapan o son contiguos en el menor número de bloques CIDR que cubren exactamente las mismas direcciones, primero IPv4 y luego IPv6. Lo que pongas en el cuadro Excluir se quita del resultado; así se construye una lista AllowedIPs de WireGuard que enruta todo salvo tu LAN: 0.0.0.0/0 menos 192.168.0.0/16 da 16 bloques. Las líneas que no se pueden interpretar se muestran con su número de línea y se omiten, para que un error tipográfico no oculte el resto.'
 			}
 		]
 	},

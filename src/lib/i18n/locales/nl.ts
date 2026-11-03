@@ -501,7 +501,7 @@ const nl: Messages = {
 		nbDec: 'Decimaal',
 		nbHex: 'Hex',
 		nbBits: 'bits',
-		cidrInput: 'CIDR, adres of bereik',
+		cidrInput: 'CIDR, adres, bereik of lijst',
 		cidrAddress: 'Adres',
 		cidrNetwork: 'Netwerk',
 		cidrBroadcast: 'Broadcast',
@@ -526,6 +526,14 @@ const nl: Messages = {
 		cidrOutside: 'Buiten het blok',
 		cidrBlocks: '{n} CIDR-blokken',
 		cidrEmpty: 'Details verschijnen hier — probeer 10.0.0.0/16 of een bereik als 10.0.0.1 - 10.0.0.50',
+		cidrEntries: '{n} items',
+		cidrSkipped: '{n} overgeslagen',
+		cidrExcludedN: '{n} uitgesloten',
+		cidrNothingLeft: 'Er blijft niets over — de uitsluitingen dekken elk adres',
+		cidrLine: 'Regel {n}',
+		cidrExcludeLine: 'Uitsluiting, regel {n}',
+		cidrExclude: 'Uitsluiten',
+		cidrExcludeHint: 'Blokken, adressen of bereiken om uit het resultaat te halen, bijv. je LAN uit 0.0.0.0/0 voor WireGuard-AllowedIPs. Eén per regel of gescheiden door komma\'s.',
 
 		// Chmod calculator
 		chmInput: 'Modus, ls -l-string, chmod-commando of umask',

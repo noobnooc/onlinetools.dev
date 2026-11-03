@@ -473,7 +473,7 @@ const ja: Messages = {
 		nbDec: '10 進数',
 		nbHex: '16 進数',
 		nbBits: 'ビット',
-		cidrInput: 'CIDR・アドレス・範囲',
+		cidrInput: 'CIDR・アドレス・範囲・リスト',
 		cidrAddress: 'アドレス',
 		cidrNetwork: 'ネットワーク',
 		cidrBroadcast: 'ブロードキャスト',
@@ -498,6 +498,14 @@ const ja: Messages = {
 		cidrOutside: 'ブロック外',
 		cidrBlocks: '{n} 個の CIDR ブロック',
 		cidrEmpty: 'ここに詳細が表示されます — 10.0.0.0/16 や 10.0.0.1 - 10.0.0.50 のような範囲を試してください',
+		cidrEntries: '{n} 件',
+		cidrSkipped: '{n} 件をスキップ',
+		cidrExcludedN: '{n} 件を除外',
+		cidrNothingLeft: '何も残りません — 除外がすべてのアドレスを覆っています',
+		cidrLine: '{n} 行目',
+		cidrExcludeLine: '除外 {n} 行目',
+		cidrExclude: '除外',
+		cidrExcludeHint: '結果から取り除くブロック・アドレス・範囲。例: WireGuard の AllowedIPs で 0.0.0.0/0 から LAN を除く。1 行に 1 つ、またはカンマ区切り。',
 
 		// Chmod calculator
 		chmInput: 'モード・ls -l 文字列・chmod コマンド・umask',

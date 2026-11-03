@@ -1188,6 +1188,10 @@ const TOOL_CONTENT_PL: Record<string, ToolContent> = {
 			{
 				q: 'Do czego służy maska wildcard?',
 				a: 'To odwrócona maska sieci — 0.0.0.255 dla /24 — i właśnie tak zakres wyrażają listy dostępu w Cisco IOS oraz polecenia network w OSPF. Do kalkulatora możesz wkleić dowolną z tych postaci; rozpozna maskę wildcard i przeliczy ją na długość prefiksu.'
+			},
+			{
+				q: 'Czy da się scalić listę bloków albo odjąć jeden zakres od drugiego?',
+				a: 'Tak. Wklej kilka bloków, adresów lub zakresów — po jednym w wierszu albo rozdzielonych przecinkami, komentarze # są dozwolone — a kalkulator scali nakładające się i sąsiednie w najmniejszą liczbę bloków CIDR, które obejmują dokładnie te same adresy, najpierw IPv4, potem IPv6. To, co wpiszesz w polu Wyklucz, zostaje usunięte z wyniku — tak buduje się listę AllowedIPs dla WireGuard, która kieruje przez tunel wszystko poza siecią LAN: 0.0.0.0/0 minus 192.168.0.0/16 to 16 bloków. Wiersze, których nie da się odczytać, są wypisywane z numerem i pomijane, więc jedna literówka nie ukrywa reszty.'
 			}
 		]
 	},

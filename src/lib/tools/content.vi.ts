@@ -1188,6 +1188,10 @@ const TOOL_CONTENT_VI: Record<string, ToolContent> = {
 			{
 				q: 'Wildcard mask dùng để làm gì?',
 				a: 'Đó là netmask đảo ngược — 0.0.0.255 cho một /24 — và là cách mà access list của Cisco IOS và câu lệnh network của OSPF biểu diễn một dải. Bạn có thể dán dạng nào vào công cụ cũng được; nó nhận ra wildcard mask và chuyển thành độ dài prefix.'
+			},
+			{
+				q: 'Có thể gộp một danh sách khối, hoặc trừ một dải khỏi dải khác không?',
+				a: 'Có. Dán nhiều khối, địa chỉ hoặc dải — mỗi dòng một mục hoặc cách nhau bằng dấu phẩy, cho phép chú thích # — và công cụ gộp các mục chồng lấn hoặc liền kề thành ít khối CIDR nhất phủ đúng cùng các địa chỉ đó, IPv4 trước rồi đến IPv6. Mọi thứ trong ô Loại trừ sẽ bị cắt khỏi kết quả; đó là cách tạo danh sách AllowedIPs cho WireGuard để định tuyến mọi thứ trừ mạng LAN: 0.0.0.0/0 trừ 192.168.0.0/16 cho ra 16 khối. Các dòng không đọc được sẽ được liệt kê kèm số dòng và bỏ qua, để một lỗi gõ không che mất phần còn lại.'
 			}
 		]
 	},

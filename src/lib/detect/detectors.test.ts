@@ -86,6 +86,8 @@ describe('smart paste detection', () => {
 		expect(detect('10.0.0.0/8')[0]?.type).toBe('cidr');
 		expect(detect('2001:db8::/32')[0]?.type).toBe('cidr');
 		expect(detect('192.168.0.1 - 192.168.0.40')[0]?.type).toBe('cidr');
+		expect(detect('10.0.0.0/24\n10.0.1.0/24\n2001:db8::/48')[0]?.label).toBe('CIDR list');
+		expect(detect('10.0.0.0/24\nhello').some((d) => d.type === 'cidr')).toBe(false);
 		expect(detect('1/2').some((d) => d.type === 'cidr')).toBe(false);
 		expect(detect('2024-01-01').some((d) => d.type === 'cidr')).toBe(false);
 	});

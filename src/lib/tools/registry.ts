@@ -497,8 +497,8 @@ export const TOOLS: ToolMeta[] = [
 		name: 'CIDR / Subnet Calculator',
 		description: 'Work out network, broadcast, mask and host range for any IPv4 or IPv6 CIDR block',
 		category: 'web',
-		aliases: ['cidr', 'subnet', 'subnet calculator', 'ip calculator', 'netmask', 'ipv6 subnet', 'ip range to cidr'],
-		keywords: ['cidr calculator', 'subnet calculator', 'ipv4 subnet calculator', 'ipv6 cidr calculator', 'ip range to cidr', 'netmask calculator'],
+		aliases: ['cidr', 'subnet', 'subnet calculator', 'ip calculator', 'netmask', 'ipv6 subnet', 'ip range to cidr', 'merge cidr', 'cidr aggregation', 'allowedips'],
+		keywords: ['cidr calculator', 'subnet calculator', 'ipv4 subnet calculator', 'ipv6 cidr calculator', 'ip range to cidr', 'netmask calculator', 'cidr aggregator', 'wireguard allowedips calculator'],
 		related: ['number-base-converter', 'url-parser', 'user-agent-parser', 'text-to-hex', 'regex-tester', 'chmod-calculator']
 	},
 	{

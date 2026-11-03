@@ -1189,6 +1189,10 @@ const TOOL_CONTENT_IT: Record<string, ToolContent> = {
 			{
 				q: 'A cosa serve la wildcard mask?',
 				a: 'È la netmask invertita — 0.0.0.255 per un /24 — ed è il modo in cui le access list di Cisco IOS e le istruzioni network di OSPF esprimono un intervallo. Puoi incollare l’una o l’altra forma nel calcolatore; riconosce una wildcard mask e la converte nella lunghezza del prefisso.'
+			},
+			{
+				q: 'Può unire un elenco di blocchi o sottrarre un intervallo da un altro?',
+				a: 'Sì. Incolla più blocchi, indirizzi o intervalli — uno per riga o separati da virgole, con commenti # ammessi — e il calcolatore unisce quelli sovrapposti o adiacenti nel minor numero di blocchi CIDR che coprono esattamente gli stessi indirizzi, prima IPv4 e poi IPv6. Ciò che metti nel campo Escludi viene tolto dal risultato: è così che si costruisce un elenco AllowedIPs di WireGuard che instrada tutto tranne la tua LAN. 0.0.0.0/0 meno 192.168.0.0/16 dà 16 blocchi. Le righe non interpretabili vengono elencate con il loro numero e saltate, così un errore di battitura non nasconde il resto.'
 			}
 		]
 	},

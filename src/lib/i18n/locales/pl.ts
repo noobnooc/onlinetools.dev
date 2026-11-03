@@ -485,7 +485,7 @@ const pl: Messages = {
 		nbDec: 'Dziesiętny',
 		nbHex: 'Szesnastkowy',
 		nbBits: 'bitów',
-		cidrInput: 'CIDR, adres lub zakres',
+		cidrInput: 'CIDR, adres, zakres lub lista',
 		cidrAddress: 'Adres',
 		cidrNetwork: 'Sieć',
 		cidrBroadcast: 'Broadcast',
@@ -510,6 +510,14 @@ const pl: Messages = {
 		cidrOutside: 'Poza blokiem',
 		cidrBlocks: 'bloki CIDR: {n}',
 		cidrEmpty: 'Tu pojawią się szczegóły — spróbuj 10.0.0.0/16 lub zakresu 10.0.0.1 - 10.0.0.50',
+		cidrEntries: 'wpisy: {n}',
+		cidrSkipped: 'pominięte: {n}',
+		cidrExcludedN: 'wykluczone: {n}',
+		cidrNothingLeft: 'Nic nie zostało — wykluczenia obejmują wszystkie adresy',
+		cidrLine: 'Wiersz {n}',
+		cidrExcludeLine: 'Wykluczenia, wiersz {n}',
+		cidrExclude: 'Wyklucz',
+		cidrExcludeHint: 'Bloki, adresy lub zakresy do usunięcia z wyniku, np. sieć LAN z 0.0.0.0/0 dla AllowedIPs w WireGuard. Jeden na wiersz lub rozdzielone przecinkami.',
 
 		// Chmod calculator
 		chmInput: 'Tryb, ciąg ls -l, polecenie chmod lub umask',
