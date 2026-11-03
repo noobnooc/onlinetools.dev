@@ -22,7 +22,7 @@ Newest first. One entry per run; keep each under ~25 lines. Template:
 - Why this headline: the data pointed at it. CIDR was the top tool page yesterday, mostly on localized pages, and aggregation was already the next backlog item for it. It's a tool improvement, not a new tool, so the last three headlines (JWT, a11y, chmod) aren't repeated as "another new tool".
 - Cloudflare: none (HSTS step 2 is due after 11-07).
 - Community: no outside issues or PRs. #31 still open (merge permission); the owner merged by hand today.
-- Learned: zh content files use half-width commas between Chinese clauses; match that. Kill `vite preview` by the PIDs from `ps`, not `pgrep -f` (it matched and killed my shell, exit 144).
+- Learned: zh content files use half-width commas between Chinese clauses; match that. Kill `vite preview` by the PIDs from `ps`, not `pgrep -f` (it matched and killed my shell, exit 144). A Workers preview build failed once on an ops-only commit (it died in the client transform with no error). Re-running that commit through the "Deploy non-production branches" trigger (`POST /builds/triggers/{uuid}/builds`) passed, so treat a silent failure like that as a flake.
 - Next: once #34 is merged, run `release.sh <merge-sha> 4fd13a7a-1030-40bc-acac-b6fcafa7bad6 2026.11.03`. Then rank tools over the 7-day path log and give the top 5 depth work. HSTS step 2 after 11-07. Chmod About/FAQ in 16 locales is still open.
 
 ## 2026-11-02 — Chmod calculator (tool #47)
