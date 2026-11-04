@@ -1163,6 +1163,36 @@ const TOOL_CONTENT_ES: Record<string, ToolContent> = {
 		]
 	},
 
+	'chmod-calculator': {
+		about: [
+			'Escribe un modo tal como lo tengas — 755, 0644, rwxr-xr-x, una línea entera de `ls -l`, u=rwx,g=rx,o=rx o un comando completo como chmod -R 750 /srv/app — y míralo en todas las demás formas: octal, la cadena rwx, la columna de ls -l y los dos comandos chmod listos para copiar. La cuadrícula muestra lectura, escritura y ejecución para propietario, grupo y otros; marca una casilla y el modo se actualiza.',
+			'Cada dígito octal es la suma de lectura (4), escritura (2) y ejecución (1) para una clase, así que 7 es rwx, 5 es r-x y 4 es r--. Un cuarto dígito opcional delante contiene los bits especiales: 4 para setuid, 2 para setgid y 1 para el sticky bit. Por eso /tmp es 1777 y se muestra como rwxrwxrwt, y passwd es 4755 y se muestra como rwsr-xr-x. Una S o T mayúscula significa que el bit especial está activado pero la ejecución no, lo que casi siempre es un error.',
+			'Las expresiones relativas como g+w, go-rwx o a+X dependen de lo que el archivo ya tiene, así que la calculadora las aplica a un modo de partida que tú eliges (644 por defecto) y sigue a GNU chmod: X añade ejecución solo a directorios o a archivos que ya la tienen, u=g copia una clase en otra, y = en un directorio conserva setuid y setgid. Escribe umask 027 para ver qué modos recibirán los archivos y directorios nuevos. Nada de lo que pegues — rutas, nombres de usuario, estructuras de servidor — sale de la página.'
+		],
+		faqs: [
+			{
+				q: '¿Cuál es la diferencia entre 755 y 644?',
+				a: '755 (rwxr-xr-x) permite al propietario leer, escribir y ejecutar, y a todos los demás leer y ejecutar. Es el modo habitual para directorios y scripts. 644 (rw-r--r--) quita la ejecución a todos, que es el modo habitual para archivos normales. Un directorio necesita ejecución (x) para poder entrar en él, así que un directorio con 644 no lo puede abrir ni su propietario.'
+			},
+			{
+				q: '¿Por qué SSH rechaza mi clave privada con "permissions are too open"?',
+				a: 'OpenSSH se niega a usar una clave privada que el grupo u otros usuarios puedan leer. Ponla en 600 (rw-------), o en 400 para solo lectura, con chmod 600 ~/.ssh/id_ed25519. El propio directorio ~/.ssh debería estar en 700, y authorized_keys en 600 o 644.'
+			},
+			{
+				q: '¿Es chmod 777 alguna vez buena idea?',
+				a: 'Rara vez. 777 permite a cualquier cuenta de la máquina, incluido un proceso web comprometido, modificar o reemplazar el archivo. Cuando "permission denied" desaparece con 777, la solución real suele ser la propiedad (hacer chown del archivo al usuario que ejecuta el servicio) o la pertenencia a un grupo con 770 o 775. Los directorios temporales compartidos que de verdad necesitan escritura para todos deberían llevar además el sticky bit (1777), para que los usuarios no puedan borrar los archivos de otros.'
+			},
+			{
+				q: '¿Qué hace chmod +x sin u, g ni o?',
+				a: 'El chmod real lo aplica a las tres clases, salvo los bits que enmascara tu umask. Con la umask habitual 022 eso no cambia nada para +x, pero +w se queda en u+w. La calculadora trata una clase ausente como a (todas) y no aplica ninguna umask, así que escribe u+w o a+w explícitamente si la diferencia importa.'
+			},
+			{
+				q: '¿Qué relación tiene la umask con estos números?',
+				a: 'La umask indica los bits que se quitan a los archivos y directorios nuevos. Los programas suelen crear los archivos como 666 y los directorios como 777, y a eso se le resta la umask: 022 da 644 y 755, 027 da 640 y 750, y 077 da 600 y 700. La umask nunca añade ejecución a los archivos nuevos, por eso un script recién creado necesita chmod +x.'
+			}
+		]
+	},
+
 	'cidr-calculator': {
 		about: [
 			'Escribe un bloque CIDR como 10.20.0.0/16 o 2001:db8::/48 y consulta todo sobre él de un vistazo: dirección de red, broadcast (o última dirección en IPv6), máscara de red y máscara comodín, primer y último host utilizable, número de direcciones y en qué rango de uso especial se encuentra — espacio privado RFC 1918, NAT de nivel de operador (CGNAT), link-local, documentación, multicast y el resto. También funciona una dirección suelta, así como la notación con máscara de red (192.168.1.0 255.255.255.0) y la forma comodín de Cisco (0.0.0.255).',

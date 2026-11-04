@@ -1163,6 +1163,36 @@ const TOOL_CONTENT_DE: Record<string, ToolContent> = {
 		]
 	},
 
+	'chmod-calculator': {
+		about: [
+			'Gib einen Modus so ein, wie er dir vorliegt — 755, 0644, rwxr-xr-x, eine ganze `ls -l`-Zeile, u=rwx,g=rx,o=rx oder einen vollständigen Befehl wie chmod -R 750 /srv/app — und sieh ihn in jeder anderen Form: oktal, als rwx-Zeichenkette, als ls -l-Spalte und als beide chmod-Befehle zum Kopieren. Das Raster zeigt Lesen, Schreiben und Ausführen für Besitzer, Gruppe und andere; setze ein Häkchen, und der Modus passt sich an.',
+			'Jede Oktalziffer ist die Summe aus Lesen (4), Schreiben (2) und Ausführen (1) für eine Klasse, also ist 7 rwx, 5 r-x und 4 r--. Eine optionale vierte Ziffer davor enthält die Spezialbits: 4 für Setuid, 2 für Setgid und 1 für das Sticky-Bit. Deshalb ist /tmp 1777 und erscheint als rwxrwxrwt, und passwd ist 4755 und erscheint als rwsr-xr-x. Ein großes S oder T bedeutet, dass das Spezialbit gesetzt ist, Ausführen aber nicht — das ist fast immer ein Versehen.',
+			'Relative Ausdrücke wie g+w, go-rwx oder a+X hängen davon ab, was die Datei bereits hat. Deshalb wendet der Rechner sie auf einen Ausgangsmodus deiner Wahl an (standardmäßig 644) und folgt GNU chmod: X fügt Ausführen nur für Verzeichnisse oder Dateien hinzu, die es schon haben, u=g kopiert eine Klasse auf eine andere, und = behält bei einem Verzeichnis Setuid und Setgid. Gib umask 027 ein, um zu sehen, welche Modi neue Dateien und Verzeichnisse bekommen. Nichts, was du einfügst — Pfade, Benutzernamen, Server-Strukturen —, verlässt die Seite.'
+		],
+		faqs: [
+			{
+				q: 'Was ist der Unterschied zwischen 755 und 644?',
+				a: '755 (rwxr-xr-x) erlaubt dem Besitzer Lesen, Schreiben und Ausführen, allen anderen Lesen und Ausführen. Das ist der übliche Modus für Verzeichnisse und Skripte. 644 (rw-r--r--) nimmt allen das Ausführen weg — der übliche Modus für gewöhnliche Dateien. Ein Verzeichnis braucht Ausführen (x), damit man es überhaupt betreten kann; ein Verzeichnis mit 644 lässt sich daher nicht einmal von seinem Besitzer öffnen.'
+			},
+			{
+				q: 'Warum lehnt SSH meinen privaten Schlüssel mit „permissions are too open“ ab?',
+				a: 'OpenSSH verweigert einen privaten Schlüssel, den die Gruppe oder andere Benutzer lesen können. Setze ihn auf 600 (rw-------) oder auf 400 für Nur-Lesen, mit chmod 600 ~/.ssh/id_ed25519. Das Verzeichnis ~/.ssh selbst sollte 700 sein, authorized_keys 600 oder 644.'
+			},
+			{
+				q: 'Ist chmod 777 jemals eine gute Idee?',
+				a: 'Selten. 777 erlaubt jedem Konto auf dem Rechner, einschließlich eines kompromittierten Webprozesses, die Datei zu ändern oder zu ersetzen. Wenn „permission denied“ mit 777 verschwindet, liegt die eigentliche Lösung meist im Besitz (chown der Datei auf den Benutzer, unter dem der Dienst läuft) oder in einer Gruppenmitgliedschaft mit 770 oder 775. Gemeinsame Ablageverzeichnisse, die wirklich für alle beschreibbar sein müssen, sollten zusätzlich das Sticky-Bit bekommen (1777), damit Benutzer nicht gegenseitig ihre Dateien löschen können.'
+			},
+			{
+				q: 'Was macht chmod +x ohne u, g oder o?',
+				a: 'Das echte chmod wendet es auf alle drei Klassen an, mit Ausnahme der Bits, die deine umask ausblendet. Mit der verbreiteten umask 022 macht das für +x keinen Unterschied, aus +w wird aber nur u+w. Der Rechner behandelt eine fehlende Klasse als a (alle) und wendet keine umask an — gib also u+w oder a+w ausdrücklich ein, wenn der Unterschied wichtig ist.'
+			},
+			{
+				q: 'Wie hängt die umask mit diesen Zahlen zusammen?',
+				a: 'Die umask listet die Bits auf, die neuen Dateien und Verzeichnissen entzogen werden. Programme legen Dateien meist als 666 und Verzeichnisse als 777 an, und davon wird die umask abgezogen: 022 ergibt 644 und 755, 027 ergibt 640 und 750, 077 ergibt 600 und 700. Ausführen wird neuen Dateien durch die umask nie hinzugefügt — deshalb braucht ein frisches Skript chmod +x.'
+			}
+		]
+	},
+
 	'cidr-calculator': {
 		about: [
 			'Gib einen CIDR-Block wie 10.20.0.0/16 oder 2001:db8::/48 ein und lies alles darüber auf einen Blick ab: Netzwerkadresse, Broadcast (bzw. letzte Adresse bei IPv6), Netzmaske und Wildcard-Maske, erster und letzter nutzbarer Host, Anzahl der Adressen und in welchem Sonderbereich er liegt — privater Adressraum nach RFC 1918, Carrier-Grade-NAT, Link-Local, Dokumentation, Multicast und der Rest. Eine einzelne Adresse funktioniert ebenfalls, genauso wie die Netzmasken-Schreibweise (192.168.1.0 255.255.255.0) und die Cisco-Wildcard-Form (0.0.0.255).',

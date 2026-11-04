@@ -1162,6 +1162,36 @@ const TOOL_CONTENT_ID: Record<string, ToolContent> = {
 		]
 	},
 
+	'chmod-calculator': {
+		about: [
+			'Ketik mode sesuai yang Anda punya — 755, 0644, rwxr-xr-x, satu baris `ls -l` utuh, u=rwx,g=rx,o=rx, atau perintah lengkap seperti chmod -R 750 /srv/app — dan lihat dalam semua bentuk lainnya: oktal, string rwx, kolom ls -l, dan kedua perintah chmod yang siap disalin. Grid menampilkan baca, tulis, dan eksekusi untuk pemilik, grup, dan lainnya; centang sebuah kotak dan mode-nya langsung diperbarui.',
+			'Setiap digit oktal adalah jumlah dari baca (4), tulis (2), dan eksekusi (1) untuk satu kelas, jadi 7 adalah rwx, 5 adalah r-x, dan 4 adalah r--. Digit keempat opsional di depan menyimpan bit khusus: 4 untuk setuid, 2 untuk setgid, dan 1 untuk sticky bit. Itulah sebabnya /tmp bernilai 1777 dan tampil sebagai rwxrwxrwt, sedangkan passwd bernilai 4755 dan tampil sebagai rwsr-xr-x. Huruf kapital S atau T berarti bit khususnya aktif tetapi eksekusi tidak, dan itu hampir selalu kesalahan.',
+			'Ekspresi relatif seperti g+w, go-rwx, atau a+X bergantung pada izin yang sudah dimiliki berkas, jadi kalkulator menerapkannya pada mode awal yang Anda pilih (644 secara default) dan mengikuti GNU chmod: X menambahkan eksekusi hanya untuk direktori atau berkas yang sudah memilikinya, u=g menyalin satu kelas ke kelas lain, dan = pada direktori mempertahankan setuid dan setgid. Ketik umask 027 untuk melihat mode apa yang akan didapat berkas dan direktori baru. Apa pun yang Anda tempel — path, nama pengguna, tata letak server — tidak pernah meninggalkan halaman ini.'
+		],
+		faqs: [
+			{
+				q: 'Apa bedanya 755 dan 644?',
+				a: '755 (rwxr-xr-x) membuat pemilik bisa membaca, menulis, dan mengeksekusi, sementara semua orang lain bisa membaca dan mengeksekusi. Ini mode yang lazim untuk direktori dan skrip. 644 (rw-r--r--) menghapus eksekusi untuk semua orang, dan itulah mode yang lazim untuk berkas biasa. Sebuah direktori butuh eksekusi (x) agar bisa dimasuki sama sekali, jadi direktori dengan mode 644 tidak bisa dibuka bahkan oleh pemiliknya.'
+			},
+			{
+				q: 'Kenapa SSH menolak kunci privat saya dengan pesan “permissions are too open”?',
+				a: 'OpenSSH menolak memakai kunci privat yang bisa dibaca oleh grup atau pengguna lain. Atur ke 600 (rw-------), atau 400 agar hanya bisa dibaca, dengan chmod 600 ~/.ssh/id_ed25519. Direktori ~/.ssh sendiri sebaiknya 700, dan authorized_keys 600 atau 644.'
+			},
+			{
+				q: 'Apakah chmod 777 pernah jadi ide bagus?',
+				a: 'Jarang sekali. 777 membuat setiap akun di mesin itu, termasuk proses web yang sudah dibobol, bisa mengubah atau mengganti berkas tersebut. Kalau “permission denied” hilang dengan 777, solusi sebenarnya biasanya soal kepemilikan (chown berkas ke pengguna yang menjalankan layanan) atau keanggotaan grup dengan 770 atau 775. Direktori scratch bersama yang memang perlu bisa ditulis semua orang juga sebaiknya diberi sticky bit (1777), agar pengguna tidak bisa menghapus berkas milik satu sama lain.'
+			},
+			{
+				q: 'Apa yang dilakukan chmod +x tanpa u, g, atau o?',
+				a: 'chmod sungguhan menerapkannya ke ketiga kelas, kecuali bit yang disaring oleh umask Anda. Dengan umask umum 022, hal itu tidak berpengaruh untuk +x, tetapi +w menjadi u+w saja. Kalkulator memperlakukan kelas yang tidak disebut sebagai a (semua) dan tidak menerapkan umask, jadi ketik u+w atau a+w secara eksplisit jika perbedaannya penting.'
+			},
+			{
+				q: 'Apa hubungan umask dengan angka-angka ini?',
+				a: 'umask berisi daftar bit yang dihapus dari berkas dan direktori baru. Program biasanya membuat berkas sebagai 666 dan direktori sebagai 777, lalu umask dikurangkan dari situ: 022 menghasilkan 644 dan 755, 027 menghasilkan 640 dan 750, dan 077 menghasilkan 600 dan 700. Umask tidak pernah menambahkan eksekusi pada berkas baru, itulah sebabnya skrip yang baru dibuat perlu chmod +x.'
+			}
+		]
+	},
+
 	'cidr-calculator': {
 		about: [
 			'Ketik blok CIDR seperti 10.20.0.0/16 atau 2001:db8::/48 dan baca semua tentangnya sekaligus: alamat jaringan, broadcast (atau alamat terakhir untuk IPv6), netmask dan wildcard mask, host pertama dan terakhir yang bisa dipakai, jumlah alamat, serta rentang khusus mana yang mencakupnya — ruang privat RFC 1918, carrier-grade NAT, link-local, dokumentasi, multicast, dan lainnya. Alamat tunggal juga bisa, begitu pula notasi netmask (192.168.1.0 255.255.255.0) dan bentuk wildcard ala Cisco (0.0.0.255).',

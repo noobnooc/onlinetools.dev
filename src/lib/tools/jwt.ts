@@ -28,14 +28,28 @@ function decodeSegment(segment: string): Record<string, unknown> | null {
 	}
 }
 
+/**
+ * The message for a token that doesn't have 3 segments. A 5-segment token
+ * whose header names an `enc` is a JWE (RFC 7516): its payload is encrypted,
+ * so say that instead of a bare segment count.
+ */
+function segmentCountError(parts: string[]): string {
+	if (parts.length === 5) {
+		const header = decodeSegment(parts[0]);
+		if (header && typeof header.enc === 'string') {
+			const alg = typeof header.alg === 'string' ? `alg ${header.alg}, ` : '';
+			return `This is an encrypted JWT (JWE, ${alg}enc ${header.enc}). Its payload can only be read with the recipient's key, so it can't be decoded here`;
+		}
+	}
+	return `A JWT has 3 dot-separated segments; found ${parts.length}`;
+}
+
 /** `now` is injectable for deterministic tests (ms since epoch). */
 export function decodeJwt(input: string, now?: number): ToolResult<DecodedJwt> {
 	const token = input.trim().replace(/^Bearer\s+/i, '');
 	if (token === '') return err('Input is empty');
 	const parts = token.split('.');
-	if (parts.length !== 3) {
-		return err(`A JWT has 3 dot-separated segments; found ${parts.length}`);
-	}
+	if (parts.length !== 3) return err(segmentCountError(parts));
 	const header = decodeSegment(parts[0]);
 	if (!header) return err('Header segment is not valid Base64URL-encoded JSON');
 	const payload = decodeSegment(parts[1]);
@@ -514,7 +528,7 @@ export async function verifyJwt(
 ): Promise<ToolResult<VerifyOutcome>> {
 	const t = token.trim().replace(/^Bearer\s+/i, '');
 	const parts = t.split('.');
-	if (parts.length !== 3) return err(`A JWT has 3 dot-separated segments; found ${parts.length}`);
+	if (parts.length !== 3) return err(segmentCountError(parts));
 	const header = decodeSegment(parts[0]);
 	if (!header) return err('Header segment is not valid Base64URL-encoded JSON');
 	const time = checkTime(decodeSegment(parts[1]), now, leewaySec);

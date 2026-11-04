@@ -1162,6 +1162,36 @@ const TOOL_CONTENT_NL: Record<string, ToolContent> = {
 		]
 	},
 
+	'chmod-calculator': {
+		about: [
+			'Typ een modus zoals je hem hebt — 755, 0644, rwxr-xr-x, een hele `ls -l`-regel, u=rwx,g=rx,o=rx of een volledig commando als chmod -R 750 /srv/app — en zie hem in elke andere vorm: octaal, de rwx-string, de ls -l-kolom en beide chmod-commando’s klaar om te kopiëren. Het raster toont lezen, schrijven en uitvoeren voor eigenaar, groep en overigen; vink een vakje aan en de modus wordt bijgewerkt.',
+			'Elk octaal cijfer is de som van lezen (4), schrijven (2) en uitvoeren (1) voor één klasse, dus 7 is rwx, 5 is r-x en 4 is r--. Een optioneel vierde cijfer vooraan bevat de speciale bits: 4 voor setuid, 2 voor setgid en 1 voor de sticky bit. Daarom is /tmp 1777 en verschijnt het als rwxrwxrwt, en is passwd 4755 en verschijnt het als rwsr-xr-x. Een hoofdletter S of T betekent dat de speciale bit gezet is maar uitvoeren niet, en dat is bijna altijd een vergissing.',
+			'Relatieve expressies zoals g+w, go-rwx of a+X hangen af van wat het bestand al heeft, dus de calculator past ze toe op een beginmodus die je zelf kiest (standaard 644) en volgt GNU chmod: X voegt uitvoeren alleen toe voor mappen of bestanden die het al hebben, u=g kopieert de ene klasse naar de andere, en = op een map behoudt setuid en setgid. Typ umask 027 om te zien welke modi nieuwe bestanden en mappen krijgen. Niets wat je plakt — paden, gebruikersnamen, serverindelingen — verlaat de pagina.'
+		],
+		faqs: [
+			{
+				q: 'Wat is het verschil tussen 755 en 644?',
+				a: '755 (rwxr-xr-x) laat de eigenaar lezen, schrijven en uitvoeren, en alle anderen lezen en uitvoeren. Dat is de gebruikelijke modus voor mappen en scripts. 644 (rw-r--r--) haalt uitvoeren voor iedereen weg, de gebruikelijke modus voor gewone bestanden. Een map heeft uitvoeren (x) nodig om er überhaupt in te kunnen, dus een map met 644 kan zelfs door de eigenaar niet geopend worden.'
+			},
+			{
+				q: 'Waarom weigert SSH mijn private key met “permissions are too open”?',
+				a: 'OpenSSH weigert een private key te gebruiken die de groep of andere gebruikers kunnen lezen. Zet hem op 600 (rw-------), of 400 voor alleen-lezen, met chmod 600 ~/.ssh/id_ed25519. De map ~/.ssh zelf hoort 700 te zijn, en authorized_keys 600 of 644.'
+			},
+			{
+				q: 'Is chmod 777 ooit een goed idee?',
+				a: 'Zelden. Met 777 kan elk account op de machine, inclusief een gecompromitteerd webproces, het bestand wijzigen of vervangen. Als “permission denied” verdwijnt met 777, ligt de echte oplossing meestal bij het eigenaarschap (chown het bestand naar de gebruiker die de service draait) of bij groepslidmaatschap met 770 of 775. Gedeelde scratchmappen die echt schrijfrechten voor iedereen nodig hebben, horen ook de sticky bit (1777) te krijgen, zodat gebruikers elkaars bestanden niet kunnen verwijderen.'
+			},
+			{
+				q: 'Wat doet chmod +x zonder u, g of o?',
+				a: 'Echte chmod past het toe op alle drie de klassen, behalve op bits die je umask wegfiltert. Met de gangbare umask 022 maakt dat voor +x niets uit, maar +w wordt dan alleen u+w. De calculator behandelt een ontbrekende klasse als a (alle) en past geen umask toe, dus typ u+w of a+w expliciet als het verschil ertoe doet.'
+			},
+			{
+				q: 'Hoe hangt umask samen met deze getallen?',
+				a: 'umask geeft de bits aan die van nieuwe bestanden en mappen worden afgehaald. Programma’s maken bestanden meestal aan als 666 en mappen als 777, en de umask wordt daarvan afgetrokken: 022 geeft 644 en 755, 027 geeft 640 en 750, en 077 geeft 600 en 700. De umask voegt nooit uitvoeren toe aan nieuwe bestanden, en daarom heeft een vers script chmod +x nodig.'
+			}
+		]
+	},
+
 	'cidr-calculator': {
 		about: [
 			'Typ een CIDR-blok zoals 10.20.0.0/16 of 2001:db8::/48 en lees alles erover in één keer af: netwerkadres, broadcast (of laatste adres bij IPv6), netmasker en wildcardmasker, eerste en laatste bruikbare host, aantal adressen, en in welk bereik voor speciaal gebruik het valt — RFC 1918-privéruimte, carrier-grade NAT, link-local, documentatie, multicast en de rest. Een los adres werkt ook, net als netmasknotatie (192.168.1.0 255.255.255.0) en de wildcardvorm van Cisco (0.0.0.255).',

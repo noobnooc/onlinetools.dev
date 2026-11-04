@@ -1163,6 +1163,36 @@ const TOOL_CONTENT_IT: Record<string, ToolContent> = {
 		]
 	},
 
+	'chmod-calculator': {
+		about: [
+			'Digita un modo così come ce l’hai — 755, 0644, rwxr-xr-x, un’intera riga di `ls -l`, u=rwx,g=rx,o=rx o un comando completo come chmod -R 750 /srv/app — e vedilo in tutte le altre forme: ottale, stringa rwx, colonna di ls -l ed entrambi i comandi chmod pronti da copiare. La griglia mostra lettura, scrittura ed esecuzione per proprietario, gruppo e altri; spunta una casella e il modo si aggiorna.',
+			'Ogni cifra ottale è la somma di lettura (4), scrittura (2) ed esecuzione (1) per una classe, quindi 7 è rwx, 5 è r-x e 4 è r--. Una quarta cifra facoltativa davanti contiene i bit speciali: 4 per setuid, 2 per setgid e 1 per lo sticky bit. Ecco perché /tmp è 1777 e appare come rwxrwxrwt, e passwd è 4755 e appare come rwsr-xr-x. Una S o una T maiuscola indica che il bit speciale è impostato ma l’esecuzione no, il che è quasi sempre un errore.',
+			'Le espressioni relative come g+w, go-rwx o a+X dipendono da ciò che il file ha già, quindi il calcolatore le applica a un modo di partenza scelto da te (644 per impostazione predefinita) e segue GNU chmod: X aggiunge l’esecuzione solo alle directory o ai file che ce l’hanno già, u=g copia una classe su un’altra, e = su una directory mantiene setuid e setgid. Digita umask 027 per vedere quali modi riceveranno i nuovi file e le nuove directory. Niente di ciò che incolli — percorsi, nomi utente, struttura dei server — lascia la pagina.'
+		],
+		faqs: [
+			{
+				q: 'Qual è la differenza tra 755 e 644?',
+				a: '755 (rwxr-xr-x) consente al proprietario di leggere, scrivere ed eseguire, e a tutti gli altri di leggere ed eseguire. È il modo abituale per directory e script. 644 (rw-r--r--) toglie l’esecuzione a tutti ed è il modo abituale per i file normali. Una directory ha bisogno dell’esecuzione (x) per potervi anche solo entrare, quindi una directory impostata a 644 non può essere aperta nemmeno dal suo proprietario.'
+			},
+			{
+				q: 'Perché SSH rifiuta la mia chiave privata con "permissions are too open"?',
+				a: 'OpenSSH si rifiuta di usare una chiave privata leggibile dal gruppo o dagli altri utenti. Impostala a 600 (rw-------), o a 400 per la sola lettura, con chmod 600 ~/.ssh/id_ed25519. La directory ~/.ssh stessa dovrebbe essere 700, e authorized_keys 600 o 644.'
+			},
+			{
+				q: 'chmod 777 è mai una buona idea?',
+				a: 'Raramente. 777 permette a qualsiasi account della macchina, compreso un processo web compromesso, di modificare o sostituire il file. Quando "permission denied" sparisce con 777, la vera soluzione di solito riguarda la proprietà (fare chown del file all’utente che esegue il servizio) o l’appartenenza a un gruppo con 770 o 775. Le directory temporanee condivise che hanno davvero bisogno di essere scrivibili da tutti dovrebbero avere anche lo sticky bit (1777), così gli utenti non possono cancellare i file degli altri.'
+			},
+			{
+				q: 'Cosa fa chmod +x senza u, g o o?',
+				a: 'Il vero chmod lo applica a tutte e tre le classi, tranne i bit mascherati dalla tua umask. Con la diffusa umask 022 per +x non cambia nulla, ma +w diventa solo u+w. Il calcolatore tratta una classe mancante come a (tutte) e non applica alcuna umask, quindi digita u+w o a+w in modo esplicito se la differenza conta.'
+			},
+			{
+				q: 'Che rapporto c’è tra la umask e questi numeri?',
+				a: 'La umask elenca i bit da togliere ai nuovi file e alle nuove directory. I programmi di solito creano i file come 666 e le directory come 777, e la umask viene sottratta da lì: 022 dà 644 e 755, 027 dà 640 e 750, e 077 dà 600 e 700. La umask non aggiunge mai l’esecuzione ai nuovi file, ed è per questo che uno script appena creato ha bisogno di chmod +x.'
+			}
+		]
+	},
+
 	'cidr-calculator': {
 		about: [
 			'Digita un blocco CIDR come 10.20.0.0/16 o 2001:db8::/48 e leggi tutto ciò che lo riguarda in un colpo d’occhio: indirizzo di rete, broadcast (o ultimo indirizzo per IPv6), netmask e wildcard mask, primo e ultimo host utilizzabile, numero di indirizzi e l’intervallo a uso speciale in cui ricade — spazio privato RFC 1918, NAT di livello carrier (CGNAT), link-local, documentazione, multicast e il resto. Funziona anche un indirizzo singolo, così come la notazione con netmask (192.168.1.0 255.255.255.0) e la forma wildcard di Cisco (0.0.0.255).',

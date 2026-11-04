@@ -1163,6 +1163,36 @@ const TOOL_CONTENT_PT: Record<string, ToolContent> = {
 		]
 	},
 
+	'chmod-calculator': {
+		about: [
+			'Digite um modo do jeito que você o tem — 755, 0644, rwxr-xr-x, uma linha inteira do `ls -l`, u=rwx,g=rx,o=rx ou um comando completo como chmod -R 750 /srv/app — e veja-o em todas as outras formas: octal, a string rwx, a coluna do ls -l e os dois comandos chmod prontos para copiar. A grade mostra leitura, escrita e execução para dono, grupo e outros; marque uma caixa e o modo é atualizado.',
+			'Cada dígito octal é a soma de leitura (4), escrita (2) e execução (1) para uma classe, então 7 é rwx, 5 é r-x e 4 é r--. Um quarto dígito opcional na frente guarda os bits especiais: 4 para setuid, 2 para setgid e 1 para o sticky bit. É por isso que /tmp é 1777 e aparece como rwxrwxrwt, e passwd é 4755 e aparece como rwsr-xr-x. Um S ou T maiúsculo significa que o bit especial está ativo, mas a execução não, o que quase sempre é um erro.',
+			'Expressões relativas como g+w, go-rwx ou a+X dependem do que o arquivo já tem, então a calculadora as aplica a um modo inicial que você escolhe (644 por padrão) e segue o GNU chmod: X adiciona execução apenas a diretórios ou a arquivos que já a têm, u=g copia uma classe para outra, e = em um diretório mantém setuid e setgid. Digite umask 027 para ver quais modos novos arquivos e diretórios vão receber. Nada do que você cola — caminhos, nomes de usuário, estrutura de servidores — sai da página.'
+		],
+		faqs: [
+			{
+				q: 'Qual é a diferença entre 755 e 644?',
+				a: '755 (rwxr-xr-x) permite que o dono leia, escreva e execute, e que todos os demais leiam e executem. É o modo usual para diretórios e scripts. 644 (rw-r--r--) tira a execução de todos, que é o modo usual para arquivos comuns. Um diretório precisa de execução (x) para que se possa sequer entrar nele, então um diretório com 644 não pode ser aberto nem pelo próprio dono.'
+			},
+			{
+				q: 'Por que o SSH rejeita minha chave privada com "permissions are too open"?',
+				a: 'O OpenSSH se recusa a usar uma chave privada que o grupo ou outros usuários possam ler. Defina-a como 600 (rw-------), ou 400 para somente leitura, com chmod 600 ~/.ssh/id_ed25519. O próprio diretório ~/.ssh deve ser 700, e authorized_keys 600 ou 644.'
+			},
+			{
+				q: 'chmod 777 é uma boa ideia em algum caso?',
+				a: 'Raramente. 777 permite que qualquer conta na máquina, incluindo um processo web comprometido, altere ou substitua o arquivo. Quando o "permission denied" some com 777, a correção real geralmente está na propriedade (fazer chown do arquivo para o usuário que roda o serviço) ou na participação em um grupo com 770 ou 775. Diretórios temporários compartilhados que realmente precisam de escrita para todos também devem receber o sticky bit (1777), para que um usuário não possa apagar os arquivos de outro.'
+			},
+			{
+				q: 'O que chmod +x faz sem u, g ou o?',
+				a: 'O chmod real o aplica às três classes, exceto aos bits que a sua umask mascara. Com a umask comum 022 isso não faz diferença para +x, mas +w vira apenas u+w. A calculadora trata uma classe ausente como a (todas) e não aplica umask, então digite u+w ou a+w explicitamente se a diferença importar.'
+			},
+			{
+				q: 'Como a umask se relaciona com esses números?',
+				a: 'A umask lista os bits a remover de novos arquivos e diretórios. Programas geralmente criam arquivos como 666 e diretórios como 777, e a umask é subtraída disso: 022 resulta em 644 e 755, 027 em 640 e 750, e 077 em 600 e 700. A umask nunca adiciona execução a novos arquivos, e é por isso que um script recém-criado precisa de chmod +x.'
+			}
+		]
+	},
+
 	'cidr-calculator': {
 		about: [
 			'Digite um bloco CIDR como 10.20.0.0/16 ou 2001:db8::/48 e veja tudo sobre ele de uma vez: endereço de rede, broadcast (ou último endereço, no IPv6), máscara de rede e máscara curinga, primeiro e último host utilizável, quantidade de endereços e em qual intervalo de uso especial ele se encaixa — espaço privado da RFC 1918, NAT de nível de operadora, link-local, documentação, multicast e os demais. Um endereço isolado também funciona, assim como a notação de máscara (192.168.1.0 255.255.255.0) e a forma curinga da Cisco (0.0.0.255).',
