@@ -1163,6 +1163,36 @@ const TOOL_CONTENT_FR: Record<string, ToolContent> = {
 		]
 	},
 
+	'chmod-calculator': {
+		about: [
+			'Saisissez un mode tel que vous l’avez — 755, 0644, rwxr-xr-x, une ligne `ls -l` entière, u=rwx,g=rx,o=rx ou une commande complète comme chmod -R 750 /srv/app — et voyez-le sous toutes les autres formes : octal, chaîne rwx, colonne de ls -l et les deux commandes chmod prêtes à copier. La grille affiche lecture, écriture et exécution pour le propriétaire, le groupe et les autres ; cochez une case et le mode se met à jour.',
+			'Chaque chiffre octal est la somme de lecture (4), écriture (2) et exécution (1) pour une classe : 7 vaut rwx, 5 vaut r-x et 4 vaut r--. Un quatrième chiffre facultatif placé devant contient les bits spéciaux : 4 pour setuid, 2 pour setgid et 1 pour le sticky bit. C’est pourquoi /tmp vaut 1777 et s’affiche rwxrwxrwt, et passwd vaut 4755 et s’affiche rwsr-xr-x. Un S ou un T majuscule signifie que le bit spécial est positionné mais pas l’exécution, ce qui est presque toujours une erreur.',
+			'Les expressions relatives comme g+w, go-rwx ou a+X dépendent de ce que le fichier possède déjà : le calculateur les applique donc à un mode de départ de votre choix (644 par défaut) et suit GNU chmod : X n’ajoute l’exécution qu’aux répertoires ou aux fichiers qui l’ont déjà, u=g copie une classe sur une autre, et = sur un répertoire conserve setuid et setgid. Tapez umask 027 pour voir quels modes recevront les nouveaux fichiers et répertoires. Rien de ce que vous collez — chemins, noms d’utilisateur, organisation de vos serveurs — ne quitte la page.'
+		],
+		faqs: [
+			{
+				q: 'Quelle est la différence entre 755 et 644 ?',
+				a: '755 (rwxr-xr-x) permet au propriétaire de lire, écrire et exécuter, et à tous les autres de lire et exécuter. C’est le mode habituel des répertoires et des scripts. 644 (rw-r--r--) retire l’exécution à tout le monde : c’est le mode habituel des fichiers ordinaires. Un répertoire a besoin de l’exécution (x) pour qu’on puisse y entrer, si bien qu’un répertoire en 644 ne peut pas être ouvert, même par son propriétaire.'
+			},
+			{
+				q: 'Pourquoi SSH refuse-t-il ma clé privée avec "permissions are too open" ?',
+				a: 'OpenSSH refuse d’utiliser une clé privée lisible par le groupe ou par les autres utilisateurs. Passez-la en 600 (rw-------), ou en 400 pour la lecture seule, avec chmod 600 ~/.ssh/id_ed25519. Le répertoire ~/.ssh lui-même devrait être en 700, et authorized_keys en 600 ou 644.'
+			},
+			{
+				q: 'chmod 777 est-il parfois une bonne idée ?',
+				a: 'Rarement. 777 permet à n’importe quel compte de la machine, y compris un processus web compromis, de modifier ou de remplacer le fichier. Quand "permission denied" disparaît avec 777, la vraie solution relève généralement de la propriété (faire un chown du fichier vers l’utilisateur qui exécute le service) ou de l’appartenance à un groupe avec 770 ou 775. Les répertoires temporaires partagés qui ont vraiment besoin d’être accessibles en écriture à tous devraient aussi recevoir le sticky bit (1777), pour que les utilisateurs ne puissent pas supprimer les fichiers des autres.'
+			},
+			{
+				q: 'Que fait chmod +x sans u, g ni o ?',
+				a: 'Le vrai chmod l’applique aux trois classes, sauf pour les bits masqués par votre umask. Avec l’umask courant 022, cela ne change rien pour +x, mais +w devient u+w seulement. Le calculateur traite une classe absente comme a (toutes) et n’applique pas d’umask : tapez donc u+w ou a+w explicitement si la différence compte.'
+			},
+			{
+				q: 'Quel est le lien entre l’umask et ces nombres ?',
+				a: 'L’umask liste les bits à retirer des nouveaux fichiers et répertoires. Les programmes créent généralement les fichiers en 666 et les répertoires en 777, et l’umask en est soustrait : 022 donne 644 et 755, 027 donne 640 et 750, et 077 donne 600 et 700. L’umask n’ajoute jamais l’exécution aux nouveaux fichiers, c’est pourquoi un script tout juste créé a besoin de chmod +x.'
+			}
+		]
+	},
+
 	'cidr-calculator': {
 		about: [
 			'Saisissez un bloc CIDR comme 10.20.0.0/16 ou 2001:db8::/48 et lisez tout à son sujet d’un seul coup d’œil : adresse réseau, broadcast (ou dernière adresse en IPv6), masque de sous-réseau et masque générique, premier et dernier hôte utilisable, nombre d’adresses, et la plage à usage spécial dans laquelle il se trouve — espace privé RFC 1918, NAT de niveau opérateur (CGNAT), link-local, documentation, multicast et le reste. Une adresse seule fonctionne aussi, de même que la notation avec masque (192.168.1.0 255.255.255.0) et la forme générique de Cisco (0.0.0.255).',
