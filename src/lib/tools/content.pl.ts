@@ -1162,6 +1162,36 @@ const TOOL_CONTENT_PL: Record<string, ToolContent> = {
 		]
 	},
 
+	'chmod-calculator': {
+		about: [
+			'Wpisz tryb w takiej postaci, w jakiej go masz — 755, 0644, rwxr-xr-x, cały wiersz z `ls -l`, u=rwx,g=rx,o=rx albo pełne polecenie, np. chmod -R 750 /srv/app — i zobacz go we wszystkich pozostałych formach: ósemkowej, jako ciąg rwx, jako kolumnę ls -l oraz jako oba polecenia chmod gotowe do skopiowania. Siatka pokazuje odczyt, zapis i wykonanie dla właściciela, grupy i pozostałych; zaznacz pole, a tryb się zaktualizuje.',
+			'Każda cyfra ósemkowa to suma odczytu (4), zapisu (2) i wykonania (1) dla jednej klasy, więc 7 to rwx, 5 to r-x, a 4 to r--. Opcjonalna czwarta cyfra z przodu przechowuje bity specjalne: 4 dla setuid, 2 dla setgid i 1 dla sticky bit. Dlatego /tmp ma 1777 i wyświetla się jako rwxrwxrwt, a passwd ma 4755 i wyświetla się jako rwsr-xr-x. Wielka litera S lub T oznacza, że bit specjalny jest ustawiony, ale wykonanie nie, co prawie zawsze jest błędem.',
+			'Wyrażenia względne, takie jak g+w, go-rwx czy a+X, zależą od tego, co plik już ma, więc kalkulator stosuje je do wybranego przez Ciebie trybu początkowego (domyślnie 644) i działa jak GNU chmod: X dodaje wykonanie tylko katalogom lub plikom, które już je mają, u=g kopiuje jedną klasę do drugiej, a = na katalogu zachowuje setuid i setgid. Wpisz umask 027, aby zobaczyć, jakie tryby dostaną nowe pliki i katalogi. Nic, co wklejasz — ścieżki, nazwy użytkowników, układ serwerów — nie opuszcza strony.'
+		],
+		faqs: [
+			{
+				q: 'Czym różni się 755 od 644?',
+				a: '755 (rwxr-xr-x) pozwala właścicielowi czytać, zapisywać i wykonywać, a wszystkim pozostałym czytać i wykonywać. To typowy tryb dla katalogów i skryptów. 644 (rw-r--r--) odbiera wykonanie wszystkim i jest typowym trybem dla zwykłych plików. Katalog potrzebuje wykonania (x), żeby w ogóle dało się do niego wejść, więc katalogu z trybem 644 nie otworzy nawet jego właściciel.'
+			},
+			{
+				q: 'Dlaczego SSH odrzuca mój klucz prywatny z komunikatem „permissions are too open”?',
+				a: 'OpenSSH odmawia użycia klucza prywatnego, który mogą odczytać grupa lub inni użytkownicy. Ustaw mu 600 (rw-------) albo 400, jeśli ma być tylko do odczytu, poleceniem chmod 600 ~/.ssh/id_ed25519. Sam katalog ~/.ssh powinien mieć 700, a authorized_keys 600 lub 644.'
+			},
+			{
+				q: 'Czy chmod 777 to kiedykolwiek dobry pomysł?',
+				a: 'Rzadko. 777 pozwala każdemu kontu na maszynie, w tym każdemu przejętemu procesowi webowemu, zmienić lub podmienić plik. Gdy „permission denied” znika po ustawieniu 777, prawdziwym rozwiązaniem jest zwykle zmiana właściciela (chown pliku na użytkownika, który uruchamia usługę) albo członkostwo w grupie z trybem 770 lub 775. Współdzielone katalogi robocze, które naprawdę potrzebują zapisu dla wszystkich, powinny też dostać sticky bit (1777), żeby użytkownicy nie mogli usuwać sobie nawzajem plików.'
+			},
+			{
+				q: 'Co robi chmod +x bez u, g ani o?',
+				a: 'Prawdziwy chmod stosuje to do wszystkich trzech klas, z wyjątkiem bitów, które maskuje umask. Przy typowym umask 022 nie ma to znaczenia dla +x, ale +w staje się wtedy samym u+w. Kalkulator traktuje brakującą klasę jako a (wszyscy) i nie stosuje umask, więc wpisz jawnie u+w lub a+w, jeśli ta różnica ma znaczenie.'
+			},
+			{
+				q: 'Jak umask ma się do tych liczb?',
+				a: 'umask wskazuje bity, które zostaną usunięte z nowych plików i katalogów. Programy zwykle tworzą pliki z trybem 666, a katalogi z 777, i od tego odejmowany jest umask: 022 daje 644 i 755, 027 daje 640 i 750, a 077 daje 600 i 700. umask nigdy nie dodaje wykonania nowym plikom, dlatego świeżo utworzony skrypt potrzebuje chmod +x.'
+			}
+		]
+	},
+
 	'cidr-calculator': {
 		about: [
 			'Wpisz blok CIDR, np. 10.20.0.0/16 lub 2001:db8::/48, i odczytaj wszystko na jego temat naraz: adres sieci, broadcast (lub ostatni adres w IPv6), maskę sieci i maskę wildcard, pierwszy i ostatni dostępny host, liczbę adresów oraz to, do którego zakresu specjalnego przeznaczenia należy — prywatna przestrzeń RFC 1918, carrier-grade NAT, link-local, dokumentacja, multicast i pozostałe. Działa też sam adres, zapis z maską sieci (192.168.1.0 255.255.255.0) oraz ciscowa postać wildcard (0.0.0.255).',
