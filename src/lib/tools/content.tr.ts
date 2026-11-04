@@ -1162,6 +1162,36 @@ const TOOL_CONTENT_TR: Record<string, ToolContent> = {
 		]
 	},
 
+	'chmod-calculator': {
+		about: [
+			'Modu elinizdeki haliyle yazın — 755, 0644, rwxr-xr-x, bütün bir `ls -l` satırı, u=rwx,g=rx,o=rx ya da chmod -R 750 /srv/app gibi tam bir komut — ve onu diğer tüm biçimlerde görün: sekizli, rwx dizesi, ls -l sütunu ve kopyalanmaya hazır iki chmod komutu. Tablo, sahip, grup ve diğerleri için okuma, yazma ve çalıştırma izinlerini gösterir; bir kutuyu işaretlediğinizde mod güncellenir.',
+			'Her sekizli rakam, bir sınıf için okuma (4), yazma (2) ve çalıştırma (1) değerlerinin toplamıdır; yani 7 rwx, 5 r-x ve 4 r-- demektir. Başa eklenen isteğe bağlı dördüncü rakam özel bitleri taşır: setuid için 4, setgid için 2 ve sticky bit için 1. /tmp’nin 1777 olup rwxrwxrwt olarak, passwd’nin ise 4755 olup rwsr-xr-x olarak görünmesinin nedeni budur. Büyük S veya T, özel bitin ayarlı olduğunu ama çalıştırma izninin olmadığını gösterir; bu neredeyse her zaman bir hatadır.',
+			'g+w, go-rwx veya a+X gibi göreli ifadeler dosyanın mevcut izinlerine bağlıdır; bu yüzden hesaplayıcı onları seçtiğiniz bir başlangıç moduna (varsayılan olarak 644) uygular ve GNU chmod’u izler: X, çalıştırma iznini yalnızca dizinlere veya bu izne zaten sahip dosyalara ekler, u=g bir sınıfı diğerine kopyalar ve bir dizinde = setuid ile setgid’i korur. Yeni dosya ve dizinlerin hangi modları alacağını görmek için umask 027 yazın. Yapıştırdığınız hiçbir şey — yollar, kullanıcı adları, sunucu düzenleri — sayfadan çıkmaz.'
+		],
+		faqs: [
+			{
+				q: '755 ile 644 arasındaki fark nedir?',
+				a: '755 (rwxr-xr-x), sahibin okumasına, yazmasına ve çalıştırmasına, diğer herkesin ise okuyup çalıştırmasına izin verir. Dizinler ve betikler için alışılmış mod budur. 644 (rw-r--r--) herkes için çalıştırma iznini kaldırır; sıradan dosyalar için alışılmış mod da budur. Bir dizine girebilmek için bile çalıştırma (x) izni gerekir, bu yüzden 644’e ayarlanmış bir dizini sahibi bile açamaz.'
+			},
+			{
+				q: 'SSH özel anahtarımı neden “permissions are too open” diyerek reddediyor?',
+				a: 'OpenSSH, grubun veya diğer kullanıcıların okuyabildiği bir özel anahtarı kullanmayı reddeder. Anahtarı chmod 600 ~/.ssh/id_ed25519 ile 600’e (rw-------) ya da salt okunur olması için 400’e ayarlayın. ~/.ssh dizininin kendisi 700, authorized_keys ise 600 veya 644 olmalıdır.'
+			},
+			{
+				q: 'chmod 777 hiç iyi bir fikir midir?',
+				a: 'Nadiren. 777, makinedeki her hesabın — ele geçirilmiş herhangi bir web süreci dahil — dosyayı değiştirmesine veya yerine başkasını koymasına izin verir. “permission denied” hatası 777 ile ortadan kalkıyorsa asıl çözüm genellikle sahipliktir (dosyayı chown ile servisi çalıştıran kullanıcıya verin) ya da 770 veya 775 ile grup üyeliğidir. Gerçekten herkesin yazabilmesi gereken ortak geçici dizinlere de sticky bit (1777) verilmelidir; böylece kullanıcılar birbirlerinin dosyalarını silemez.'
+			},
+			{
+				q: 'chmod +x, u, g veya o olmadan ne yapar?',
+				a: 'Gerçek chmod bunu üç sınıfın hepsine uygular; yalnızca umask’ınızın maskelediği bitler hariç. Yaygın umask 022 ile bunun +x için bir farkı yoktur, ama +w yalnızca u+w olur. Hesaplayıcı belirtilmemiş sınıfı a (hepsi) olarak ele alır ve umask uygulamaz; fark önemliyse u+w veya a+w’yi açıkça yazın.'
+			},
+			{
+				q: 'umask bu sayılarla nasıl ilişkilidir?',
+				a: 'umask, yeni dosya ve dizinlerden kaldırılacak bitleri listeler. Programlar dosyaları genellikle 666, dizinleri 777 olarak oluşturur ve umask bundan çıkarılır: 022 ile 644 ve 755, 027 ile 640 ve 750, 077 ile 600 ve 700 elde edilir. umask yeni dosyalara asla çalıştırma izni eklemez; yeni bir betiğin chmod +x gerektirmesinin nedeni budur.'
+			}
+		]
+	},
+
 	'cidr-calculator': {
 		about: [
 			'10.20.0.0/16 ya da 2001:db8::/48 gibi bir CIDR bloğu yazın ve onunla ilgili her şeyi tek seferde görün: ağ adresi, yayın adresi (IPv6’da son adres), ağ maskesi ve joker maske (wildcard), kullanılabilir ilk ve son host, adres sayısı ve bloğun hangi özel amaçlı aralığa düştüğü — RFC 1918 özel adres alanı, carrier-grade NAT, link-local, dokümantasyon, multicast ve diğerleri. Yalnızca bir adres de girebilirsiniz; ağ maskesi gösterimi (192.168.1.0 255.255.255.0) ve Cisco joker maske biçimi (0.0.0.255) de çalışır.',

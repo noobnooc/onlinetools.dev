@@ -1162,6 +1162,36 @@ const TOOL_CONTENT_VI: Record<string, ToolContent> = {
 		]
 	},
 
+	'chmod-calculator': {
+		about: [
+			'Nhập mode theo đúng dạng bạn đang có — 755, 0644, rwxr-xr-x, cả một dòng `ls -l`, u=rwx,g=rx,o=rx, hoặc một lệnh đầy đủ như chmod -R 750 /srv/app — và xem nó ở mọi dạng còn lại: bát phân, chuỗi rwx, cột ls -l và cả hai lệnh chmod sẵn sàng để sao chép. Lưới hiển thị quyền đọc, ghi và thực thi cho chủ sở hữu, nhóm và người khác; đánh dấu một ô là mode được cập nhật ngay.',
+			'Mỗi chữ số bát phân là tổng của đọc (4), ghi (2) và thực thi (1) cho một lớp, nên 7 là rwx, 5 là r-x và 4 là r--. Chữ số thứ tư tùy chọn ở phía trước chứa các bit đặc biệt: 4 cho setuid, 2 cho setgid và 1 cho sticky bit. Đó là lý do /tmp là 1777 và hiển thị là rwxrwxrwt, còn passwd là 4755 và hiển thị là rwsr-xr-x. Chữ S hoặc T viết hoa nghĩa là bit đặc biệt được bật nhưng quyền thực thi thì không, và điều đó gần như luôn là nhầm lẫn.',
+			'Các biểu thức tương đối như g+w, go-rwx hay a+X phụ thuộc vào quyền mà tệp đang có, nên công cụ áp dụng chúng lên một mode ban đầu do bạn chọn (mặc định là 644) và tuân theo GNU chmod: X chỉ thêm quyền thực thi cho thư mục hoặc tệp vốn đã có quyền đó, u=g sao chép một lớp sang lớp khác, và = trên thư mục giữ nguyên setuid và setgid. Nhập umask 027 để xem tệp và thư mục mới sẽ nhận mode nào. Mọi thứ bạn dán vào — đường dẫn, tên người dùng, cấu trúc máy chủ — đều không rời khỏi trang.'
+		],
+		faqs: [
+			{
+				q: '755 và 644 khác nhau thế nào?',
+				a: '755 (rwxr-xr-x) cho phép chủ sở hữu đọc, ghi và thực thi, còn mọi người khác được đọc và thực thi. Đây là mode thường dùng cho thư mục và script. 644 (rw-r--r--) bỏ quyền thực thi của tất cả mọi người, và là mode thường dùng cho tệp thông thường. Thư mục cần quyền thực thi (x) thì mới vào được, nên thư mục đặt 644 không mở được kể cả với chủ sở hữu.'
+			},
+			{
+				q: 'Vì sao SSH từ chối khóa riêng của tôi với lỗi “permissions are too open”?',
+				a: 'OpenSSH từ chối dùng khóa riêng mà nhóm hoặc người dùng khác có thể đọc. Hãy đặt nó về 600 (rw-------), hoặc 400 để chỉ đọc, bằng chmod 600 ~/.ssh/id_ed25519. Bản thân thư mục ~/.ssh nên là 700, còn authorized_keys là 600 hoặc 644.'
+			},
+			{
+				q: 'chmod 777 có bao giờ là ý hay không?',
+				a: 'Hiếm khi. 777 cho phép mọi tài khoản trên máy, kể cả một tiến trình web đã bị chiếm quyền, sửa hoặc thay thế tệp. Khi lỗi “permission denied” biến mất nhờ 777, cách sửa thực sự thường nằm ở quyền sở hữu (chown tệp cho người dùng chạy dịch vụ) hoặc tư cách thành viên nhóm với 770 hay 775. Các thư mục tạm dùng chung thực sự cần cho mọi người ghi cũng nên được bật sticky bit (1777), để người dùng không xóa được tệp của nhau.'
+			},
+			{
+				q: 'chmod +x làm gì khi không có u, g hay o?',
+				a: 'chmod thật áp dụng nó cho cả ba lớp, trừ những bit bị umask của bạn che đi. Với umask phổ biến 022, điều này không tạo khác biệt gì với +x, nhưng +w chỉ còn là u+w. Công cụ coi lớp bị bỏ trống là a (tất cả) và không áp dụng umask, nên hãy nhập rõ u+w hoặc a+w nếu sự khác biệt đó quan trọng.'
+			},
+			{
+				q: 'umask liên quan thế nào đến các con số này?',
+				a: 'umask liệt kê các bit cần bỏ khỏi tệp và thư mục mới. Chương trình thường tạo tệp với 666 và thư mục với 777, rồi umask được trừ đi từ đó: 022 cho ra 644 và 755, 027 cho ra 640 và 750, còn 077 cho ra 600 và 700. umask không bao giờ thêm quyền thực thi cho tệp mới, đó là lý do một script vừa tạo cần chmod +x.'
+			}
+		]
+	},
+
 	'cidr-calculator': {
 		about: [
 			'Nhập một khối CIDR như 10.20.0.0/16 hay 2001:db8::/48 và xem mọi thông tin về nó cùng lúc: địa chỉ mạng, địa chỉ broadcast (hoặc địa chỉ cuối với IPv6), netmask và wildcard mask, host dùng được đầu tiên và cuối cùng, số lượng địa chỉ, và khối đó nằm trong dải địa chỉ dùng cho mục đích đặc biệt nào — không gian riêng RFC 1918, carrier-grade NAT, link-local, dải dành cho tài liệu, multicast và các dải khác. Chỉ nhập một địa chỉ cũng được, ký hiệu netmask (192.168.1.0 255.255.255.0) hay dạng wildcard kiểu Cisco (0.0.0.255) cũng vậy.',
