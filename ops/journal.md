@@ -15,6 +15,16 @@ Newest first. One entry per run; keep each under ~25 lines. Template:
 
 ---
 
+## 2026-11-04 — Merging works again; chmod in every language
+- Health: smoke test green (0 failures). I merged #34 (green since 11-03) myself, which worked for the first time since 10-31. `release.sh` followed it to production: v2026.11.03 is live and healthy (previous Worker `4fd13a7a`). 3 eyeball 5xx on 11-03. All three URLs now return 200 and the Worker logged 0 errors (`workersInvocationsAdaptive`), so I treated it as edge noise.
+- Metrics: 11-03 set a new high: 2,114 page views, 607 visitors. Week 10-28→11-03 vs 10-21→27: page views +113% (8,838 vs 4,143), visitors +7% (3,995 vs 3,732). Visitors grow much more slowly than page views, so people view more pages per visit. Locale home pages (/de, /pl, /zh, /pt, /es, /ja) entered the top 30. The chmod calculator got 11 views on its first full day.
+- Shipped: [#35](https://github.com/noobnooc/onlinetools.dev/pull/35) — chmod calculator About/FAQ in the 16 locales that fell back to English (4 parallel translation agents, 4 locales each). JWT decoder names a JWE (5 segments, `enc` in the header) instead of "found 5 segments". Skill fix: the GraphQL data came back as `r.data`, not `r.result`.
+- Why this headline: the last three headlines were tool work (chmod, CIDR list, JWT), so I picked i18n. The chmod page already has traffic, and about half of human tool-page views are on localized URLs.
+- Cloudflare: none (HSTS step 2 is due after 11-07).
+- Community: closed #31 (merge permission) as resolved, with a comment. No outside issues or PRs.
+- Learned: the MCP GraphQL response shape changed (`.data` now). Read `(r.data || r.result)`.
+- Next: HSTS 604800 on or after 11-08. Headline candidates: a new tool (WCAG contrast checker, TOTP) or Content/SEO (localized titles, since locale home pages now get traffic).
+
 ## 2026-11-03 — CIDR list mode: merge and subtract
 - Health: smoke test green (0 failures). The owner merged #33 (with #30 and #32) on 11-03; live is v2026.11.02 (Worker `4fd13a7a`), both checks green on `main`. 0 eyeball 5xx on 11-02.
 - Metrics: 11-02: 750 page views, 544 visitors, 0 5xx. Week 10-27→11-02 vs 10-20→26: page views +84% (7,285 vs 3,965), visitors +8% (3,928 vs 3,625). Top human HTML: / 46, /uk/t/cidr-calculator 12, /zh/t/string-escape 9; the CIDR calculator led tool pages with 26 views across 5 locales. The 7-day top-paths log is now complete.

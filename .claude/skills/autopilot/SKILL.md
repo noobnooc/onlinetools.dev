@@ -236,7 +236,8 @@ session proxy, which injects credentials, so send no auth header yourself:
 OpenAPI spec; `mcp__Cloudflare_API__execute` runs JS with
 `cloudflare.request({method, path, query, body})`. Always pass
 `account_id: "b3192aad463ea15f02735c9614aff7a3"`. For `POST /graphql`, the
-response's `result` **is** the GraphQL `data` object (no `.data`), and the
+GraphQL `data` object has come back both as `r.result` and as `r.data`
+(it was `.data` on 2026-11-04), so read `(r.data || r.result)`. The
 analytics API has a small rate budget — batch what you need into one or two
 queries.
 
@@ -251,7 +252,7 @@ async () => {
       uniq{uniques}}}}}`;
   const r = await cloudflare.request({method:'POST', path:'/graphql', body:{query,
     variables:{zone:'9223bb0898c72eb65d27cd77e82b1f05', since:'YYYY-MM-DD', until:'YYYY-MM-DD'}}});
-  return r.result.viewer.zones[0].httpRequests1dGroups;
+  return (r.data || r.result).viewer.zones[0].httpRequests1dGroups;
 }
 ```
 

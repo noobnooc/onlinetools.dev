@@ -16,6 +16,21 @@
 	<div lang="en">
 	<section class="relative border-l border-line pb-8 pl-6">
 		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
+		<h2 class="text-sm font-medium">Chmod Calculator in every language</h2>
+		<p class="mt-0.5 font-mono text-xs text-dim">v2026.11.04</p>
+		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
+			<li>
+				The About and FAQ of the <a href={lp('/t/chmod-calculator')} class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">Chmod
+				Calculator</a> are now translated into all 18 languages, so the localized pages no longer fall back to English.
+			</li>
+			<li>
+				The <a href={lp('/t/jwt-decoder')} class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">JWT
+				Decoder</a> recognizes an encrypted token (JWE, five segments) and says so, instead of only counting segments.
+			</li>
+		</ul>
+	</section>
+	<section class="relative border-l border-line pb-8 pl-6">
+		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
 		<h2 class="text-sm font-medium">Merge and subtract CIDR lists</h2>
 		<p class="mt-0.5 font-mono text-xs text-dim">v2026.11.03</p>
 		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">

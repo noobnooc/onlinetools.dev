@@ -11,6 +11,17 @@ the footer badge and every `<lastmod>` in the sitemap.
 
 ---
 
+## [2026.11.04] — Chmod Calculator in every language
+
+### Changed
+
+- **Chmod Calculator** About and FAQ translated into the 16 locales that
+  fell back to English, so every localized page (and its `FAQPage` JSON-LD)
+  is in its own language.
+- **JWT Decoder** recognizes an encrypted JWT (JWE, five segments with `enc`
+  in the header) and explains that its payload can't be decoded without the
+  recipient's key, instead of reporting a segment count.
+
 ## [2026.11.03] — Merge and subtract CIDR lists
 
 ### Added

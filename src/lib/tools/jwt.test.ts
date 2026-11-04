@@ -71,6 +71,18 @@ describe('decodeJwt', () => {
 		if (!r.ok) expect(r.error).toMatch(/2/);
 		expect(decodeJwt('a.b.c.d').ok).toBe(false);
 	});
+	it('names a JWE (5 segments, enc in the header) instead of counting segments', () => {
+		const h = encodeBase64(JSON.stringify({ alg: 'RSA-OAEP-256', enc: 'A256GCM' }), true);
+		if (!h.ok) throw new Error('encode failed');
+		const r = decodeJwt(`${h.value}.a.b.c.d`);
+		expect(r.ok).toBe(false);
+		if (!r.ok) {
+			expect(r.error).toMatch(/JWE/);
+			expect(r.error).toMatch(/A256GCM/);
+		}
+		const other = decodeJwt('a.b.c.d.e');
+		expect(!other.ok && other.error).toMatch(/found 5/);
+	});
 	it('rejects segments that are not base64url JSON', () => {
 		expect(decodeJwt('!!!.eyJ9.x').ok).toBe(false);
 		expect(decodeJwt('eyJhbGciOiJIUzI1NiJ9.!!!.x').ok).toBe(false);
