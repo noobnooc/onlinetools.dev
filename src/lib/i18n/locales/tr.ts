@@ -481,7 +481,7 @@ const tr: Messages = {
 		nbDec: 'Ondalık',
 		nbHex: 'Onaltılı',
 		nbBits: 'bit',
-		cidrInput: 'CIDR, adres veya aralık',
+		cidrInput: 'CIDR, adres, aralık veya liste',
 		cidrAddress: 'Adres',
 		cidrNetwork: 'Ağ',
 		cidrBroadcast: 'Yayın (broadcast)',
@@ -506,6 +506,14 @@ const tr: Messages = {
 		cidrOutside: 'Blok dışında',
 		cidrBlocks: '{n} CIDR bloğu',
 		cidrEmpty: 'Ayrıntılar burada görünür — 10.0.0.0/16 veya 10.0.0.1 - 10.0.0.50 gibi bir aralık deneyin',
+		cidrEntries: '{n} girdi',
+		cidrSkipped: '{n} atlandı',
+		cidrExcludedN: '{n} hariç',
+		cidrNothingLeft: 'Hiçbir şey kalmadı — hariç tutulanlar tüm adresleri kapsıyor',
+		cidrLine: 'Satır {n}',
+		cidrExcludeLine: 'Hariç tut, satır {n}',
+		cidrExclude: 'Hariç tut',
+		cidrExcludeHint: 'Sonuçtan çıkarılacak bloklar, adresler veya aralıklar; ör. WireGuard AllowedIPs için 0.0.0.0/0\'dan yerel ağınız. Her satıra bir tane veya virgülle ayrılmış.',
 
 		// Chmod calculator
 		chmInput: 'Mod, ls -l dizesi, chmod komutu veya umask',

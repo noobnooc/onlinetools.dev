@@ -473,7 +473,7 @@ const ru: Messages = {
 		nbDec: 'Десятичное',
 		nbHex: 'Шестнадцатеричное',
 		nbBits: 'бит',
-		cidrInput: 'CIDR, адрес или диапазон',
+		cidrInput: 'CIDR, адрес, диапазон или список',
 		cidrAddress: 'Адрес',
 		cidrNetwork: 'Сеть',
 		cidrBroadcast: 'Широковещательный',
@@ -498,6 +498,14 @@ const ru: Messages = {
 		cidrOutside: 'Вне блока',
 		cidrBlocks: 'CIDR-блоков: {n}',
 		cidrEmpty: 'Здесь появятся данные — попробуйте 10.0.0.0/16 или диапазон 10.0.0.1 - 10.0.0.50',
+		cidrEntries: 'Записей: {n}',
+		cidrSkipped: 'Пропущено: {n}',
+		cidrExcludedN: 'Исключено: {n}',
+		cidrNothingLeft: 'Ничего не осталось — исключения покрывают все адреса',
+		cidrLine: 'Строка {n}',
+		cidrExcludeLine: 'Исключения, строка {n}',
+		cidrExclude: 'Исключить',
+		cidrExcludeHint: 'Блоки, адреса или диапазоны, которые нужно убрать из результата, — например, локальную сеть из 0.0.0.0/0 для AllowedIPs в WireGuard. По одному в строке или через запятую.',
 
 		// Chmod calculator
 		chmInput: 'Режим, строка ls -l, команда chmod или umask',

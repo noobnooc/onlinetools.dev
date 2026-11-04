@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import {
+	aggregateCidrs,
 	analyzeCidr,
 	blockContains,
 	formatIPv6,
+	isCidrList,
 	isLikelyCidr,
 	maskToPrefix,
 	parseIPv4,
@@ -251,5 +253,114 @@ describe('isLikelyCidr', () => {
 		expect(isLikelyCidr('1/2')).toBe(false);
 		expect(isLikelyCidr('999.0.0.0/8')).toBe(false);
 		expect(isLikelyCidr('2024-01-01')).toBe(false);
+	});
+});
+
+function listOf(input: string, exclude = '') {
+	const r = aggregateCidrs(input, exclude);
+	if (!r.ok) throw new Error(r.error);
+	return r.value;
+}
+
+describe('aggregateCidrs', () => {
+	it('merges adjacent and overlapping blocks into the fewest CIDRs', () => {
+		expect(listOf('10.0.0.0/24\n10.0.1.0/24').cidrs).toEqual(['10.0.0.0/23']);
+		expect(listOf('10.0.0.0/24\n10.0.0.128/25\n10.0.0.5').cidrs).toEqual(['10.0.0.0/24']);
+		// Adjacent but not aligned: /23 can't start at .1.0.
+		expect(listOf('10.0.1.0/24\n10.0.2.0/24').cidrs).toEqual(['10.0.1.0/24', '10.0.2.0/24']);
+		expect(listOf('10.0.0.0/24, 10.0.1.0/24, 10.0.2.0/23').cidrs).toEqual(['10.0.0.0/22']);
+	});
+	it('sorts, dedupes and keeps IPv4 before IPv6', () => {
+		const l = listOf('2001:db8:1::/48\n192.168.1.0/24\n2001:db8::/48\n10.0.0.0/8\n10.0.0.0/8');
+		expect(l.cidrs).toEqual(['10.0.0.0/8', '192.168.1.0/24', '2001:db8::/47']);
+		expect(l.entries).toBe(5);
+		expect(l.v4).toEqual({ cidrs: 2, total: String(2 ** 24 + 256) });
+		expect(l.v6.cidrs).toBe(1);
+	});
+	it('accepts ranges, bare addresses, netmasks and comments', () => {
+		const l = listOf('# office\n10.0.0.1 - 10.0.0.3 // three hosts\n10.0.0.0\n\n172.16.0.0 255.255.0.0');
+		expect(l.cidrs).toEqual(['10.0.0.0/30', '172.16.0.0/16']);
+		expect(l.entries).toBe(3);
+	});
+	it('normalizes host bits per entry, as routers do', () => {
+		expect(listOf('10.1.2.3/8').cidrs).toEqual(['10.0.0.0/8']);
+	});
+	it('subtracts an exclude list (WireGuard AllowedIPs minus the LAN)', () => {
+		const l = listOf('0.0.0.0/0', '192.168.0.0/16');
+		expect(l.cidrs).toEqual([
+			'0.0.0.0/1',
+			'128.0.0.0/2',
+			'192.0.0.0/9',
+			'192.128.0.0/11',
+			'192.160.0.0/13',
+			'192.169.0.0/16',
+			'192.170.0.0/15',
+			'192.172.0.0/14',
+			'192.176.0.0/12',
+			'192.192.0.0/10',
+			'193.0.0.0/8',
+			'194.0.0.0/7',
+			'196.0.0.0/6',
+			'200.0.0.0/5',
+			'208.0.0.0/4',
+			'224.0.0.0/3'
+		]);
+		expect(l.v4.total).toBe(String(2 ** 32 - 2 ** 16));
+		expect(l.excluded).toBe(1);
+	});
+	it('handles exclusions at the edges, inside each other and of the other version', () => {
+		expect(listOf('10.0.0.0/24', '10.0.0.0/25').cidrs).toEqual(['10.0.0.128/25']);
+		expect(listOf('10.0.0.0/24', '10.0.0.255').cidrs.at(-1)).toBe('10.0.0.254/32');
+		expect(listOf('10.0.0.0/24', '10.0.0.0/8').cidrs).toEqual([]);
+		expect(listOf('10.0.0.0/24', '2001:db8::/32').cidrs).toEqual(['10.0.0.0/24']);
+		expect(listOf('::/0', '::1').v6.cidrs).toBe(128);
+		expect(listOf('10.0.0.0/24', '10.0.0.10\n10.0.0.20').cidrs).toEqual([
+			'10.0.0.0/29',
+			'10.0.0.8/31',
+			'10.0.0.11/32',
+			'10.0.0.12/30',
+			'10.0.0.16/30',
+			'10.0.0.21/32',
+			'10.0.0.22/31',
+			'10.0.0.24/29',
+			'10.0.0.32/27',
+			'10.0.0.64/26',
+			'10.0.0.128/25'
+		]);
+	});
+	it('reports bad lines with their line number and keeps the rest', () => {
+		const l = listOf('10.0.0.0/24\n10.0.0.300/24\n10.0.1.0/24', 'nope');
+		expect(l.cidrs).toEqual(['10.0.0.0/23']);
+		expect(l.errors).toHaveLength(2);
+		expect(l.errors[0]).toMatchObject({ source: 'input', line: 2, entry: '10.0.0.300/24' });
+		expect(l.errors[1]).toMatchObject({ source: 'exclude', line: 1, entry: 'nope' });
+	});
+	it('errors when nothing valid is left to aggregate', () => {
+		expect(aggregateCidrs('').ok).toBe(false);
+		const r = aggregateCidrs('# only a comment\nfoo');
+		expect(r.ok).toBe(false);
+		if (!r.ok) expect(r.error).toMatch(/^Line 2:/);
+	});
+	it('handles non-ASCII junk and Windows line endings', () => {
+		const l = listOf('10.0.0.0/24\r\n10.0.1.0/24\r\n１０.0.0.0/8');
+		expect(l.cidrs).toEqual(['10.0.0.0/23']);
+		expect(l.errors).toHaveLength(1);
+	});
+});
+
+describe('isCidrList', () => {
+	it('is true only for more than one entry', () => {
+		expect(isCidrList('10.0.0.0/8')).toBe(false);
+		expect(isCidrList('10.0.0.1 - 10.0.0.9')).toBe(false);
+		expect(isCidrList('10.0.0.0/8\n')).toBe(false);
+		expect(isCidrList('10.0.0.0/8\n10.1.0.0/16')).toBe(true);
+		expect(isCidrList('10.0.0.0/8, 10.1.0.0/16')).toBe(true);
+	});
+});
+
+describe('isLikelyCidr lists', () => {
+	it('accepts a list of blocks and rejects mixed text', () => {
+		expect(isLikelyCidr('10.0.0.0/8\n10.1.0.0/16\n')).toBe(true);
+		expect(isLikelyCidr('10.0.0.0/8\nhello')).toBe(false);
 	});
 });

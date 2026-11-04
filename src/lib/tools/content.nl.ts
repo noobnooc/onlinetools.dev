@@ -1188,6 +1188,10 @@ const TOOL_CONTENT_NL: Record<string, ToolContent> = {
 			{
 				q: 'Waar is het wildcardmasker voor?',
 				a: 'Het is het omgekeerde netmasker — 0.0.0.255 voor een /24 — en zo drukken access lists in Cisco IOS en network-statements in OSPF een bereik uit. Je kunt beide vormen in de calculator plakken; hij herkent een wildcardmasker en zet het om naar de prefixlengte.'
+			},
+			{
+				q: 'Kan het een lijst blokken samenvoegen, of het ene bereik van het andere aftrekken?',
+				a: 'Ja. Plak meerdere blokken, adressen of bereiken — één per regel of gescheiden door komma\'s, #-commentaar mag — en de calculator voegt overlappende en aangrenzende samen tot zo min mogelijk CIDR-blokken die precies dezelfde adressen dekken, eerst IPv4, dan IPv6. Wat in het vak Uitsluiten staat, wordt uit het resultaat gehaald. Zo bouw je een WireGuard-AllowedIPs-lijst die alles behalve je LAN routeert: 0.0.0.0/0 min 192.168.0.0/16 levert 16 blokken op. Regels die niet te lezen zijn, worden met hun regelnummer getoond en overgeslagen, zodat één typfout de rest niet verbergt.'
 			}
 		]
 	},

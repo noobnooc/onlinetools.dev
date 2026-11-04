@@ -788,6 +788,10 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
 			{
 				q: 'What is the wildcard mask for?',
 				a: 'It is the netmask inverted — 0.0.0.255 for a /24 — and it is how Cisco IOS access lists and OSPF network statements express a range. You can paste either form into the calculator; it recognizes a wildcard mask and converts it to the prefix length.'
+			},
+			{
+				q: 'Can it merge a list of blocks, or subtract one range from another?',
+				a: 'Yes. Paste several blocks, addresses or ranges — one per line or separated by commas, with # comments allowed — and the calculator merges overlapping and adjacent ones into the fewest CIDR blocks that cover exactly the same addresses, IPv4 first, then IPv6. Anything in the Exclude box is cut out of the result, which is how you build a WireGuard AllowedIPs list that routes everything except your LAN: 0.0.0.0/0 minus 192.168.0.0/16 comes out as 16 blocks. Lines that don\'t parse are listed with their line number and skipped, so one typo doesn\'t hide the rest.'
 			}
 		]
 	},

@@ -138,13 +138,14 @@ export const DETECTORS: Detector[] = [
 		id: 'cidr',
 		detect(input) {
 			if (!isLikelyCidr(input)) return null;
+			const list = /\n/.test(input.trim());
 			return {
 				type: 'cidr',
 				format: 'cidr',
-				label: 'CIDR block',
+				label: list ? 'CIDR list' : 'CIDR block',
 				confidence: 0.9,
 				tool: 'cidr-calculator',
-				actions: [{ label: 'Calculate subnet', tool: 'cidr-calculator' }]
+				actions: [{ label: list ? 'Merge CIDR blocks' : 'Calculate subnet', tool: 'cidr-calculator' }]
 			};
 		}
 	},

@@ -473,7 +473,7 @@ const ko: Messages = {
 		nbDec: '10진수',
 		nbHex: '16진수',
 		nbBits: '비트',
-		cidrInput: 'CIDR, 주소 또는 범위',
+		cidrInput: 'CIDR, 주소, 범위 또는 목록',
 		cidrAddress: '주소',
 		cidrNetwork: '네트워크',
 		cidrBroadcast: '브로드캐스트',
@@ -498,6 +498,14 @@ const ko: Messages = {
 		cidrOutside: '블록 밖',
 		cidrBlocks: 'CIDR 블록 {n}개',
 		cidrEmpty: '여기에 결과가 표시됩니다 — 10.0.0.0/16 또는 10.0.0.1 - 10.0.0.50 같은 범위를 입력해 보세요',
+		cidrEntries: '항목 {n}개',
+		cidrSkipped: '{n}개 건너뜀',
+		cidrExcludedN: '{n}개 제외',
+		cidrNothingLeft: '남은 주소가 없습니다 — 제외 목록이 모든 주소를 덮습니다',
+		cidrLine: '{n}번째 줄',
+		cidrExcludeLine: '제외 목록 {n}번째 줄',
+		cidrExclude: '제외',
+		cidrExcludeHint: '결과에서 뺄 블록, 주소 또는 범위. 예: WireGuard AllowedIPs에서 0.0.0.0/0에서 LAN 빼기. 한 줄에 하나씩 또는 쉼표로 구분.',
 
 		// Chmod calculator
 		chmInput: '모드, ls -l 문자열, chmod 명령 또는 umask',

@@ -484,7 +484,7 @@ const id: Messages = {
 		nbDec: 'Desimal',
 		nbHex: 'Heksadesimal',
 		nbBits: 'bit',
-		cidrInput: 'CIDR, alamat, atau rentang',
+		cidrInput: 'CIDR, alamat, rentang, atau daftar',
 		cidrAddress: 'Alamat',
 		cidrNetwork: 'Jaringan',
 		cidrBroadcast: 'Broadcast',
@@ -509,6 +509,14 @@ const id: Messages = {
 		cidrOutside: 'Di luar blok',
 		cidrBlocks: '{n} blok CIDR',
 		cidrEmpty: 'Detail muncul di sini — coba 10.0.0.0/16 atau rentang seperti 10.0.0.1 - 10.0.0.50',
+		cidrEntries: '{n} entri',
+		cidrSkipped: '{n} dilewati',
+		cidrExcludedN: '{n} dikecualikan',
+		cidrNothingLeft: 'Tidak ada yang tersisa — pengecualian mencakup semua alamat',
+		cidrLine: 'Baris {n}',
+		cidrExcludeLine: 'Pengecualian, baris {n}',
+		cidrExclude: 'Kecualikan',
+		cidrExcludeHint: 'Blok, alamat, atau rentang yang dibuang dari hasil, mis. LAN Anda dari 0.0.0.0/0 untuk AllowedIPs WireGuard. Satu per baris atau dipisahkan koma.',
 
 		// Chmod calculator
 		chmInput: 'Mode, string ls -l, perintah chmod, atau umask',

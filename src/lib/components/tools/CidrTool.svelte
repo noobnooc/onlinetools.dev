@@ -3,7 +3,7 @@
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
 	import EmptyState from '../EmptyState.svelte';
-	import { analyzeCidr, blockContains, splitBlock } from '$lib/tools/cidr';
+	import { aggregateCidrs, analyzeCidr, blockContains, isCidrList, splitBlock } from '$lib/tools/cidr';
 	import { initFromHash } from '$lib/state/hashstate.svelte';
 	import { currentResult } from '$lib/state/app.svelte';
 	import { copyText } from '$lib/utils/format';
@@ -14,16 +14,32 @@
 
 	let input = $state('');
 	let probe = $state('');
+	let exclude = $state('');
 	let splitTo = $state<number | null>(null);
 	let copied = $state('');
 
 	initFromHash((s) => {
 		if (s.input) input = s.input;
 		if (s.probe) probe = s.probe;
+		if (s.exclude) exclude = s.exclude;
 		if (s.split && /^\d{1,3}$/.test(s.split)) splitTo = Number(s.split);
 	});
 
-	const result = $derived(input.trim() === '' ? null : analyzeCidr(input));
+	// More than one entry, or anything to exclude, turns the calculator into a
+	// list aggregator: merge everything, subtract the exclusions.
+	const listMode = $derived(input.trim() !== '' && (isCidrList(input) || exclude.trim() !== ''));
+	const listResult = $derived(listMode ? aggregateCidrs(input, exclude) : null);
+	const list = $derived(listResult?.ok ? listResult.value : null);
+	const listSummary = $derived.by(() => {
+		if (!list) return '';
+		let head = tt('cidrEntries', { n: list.entries });
+		if (list.excluded) head += ` − ${tt('cidrExcludedN', { n: list.excluded })}`;
+		const parts = [`${head} → ${tt('cidrBlocks', { n: list.cidrs.length })}`];
+		if (list.v4.cidrs) parts.push(`IPv4 ${tt('cidrTotal')}: ${list.v4.total}`);
+		if (list.v6.cidrs) parts.push(`IPv6 ${tt('cidrTotal')}: ${list.v6.total}`);
+		return parts.join(' · ');
+	});
+	const result = $derived(input.trim() === '' || listMode ? null : analyzeCidr(input));
 	const info = $derived(result?.ok ? result.value : null);
 	const blk = $derived(info?.kind === 'block' ? info : null);
 	const range = $derived(info?.kind === 'range' ? info : null);
@@ -65,6 +81,7 @@
 	});
 
 	const output = $derived.by(() => {
+		if (list) return list.cidrs.join('\n');
 		if (range) return range.cidrs.join('\n');
 		return rows.map(([k, v]) => `${k}: ${v}`).join('\n');
 	});
@@ -75,6 +92,12 @@
 
 	const badge = $derived.by((): BadgeSegment[] => {
 		if (input.trim() === '') return [];
+		if (listMode) {
+			if (!list) return [{ text: 'invalid', tone: 'err' }];
+			const out: BadgeSegment[] = [{ text: tt('cidrEntries', { n: list.entries }), tone: 'accent' }];
+			if (list.errors.length) out.push({ text: tt('cidrSkipped', { n: list.errors.length }), tone: 'warn' });
+			return out;
+		}
 		if (!info) return [{ text: 'invalid', tone: 'err' }];
 		if (info.kind === 'range') return [{ text: `IPv${info.version} range`, tone: 'accent' }];
 		return [
@@ -95,6 +118,7 @@
 		if (input.trim() === '') return null;
 		const s: Record<string, string> = { input };
 		if (probe.trim()) s.probe = probe;
+		if (exclude.trim()) s.exclude = exclude;
 		if (splitTo !== null) s.split = String(splitTo);
 		return s;
 	});
@@ -106,8 +130,12 @@
 		label={tt('cidrInput')}
 		placeholder="192.168.1.0/24 · 2001:db8::/48 · 10.0.0.1 - 10.0.0.99"
 		{badge}
-		rows={2}
-		error={result && !result.ok ? { message: result.error } : null}
+		rows={listMode ? 6 : 2}
+		error={listResult && !listResult.ok
+			? { message: listResult.error }
+			: result && !result.ok
+				? { message: result.error }
+				: null}
 		onsample={() => (input = '10.20.0.0/16')}
 	/>
 
@@ -115,8 +143,27 @@
 		<p class="text-sm text-warn">{tt('cidrHostBits', { net: `${blk.network}/${blk.prefix}` })}</p>
 	{/if}
 
-	<OutputPanel value={output} filename={range ? 'cidrs.txt' : 'subnet.txt'} {shareState}>
-		{#if blk}
+	<OutputPanel value={output} filename={range || list ? 'cidrs.txt' : 'subnet.txt'} {shareState}>
+		{#if list}
+			<p class="mb-2 text-sm text-dim">{listSummary}</p>
+			{#if list.cidrs.length}
+				<ul class="space-y-0.5 font-mono text-sm">
+					{#each list.cidrs as c (c)}<li>{c}</li>{/each}
+				</ul>
+			{:else}
+				<p class="text-sm text-warn">{tt('cidrNothingLeft')}</p>
+			{/if}
+			{#if list.errors.length}
+				<ul class="mt-3 space-y-0.5 text-sm text-warn">
+					{#each list.errors as e (e.source + e.line + e.entry)}
+						<li>
+							{e.source === 'exclude' ? tt('cidrExcludeLine', { n: e.line }) : tt('cidrLine', { n: e.line })}:
+							<code class="font-mono">{e.entry}</code> — {e.message}
+						</li>
+					{/each}
+				</ul>
+			{/if}
+		{:else if blk}
 			<table class="w-full font-mono text-sm">
 				<tbody>
 					{#each rows as [key, value] (key)}
@@ -207,6 +254,22 @@
 					{/if}
 				</div>
 			{/if}
+		</div>
+	{/if}
+
+	{#if input.trim() !== ''}
+		<div class="rounded-lg border border-line bg-surface p-3">
+			<label for="cidr-exclude" class="mb-1.5 block text-xs font-medium tracking-wide text-dim uppercase">{tt('cidrExclude')}</label>
+			<textarea
+				id="cidr-exclude"
+				bind:value={exclude}
+				rows="2"
+				spellcheck="false"
+				autocomplete="off"
+				placeholder="192.168.0.0/16, 10.0.0.0/8"
+				class="w-full resize-y rounded-lg border border-line bg-surface-2 px-2 py-1.5 font-mono text-sm text-fg focus:border-accent"
+			></textarea>
+			<p class="mt-1 text-xs text-dim">{tt('cidrExcludeHint')}</p>
 		</div>
 	{/if}
 </div>

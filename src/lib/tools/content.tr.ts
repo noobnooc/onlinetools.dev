@@ -1188,6 +1188,10 @@ const TOOL_CONTENT_TR: Record<string, ToolContent> = {
 			{
 				q: 'Joker maske (wildcard) ne işe yarar?',
 				a: 'Ağ maskesinin tersidir — bir /24 için 0.0.0.255 — ve Cisco IOS erişim listeleri ile OSPF network komutları bir aralığı bu şekilde ifade eder. Hesaplayıcıya iki biçimden herhangi birini yapıştırabilirsiniz; joker maskeyi tanır ve önek uzunluğuna dönüştürür.'
+			},
+			{
+				q: 'Bir blok listesini birleştirebilir veya bir aralıktan diğerini çıkarabilir mi?',
+				a: 'Evet. Birden çok blok, adres veya aralık yapıştırın — her satıra bir tane ya da virgülle ayrılmış, # yorumlarına izin verilir — hesaplayıcı çakışan ve bitişik olanları tam olarak aynı adresleri kapsayan en az sayıda CIDR bloğunda birleştirir; önce IPv4, sonra IPv6. Hariç tut kutusundaki her şey sonuçtan çıkarılır; yerel ağınız dışındaki her şeyi tünelden geçiren bir WireGuard AllowedIPs listesi böyle oluşturulur: 0.0.0.0/0 eksi 192.168.0.0/16, 16 blok eder. Okunamayan satırlar satır numarasıyla listelenip atlanır, böylece tek bir yazım hatası geri kalanı gizlemez.'
 			}
 		]
 	},

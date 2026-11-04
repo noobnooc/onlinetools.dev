@@ -380,10 +380,17 @@ export function splitBlock(b: CidrBlock, newPrefix: number, limit = 256): ToolRe
 	return ok({ prefix: newPrefix, count: count.toString(), subnets });
 }
 
-/** For Smart Paste: an IPv4/IPv6 CIDR block or a dotted-quad range, nothing looser. */
+/**
+ * For Smart Paste: an IPv4/IPv6 CIDR block or a dotted-quad range, nothing
+ * looser — or a list of 2–1000 lines that are each one of those.
+ */
 export function isLikelyCidr(input: string): boolean {
 	const s = input.trim();
-	if (s.length > 100 || /\n/.test(s)) return false;
+	if (/\n/.test(s)) {
+		const lines = s.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+		return lines.length <= 1000 && lines.every((l) => isLikelyCidr(l));
+	}
+	if (s.length > 100) return false;
 	const m = s.match(/^([0-9a-fA-F.:]+)\/(\d{1,3})$/);
 	if (m) {
 		const r = analyzeCidr(s);
@@ -391,4 +398,137 @@ export function isLikelyCidr(input: string): boolean {
 	}
 	if (/^\d{1,3}(\.\d{1,3}){3}\s*-\s*\d{1,3}(\.\d{1,3}){3}$/.test(s)) return analyzeCidr(s).ok;
 	return false;
+}
+
+/** One parsed entry of a list, as an inclusive address interval. */
+interface Interval {
+	version: IpVersion;
+	lo: bigint;
+	hi: bigint;
+}
+
+export interface CidrListError {
+	/** Which box the entry came from. */
+	source: 'input' | 'exclude';
+	/** 1-based line of the bad entry. */
+	line: number;
+	entry: string;
+	message: string;
+}
+
+export interface CidrList {
+	/** Entries read from the input (after comments and blanks are dropped). */
+	entries: number;
+	/** Entries read from the exclude list. */
+	excluded: number;
+	/** The fewest CIDR blocks covering exactly the union, minus the exclusions; IPv4 first. */
+	cidrs: string[];
+	v4: { cidrs: number; total: string };
+	v6: { cidrs: number; total: string };
+	/** Bad entries are reported and skipped, so one typo doesn't hide the other 200 lines. */
+	errors: CidrListError[];
+}
+
+/**
+ * Split a pasted list into entries: one per line, commas also separate
+ * (security-group exports and WireGuard AllowedIPs use them), and `#` or `//`
+ * starts a comment. Spaces don't separate, so "10.0.0.0 255.0.0.0" and
+ * "10.0.0.1 - 10.0.0.9" stay one entry each.
+ */
+function listEntries(text: string): Array<{ line: number; entry: string }> {
+	const out: Array<{ line: number; entry: string }> = [];
+	text.split(/\r?\n/).forEach((raw, i) => {
+		const code = raw.replace(/(#|\/\/).*$/, '');
+		for (const part of code.split(',')) {
+			const entry = part.trim();
+			if (entry) out.push({ line: i + 1, entry });
+		}
+	});
+	return out;
+}
+
+function parseList(text: string, source: CidrListError['source'], errors: CidrListError[]): Interval[] {
+	const out: Interval[] = [];
+	for (const { line, entry } of listEntries(text)) {
+		const r = analyzeCidr(entry);
+		if (!r.ok) {
+			errors.push({ source, line, entry, message: r.error });
+			continue;
+		}
+		const a = r.value;
+		const v = a.version;
+		const start = a.kind === 'block' ? a.network : a.start;
+		const end = a.kind === 'block' ? a.last : a.end;
+		const lo = parseIp(start);
+		const hi = parseIp(end);
+		if (lo.ok && hi.ok) out.push({ version: v, lo: lo.value.value, hi: hi.value.value });
+	}
+	return out;
+}
+
+/** Sort and merge overlapping or touching intervals of one version. */
+function mergeIntervals(list: Interval[]): Interval[] {
+	const sorted = [...list].sort((a, b) => (a.lo < b.lo ? -1 : a.lo > b.lo ? 1 : 0));
+	const out: Interval[] = [];
+	for (const iv of sorted) {
+		const last = out[out.length - 1];
+		if (last && iv.lo <= last.hi + 1n) {
+			if (iv.hi > last.hi) last.hi = iv.hi;
+		} else out.push({ ...iv });
+	}
+	return out;
+}
+
+/** Remove every `cut` interval from `keep`; both must be merged and sorted. */
+function subtractIntervals(keep: Interval[], cut: Interval[]): Interval[] {
+	const out: Interval[] = [];
+	for (const k of keep) {
+		let lo = k.lo;
+		const hi = k.hi;
+		for (const c of cut) {
+			if (c.hi < lo || c.lo > hi) continue;
+			if (c.lo > lo) out.push({ version: k.version, lo, hi: c.lo - 1n });
+			lo = c.hi + 1n;
+			if (lo > hi) break;
+		}
+		if (lo <= hi) out.push({ version: k.version, lo, hi });
+	}
+	return out;
+}
+
+/**
+ * Aggregate a list of CIDR blocks, bare addresses and ranges into the fewest
+ * blocks that cover the same addresses, optionally minus an exclude list —
+ * the "AllowedIPs = 0.0.0.0/0 except my LAN" calculation. Host bits are
+ * ignored per entry (10.1.2.3/8 counts as 10.0.0.0/8), as routers do.
+ */
+export function aggregateCidrs(input: string, exclude = ''): ToolResult<CidrList> {
+	const errors: CidrListError[] = [];
+	const keep = parseList(input, 'input', errors);
+	const cut = parseList(exclude, 'exclude', errors);
+	if (keep.length === 0) {
+		if (errors.length) return err(`Line ${errors[0].line}: ${errors[0].message}`);
+		return err('Enter one CIDR block, address or range per line');
+	}
+	const cidrs: string[] = [];
+	const stats = { v4: { cidrs: 0, total: '0' }, v6: { cidrs: 0, total: '0' } };
+	for (const v of [4, 6] as const) {
+		const merged = mergeIntervals(keep.filter((i) => i.version === v));
+		const left = subtractIntervals(merged, mergeIntervals(cut.filter((i) => i.version === v)));
+		let total = 0n;
+		let n = 0;
+		for (const iv of left) {
+			total += iv.hi - iv.lo + 1n;
+			const blocks = rangeToCidrs(iv.lo, iv.hi, v);
+			n += blocks.length;
+			cidrs.push(...blocks);
+		}
+		stats[v === 4 ? 'v4' : 'v6'] = { cidrs: n, total: total.toString() };
+	}
+	return ok({ entries: keep.length, excluded: cut.length, cidrs, ...stats, errors });
+}
+
+/** Whether the input holds more than one entry and so is a list, not a single block. */
+export function isCidrList(input: string): boolean {
+	return listEntries(input).length > 1;
 }

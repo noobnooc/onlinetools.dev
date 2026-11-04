@@ -16,6 +16,23 @@
 	<div lang="en">
 	<section class="relative border-l border-line pb-8 pl-6">
 		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
+		<h2 class="text-sm font-medium">Merge and subtract CIDR lists</h2>
+		<p class="mt-0.5 font-mono text-xs text-dim">v2026.11.03</p>
+		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
+			<li>
+				The <a href={lp('/t/cidr-calculator')} class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">CIDR
+				Calculator</a> takes a whole list now: blocks, addresses and ranges, one per line or comma-separated,
+				merged into the fewest CIDR blocks that cover exactly the same addresses.
+			</li>
+			<li>
+				A new Exclude box cuts blocks out of the result, for WireGuard AllowedIPs and similar
+				"everything except my LAN" lists. Bad lines are listed with their line number and skipped.
+			</li>
+			<li>Smart Paste recognizes a pasted list of CIDR blocks.</li>
+		</ul>
+	</section>
+	<section class="relative border-l border-line pb-8 pl-6">
+		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
 		<h2 class="text-sm font-medium">File permissions, every way they are written</h2>
 		<p class="mt-0.5 font-mono text-xs text-dim">v2026.11.02</p>
 		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">

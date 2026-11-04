@@ -501,7 +501,7 @@ const uk: Messages = {
 		nbDec: 'Десяткова',
 		nbHex: 'Шістнадцяткова',
 		nbBits: 'біт',
-		cidrInput: 'CIDR, адреса або діапазон',
+		cidrInput: 'CIDR, адреса, діапазон або список',
 		cidrAddress: 'Адреса',
 		cidrNetwork: 'Мережа',
 		cidrBroadcast: 'Широкомовна',
@@ -526,6 +526,14 @@ const uk: Messages = {
 		cidrOutside: 'Поза блоком',
 		cidrBlocks: 'CIDR-блоків: {n}',
 		cidrEmpty: 'Тут з’являться дані — спробуйте 10.0.0.0/16 або діапазон 10.0.0.1 - 10.0.0.50',
+		cidrEntries: 'Записів: {n}',
+		cidrSkipped: 'Пропущено: {n}',
+		cidrExcludedN: 'Виключено: {n}',
+		cidrNothingLeft: 'Нічого не лишилося — виключення покривають усі адреси',
+		cidrLine: 'Рядок {n}',
+		cidrExcludeLine: 'Виключення, рядок {n}',
+		cidrExclude: 'Виключити',
+		cidrExcludeHint: 'Блоки, адреси або діапазони, які треба прибрати з результату, — наприклад, локальну мережу з 0.0.0.0/0 для AllowedIPs у WireGuard. По одному в рядку або через кому.',
 
 		// Chmod calculator
 		chmInput: 'Режим, рядок ls -l, команда chmod або umask',

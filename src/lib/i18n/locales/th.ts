@@ -500,7 +500,7 @@ const th: Messages = {
 		nbDec: 'ฐานสิบ',
 		nbHex: 'ฐานสิบหก',
 		nbBits: 'บิต',
-		cidrInput: 'CIDR, ที่อยู่ หรือช่วง',
+		cidrInput: 'CIDR, ที่อยู่, ช่วง หรือรายการ',
 		cidrAddress: 'ที่อยู่',
 		cidrNetwork: 'เครือข่าย',
 		cidrBroadcast: 'บรอดแคสต์',
@@ -525,6 +525,14 @@ const th: Messages = {
 		cidrOutside: 'อยู่นอกบล็อก',
 		cidrBlocks: '{n} บล็อก CIDR',
 		cidrEmpty: 'รายละเอียดจะแสดงที่นี่ — ลอง 10.0.0.0/16 หรือช่วงอย่าง 10.0.0.1 - 10.0.0.50',
+		cidrEntries: '{n} รายการ',
+		cidrSkipped: 'ข้าม {n} รายการ',
+		cidrExcludedN: 'ยกเว้น {n} รายการ',
+		cidrNothingLeft: 'ไม่เหลืออะไร — รายการยกเว้นครอบคลุมทุกที่อยู่',
+		cidrLine: 'บรรทัดที่ {n}',
+		cidrExcludeLine: 'รายการยกเว้น บรรทัดที่ {n}',
+		cidrExclude: 'ยกเว้น',
+		cidrExcludeHint: 'บล็อก ที่อยู่ หรือช่วงที่จะตัดออกจากผลลัพธ์ เช่น ตัด LAN ออกจาก 0.0.0.0/0 สำหรับ AllowedIPs ของ WireGuard ใส่บรรทัดละหนึ่งรายการหรือคั่นด้วยจุลภาค',
 
 		// Chmod calculator
 		chmInput: 'โหมด, สตริง ls -l, คำสั่ง chmod หรือ umask',

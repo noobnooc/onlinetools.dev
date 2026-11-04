@@ -1189,6 +1189,10 @@ const TOOL_CONTENT_PT: Record<string, ToolContent> = {
 			{
 				q: 'Para que serve a máscara curinga?',
 				a: 'É a máscara de rede invertida — 0.0.0.255 para um /24 — e é assim que as listas de acesso do Cisco IOS e as instruções network do OSPF expressam um intervalo. Você pode colar qualquer uma das formas na calculadora; ela reconhece uma máscara curinga e a converte no comprimento de prefixo.'
+			},
+			{
+				q: 'Dá para mesclar uma lista de blocos ou subtrair um intervalo de outro?',
+				a: 'Sim. Cole vários blocos, endereços ou intervalos — um por linha ou separados por vírgulas, com comentários # permitidos — e a calculadora mescla os sobrepostos e adjacentes no menor número de blocos CIDR que cobrem exatamente os mesmos endereços, primeiro IPv4, depois IPv6. O que estiver na caixa Excluir é retirado do resultado; é assim que se monta uma lista AllowedIPs do WireGuard que roteia tudo menos a sua LAN: 0.0.0.0/0 menos 192.168.0.0/16 resulta em 16 blocos. Linhas que não podem ser lidas aparecem com o número da linha e são ignoradas, para que um erro de digitação não esconda o resto.'
 			}
 		]
 	},

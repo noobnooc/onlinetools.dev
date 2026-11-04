@@ -15,6 +15,16 @@ Newest first. One entry per run; keep each under ~25 lines. Template:
 
 ---
 
+## 2026-11-03 — CIDR list mode: merge and subtract
+- Health: smoke test green (0 failures). The owner merged #33 (with #30 and #32) on 11-03; live is v2026.11.02 (Worker `4fd13a7a`), both checks green on `main`. 0 eyeball 5xx on 11-02.
+- Metrics: 11-02: 750 page views, 544 visitors, 0 5xx. Week 10-27→11-02 vs 10-20→26: page views +84% (7,285 vs 3,965), visitors +8% (3,928 vs 3,625). Top human HTML: / 46, /uk/t/cidr-calculator 12, /zh/t/string-escape 9; the CIDR calculator led tool pages with 26 views across 5 locales. The 7-day top-paths log is now complete.
+- Shipped (PR open, green, not merged — the merge was denied by the session policy again, as on 11-01/11-02; I didn't try other routes): [#34](https://github.com/noobnooc/onlinetools.dev/pull/34) CIDR calculator list mode. Paste many blocks/addresses/ranges and get the fewest CIDRs covering the same addresses. An Exclude box subtracts blocks (WireGuard AllowedIPs: 0.0.0.0/0 minus 192.168.0.0/16 = 16 blocks). Bad lines get a line number and are skipped. Smart Paste knows CIDR lists. Strings and a new FAQ in all 18 locales. Also includes these ops records.
+- Why this headline: the data pointed at it. CIDR was the top tool page yesterday, mostly on localized pages, and aggregation was already the next backlog item for it. It's a tool improvement, not a new tool, so the last three headlines (JWT, a11y, chmod) aren't repeated as "another new tool".
+- Cloudflare: none (HSTS step 2 is due after 11-07).
+- Community: no outside issues or PRs. #31 still open (merge permission); the owner merged by hand today.
+- Learned: zh content files use half-width commas between Chinese clauses; match that. Kill `vite preview` by the PIDs from `ps`, not `pgrep -f` (it matched and killed my shell, exit 144). A Workers preview build failed once on an ops-only commit (it died in the client transform with no error). Re-running that commit through the "Deploy non-production branches" trigger (`POST /builds/triggers/{uuid}/builds`) passed, so treat a silent failure like that as a flake.
+- Next: once #34 is merged, run `release.sh <merge-sha> 4fd13a7a-1030-40bc-acac-b6fcafa7bad6 2026.11.03`. Then rank tools over the 7-day path log and give the top 5 depth work. HSTS step 2 after 11-07. Chmod About/FAQ in 16 locales is still open.
+
 ## 2026-11-02 — Chmod calculator (tool #47)
 - Health: smoke test green (0 failures); live still v2026.10.30 (Worker `1f14f4ca`) because #30 and #32 are unmerged. 0 eyeball 5xx on 11-01.
 - Blocker (unchanged): merging is still denied by the session's permission policy ("merge without review"). I tried the documented `gh api` merge for #30 once, got the denial, and did not try other routes. #31 is still open with no owner reply. Today's PR is stacked on #32 (which contains #30), so merging today's PR alone lands all three.

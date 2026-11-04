@@ -1189,6 +1189,10 @@ const TOOL_CONTENT_DE: Record<string, ToolContent> = {
 			{
 				q: 'Wofür ist die Wildcard-Maske da?',
 				a: 'Sie ist die invertierte Netzmaske — 0.0.0.255 bei einem /24 — und so drücken Access-Listen in Cisco IOS und network-Anweisungen in OSPF einen Bereich aus. Du kannst beide Formen in den Rechner einfügen; er erkennt eine Wildcard-Maske und rechnet sie in die Präfixlänge um.'
+			},
+			{
+				q: 'Kann es eine Liste von Blöcken zusammenfassen oder einen Bereich von einem anderen abziehen?',
+				a: 'Ja. Füge mehrere Blöcke, Adressen oder Bereiche ein — einen pro Zeile oder durch Kommas getrennt, #-Kommentare sind erlaubt — und der Rechner fasst überlappende und angrenzende zur kleinsten Zahl von CIDR-Blöcken zusammen, die genau dieselben Adressen abdecken, zuerst IPv4, dann IPv6. Was im Feld „Ausschließen“ steht, wird aus dem Ergebnis entfernt. So entsteht eine WireGuard-AllowedIPs-Liste, die alles außer deinem LAN routet: 0.0.0.0/0 minus 192.168.0.0/16 ergibt 16 Blöcke. Zeilen, die sich nicht lesen lassen, werden mit Zeilennummer aufgeführt und übersprungen, damit ein Tippfehler nicht den Rest verdeckt.'
 			}
 		]
 	},

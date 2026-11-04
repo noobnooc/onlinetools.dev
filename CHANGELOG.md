@@ -11,6 +11,18 @@ the footer badge and every `<lastmod>` in the sitemap.
 
 ---
 
+## [2026.11.03] — Merge and subtract CIDR lists
+
+### Added
+
+- **CIDR Calculator** list mode: paste several blocks, addresses or ranges
+  (one per line or comma-separated, `#` and `//` comments allowed) and get the
+  fewest CIDR blocks that cover exactly the same addresses, IPv4 then IPv6.
+- An **Exclude** box subtracts blocks from the result — e.g. `0.0.0.0/0`
+  minus `192.168.0.0/16` for WireGuard AllowedIPs.
+- Lines that don't parse are listed with their line number and skipped.
+- Smart Paste recognizes multi-line CIDR lists.
+
 ## [2026.11.02] — File permissions, every way they are written
 
 ### Added

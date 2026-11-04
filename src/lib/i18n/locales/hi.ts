@@ -499,7 +499,7 @@ const hi: Messages = {
 		nbDec: 'दशमलव',
 		nbHex: 'षोडश आधारी',
 		nbBits: 'बिट',
-		cidrInput: 'CIDR, पता या रेंज',
+		cidrInput: 'CIDR, पता, रेंज या सूची',
 		cidrAddress: 'पता',
 		cidrNetwork: 'नेटवर्क',
 		cidrBroadcast: 'ब्रॉडकास्ट',
@@ -524,6 +524,14 @@ const hi: Messages = {
 		cidrOutside: 'ब्लॉक के बाहर',
 		cidrBlocks: '{n} CIDR ब्लॉक',
 		cidrEmpty: 'विवरण यहाँ दिखेगा — 10.0.0.0/16 या 10.0.0.1 - 10.0.0.50 जैसी रेंज आज़माएँ',
+		cidrEntries: '{n} प्रविष्टियाँ',
+		cidrSkipped: '{n} छोड़ी गईं',
+		cidrExcludedN: '{n} बाहर',
+		cidrNothingLeft: 'कुछ नहीं बचा — बाहर रखी गई सूची हर पते को ढक लेती है',
+		cidrLine: 'पंक्ति {n}',
+		cidrExcludeLine: 'बाहर रखें, पंक्ति {n}',
+		cidrExclude: 'बाहर रखें',
+		cidrExcludeHint: 'परिणाम से हटाने के लिए ब्लॉक, पते या रेंज, जैसे WireGuard AllowedIPs के लिए 0.0.0.0/0 से अपना LAN। हर पंक्ति में एक या अल्पविराम से अलग।',
 
 		// Chmod calculator
 		chmInput: 'मोड, ls -l स्ट्रिंग, chmod कमांड या umask',

@@ -472,7 +472,7 @@ const zh: Messages = {
 		nbDec: '十进制',
 		nbHex: '十六进制',
 		nbBits: '位',
-		cidrInput: 'CIDR、地址或范围',
+		cidrInput: 'CIDR、地址、范围或列表',
 		cidrAddress: '地址',
 		cidrNetwork: '网络地址',
 		cidrBroadcast: '广播地址',
@@ -497,6 +497,14 @@ const zh: Messages = {
 		cidrOutside: '不在该网段内',
 		cidrBlocks: '{n} 个 CIDR 块',
 		cidrEmpty: '结果会显示在这里 — 试试 10.0.0.0/16 或 10.0.0.1 - 10.0.0.50 这样的范围',
+		cidrEntries: '{n} 个条目',
+		cidrSkipped: '跳过 {n} 个',
+		cidrExcludedN: '排除 {n} 个',
+		cidrNothingLeft: '什么都不剩了 — 排除项覆盖了所有地址',
+		cidrLine: '第 {n} 行',
+		cidrExcludeLine: '排除项第 {n} 行',
+		cidrExclude: '排除',
+		cidrExcludeHint: '要从结果中剔除的网段、地址或范围,例如为 WireGuard AllowedIPs 从 0.0.0.0/0 中去掉局域网。每行一个或用逗号分隔。',
 
 		// Chmod calculator
 		chmInput: '模式、ls -l 字符串、chmod 命令或 umask',
