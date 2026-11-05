@@ -534,6 +534,34 @@ const fr: Messages = {
 		chmWarnSpecialNoExec: 'Un bit spécial est activé sans exécution (affiché S ou T), ce qui est généralement une erreur.',
 		chmWarnOwnerLess: 'Le propriétaire a moins de permissions que le groupe ou les autres. Vérifiez l’ordre des chiffres.',
 		chmEmpty: 'Saisissez 755, rwxr-xr-x ou g+w, ou cochez les cases ci-dessus',
+		totpInput: 'Secret ou URI otpauth://',
+		totpType: 'Type',
+		totpAlgorithm: 'Algorithme',
+		totpDigits: 'Chiffres',
+		totpPeriod: 'Période (s)',
+		totpCounter: 'Compteur',
+		totpFromUri: 'Les paramètres proviennent de l’URI.',
+		totpCurrent: 'Code actuel',
+		totpPrev: 'Précédent',
+		totpNext: 'Suivant',
+		totpRefresh: 'Nouveau code dans {s} s',
+		totpHotpNote: 'Les codes HOTP avancent avec le compteur, pas avec l’horloge.',
+		totpCheck: 'Vérifier un code',
+		totpCheckPlaceholder: 'Code issu d’une application ou d’un journal serveur',
+		totpMatchNow: 'Correspond au code actuel.',
+		totpMatchPast: 'Correspond au code d’il y a {n} pas ({s} s). L’horloge de l’appareil est peut-être en retard, ou le code a été saisi trop tard.',
+		totpMatchFuture: 'Correspond au code qui viendra dans {n} pas ({s} s). L’horloge de l’appareil est probablement en avance.',
+		totpMatchCounter: 'Correspond au compteur {c}.',
+		totpNoMatch: 'Aucune correspondance à ±{n} pas. Vérifiez le secret, l’algorithme, les chiffres et la période.',
+		totpNewSecret: 'Nouveau secret',
+		totpIssuer: 'Émetteur',
+		totpAccount: 'Compte',
+		totpSecret: 'Secret (Base32)',
+		totpUri: 'URI otpauth',
+		totpWarnShort: 'Le secret fait moins de 128 bits. La RFC 4226 exige au moins 128 bits et en recommande 160.',
+		totpWarnNonDefault: 'Algorithme, nombre de chiffres ou période non standard. Certaines applications d’authentification les ignorent et affichent des codes faux : testez avec les applications de vos utilisateurs.',
+		totpEmpty: 'Collez un secret 2FA ou une URI otpauth://, ou créez un nouveau secret',
+		totpPrivacy: 'Les codes sont calculés avec WebCrypto dans cet onglet. Le secret n’entre jamais dans un lien de partage, et il est retiré de la barre d’adresse s’il y arrive.',
 
 		// Text ↔ hex/binary
 		hbFormat: 'Octets en',
@@ -781,6 +809,10 @@ const fr: Messages = {
 		'chmod-calculator': {
 			name: 'Calculateur chmod',
 			description: 'Convertissez les permissions Unix entre octal, rwx et chmod symbolique, avec une grille cliquable'
+		},
+		'totp-generator': {
+			name: 'Générateur de codes TOTP / 2FA',
+			description: 'Obtenez le code 2FA actuel à partir d’un secret ou d’une URI otpauth://, vérifiez un code ou créez un nouveau secret'
 		},
 		'cidr-calculator': {
 			name: 'Calculateur CIDR / de sous-réseau',

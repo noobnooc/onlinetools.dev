@@ -1163,6 +1163,36 @@ const TOOL_CONTENT_DE: Record<string, ToolContent> = {
 		]
 	},
 
+	'totp-generator': {
+		about: [
+			'Füge ein 2FA-Secret ein — die Base32-Zeichenkette, die eine Website unter „Code kann nicht gescannt werden?“ anzeigt, etwa JBSW Y3DP EHPK 3PXP — oder die vollständige otpauth://-URI aus einem QR-Code, und du bekommst denselben sechsstelligen Code, den eine Authenticator-App gerade anzeigen würde, dazu den vorherigen und den nächsten sowie einen Countdown bis zum Wechsel. Aussteller, Konto, Algorithmus, Stellen und Periode werden aus der URI gelesen; bei einem bloßen Secret stellst du sie selbst ein. HOTP-Secrets (zählerbasiert) funktionieren ebenfalls.',
+			'Das Prüffeld beantwortet die Frage hinter den meisten 2FA-Fehlermeldungen: Warum wurde dieser Code abgelehnt? Gib einen Code von einem Handy oder aus einem Server-Log ein, und das Tool sagt dir, ob es der aktuelle ist, zu einem Zeitfenster einige Schritte davor oder danach gehört (Uhrabweichung oder ein zu spät eingegebener Code) oder innerhalb von ±10 Schritten zu nichts passt — was stattdessen auf ein falsches Secret, einen falschen Algorithmus, eine falsche Stellenzahl oder Periode hindeutet. „Neues Secret“ erzeugt ein zufälliges 160-Bit-Secret samt otpauth://-URI, und „Weiter mit“ übergibt diese URI an den QR-Code-Generator, wenn du die Einrichtung in deine eigene App einbaust.',
+			'Die Codes werden in deinem Browser mit WebCrypto HMAC berechnet, genau wie RFC 6238 und RFC 4226 es festlegen; die Testsuite prüft die in den RFCs veröffentlichten Testvektoren für SHA-1, SHA-256 und SHA-512. Ein 2FA-Secret ist so sensibel wie ein Passwort, deshalb legt das Tool es nie in einen Teil-Link, und kommt es über die Adressleiste an, wird es entfernt, sobald es gelesen ist. Nichts wird irgendwohin gesendet.'
+		],
+		faqs: [
+			{
+				q: 'Wie funktioniert ein TOTP-Code?',
+				a: 'Das Secret und die aktuelle Zeit sind die einzigen Eingaben. Die Zeit wird in Schritte unterteilt (standardmäßig 30 Sekunden), und die Schrittnummer wird mit dem Secret als Schlüssel durch HMAC-SHA1 geschickt. Vier Bytes des Ergebnisses werden in eine Zahl umgewandelt, und deren letzte sechs Ziffern sind der Code. Handy und Server berechnen ihn unabhängig voneinander und kommunizieren nie miteinander — deshalb müssen die Uhren übereinstimmen.'
+			},
+			{
+				q: 'Warum wird mein 2FA-Code abgelehnt?',
+				a: 'Meist liegt es an der Uhr. Weichen Handy oder Server um mehr als einen Schritt ab, unterscheiden sich ihre Codes; die automatische Uhrzeit auf dem Handy einzuschalten behebt die meisten Fälle, und Server akzeptieren normalerweise einen Schritt in jede Richtung. Füge das Secret hier ein und prüfe den abgelehnten Code, um zu sehen, um wie viele Schritte er abweicht. Passt er zu gar keinem Zeitfenster, unterscheiden sich Secret, Algorithmus, Stellen oder Periode zwischen beiden Seiten.'
+			},
+			{
+				q: 'Ist es sicher, mein 2FA-Secret in eine Website einzufügen?',
+				a: 'Nur in eine, die es nirgendwohin sendet — und das solltest du prüfen können. Diese Seite berechnet die Codes lokal und stellt nach dem Laden keine Netzwerkanfragen: Öffne den Netzwerk-Tab des Browsers oder trenne die Internetverbindung, und sie funktioniert weiter. Behandle das Secret trotzdem wie ein Passwort. Wer es hat, kann deine Codes erzeugen, also lass es nicht in Notizen, Screenshots oder Chatverläufen liegen.'
+			},
+			{
+				q: 'Was ist eine otpauth://-URI?',
+				a: 'Das ist der Inhalt eines 2FA-QR-Codes: otpauth://totp/Issuer:account?secret=…&issuer=Issuer, dazu die optionalen Parameter algorithm, digits und period (und counter bei HOTP). Das Format stammt aus dem Key Uri Format von Google Authenticator, und jede gängige Authenticator-App liest es. Dekodiere das QR-Bild mit dem QR-Code-Decoder und mach hier weiter, um die Codes zu sehen.'
+			},
+			{
+				q: 'Sollte ich SHA-256, 8 Stellen oder eine Periode von 60 Sekunden verwenden?',
+				a: 'Nur wenn du jeden Client kontrollierst. Mehrere verbreitete Authenticator-Apps haben die Parameter für Algorithmus, Stellen oder Periode ignoriert und stillschweigend sechsstellige SHA-1-Codes mit 30 Sekunden angezeigt, die nie passen. Die Standardwerte sind nicht schwach: Ein Angreifer hat eine Handvoll Versuche bei einem Code mit einer Chance von eins zu einer Million, und eine Ratenbegrenzung auf dem Server zählt weit mehr als der Hash.'
+			}
+		]
+	},
+
 	'chmod-calculator': {
 		about: [
 			'Gib einen Modus so ein, wie er dir vorliegt — 755, 0644, rwxr-xr-x, eine ganze `ls -l`-Zeile, u=rwx,g=rx,o=rx oder einen vollständigen Befehl wie chmod -R 750 /srv/app — und sieh ihn in jeder anderen Form: oktal, als rwx-Zeichenkette, als ls -l-Spalte und als beide chmod-Befehle zum Kopieren. Das Raster zeigt Lesen, Schreiben und Ausführen für Besitzer, Gruppe und andere; setze ein Häkchen, und der Modus passt sich an.',

@@ -16,6 +16,26 @@
 	<div lang="en">
 	<section class="relative border-l border-line pb-8 pl-6">
 		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
+		<h2 class="text-sm font-medium">TOTP / 2FA Code Generator</h2>
+		<p class="mt-0.5 font-mono text-xs text-dim">v2026.11.05</p>
+		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
+			<li>
+				New tool: the <a href={lp('/t/totp-generator')} class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">TOTP / 2FA Code
+				Generator</a>. Paste a Base32 secret or an otpauth:// URI and see the current, previous and next code
+				with a countdown. TOTP and HOTP, SHA-1/256/512, 6–8 digits, any period.
+			</li>
+			<li>
+				"Check a code" tells you whether a rejected code is a few steps early or late (clock drift) or matches
+				nothing, which means the secret or settings differ. "New secret" makes a 160-bit secret and its URI.
+			</li>
+			<li>
+				The secret never goes into a share link. Smart Paste and the <a href={lp('/t/qr-code-decoder')} class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">QR
+				Code Decoder</a> hand otpauth:// URIs straight to the new tool.
+			</li>
+		</ul>
+	</section>
+	<section class="relative border-l border-line pb-8 pl-6">
+		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
 		<h2 class="text-sm font-medium">Chmod Calculator in every language</h2>
 		<p class="mt-0.5 font-mono text-xs text-dim">v2026.11.04</p>
 		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">

@@ -4,7 +4,7 @@
 
 # onlinetools.dev
 
-**47 developer tools that run entirely in your browser.**
+**48 developer tools that run entirely in your browser.**
 No upload, no login, no ads, no trackers — and you can verify it.
 
 [**onlinetools.dev**](https://onlinetools.dev) · [Why this exists](https://onlinetools.dev/about) · [Changelog](https://onlinetools.dev/changelog) · [Contributing](CONTRIBUTING.md)
@@ -130,7 +130,7 @@ That single constraint shapes everything else:
 </details>
 
 <details>
-<summary><b>Generators</b> (3) · <b>Hashing &amp; Crypto</b> (2) · <b>Date &amp; Time</b> (2) · <b>Privacy</b> (1)</summary>
+<summary><b>Generators</b> (3) · <b>Hashing &amp; Crypto</b> (3) · <b>Date &amp; Time</b> (2) · <b>Privacy</b> (1)</summary>
 
 | Tool | What it does |
 | --- | --- |
@@ -139,6 +139,7 @@ That single constraint shapes everything else:
 | [QR Code Generator](https://onlinetools.dev/t/qr-code-generator) | Generate crisp QR codes as SVG or PNG — no watermark, no upload |
 | [Hash Generator](https://onlinetools.dev/t/hash-generator) | MD5, SHA-1, SHA-256, SHA-512 and HMAC — computed in your browser |
 | [Bcrypt Hash & Verify](https://onlinetools.dev/t/bcrypt-generator) | Hash passwords with bcrypt and check hashes against plaintext |
+| [TOTP / 2FA Code Generator](https://onlinetools.dev/t/totp-generator) | Get the current 2FA code from a secret or otpauth:// URI, check a code, or make a new secret |
 | [Unix Timestamp Converter](https://onlinetools.dev/t/timestamp-converter) | Convert unix timestamps to human dates and back, with relative time |
 | [Cron Expression Parser](https://onlinetools.dev/t/cron-parser) | Explain any cron schedule in plain English with the next run times |
 | [EXIF Viewer & Remover](https://onlinetools.dev/t/exif-viewer) | See what metadata your photos carry — and strip it without re-encoding |

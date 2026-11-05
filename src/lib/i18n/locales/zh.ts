@@ -533,6 +533,34 @@ const zh: Messages = {
 		chmWarnSpecialNoExec: '设置了特殊位但没有执行权限 (显示为 S 或 T),这通常是个错误。',
 		chmWarnOwnerLess: '属主的权限少于属组或其他用户。请检查数字顺序。',
 		chmEmpty: '输入 755、rwxr-xr-x 或 g+w,或勾选上方的复选框',
+		totpInput: '密钥或 otpauth:// URI',
+		totpType: '类型',
+		totpAlgorithm: '算法',
+		totpDigits: '位数',
+		totpPeriod: '周期 (秒)',
+		totpCounter: '计数器',
+		totpFromUri: '设置取自 URI。',
+		totpCurrent: '当前验证码',
+		totpPrev: '上一个',
+		totpNext: '下一个',
+		totpRefresh: '{s} 秒后生成新验证码',
+		totpHotpNote: 'HOTP 验证码随计数器变化,而不是随时间变化。',
+		totpCheck: '校验验证码',
+		totpCheckPlaceholder: '来自应用或服务器日志的验证码',
+		totpMatchNow: '与当前验证码一致。',
+		totpMatchPast: '与 {n} 步前 ({s} 秒) 的验证码一致。设备时钟可能偏慢,或验证码输入得太晚。',
+		totpMatchFuture: '与 {n} 步后 ({s} 秒) 的验证码一致。设备时钟很可能偏快。',
+		totpMatchCounter: '与计数器 {c} 一致。',
+		totpNoMatch: '±{n} 步内均无匹配。请检查密钥、算法、位数和周期。',
+		totpNewSecret: '新建密钥',
+		totpIssuer: '签发方',
+		totpAccount: '账户',
+		totpSecret: '密钥 (Base32)',
+		totpUri: 'otpauth URI',
+		totpWarnShort: '密钥短于 128 位。RFC 4226 要求至少 128 位,推荐 160 位。',
+		totpWarnNonDefault: '算法、位数或周期不是默认值。部分身份验证器应用会忽略这些参数并显示错误的验证码,请用你的用户实际使用的应用测试。',
+		totpEmpty: '粘贴两步验证密钥或 otpauth:// URI,或新建一个密钥',
+		totpPrivacy: '验证码在此标签页中通过 WebCrypto 计算。密钥绝不会写入分享链接;如果它出现在地址栏中,也会被移除。',
 
 		// Text ↔ hex/binary
 		hbFormat: '字节表示为',
@@ -781,6 +809,10 @@ const zh: Messages = {
 		'chmod-calculator': {
 			name: 'Chmod 权限计算器',
 			description: '在八进制、rwx 与 chmod 符号表达式之间换算 Unix 文件权限,可直接勾选'
+		},
+		'totp-generator': {
+			name: 'TOTP / 2FA 验证码生成器',
+			description: '用密钥或 otpauth:// URI 获取当前的两步验证码,校验验证码,或生成新密钥'
 		},
 		'cidr-calculator': {
 			name: 'CIDR / 子网计算器',

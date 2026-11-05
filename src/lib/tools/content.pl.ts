@@ -1162,6 +1162,36 @@ const TOOL_CONTENT_PL: Record<string, ToolContent> = {
 		]
 	},
 
+	'totp-generator': {
+		about: [
+			'Wklej sekret 2FA — ciąg Base32, który strona pokazuje pod „nie możesz zeskanować kodu?”, np. JBSW Y3DP EHPK 3PXP — albo pełny URI otpauth:// z kodu QR i otrzymaj ten sam sześciocyfrowy kod, który pokazałaby teraz aplikacja uwierzytelniająca, a do tego poprzedni i następny oraz odliczanie do zmiany. Wystawca, konto, algorytm, liczba cyfr i okres są odczytywane z URI; dla samego sekretu ustawiasz je sam. Sekrety HOTP (oparte na liczniku) też działają.',
+			'Pole sprawdzania odpowiada na pytanie stojące za większością zgłoszeń błędów 2FA: dlaczego ten kod został odrzucony? Wpisz kod z telefonu lub z logu serwera, a narzędzie powie, czy jest bieżący, czy należy do okna kilka kroków wcześniej lub później (rozjazd zegara albo kod wpisany za późno), czy też nie pasuje do niczego w zakresie ±10 kroków — co wskazuje raczej na błędny sekret, algorytm, liczbę cyfr lub okres. Nowy sekret tworzy losowy 160-bitowy sekret i jego URI otpauth://, a „Kontynuuj w” przekazuje ten URI do Generatora kodów QR, gdy budujesz rejestrację 2FA we własnej aplikacji.',
+			'Kody są obliczane w Twojej przeglądarce za pomocą WebCrypto HMAC, dokładnie tak, jak określają RFC 6238 i RFC 4226; zestaw testów sprawdza opublikowane w RFC wektory dla SHA-1, SHA-256 i SHA-512. Sekret 2FA jest tak samo wrażliwy jak hasło, więc narzędzie nigdy nie umieszcza go w linku do udostępniania, a jeśli trafi do paska adresu, zostaje usunięty zaraz po odczytaniu. Nic nie jest nigdzie wysyłane.'
+		],
+		faqs: [
+			{
+				q: 'Jak działa kod TOTP?',
+				a: 'Jedynymi danymi wejściowymi są sekret i bieżący czas. Czas jest dzielony na kroki (domyślnie 30 sekund), a numer kroku przechodzi przez HMAC-SHA1 z sekretem jako kluczem. Cztery bajty wyniku zamieniane są na liczbę, a jej ostatnie sześć cyfr to kod. Telefon i serwer obliczają go niezależnie i nigdy się ze sobą nie komunikują, dlatego ich zegary muszą się zgadzać.'
+			},
+			{
+				q: 'Dlaczego mój kod 2FA jest odrzucany?',
+				a: 'Zwykle przez zegar. Jeśli zegar telefonu lub serwera rozjeżdża się o więcej niż krok, ich kody się różnią; włączenie automatycznego czasu w telefonie rozwiązuje większość przypadków, a serwery zwykle akceptują jeden krok w każdą stronę. Wklej tu sekret i sprawdź odrzucony kod, aby zobaczyć, o ile kroków się różni. Jeśli nie pasuje do żadnego okna, to sekret, algorytm, liczba cyfr lub okres różnią się po obu stronach.'
+			},
+			{
+				q: 'Czy wklejanie sekretu 2FA na stronie internetowej jest bezpieczne?',
+				a: 'Tylko na takiej, która nigdzie go nie wysyła, i powinno dać się to sprawdzić. Ta strona oblicza kody lokalnie i po załadowaniu nie wykonuje żadnych żądań sieciowych: otwórz panel sieci w przeglądarce albo odłącz się od internetu, a nadal będzie działać. Mimo to traktuj sekret jak hasło. Każdy, kto go ma, może generować Twoje kody, więc nie zostawiaj go w notatkach, zrzutach ekranu ani historii czatów.'
+			},
+			{
+				q: 'Czym jest URI otpauth://?',
+				a: 'To właśnie zawiera kod QR 2FA: otpauth://totp/Issuer:account?secret=…&issuer=Issuer oraz opcjonalne parametry algorithm, digits i period (a dla HOTP counter). Format pochodzi z Key Uri Format Google Authenticatora i odczytuje go każda większa aplikacja uwierzytelniająca. Zdekoduj obraz QR Dekoderem kodów QR i kontynuuj tutaj, aby zobaczyć kody.'
+			},
+			{
+				q: 'Czy używać SHA-256, 8 cyfr albo okresu 60 sekund?',
+				a: 'Tylko jeśli kontrolujesz wszystkich klientów. Kilka popularnych aplikacji uwierzytelniających ignorowało parametry algorytmu, liczby cyfr lub okresu i po cichu pokazywało 6-cyfrowe, 30-sekundowe kody SHA-1, które nigdy nie pasują. Wartości domyślne nie są słabe: atakujący ma garść prób na kod z szansą jeden na milion, a ograniczanie liczby prób na serwerze znaczy dużo więcej niż hash.'
+			}
+		]
+	},
+
 	'chmod-calculator': {
 		about: [
 			'Wpisz tryb w takiej postaci, w jakiej go masz — 755, 0644, rwxr-xr-x, cały wiersz z `ls -l`, u=rwx,g=rx,o=rx albo pełne polecenie, np. chmod -R 750 /srv/app — i zobacz go we wszystkich pozostałych formach: ósemkowej, jako ciąg rwx, jako kolumnę ls -l oraz jako oba polecenia chmod gotowe do skopiowania. Siatka pokazuje odczyt, zapis i wykonanie dla właściciela, grupy i pozostałych; zaznacz pole, a tryb się zaktualizuje.',

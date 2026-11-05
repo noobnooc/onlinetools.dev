@@ -1162,6 +1162,36 @@ const TOOL_CONTENT_ID: Record<string, ToolContent> = {
 		]
 	},
 
+	'totp-generator': {
+		about: [
+			'Tempel kunci rahasia 2FA — string Base32 yang ditampilkan situs di bawah “tidak bisa memindai kode?”, misalnya JBSW Y3DP EHPK 3PXP — atau URI otpauth:// lengkap dari kode QR, lalu dapatkan kode enam digit yang sama dengan yang akan ditampilkan aplikasi autentikator saat ini, ditambah kode sebelumnya dan berikutnya serta hitung mundur hingga kode berganti. Penerbit, akun, algoritme, digit, dan periode dibaca dari URI; untuk kunci rahasia saja, Anda mengaturnya sendiri. Kunci rahasia HOTP (berbasis penghitung) juga didukung.',
+			'Kotak pemeriksaan menjawab pertanyaan di balik sebagian besar laporan bug 2FA: kenapa kode ini ditolak? Ketik kode dari ponsel atau log server, dan alat ini memberi tahu apakah itu kode saat ini, milik jendela beberapa langkah sebelum atau sesudahnya (jam yang bergeser, atau kode yang diketik terlambat), atau tidak cocok dengan apa pun dalam ±10 langkah — yang justru menunjukkan kunci rahasia, algoritme, jumlah digit, atau periode yang salah. Kunci rahasia baru membuat kunci rahasia acak 160-bit beserta URI otpauth://-nya, dan “Lanjutkan dengan” meneruskan URI tersebut ke Generator Kode QR saat Anda membangun pendaftaran 2FA di aplikasi Anda sendiri.',
+			'Kode dihitung di browser Anda dengan WebCrypto HMAC, persis seperti yang ditetapkan RFC 6238 dan RFC 4226; rangkaian pengujiannya menjalankan vektor uji yang diterbitkan RFC untuk SHA-1, SHA-256, dan SHA-512. Kunci rahasia 2FA sama sensitifnya dengan kata sandi, jadi alat ini tidak pernah memasukkannya ke tautan berbagi, dan jika kunci itu tiba lewat bilah alamat, ia dihapus begitu dibaca. Tidak ada yang dikirim ke mana pun.'
+		],
+		faqs: [
+			{
+				q: 'Bagaimana cara kerja kode TOTP?',
+				a: 'Kunci rahasia dan waktu saat ini adalah satu-satunya masukan. Waktu dibagi menjadi langkah-langkah (30 detik secara default) dan nomor langkah dijalankan melalui HMAC-SHA1 dengan kunci rahasia sebagai kuncinya. Empat bita dari hasilnya diubah menjadi angka, dan enam digit terakhirnya adalah kodenya. Ponsel Anda dan server menghitungnya secara terpisah tanpa pernah saling berkomunikasi, itulah sebabnya jam keduanya harus sama.'
+			},
+			{
+				q: 'Kenapa kode 2FA saya ditolak?',
+				a: 'Biasanya karena jam. Jika jam ponsel atau server meleset lebih dari satu langkah, kode keduanya berbeda; menyalakan waktu otomatis di ponsel menyelesaikan sebagian besar kasus, dan server biasanya menerima selisih satu langkah ke kedua arah. Tempel kunci rahasianya di sini dan periksa kode yang ditolak untuk melihat berapa langkah selisihnya. Jika kode itu tidak cocok dengan jendela mana pun, berarti kunci rahasia, algoritme, digit, atau periode berbeda di kedua sisi.'
+			},
+			{
+				q: 'Apakah aman menempelkan kunci rahasia 2FA saya ke sebuah situs web?',
+				a: 'Hanya ke situs yang tidak mengirimkannya ke mana pun, dan Anda semestinya bisa memeriksanya. Halaman ini menghitung kode secara lokal dan tidak membuat permintaan jaringan apa pun setelah dimuat: buka panel jaringan browser, atau putuskan koneksi internet, dan halaman tetap berfungsi. Meski begitu, perlakukan kunci rahasia seperti kata sandi. Siapa pun yang memilikinya bisa membuat kode Anda, jadi jangan tinggalkan di catatan, tangkapan layar, atau log obrolan.'
+			},
+			{
+				q: 'Apa itu URI otpauth://?',
+				a: 'Itulah isi kode QR 2FA: otpauth://totp/Issuer:account?secret=…&issuer=Issuer, ditambah parameter opsional algorithm, digits, dan period (serta counter untuk HOTP). Formatnya berasal dari Key Uri Format milik Google Authenticator dan dibaca oleh semua aplikasi autentikator utama. Dekode gambar QR dengan Pendekode Kode QR lalu lanjutkan di sini untuk melihat kodenya.'
+			},
+			{
+				q: 'Haruskah saya memakai SHA-256, 8 digit, atau periode 60 detik?',
+				a: 'Hanya jika Anda mengendalikan setiap klien. Beberapa aplikasi autentikator populer pernah mengabaikan parameter algorithm, digits, atau period dan diam-diam menampilkan kode SHA-1, 6 digit, 30 detik yang tidak pernah cocok. Nilai default tidaklah lemah: penyerang hanya mendapat segelintir tebakan untuk kode berpeluang satu banding sejuta, dan pembatasan laju di server jauh lebih penting daripada hash-nya.'
+			}
+		]
+	},
+
 	'chmod-calculator': {
 		about: [
 			'Ketik mode sesuai yang Anda punya — 755, 0644, rwxr-xr-x, satu baris `ls -l` utuh, u=rwx,g=rx,o=rx, atau perintah lengkap seperti chmod -R 750 /srv/app — dan lihat dalam semua bentuk lainnya: oktal, string rwx, kolom ls -l, dan kedua perintah chmod yang siap disalin. Grid menampilkan baca, tulis, dan eksekusi untuk pemilik, grup, dan lainnya; centang sebuah kotak dan mode-nya langsung diperbarui.',

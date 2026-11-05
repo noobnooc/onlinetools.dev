@@ -534,6 +534,34 @@ const es: Messages = {
 		chmWarnSpecialNoExec: 'Hay un bit especial activado sin ejecución (se muestra como S o T), lo que suele ser un error.',
 		chmWarnOwnerLess: 'El propietario tiene menos permisos que el grupo u otros. Revisa el orden de los dígitos.',
 		chmEmpty: 'Escribe 755, rwxr-xr-x o g+w, o marca las casillas de arriba',
+		totpInput: 'Secreto o URI otpauth://',
+		totpType: 'Tipo',
+		totpAlgorithm: 'Algoritmo',
+		totpDigits: 'Dígitos',
+		totpPeriod: 'Periodo (s)',
+		totpCounter: 'Contador',
+		totpFromUri: 'La configuración viene de la URI.',
+		totpCurrent: 'Código actual',
+		totpPrev: 'Anterior',
+		totpNext: 'Siguiente',
+		totpRefresh: 'Nuevo código en {s} s',
+		totpHotpNote: 'Los códigos HOTP avanzan con el contador, no con el reloj.',
+		totpCheck: 'Comprobar un código',
+		totpCheckPlaceholder: 'Código de una app o de un log del servidor',
+		totpMatchNow: 'Coincide con el código actual.',
+		totpMatchPast: 'Coincide con el código de hace {n} paso(s) ({s} s). Puede que el reloj del dispositivo vaya atrasado o que el código se escribiera tarde.',
+		totpMatchFuture: 'Coincide con el código de {n} paso(s) por delante ({s} s). Probablemente el reloj del dispositivo va adelantado.',
+		totpMatchCounter: 'Coincide con el contador {c}.',
+		totpNoMatch: 'Sin coincidencias en ±{n} pasos. Revisa el secreto, el algoritmo, los dígitos y el periodo.',
+		totpNewSecret: 'Nuevo secreto',
+		totpIssuer: 'Emisor',
+		totpAccount: 'Cuenta',
+		totpSecret: 'Secreto (Base32)',
+		totpUri: 'URI otpauth',
+		totpWarnShort: 'El secreto tiene menos de 128 bits. RFC 4226 exige al menos 128 y recomienda 160.',
+		totpWarnNonDefault: 'Algoritmo, dígitos o periodo no predeterminados. Algunas apps de autenticación los ignoran y muestran códigos erróneos, así que prueba con las apps que usan tus usuarios.',
+		totpEmpty: 'Pega un secreto 2FA o una URI otpauth://, o crea un nuevo secreto',
+		totpPrivacy: 'Los códigos se calculan con WebCrypto en esta pestaña. El secreto nunca va en un enlace compartido y se elimina de la barra de direcciones si llega en uno.',
 
 		// Text ↔ hex/binary
 		hbFormat: 'Bytes como',
@@ -781,6 +809,10 @@ const es: Messages = {
 		'chmod-calculator': {
 			name: 'Calculadora chmod',
 			description: 'Convierte permisos Unix entre octal, rwx y chmod simbólico, con una cuadrícula interactiva'
+		},
+		'totp-generator': {
+			name: 'Generador de códigos TOTP / 2FA',
+			description: 'Obtén el código 2FA actual a partir de un secreto o una URI otpauth://, comprueba un código o crea un nuevo secreto'
 		},
 		'cidr-calculator': {
 			name: 'Calculadora CIDR / de subredes',

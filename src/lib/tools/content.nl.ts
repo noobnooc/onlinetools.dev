@@ -1162,6 +1162,36 @@ const TOOL_CONTENT_NL: Record<string, ToolContent> = {
 		]
 	},
 
+	'totp-generator': {
+		about: [
+			'Plak een 2FA-geheim — de Base32-string die een site toont onder “kun je de code niet scannen?”, zoals JBSW Y3DP EHPK 3PXP — of de volledige otpauth://-URI uit een QR-code, en krijg dezelfde zescijferige code die een authenticator-app nu zou tonen, plus de vorige en de volgende en een aftelling tot de wissel. Uitgever, account, algoritme, cijfers en periode worden uit de URI gelezen; voor een los geheim stel je ze zelf in. HOTP-geheimen (op basis van een teller) werken ook.',
+			'Het controlevak beantwoordt de vraag achter de meeste 2FA-bugmeldingen: waarom werd deze code geweigerd? Typ een code van een telefoon of uit een serverlog en de tool vertelt je of het de huidige is, bij een venster een paar stappen ervoor of erna hoort (klokafwijking, of een te laat ingetypte code), of binnen ±10 stappen nergens mee overeenkomt — wat dan wijst op een verkeerd geheim, algoritme, aantal cijfers of periode. Nieuw geheim maakt een willekeurig geheim van 160 bits met de bijbehorende otpauth://-URI, en “Ga verder met” geeft die URI door aan de QR-codegenerator als je de 2FA-registratie in je eigen app bouwt.',
+			'Codes worden in je browser berekend met WebCrypto HMAC, precies zoals RFC 6238 en RFC 4226 voorschrijven; de testsuite draait de gepubliceerde vectoren uit de RFC’s voor SHA-1, SHA-256 en SHA-512. Een 2FA-geheim is net zo gevoelig als een wachtwoord, dus de tool zet het nooit in een deellink, en komt het via de adresbalk binnen, dan wordt het verwijderd zodra het gelezen is. Er wordt niets verstuurd.'
+		],
+		faqs: [
+			{
+				q: 'Hoe werkt een TOTP-code?',
+				a: 'Het geheim en de huidige tijd zijn de enige invoer. De tijd wordt in stappen verdeeld (standaard 30 seconden) en het stapnummer gaat door HMAC-SHA1 met het geheim als sleutel. Vier bytes van het resultaat worden een getal, en de laatste zes cijfers daarvan zijn de code. Je telefoon en de server berekenen hem elk apart en praten nooit met elkaar; daarom moeten de klokken overeenkomen.'
+			},
+			{
+				q: 'Waarom wordt mijn 2FA-code geweigerd?',
+				a: 'Meestal door de klok. Loopt de telefoon of de server meer dan een stap af, dan verschillen hun codes; automatische tijd aanzetten op de telefoon lost de meeste gevallen op, en servers accepteren normaal één stap aan elke kant. Plak het geheim hier en controleer de geweigerde code om te zien hoeveel stappen hij afwijkt. Past hij in geen enkel venster, dan verschillen het geheim, het algoritme, de cijfers of de periode tussen beide kanten.'
+			},
+			{
+				q: 'Is het veilig om mijn 2FA-geheim in een website te plakken?',
+				a: 'Alleen in een site die het nergens heen stuurt, en dat zou je moeten kunnen controleren. Deze pagina berekent codes lokaal en doet na het laden geen netwerkverzoeken: open het netwerkpaneel van je browser, of verbreek de internetverbinding, en hij blijft werken. Behandel het geheim toch als een wachtwoord. Wie het heeft, kan je codes genereren, dus laat het niet achter in notities, schermafbeeldingen of chatlogs.'
+			},
+			{
+				q: 'Wat is een otpauth://-URI?',
+				a: 'Dat is wat een 2FA-QR-code bevat: otpauth://totp/Issuer:account?secret=…&issuer=Issuer, plus de optionele parameters algorithm, digits en period (en counter voor HOTP). Het formaat komt uit het Key Uri Format van Google Authenticator en elke grote authenticator-app leest het. Decodeer de QR-afbeelding met de QR-codedecoder en ga hier verder om de codes te zien.'
+			},
+			{
+				q: 'Moet ik SHA-256, 8 cijfers of een periode van 60 seconden gebruiken?',
+				a: 'Alleen als je elke client in de hand hebt. Verschillende populaire authenticator-apps hebben de parameters voor algoritme, cijfers of periode genegeerd en stilzwijgend SHA-1-codes van 6 cijfers en 30 seconden getoond die nooit overeenkomen. De standaardwaarden zijn niet zwak: een aanvaller krijgt een handvol pogingen op een code met een kans van één op een miljoen, en rate limiting op de server telt veel zwaarder dan de hash.'
+			}
+		]
+	},
+
 	'chmod-calculator': {
 		about: [
 			'Typ een modus zoals je hem hebt — 755, 0644, rwxr-xr-x, een hele `ls -l`-regel, u=rwx,g=rx,o=rx of een volledig commando als chmod -R 750 /srv/app — en zie hem in elke andere vorm: octaal, de rwx-string, de ls -l-kolom en beide chmod-commando’s klaar om te kopiëren. Het raster toont lezen, schrijven en uitvoeren voor eigenaar, groep en overigen; vink een vakje aan en de modus wordt bijgewerkt.',

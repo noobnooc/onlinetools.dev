@@ -534,6 +534,34 @@ const ko: Messages = {
 		chmWarnSpecialNoExec: '실행 권한 없이 특수 비트가 설정되어 있습니다 (S 또는 T로 표시). 보통 실수입니다.',
 		chmWarnOwnerLess: '소유자의 권한이 그룹이나 기타 사용자보다 적습니다. 숫자 순서를 확인하세요.',
 		chmEmpty: '755, rwxr-xr-x 또는 g+w를 입력하거나 위의 체크박스를 선택하세요',
+		totpInput: '비밀 키 또는 otpauth:// URI',
+		totpType: '유형',
+		totpAlgorithm: '알고리즘',
+		totpDigits: '자릿수',
+		totpPeriod: '주기 (초)',
+		totpCounter: '카운터',
+		totpFromUri: '설정은 URI에서 가져옵니다.',
+		totpCurrent: '현재 코드',
+		totpPrev: '이전',
+		totpNext: '다음',
+		totpRefresh: '{s}초 후 새 코드',
+		totpHotpNote: 'HOTP 코드는 시계가 아니라 카운터에 따라 바뀝니다.',
+		totpCheck: '코드 확인',
+		totpCheckPlaceholder: '앱이나 서버 로그의 코드',
+		totpMatchNow: '현재 코드와 일치합니다.',
+		totpMatchPast: '{n}단계 전({s}초)의 코드와 일치합니다. 기기 시계가 늦거나 코드를 늦게 입력했을 수 있습니다.',
+		totpMatchFuture: '{n}단계 후({s}초)의 코드와 일치합니다. 기기 시계가 빠른 것으로 보입니다.',
+		totpMatchCounter: '카운터 {c}의 코드와 일치합니다.',
+		totpNoMatch: '±{n}단계 안에 일치하는 코드가 없습니다. 비밀 키, 알고리즘, 자릿수, 주기를 확인하세요.',
+		totpNewSecret: '새 비밀 키',
+		totpIssuer: '발급자',
+		totpAccount: '계정',
+		totpSecret: '비밀 키 (Base32)',
+		totpUri: 'otpauth URI',
+		totpWarnShort: '비밀 키가 128비트보다 짧습니다. RFC 4226은 최소 128비트를 요구하며 160비트를 권장합니다.',
+		totpWarnNonDefault: '알고리즘, 자릿수 또는 주기가 기본값이 아닙니다. 일부 인증 앱은 이를 무시하고 잘못된 코드를 표시하므로, 사용자가 쓰는 앱으로 테스트하세요.',
+		totpEmpty: '2단계 인증 비밀 키나 otpauth:// URI를 붙여넣거나 새 비밀 키를 만드세요',
+		totpPrivacy: '코드는 이 탭에서 WebCrypto로 계산됩니다. 비밀 키는 공유 링크에 절대 들어가지 않으며, 주소창으로 전달되면 그곳에서 제거됩니다.',
 
 		// Text ↔ hex/binary
 		hbFormat: '바이트 표기',
@@ -781,6 +809,10 @@ const ko: Messages = {
 		'chmod-calculator': {
 			name: 'Chmod 계산기',
 			description: 'Unix 권한을 8진수, rwx, 기호 표기 chmod 사이에서 변환하고 클릭 가능한 표로 설정'
+		},
+		'totp-generator': {
+			name: 'TOTP / 2FA 코드 생성기',
+			description: '비밀 키나 otpauth:// URI로 현재 2단계 인증 코드 확인, 코드 검사, 새 비밀 키 생성'
 		},
 		'cidr-calculator': {
 			name: 'CIDR / 서브넷 계산기',

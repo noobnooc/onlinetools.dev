@@ -35,6 +35,7 @@ export const TOOL_COMPONENTS: Record<string, () => Promise<{ default: Component 
 	'user-agent-parser': () => import('./UaTool.svelte'),
 	'cidr-calculator': () => import('./CidrTool.svelte'),
 	'chmod-calculator': () => import('./ChmodTool.svelte'),
+	'totp-generator': () => import('./TotpTool.svelte'),
 	'image-to-base64': () => import('./ImageBase64Tool.svelte'),
 	'image-converter': () => import('./ImageConvertTool.svelte'),
 	'image-resizer': () => import('./ImageResizeTool.svelte'),

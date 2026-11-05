@@ -563,6 +563,35 @@ const nl: Messages = {
 		chmWarnOwnerLess: 'De eigenaar heeft minder rechten dan groep of overigen. Controleer de volgorde van de cijfers.',
 		chmEmpty: 'Typ 755, rwxr-xr-x of g+w, of vink de vakjes hierboven aan',
 
+		totpInput: 'Geheim of otpauth://-URI',
+		totpType: 'Type',
+		totpAlgorithm: 'Algoritme',
+		totpDigits: 'Cijfers',
+		totpPeriod: 'Periode (s)',
+		totpCounter: 'Teller',
+		totpFromUri: 'De instellingen komen uit de URI.',
+		totpCurrent: 'Huidige code',
+		totpPrev: 'Vorige',
+		totpNext: 'Volgende',
+		totpRefresh: 'Nieuwe code over {s} s',
+		totpHotpNote: 'HOTP-codes lopen mee met de teller, niet met de klok.',
+		totpCheck: 'Code controleren',
+		totpCheckPlaceholder: 'Code uit een app of een serverlog',
+		totpMatchNow: 'Komt overeen met de huidige code.',
+		totpMatchPast: 'Komt overeen met de code van {n} stap(pen) geleden ({s} s). De klok van het apparaat loopt misschien achter, of de code is te laat ingetypt.',
+		totpMatchFuture: 'Komt overeen met de code {n} stap(pen) vooruit ({s} s). De klok van het apparaat loopt waarschijnlijk voor.',
+		totpMatchCounter: 'Komt overeen met teller {c}.',
+		totpNoMatch: 'Geen overeenkomst binnen ±{n} stappen. Controleer het geheim, het algoritme, de cijfers en de periode.',
+		totpNewSecret: 'Nieuw geheim',
+		totpIssuer: 'Uitgever',
+		totpAccount: 'Account',
+		totpSecret: 'Geheim (Base32)',
+		totpUri: 'otpauth-URI',
+		totpWarnShort: 'Het geheim is korter dan 128 bits. RFC 4226 vereist minstens 128 en raadt 160 aan.',
+		totpWarnNonDefault: 'Niet-standaard algoritme, aantal cijfers of periode. Sommige authenticator-apps negeren deze en tonen verkeerde codes, dus test met de apps die je gebruikers hebben.',
+		totpEmpty: 'Plak een 2FA-geheim of otpauth://-URI, of maak een nieuw geheim',
+		totpPrivacy: 'Codes worden met WebCrypto in dit tabblad berekend. Het geheim komt nooit in een deellink en wordt uit de adresbalk verwijderd als het via een link binnenkomt.',
+
 		hbFormat: 'Bytes als',
 		hbSep: 'Scheidingsteken',
 		hbSpace: 'Spatie',
@@ -816,6 +845,10 @@ const nl: Messages = {
 		'chmod-calculator': {
 			name: 'Chmod-calculator',
 			description: 'Zet Unix-rechten om tussen octaal, rwx en symbolische chmod, met een klikbaar raster'
+		},
+		'totp-generator': {
+			name: 'TOTP / 2FA-codegenerator',
+			description: 'Haal de huidige 2FA-code uit een geheim of otpauth://-URI, controleer een code of maak een nieuw geheim'
 		},
 		'cidr-calculator': {
 			name: 'CIDR- / subnetcalculator',

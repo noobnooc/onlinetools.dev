@@ -16,7 +16,14 @@ trap 'rm -rf "$tmp"' EXIT
 
 pass() { printf '  ok    %s\n' "$1"; }
 fail() { printf '  FAIL  %s\n' "$1"; failures=$((failures + 1)); }
-status() { curl -sS -o /dev/null -w '%{http_code}' --max-time 20 "$1" 2>/dev/null || echo 000; }
+# One retry: through the session proxy a transfer sometimes fails after the
+# status line arrived, and `|| echo 000` then glued "000" onto it ("200000").
+status() {
+	local code
+	code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 "$1" 2>/dev/null)" && { echo "$code"; return; }
+	code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 "$1" 2>/dev/null)" && { echo "$code"; return; }
+	echo "${code:-000} (transfer failed)"
+}
 
 echo "Smoke test against $BASE"
 
