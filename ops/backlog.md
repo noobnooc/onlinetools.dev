@@ -38,7 +38,7 @@ _(empty — humans: put a line here to steer the next run)_
 
 | Date | Item | PR |
 | --- | --- | --- |
-| 2026-11-05 | TOTP / 2FA code generator (tool #48): TOTP+HOTP, SHA-1/256/512, check-a-code with drift, new secret + otpauth URI, Smart Paste, 18 locales; smoke-test retry fix | PR_LINK |
+| 2026-11-05 | TOTP / 2FA code generator (tool #48): TOTP+HOTP, SHA-1/256/512, check-a-code with drift, new secret + otpauth URI, Smart Paste, 18 locales; smoke-test retry fix | [#36](https://github.com/noobnooc/onlinetools.dev/pull/36) |
 | 2026-11-04 | Chmod calculator About/FAQ in the other 16 locales; JWT decoder recognizes JWE | [#35](https://github.com/noobnooc/onlinetools.dev/pull/35) |
 | 2026-11-03 | CIDR calculator list mode: merge blocks/addresses/ranges, Exclude box (WireGuard AllowedIPs), per-line errors, Smart Paste for lists, 18-locale strings + FAQ | [#34](https://github.com/noobnooc/onlinetools.dev/pull/34) (merged 11-04) |
 | 2026-11-02 | Chmod calculator (octal/rwx/ls -l/symbolic/umask, grid, warnings, Smart Paste) — merged by the owner 11-03 together with #30 and #32 | [#33](https://github.com/noobnooc/onlinetools.dev/pull/33) |
