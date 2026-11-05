@@ -44,7 +44,8 @@ import {
 	FileCheck,
 	EyeOff,
 	Shield,
-	WandSparkles
+	WandSparkles,
+	ShieldEllipsis
 } from 'lucide-svelte';
 import type { ToolCategory } from './registry';
 
@@ -82,6 +83,7 @@ export const TOOL_ICONS: Record<string, IconComponent> = {
 	'user-agent-parser': MonitorSmartphone,
 	'cidr-calculator': Network,
 	'chmod-calculator': FileLock,
+	'totp-generator': ShieldEllipsis,
 	'image-to-base64': FileImage,
 	'image-converter': Images,
 	'image-resizer': Scaling,

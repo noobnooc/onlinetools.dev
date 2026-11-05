@@ -534,6 +534,34 @@ const ja: Messages = {
 		chmWarnSpecialNoExec: '実行権限なしで特殊ビットが設定されています (S または T と表示)。通常は誤りです。',
 		chmWarnOwnerLess: '所有者の権限がグループやその他より少なくなっています。数字の順序を確認してください。',
 		chmEmpty: '755、rwxr-xr-x、g+w などを入力するか、上のチェックボックスを選択してください',
+		totpInput: 'シークレットまたは otpauth:// URI',
+		totpType: '種類',
+		totpAlgorithm: 'アルゴリズム',
+		totpDigits: '桁数',
+		totpPeriod: '周期 (秒)',
+		totpCounter: 'カウンター',
+		totpFromUri: '設定は URI から読み込まれます。',
+		totpCurrent: '現在のコード',
+		totpPrev: '前',
+		totpNext: '次',
+		totpRefresh: '{s} 秒後に新しいコード',
+		totpHotpNote: 'HOTP のコードは時刻ではなくカウンターに応じて変わります。',
+		totpCheck: 'コードを確認',
+		totpCheckPlaceholder: 'アプリやサーバーログのコード',
+		totpMatchNow: '現在のコードと一致します。',
+		totpMatchPast: '{n} ステップ前 ({s} 秒) のコードと一致します。端末の時計が遅れているか、コードの入力が遅かった可能性があります。',
+		totpMatchFuture: '{n} ステップ先 ({s} 秒) のコードと一致します。端末の時計が進んでいる可能性が高いです。',
+		totpMatchCounter: 'カウンター {c} と一致します。',
+		totpNoMatch: '±{n} ステップ以内に一致するコードはありません。シークレット、アルゴリズム、桁数、周期を確認してください。',
+		totpNewSecret: '新しいシークレット',
+		totpIssuer: '発行者',
+		totpAccount: 'アカウント',
+		totpSecret: 'シークレット (Base32)',
+		totpUri: 'otpauth URI',
+		totpWarnShort: 'シークレットが 128 ビット未満です。RFC 4226 は 128 ビット以上を必須とし、160 ビットを推奨しています。',
+		totpWarnNonDefault: 'アルゴリズム、桁数、周期のいずれかが既定値ではありません。これらを無視して誤ったコードを表示する認証アプリもあるため、ユーザーが使っているアプリで試してください。',
+		totpEmpty: '二要素認証のシークレットか otpauth:// URI を貼り付けるか、新しいシークレットを作成してください',
+		totpPrivacy: 'コードはこのタブ内で WebCrypto により計算されます。シークレットが共有リンクに入ることはなく、アドレスバーに含まれていた場合は削除されます。',
 
 		// Text ↔ hex/binary
 		hbFormat: 'バイトの表記',
@@ -781,6 +809,10 @@ const ja: Messages = {
 		'chmod-calculator': {
 			name: 'Chmod 計算機',
 			description: 'Unix パーミッションを 8 進数・rwx・シンボリック形式の chmod 間で変換。クリックで操作できるグリッド付き'
+		},
+		'totp-generator': {
+			name: 'TOTP / 2FA コードジェネレーター',
+			description: 'シークレットや otpauth:// URI から現在の二要素認証コードを取得、コードの確認、新しいシークレットの作成'
 		},
 		'cidr-calculator': {
 			name: 'CIDR / サブネット計算機',

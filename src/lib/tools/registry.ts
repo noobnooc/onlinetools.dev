@@ -289,7 +289,7 @@ export const TOOLS: ToolMeta[] = [
 		category: 'generators',
 		aliases: ['password', 'random password', 'passphrase', 'pwgen'],
 		keywords: ['password generator', 'strong password', 'random password generator'],
-		related: ['uuid-generator', 'bcrypt-generator', 'hash-generator', 'qr-code-generator', 'base64-decode', 'lorem-ipsum-generator']
+		related: ['uuid-generator', 'bcrypt-generator', 'hash-generator', 'qr-code-generator', 'totp-generator', 'base64-decode']
 	},
 	{
 		slug: 'qr-code-generator',
@@ -299,7 +299,7 @@ export const TOOLS: ToolMeta[] = [
 		category: 'generators',
 		aliases: ['qr', 'qrcode', 'qr code'],
 		keywords: ['qr code generator', 'free qr code', 'qr code svg', 'url to qr'],
-		related: ['qr-code-decoder', 'url-parser', 'password-generator', 'uuid-generator', 'image-to-base64', 'slug-generator']
+		related: ['qr-code-decoder', 'url-parser', 'password-generator', 'totp-generator', 'uuid-generator', 'image-to-base64']
 	},
 	{
 		slug: 'qr-code-decoder',
@@ -309,7 +309,7 @@ export const TOOLS: ToolMeta[] = [
 		category: 'image',
 		aliases: ['qr decode', 'qr reader', 'qr scanner', 'scan qr', 'read qr code'],
 		keywords: ['qr code decoder', 'qr code reader', 'decode qr from image', 'scan qr code online', 'qr to text'],
-		related: ['qr-code-generator', 'exif-viewer', 'image-converter', 'image-to-base64', 'url-parser', 'image-resizer']
+		related: ['qr-code-generator', 'totp-generator', 'exif-viewer', 'image-converter', 'image-to-base64', 'url-parser']
 	},
 	{
 		slug: 'json-to-yaml',
@@ -510,6 +510,16 @@ export const TOOLS: ToolMeta[] = [
 		aliases: ['chmod', 'permissions', 'file permissions', 'unix permissions', 'umask', 'rwx', '755', '644', 'octal permissions'],
 		keywords: ['chmod calculator', 'chmod 755', 'chmod 644', 'linux file permissions calculator', 'rwx to octal', 'umask calculator', 'symbolic to octal permissions'],
 		related: ['cron-parser', 'number-base-converter', 'cidr-calculator', 'regex-tester', 'string-escape', 'hash-generator']
+	},
+	{
+		slug: 'totp-generator',
+		accepts: ['otpauth'],
+		name: 'TOTP / 2FA Code Generator',
+		description: 'Get the current 2FA code from a secret or otpauth:// URI, check a code, or make a new secret',
+		category: 'crypto',
+		aliases: ['totp', 'hotp', '2fa', 'otp', 'mfa', 'one-time password', 'authenticator', 'google authenticator', 'otpauth', 'two-factor'],
+		keywords: ['totp generator', '2fa code generator', 'totp code from secret', 'otpauth uri', 'google authenticator online', 'hotp generator', 'rfc 6238'],
+		related: ['qr-code-decoder', 'qr-code-generator', 'password-generator', 'hash-generator', 'jwt-decoder', 'base64-decode']
 	}
 ];
 

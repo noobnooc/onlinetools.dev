@@ -536,6 +536,34 @@ const de: Messages = {
 		chmWarnSpecialNoExec: 'Ein Spezialbit ist ohne Ausführen gesetzt (als S oder T angezeigt), meist ein Versehen.',
 		chmWarnOwnerLess: 'Der Besitzer hat weniger Rechte als Gruppe oder andere. Prüfe die Reihenfolge der Ziffern.',
 		chmEmpty: 'Gib 755, rwxr-xr-x oder g+w ein oder setze oben die Häkchen',
+		totpInput: 'Secret oder otpauth://-URI',
+		totpType: 'Typ',
+		totpAlgorithm: 'Algorithmus',
+		totpDigits: 'Stellen',
+		totpPeriod: 'Periode (s)',
+		totpCounter: 'Zähler',
+		totpFromUri: 'Die Einstellungen stammen aus der URI.',
+		totpCurrent: 'Aktueller Code',
+		totpPrev: 'Vorheriger',
+		totpNext: 'Nächster',
+		totpRefresh: 'Neuer Code in {s} s',
+		totpHotpNote: 'HOTP-Codes ändern sich mit dem Zähler, nicht mit der Uhr.',
+		totpCheck: 'Code prüfen',
+		totpCheckPlaceholder: 'Code aus einer App oder einem Server-Log',
+		totpMatchNow: 'Stimmt mit dem aktuellen Code überein.',
+		totpMatchPast: 'Stimmt mit dem Code von vor {n} Schritt(en) überein ({s} s). Die Uhr des Geräts geht vielleicht nach, oder der Code wurde zu spät eingegeben.',
+		totpMatchFuture: 'Stimmt mit dem Code {n} Schritt(e) voraus überein ({s} s). Die Uhr des Geräts geht wahrscheinlich vor.',
+		totpMatchCounter: 'Stimmt mit Zähler {c} überein.',
+		totpNoMatch: 'Keine Übereinstimmung innerhalb von ±{n} Schritten. Prüfe Secret, Algorithmus, Stellen und Periode.',
+		totpNewSecret: 'Neues Secret',
+		totpIssuer: 'Aussteller',
+		totpAccount: 'Konto',
+		totpSecret: 'Secret (Base32)',
+		totpUri: 'otpauth-URI',
+		totpWarnShort: 'Das Secret ist kürzer als 128 Bit. RFC 4226 verlangt mindestens 128 und empfiehlt 160.',
+		totpWarnNonDefault: 'Algorithmus, Stellenzahl oder Periode weichen vom Standard ab. Manche Authenticator-Apps ignorieren diese Werte und zeigen falsche Codes, teste also mit den Apps deiner Nutzer.',
+		totpEmpty: 'Füge ein 2FA-Secret oder eine otpauth://-URI ein oder erstelle ein neues Secret',
+		totpPrivacy: 'Die Codes werden mit WebCrypto in diesem Tab berechnet. Das Secret landet nie in einem Teil-Link und wird aus der Adressleiste entfernt, falls es darüber ankommt.',
 
 		// Text ↔ hex/binary
 		hbFormat: 'Bytes als',
@@ -784,6 +812,10 @@ const de: Messages = {
 		'chmod-calculator': {
 			name: 'Chmod-Rechner',
 			description: 'Unix-Berechtigungen zwischen oktal, rwx und symbolischem chmod umrechnen, mit anklickbarem Raster'
+		},
+		'totp-generator': {
+			name: 'TOTP-/2FA-Code-Generator',
+			description: 'Den aktuellen 2FA-Code aus einem Secret oder einer otpauth://-URI abrufen, einen Code prüfen oder ein neues Secret erstellen'
 		},
 		'cidr-calculator': {
 			name: 'CIDR- / Subnetzrechner',

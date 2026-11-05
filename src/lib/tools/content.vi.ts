@@ -1162,6 +1162,36 @@ const TOOL_CONTENT_VI: Record<string, ToolContent> = {
 		]
 	},
 
+	'totp-generator': {
+		about: [
+			'Dán khóa bí mật 2FA — chuỗi Base32 mà trang web hiển thị bên dưới dòng “không quét được mã?”, chẳng hạn JBSW Y3DP EHPK 3PXP — hoặc URI otpauth:// đầy đủ từ mã QR, và nhận đúng mã sáu chữ số mà ứng dụng xác thực sẽ hiển thị lúc này, cùng mã trước, mã sau và thời gian đếm ngược đến lần đổi mã. Nhà phát hành, tài khoản, thuật toán, số chữ số và chu kỳ được đọc từ URI; với một khóa bí mật đơn thuần, bạn tự đặt các giá trị này. Khóa bí mật HOTP (dựa trên bộ đếm) cũng dùng được.',
+			'Ô kiểm tra trả lời câu hỏi đằng sau hầu hết các báo cáo lỗi 2FA: vì sao mã này bị từ chối? Nhập mã từ điện thoại hoặc log máy chủ, công cụ sẽ cho biết đó là mã hiện tại, thuộc về một cửa sổ vài bước trước hoặc sau (đồng hồ lệch, hoặc mã được nhập quá muộn), hay không khớp với gì trong phạm vi ±10 bước — điều này cho thấy sai khóa bí mật, thuật toán, số chữ số hoặc chu kỳ. Khóa bí mật mới tạo một khóa bí mật ngẫu nhiên 160 bit cùng URI otpauth:// của nó, và “Tiếp tục với” chuyển URI đó sang công cụ Tạo mã QR khi bạn xây dựng bước đăng ký 2FA cho ứng dụng của riêng mình.',
+			'Mã được tính trong trình duyệt của bạn bằng WebCrypto HMAC, đúng như RFC 6238 và RFC 4226 quy định; bộ kiểm thử chạy các vector kiểm thử do các RFC công bố cho SHA-1, SHA-256 và SHA-512. Khóa bí mật 2FA nhạy cảm như mật khẩu, nên công cụ không bao giờ đưa nó vào liên kết chia sẻ, và nếu nó xuất hiện trên thanh địa chỉ thì sẽ bị xóa ngay khi được đọc. Không có gì được gửi đi đâu cả.'
+		],
+		faqs: [
+			{
+				q: 'Mã TOTP hoạt động như thế nào?',
+				a: 'Khóa bí mật và thời gian hiện tại là hai đầu vào duy nhất. Thời gian được chia thành các bước (mặc định 30 giây) và số thứ tự của bước được đưa qua HMAC-SHA1 với khóa bí mật làm khóa. Bốn byte của kết quả được chuyển thành một số, và sáu chữ số cuối của số đó là mã. Điện thoại của bạn và máy chủ tính mã riêng rẽ, không hề liên lạc với nhau, vì vậy đồng hồ của hai bên phải khớp nhau.'
+			},
+			{
+				q: 'Vì sao mã 2FA của tôi bị từ chối?',
+				a: 'Thường là do đồng hồ. Nếu điện thoại hoặc máy chủ lệch quá một bước, mã của hai bên sẽ khác nhau; bật giờ tự động trên điện thoại giải quyết được phần lớn trường hợp, và máy chủ thường chấp nhận lệch một bước về mỗi phía. Dán khóa bí mật vào đây và kiểm tra mã bị từ chối để xem nó lệch bao nhiêu bước. Nếu nó không khớp với cửa sổ nào cả, thì khóa bí mật, thuật toán, số chữ số hoặc chu kỳ ở hai bên đang khác nhau.'
+			},
+			{
+				q: 'Dán khóa bí mật 2FA vào một trang web có an toàn không?',
+				a: 'Chỉ an toàn với trang không gửi nó đi đâu cả, và bạn phải kiểm chứng được điều đó. Trang này tính mã cục bộ và không gửi yêu cầu mạng nào sau khi tải xong: hãy mở bảng mạng (network) của trình duyệt, hoặc ngắt kết nối internet, nó vẫn hoạt động. Dù vậy, hãy đối xử với khóa bí mật như mật khẩu. Ai có nó đều tạo được mã của bạn, nên đừng để nó trong ghi chú, ảnh chụp màn hình hay lịch sử chat.'
+			},
+			{
+				q: 'URI otpauth:// là gì?',
+				a: 'Đó là nội dung bên trong mã QR 2FA: otpauth://totp/Issuer:account?secret=…&issuer=Issuer, cùng các tham số tùy chọn algorithm, digits và period (và counter với HOTP). Định dạng này bắt nguồn từ Key Uri Format của Google Authenticator và mọi ứng dụng xác thực lớn đều đọc được. Hãy giải mã ảnh QR bằng công cụ Giải mã mã QR rồi tiếp tục tại đây để xem các mã.'
+			},
+			{
+				q: 'Tôi có nên dùng SHA-256, 8 chữ số hoặc chu kỳ 60 giây không?',
+				a: 'Chỉ khi bạn kiểm soát mọi client. Một số ứng dụng xác thực phổ biến từng bỏ qua các tham số algorithm, digits hoặc period và lặng lẽ hiển thị mã SHA-1, 6 chữ số, 30 giây không bao giờ khớp. Các giá trị mặc định không hề yếu: kẻ tấn công chỉ có vài lần đoán cho một mã có xác suất một phần triệu, và việc giới hạn tần suất trên máy chủ quan trọng hơn nhiều so với hàm băm.'
+			}
+		]
+	},
+
 	'chmod-calculator': {
 		about: [
 			'Nhập mode theo đúng dạng bạn đang có — 755, 0644, rwxr-xr-x, cả một dòng `ls -l`, u=rwx,g=rx,o=rx, hoặc một lệnh đầy đủ như chmod -R 750 /srv/app — và xem nó ở mọi dạng còn lại: bát phân, chuỗi rwx, cột ls -l và cả hai lệnh chmod sẵn sàng để sao chép. Lưới hiển thị quyền đọc, ghi và thực thi cho chủ sở hữu, nhóm và người khác; đánh dấu một ô là mode được cập nhật ngay.',

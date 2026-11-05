@@ -98,6 +98,13 @@ describe('smart paste detection', () => {
 		expect(detect('chmod 600 ~/.ssh/id_ed25519')[0]?.type).toBe('permissions');
 		expect(detect('755').some((d) => d.type === 'permissions')).toBe(false);
 	});
+
+	it('detects otpauth URIs and routes them to the TOTP generator', () => {
+		const top = detect('otpauth://totp/Example:alice@example.com?secret=JBSWY3DPEHPK3PXP&issuer=Example')[0];
+		expect(top?.type).toBe('otpauth');
+		expect(top?.tool).toBe('totp-generator');
+		expect(detect('JBSWY3DPEHPK3PXP').some((d) => d.type === 'otpauth')).toBe(false);
+	});
 	it('detects YAML documents', () => {
 		expect(detect('name: demo\nversion: 2\nitems:\n  - a\n  - b')[0]?.type).toBe('yaml');
 	});

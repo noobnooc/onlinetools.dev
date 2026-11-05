@@ -11,6 +11,7 @@ import { isLikelyMarkdown } from '$lib/tools/markdown';
 import { isLikelyHexDump } from '$lib/tools/hexbin';
 import { isLikelyCidr } from '$lib/tools/cidr';
 import { isLikelyPermissions } from '$lib/tools/chmod';
+import { isLikelyOtpauth } from '$lib/tools/totp';
 import type { DataFormat } from './formats';
 
 export interface Detection {
@@ -174,6 +175,21 @@ export const DETECTORS: Detector[] = [
 				confidence: 0.85,
 				tool: 'color-converter',
 				actions: [{ label: 'Convert formats', tool: 'color-converter' }]
+			};
+		}
+	},
+	{
+		id: 'otpauth',
+		detect(input) {
+			if (!isLikelyOtpauth(input)) return null;
+			return {
+				type: 'otpauth',
+				format: 'otpauth',
+				label: '2FA secret (otpauth URI)',
+				// The scheme plus secret= is unambiguous.
+				confidence: 0.97,
+				tool: 'totp-generator',
+				actions: [{ label: 'Show the current code', tool: 'totp-generator' }]
 			};
 		}
 	},

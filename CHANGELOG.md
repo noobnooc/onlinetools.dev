@@ -11,6 +11,22 @@ the footer badge and every `<lastmod>` in the sitemap.
 
 ---
 
+## [2026.11.05] — TOTP / 2FA Code Generator
+
+### Added
+
+- **TOTP / 2FA Code Generator** (tool #48): paste a Base32 secret or an
+  `otpauth://` URI and see the current, previous and next code with a
+  countdown. TOTP and HOTP; SHA-1, SHA-256 and SHA-512; 6–8 digits; any
+  period. "Check a code" says whether a code is current, a few steps early or
+  late (clock drift), or matches nothing within ±10 steps. "New secret"
+  makes a 160-bit secret and its URI for the QR Code Generator. Tested
+  against the RFC 6238 and RFC 4226 vectors.
+- The secret is never put in a share link, and is removed from the address
+  bar when it arrives through "Continue with" or Smart Paste.
+- Smart Paste recognizes `otpauth://` URIs, so a decoded 2FA QR code goes
+  straight to the new tool.
+
 ## [2026.11.04] — Chmod Calculator in every language
 
 ### Changed

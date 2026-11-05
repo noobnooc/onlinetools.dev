@@ -1163,6 +1163,36 @@ const TOOL_CONTENT_FR: Record<string, ToolContent> = {
 		]
 	},
 
+	'totp-generator': {
+		about: [
+			'Collez un secret 2FA — la chaîne Base32 qu’un site affiche sous « Impossible de scanner le code ? », comme JBSW Y3DP EHPK 3PXP — ou l’URI otpauth:// complète d’un QR code, et obtenez le même code à six chiffres qu’afficherait en ce moment une application d’authentification, avec le précédent, le suivant et un compte à rebours jusqu’au changement. L’émetteur, le compte, l’algorithme, les chiffres et la période sont lus dans l’URI ; pour un secret seul, vous les réglez vous-même. Les secrets HOTP (basés sur un compteur) fonctionnent aussi.',
+			'La zone de vérification répond à la question derrière la plupart des signalements de bugs 2FA : pourquoi ce code a-t-il été refusé ? Saisissez un code venant d’un téléphone ou d’un journal serveur, et l’outil vous dit s’il s’agit du code actuel, s’il appartient à une fenêtre quelques pas avant ou après (dérive d’horloge, ou code saisi trop tard), ou s’il ne correspond à rien à ±10 pas — ce qui indique plutôt un secret, un algorithme, un nombre de chiffres ou une période erronés. « Nouveau secret » crée un secret aléatoire de 160 bits et son URI otpauth://, et « Continuer avec » transmet cette URI au Générateur de QR codes quand vous intégrez l’enrôlement dans votre propre application.',
+			'Les codes sont calculés dans votre navigateur avec WebCrypto HMAC, exactement comme le spécifient les RFC 6238 et RFC 4226 ; la suite de tests exécute les vecteurs publiés dans les RFC pour SHA-1, SHA-256 et SHA-512. Un secret 2FA est aussi sensible qu’un mot de passe : l’outil ne le met donc jamais dans un lien de partage, et s’il arrive par la barre d’adresse, il en est retiré dès sa lecture. Rien n’est envoyé nulle part.'
+		],
+		faqs: [
+			{
+				q: 'Comment fonctionne un code TOTP ?',
+				a: 'Le secret et l’heure actuelle sont les seules entrées. Le temps est découpé en pas (30 secondes par défaut) et le numéro du pas passe par HMAC-SHA1 avec le secret comme clé. Quatre octets du résultat sont convertis en nombre, dont les six derniers chiffres forment le code. Votre téléphone et le serveur le calculent chacun de leur côté sans jamais communiquer, c’est pourquoi les horloges doivent être d’accord.'
+			},
+			{
+				q: 'Pourquoi mon code 2FA est-il refusé ?',
+				a: 'Le plus souvent à cause de l’horloge. Si le téléphone ou le serveur est décalé de plus d’un pas, leurs codes diffèrent ; activer l’heure automatique sur le téléphone règle la plupart des cas, et les serveurs acceptent normalement un pas de part et d’autre. Collez le secret ici et vérifiez le code refusé pour voir de combien de pas il est décalé. S’il ne correspond à aucune fenêtre, le secret, l’algorithme, les chiffres ou la période diffèrent entre les deux côtés.'
+			},
+			{
+				q: 'Est-il sûr de coller mon secret 2FA dans un site web ?',
+				a: 'Seulement dans un site qui ne l’envoie nulle part, et vous devez pouvoir le vérifier. Cette page calcule les codes localement et ne fait aucune requête réseau après son chargement : ouvrez le panneau réseau du navigateur, ou coupez votre connexion Internet, et elle continue de fonctionner. Traitez tout de même le secret comme un mot de passe. Quiconque le possède peut générer vos codes : ne le laissez donc pas dans des notes, des captures d’écran ou des historiques de discussion.'
+			},
+			{
+				q: 'Qu’est-ce qu’une URI otpauth:// ?',
+				a: 'C’est ce que contient un QR code 2FA : otpauth://totp/Issuer:account?secret=…&issuer=Issuer, plus les paramètres facultatifs algorithm, digits et period (et counter pour HOTP). Le format vient du Key Uri Format de Google Authenticator et toutes les grandes applications d’authentification le lisent. Décodez l’image du QR code avec le Décodeur de QR codes, puis continuez ici pour voir les codes.'
+			},
+			{
+				q: 'Faut-il utiliser SHA-256, 8 chiffres ou une période de 60 secondes ?',
+				a: 'Seulement si vous maîtrisez tous les clients. Plusieurs applications d’authentification populaires ont ignoré les paramètres d’algorithme, de chiffres ou de période et affiché en silence des codes SHA-1 à 6 chiffres sur 30 secondes qui ne correspondent jamais. Les valeurs par défaut ne sont pas faibles : un attaquant n’a droit qu’à quelques essais pour un code à une chance sur un million, et la limitation de débit côté serveur compte bien plus que le hachage.'
+			}
+		]
+	},
+
 	'chmod-calculator': {
 		about: [
 			'Saisissez un mode tel que vous l’avez — 755, 0644, rwxr-xr-x, une ligne `ls -l` entière, u=rwx,g=rx,o=rx ou une commande complète comme chmod -R 750 /srv/app — et voyez-le sous toutes les autres formes : octal, chaîne rwx, colonne de ls -l et les deux commandes chmod prêtes à copier. La grille affiche lecture, écriture et exécution pour le propriétaire, le groupe et les autres ; cochez une case et le mode se met à jour.',

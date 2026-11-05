@@ -32,6 +32,7 @@ export type DataFormat =
 	| 'useragent'
 	| 'cidr'
 	| 'permissions'
+	| 'otpauth'
 	| 'image-data-url'
 	| 'image'
 	| 'text';
@@ -64,6 +65,7 @@ export const FORMAT_FALLBACKS: Record<DataFormat, DataFormat[]> = {
 	useragent: ['text'],
 	cidr: ['text'],
 	permissions: ['text'],
+	otpauth: ['url', 'text'],
 	'image-data-url': ['base64', 'text'],
 	image: [],
 	text: []

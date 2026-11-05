@@ -1162,6 +1162,36 @@ const TOOL_CONTENT_TR: Record<string, ToolContent> = {
 		]
 	},
 
+	'totp-generator': {
+		about: [
+			'Bir 2FA gizli anahtarını — bir sitenin “kodu tarayamıyor musunuz?” bağlantısının altında gösterdiği, JBSW Y3DP EHPK 3PXP gibi Base32 dizesini — ya da bir QR koddaki tam otpauth:// URI’yi yapıştırın; bir kimlik doğrulama uygulamasının şu anda göstereceği altı haneli kodun aynısını, ayrıca önceki ve sonraki kodları ve değişime kalan süreyi görün. Sağlayıcı, hesap, algoritma, basamak sayısı ve süre URI’den okunur; yalın bir gizli anahtar için bunları kendiniz ayarlarsınız. HOTP (sayaç tabanlı) gizli anahtarlar da çalışır.',
+			'Denetim kutusu, çoğu 2FA hata bildiriminin ardındaki soruyu yanıtlar: bu kod neden reddedildi? Bir telefondan veya sunucu günlüğünden bir kod yazın; araç size bunun geçerli kod mu olduğunu, birkaç adım önceki ya da sonraki bir pencereye mi ait olduğunu (saat kayması veya çok geç yazılmış bir kod) yoksa ±10 adım içinde hiçbir şeyle eşleşmediğini mi söyler — sonuncusu yanlış bir gizli anahtara, algoritmaya, basamak sayısına veya süreye işaret eder. Yeni gizli anahtar, rastgele 160 bitlik bir gizli anahtar ve onun otpauth:// URI’sini üretir; kayıt adımını kendi uygulamanıza eklerken “Şununla devam et” bu URI’yi QR Kod Üreteci’ne aktarır.',
+			'Kodlar tarayıcınızda WebCrypto HMAC ile, tam olarak RFC 6238 ve RFC 4226’da belirtildiği gibi hesaplanır; test paketi RFC’lerin SHA-1, SHA-256 ve SHA-512 için yayımladığı test vektörlerini çalıştırır. Bir 2FA gizli anahtarı bir parola kadar hassastır; bu yüzden araç onu hiçbir zaman paylaşım bağlantısına koymaz ve adres çubuğunda gelirse okunur okunmaz oradan kaldırır. Hiçbir şey hiçbir yere gönderilmez.'
+		],
+		faqs: [
+			{
+				q: 'Bir TOTP kodu nasıl çalışır?',
+				a: 'Tek girdiler gizli anahtar ve geçerli zamandır. Zaman adımlara bölünür (varsayılan olarak 30 saniye) ve adım numarası, gizli anahtar HMAC anahtarı olarak kullanılarak HMAC-SHA1’den geçirilir. Sonucun dört baytı bir sayıya dönüştürülür ve bu sayının son altı hanesi koddur. Telefonunuz ve sunucu kodu ayrı ayrı hesaplar ve birbirleriyle hiç iletişim kurmaz; saatlerin uyuşması gerekmesinin nedeni budur.'
+			},
+			{
+				q: '2FA kodum neden reddediliyor?',
+				a: 'Genellikle saat yüzünden. Telefonun veya sunucunun saati bir adımdan fazla saparsa kodları farklı olur; telefonda otomatik saati açmak çoğu durumu çözer ve sunucular normalde her iki yönde bir adımı kabul eder. Kaç adım saptığını görmek için gizli anahtarı buraya yapıştırıp reddedilen kodu denetleyin. Kod hiçbir pencereyle eşleşmiyorsa iki taraf arasında gizli anahtar, algoritma, basamak sayısı veya süre farklıdır.'
+			},
+			{
+				q: '2FA gizli anahtarımı bir web sitesine yapıştırmak güvenli mi?',
+				a: 'Yalnızca onu hiçbir yere göndermeyen bir siteye — ve bunu kontrol edebilmeniz gerekir. Bu sayfa kodları yerelde hesaplar ve yüklendikten sonra hiçbir ağ isteği yapmaz: tarayıcının ağ panelini açın ya da internet bağlantınızı kesin, çalışmaya devam eder. Yine de gizli anahtara bir parola gibi davranın. Ona sahip olan herkes kodlarınızı üretebilir; bu yüzden onu notlarda, ekran görüntülerinde veya sohbet kayıtlarında bırakmayın.'
+			},
+			{
+				q: 'otpauth:// URI nedir?',
+				a: 'Bir 2FA QR kodunun içerdiği şeydir: otpauth://totp/Issuer:account?secret=…&issuer=Issuer, ayrıca isteğe bağlı algorithm, digits ve period parametreleri (HOTP için de counter). Biçim, Google Authenticator’ın Key Uri Format’ından gelir ve tüm büyük kimlik doğrulama uygulamaları onu okur. QR görselini QR Kod Çözücü ile çözün ve kodları görmek için burada devam edin.'
+			},
+			{
+				q: 'SHA-256, 8 basamak veya 60 saniyelik süre kullanmalı mıyım?',
+				a: 'Yalnızca tüm istemcileri siz yönetiyorsanız. Birçok popüler kimlik doğrulama uygulaması algorithm, digits veya period parametrelerini yok saymış ve sessizce hiç eşleşmeyen SHA-1, 6 basamaklı, 30 saniyelik kodlar göstermiştir. Varsayılanlar zayıf değildir: bir saldırgan milyonda bir olasılıklı bir kod için yalnızca birkaç tahmin hakkı elde eder ve sunucudaki hız sınırlaması hash’ten çok daha önemlidir.'
+			}
+		]
+	},
+
 	'chmod-calculator': {
 		about: [
 			'Modu elinizdeki haliyle yazın — 755, 0644, rwxr-xr-x, bütün bir `ls -l` satırı, u=rwx,g=rx,o=rx ya da chmod -R 750 /srv/app gibi tam bir komut — ve onu diğer tüm biçimlerde görün: sekizli, rwx dizesi, ls -l sütunu ve kopyalanmaya hazır iki chmod komutu. Tablo, sahip, grup ve diğerleri için okuma, yazma ve çalıştırma izinlerini gösterir; bir kutuyu işaretlediğinizde mod güncellenir.',

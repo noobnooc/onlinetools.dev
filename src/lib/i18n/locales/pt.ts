@@ -535,6 +535,35 @@ const pt: Messages = {
 		chmWarnOwnerLess: 'O dono tem menos permissões que o grupo ou os outros. Confira a ordem dos dígitos.',
 		chmEmpty: 'Digite 755, rwxr-xr-x ou g+w, ou marque as caixas acima',
 
+		totpInput: 'Segredo ou URI otpauth://',
+		totpType: 'Tipo',
+		totpAlgorithm: 'Algoritmo',
+		totpDigits: 'Dígitos',
+		totpPeriod: 'Período (s)',
+		totpCounter: 'Contador',
+		totpFromUri: 'As configurações vêm da URI.',
+		totpCurrent: 'Código atual',
+		totpPrev: 'Anterior',
+		totpNext: 'Próximo',
+		totpRefresh: 'Novo código em {s} s',
+		totpHotpNote: 'Códigos HOTP avançam com o contador, não com o relógio.',
+		totpCheck: 'Conferir um código',
+		totpCheckPlaceholder: 'Código de um aplicativo ou de um log do servidor',
+		totpMatchNow: 'Corresponde ao código atual.',
+		totpMatchPast: 'Corresponde ao código de {n} passo(s) atrás ({s} s). O relógio do dispositivo pode estar atrasado, ou o código foi digitado tarde.',
+		totpMatchFuture: 'Corresponde ao código {n} passo(s) à frente ({s} s). O relógio do dispositivo provavelmente está adiantado.',
+		totpMatchCounter: 'Corresponde ao contador {c}.',
+		totpNoMatch: 'Nenhuma correspondência em ±{n} passos. Confira o segredo, o algoritmo, os dígitos e o período.',
+		totpNewSecret: 'Novo segredo',
+		totpIssuer: 'Emissor',
+		totpAccount: 'Conta',
+		totpSecret: 'Segredo (Base32)',
+		totpUri: 'URI otpauth',
+		totpWarnShort: 'O segredo tem menos de 128 bits. A RFC 4226 exige pelo menos 128 e recomenda 160.',
+		totpWarnNonDefault: 'Algoritmo, dígitos ou período fora do padrão. Alguns aplicativos autenticadores ignoram esses valores e mostram códigos errados, então teste com os aplicativos que seus usuários têm.',
+		totpEmpty: 'Cole um segredo 2FA ou uma URI otpauth://, ou crie um novo segredo',
+		totpPrivacy: 'Os códigos são calculados com WebCrypto nesta aba. O segredo nunca entra em um link de compartilhamento e é removido da barra de endereço se chegar por um.',
+
 		// Text ↔ hex/binary
 		hbFormat: 'Bytes como',
 		hbSep: 'Separador',
@@ -781,6 +810,10 @@ const pt: Messages = {
 		'chmod-calculator': {
 			name: 'Calculadora Chmod',
 			description: 'Converta permissões Unix entre octal, rwx e chmod simbólico, com uma grade clicável'
+		},
+		'totp-generator': {
+			name: 'Gerador de códigos TOTP / 2FA',
+			description: 'Obtenha o código 2FA atual a partir de um segredo ou URI otpauth://, confira um código ou crie um novo segredo'
 		},
 		'cidr-calculator': {
 			name: 'Calculadora CIDR / de sub-rede',

@@ -762,6 +762,36 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
 		]
 	},
 
+	'totp-generator': {
+		about: [
+			'Paste a 2FA secret — the Base32 string a site shows under "can\'t scan the code?", such as JBSW Y3DP EHPK 3PXP — or the full otpauth:// URI from a QR code, and get the same six-digit code an authenticator app would show right now, plus the previous and next ones and a countdown to the change. Issuer, account, algorithm, digits and period are read from the URI; for a bare secret you set them yourself. HOTP (counter-based) secrets work too.',
+			'The check box answers the question behind most 2FA bug reports: why was this code rejected? Type a code from a phone or a server log and the tool tells you whether it is the current one, belongs to a window a few steps before or after (clock drift, or a code typed too late), or matches nothing within ±10 steps — which points to a wrong secret, algorithm, digit count or period instead. New secret makes a random 160-bit secret and its otpauth:// URI, and "Continue with" hands that URI to the QR Code Generator when you are building enrollment into your own app.',
+			'Codes are computed in your browser with WebCrypto HMAC, exactly as RFC 6238 and RFC 4226 specify; the test suite runs the RFCs\' published vectors for SHA-1, SHA-256 and SHA-512. A 2FA secret is as sensitive as a password, so the tool never puts it in a share link, and if one arrives in the address bar it is removed as soon as it is read. Nothing is sent anywhere.'
+		],
+		faqs: [
+			{
+				q: 'How does a TOTP code work?',
+				a: 'The secret and the current time are the only inputs. The time is divided into steps (30 seconds by default) and the step number is run through HMAC-SHA1 with the secret as the key. Four bytes of the result are turned into a number and its last six digits are the code. Your phone and the server compute it separately and never talk to each other, which is why the clocks have to agree.'
+			},
+			{
+				q: 'Why is my 2FA code rejected?',
+				a: 'Usually the clock. If the phone or the server is off by more than a step, their codes differ; turning on automatic time on the phone fixes most cases, and servers normally accept one step either side. Paste the secret here and check the rejected code to see how many steps off it is. If it matches no window at all, the secret, algorithm, digits or period differ between the two sides.'
+			},
+			{
+				q: 'Is it safe to paste my 2FA secret into a website?',
+				a: 'Only into one that does not send it anywhere, and you should be able to check that. This page computes codes locally and makes no network requests after it loads: open the browser\'s network panel, or disconnect from the internet, and it keeps working. Still, treat the secret like a password. Anyone who has it can generate your codes, so don\'t leave it in notes, screenshots or chat logs.'
+			},
+			{
+				q: 'What is an otpauth:// URI?',
+				a: 'It is what a 2FA QR code contains: otpauth://totp/Issuer:account?secret=…&issuer=Issuer, plus optional algorithm, digits and period parameters (and counter for HOTP). The format comes from Google Authenticator\'s Key Uri Format and every major authenticator app reads it. Decode the QR image with the QR Code Decoder and continue here to see the codes.'
+			},
+			{
+				q: 'Should I use SHA-256, 8 digits or a 60-second period?',
+				a: 'Only if you control every client. Several popular authenticator apps have ignored the algorithm, digits or period parameters and silently shown SHA-1, 6-digit, 30-second codes that never match. The defaults are not weak: an attacker gets a handful of guesses at a one-in-a-million code, and rate limiting on the server matters far more than the hash.'
+			}
+		]
+	},
+
 	'cidr-calculator': {
 		about: [
 			'Type a CIDR block such as 10.20.0.0/16 or 2001:db8::/48 and read everything about it at once: network address, broadcast (or last address for IPv6), netmask and wildcard mask, first and last usable host, address count, and which special-purpose range it sits in — RFC 1918 private space, carrier-grade NAT, link-local, documentation, multicast and the rest. A bare address works too, as does netmask notation (192.168.1.0 255.255.255.0) and the Cisco wildcard form (0.0.0.255).',

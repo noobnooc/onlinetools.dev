@@ -1163,6 +1163,36 @@ const TOOL_CONTENT_ES: Record<string, ToolContent> = {
 		]
 	},
 
+	'totp-generator': {
+		about: [
+			'Pega un secreto 2FA — la cadena Base32 que un sitio muestra bajo «¿No puedes escanear el código?», como JBSW Y3DP EHPK 3PXP — o la URI otpauth:// completa de un código QR, y obtén el mismo código de seis dígitos que mostraría ahora mismo una app de autenticación, además del anterior, el siguiente y una cuenta atrás hasta el cambio. El emisor, la cuenta, el algoritmo, los dígitos y el periodo se leen de la URI; para un secreto suelto los ajustas tú. Los secretos HOTP (basados en contador) también funcionan.',
+			'El cuadro de comprobación responde a la pregunta detrás de la mayoría de los informes de errores de 2FA: ¿por qué se rechazó este código? Escribe un código de un móvil o de un log del servidor y la herramienta te dice si es el actual, si pertenece a una ventana unos pasos antes o después (desfase del reloj, o un código escrito demasiado tarde) o si no coincide con nada en ±10 pasos — lo que apunta más bien a un secreto, algoritmo, número de dígitos o periodo equivocados. «Nuevo secreto» crea un secreto aleatorio de 160 bits y su URI otpauth://, y «Continuar con» pasa esa URI al Generador de códigos QR cuando estás integrando el registro en tu propia app.',
+			'Los códigos se calculan en tu navegador con WebCrypto HMAC, exactamente como especifican RFC 6238 y RFC 4226; la batería de pruebas ejecuta los vectores publicados en los RFC para SHA-1, SHA-256 y SHA-512. Un secreto 2FA es tan sensible como una contraseña, así que la herramienta nunca lo pone en un enlace compartido, y si llega por la barra de direcciones se elimina en cuanto se lee. No se envía nada a ninguna parte.'
+		],
+		faqs: [
+			{
+				q: '¿Cómo funciona un código TOTP?',
+				a: 'El secreto y la hora actual son las únicas entradas. El tiempo se divide en pasos (30 segundos por defecto) y el número de paso se pasa por HMAC-SHA1 con el secreto como clave. Cuatro bytes del resultado se convierten en un número y sus últimos seis dígitos son el código. Tu móvil y el servidor lo calculan por separado y nunca se comunican entre sí, por eso los relojes tienen que coincidir.'
+			},
+			{
+				q: '¿Por qué se rechaza mi código 2FA?',
+				a: 'Normalmente por el reloj. Si el móvil o el servidor se desvían más de un paso, sus códigos difieren; activar la hora automática en el móvil soluciona la mayoría de los casos, y los servidores suelen aceptar un paso a cada lado. Pega aquí el secreto y comprueba el código rechazado para ver cuántos pasos está desviado. Si no coincide con ninguna ventana, el secreto, el algoritmo, los dígitos o el periodo difieren entre ambos lados.'
+			},
+			{
+				q: '¿Es seguro pegar mi secreto 2FA en un sitio web?',
+				a: 'Solo en uno que no lo envíe a ninguna parte, y deberías poder comprobarlo. Esta página calcula los códigos localmente y no hace peticiones de red tras cargarse: abre el panel de red del navegador, o desconéctate de internet, y sigue funcionando. Aun así, trata el secreto como una contraseña. Cualquiera que lo tenga puede generar tus códigos, así que no lo dejes en notas, capturas de pantalla ni historiales de chat.'
+			},
+			{
+				q: '¿Qué es una URI otpauth://?',
+				a: 'Es lo que contiene un código QR de 2FA: otpauth://totp/Issuer:account?secret=…&issuer=Issuer, más los parámetros opcionales algorithm, digits y period (y counter para HOTP). El formato viene del Key Uri Format de Google Authenticator y todas las apps de autenticación importantes lo leen. Decodifica la imagen QR con el Decodificador de códigos QR y continúa aquí para ver los códigos.'
+			},
+			{
+				q: '¿Debería usar SHA-256, 8 dígitos o un periodo de 60 segundos?',
+				a: 'Solo si controlas todos los clientes. Varias apps de autenticación populares han ignorado los parámetros de algoritmo, dígitos o periodo y han mostrado sin avisar códigos SHA-1 de 6 dígitos y 30 segundos que nunca coinciden. Los valores predeterminados no son débiles: un atacante tiene un puñado de intentos ante un código de uno entre un millón, y la limitación de intentos en el servidor importa mucho más que el hash.'
+			}
+		]
+	},
+
 	'chmod-calculator': {
 		about: [
 			'Escribe un modo tal como lo tengas — 755, 0644, rwxr-xr-x, una línea entera de `ls -l`, u=rwx,g=rx,o=rx o un comando completo como chmod -R 750 /srv/app — y míralo en todas las demás formas: octal, la cadena rwx, la columna de ls -l y los dos comandos chmod listos para copiar. La cuadrícula muestra lectura, escritura y ejecución para propietario, grupo y otros; marca una casilla y el modo se actualiza.',

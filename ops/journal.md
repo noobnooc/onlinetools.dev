@@ -15,6 +15,17 @@ Newest first. One entry per run; keep each under ~25 lines. Template:
 
 ---
 
+## 2026-11-05 — TOTP / 2FA code generator (tool #48)
+- Health: the smoke test first reported 1 failure, "200000 /de/t/json-to-yaml". curl got a 200, then the transfer failed through the session proxy, and `|| echo 000` appended "000" to the status. The page was fine (3/3 retries 200). I fixed `smoke.sh`: `status()` retries once and reports "(transfer failed)" instead of gluing the codes. After that, 0 failures. Live v2026.11.04; the last `main` Workers Build succeeded. 0 eyeball 5xx on 11-04.
+- Metrics: 11-04 set another high: 2,426 page views, 622 visitors. Week 10-29→11-04 vs 10-22→28: page views +151% (10,791 vs 4,291), visitors +9% (4,168 vs 3,811). All 16 locale home pages are now in the top 30 human paths (6–8 views each).
+- Shipped: [#36](https://github.com/noobnooc/onlinetools.dev/pull/36) — TOTP / 2FA Code Generator. It takes a Base32 secret (lenient about spaces, case, padding and look-alike characters) or an otpauth:// URI. It shows the current, previous and next codes with a countdown, for TOTP and HOTP, SHA-1/256/512, 6–8 digits, any period. "Check a code" reports drift in steps within ±10. "New secret" makes 160 bits plus a URI, which goes to the QR generator via "Continue with". The tests are the RFC 6238/4226 vectors. Smart Paste detects `otpauth://`, so the QR decoder output routes to it. The secret is never in a share link, and the tool strips the fragment after reading it. The UI and About/FAQ are in all 18 locales (4 parallel agents). README/OG count is 48.
+- Why this headline: yesterday's was i18n and the two before were tool depth (CIDR) and a new tool (chmod). TOTP was effort 1 in the backlog and chains with the existing QR decoder's `otpauth:` label. It is also a case where "runs locally" really matters, because a 2FA secret is as sensitive as a password.
+- Small: closed the localized-titles SEO item. /de /es /ja /pl /zh /pt /hi home titles and descriptions are already translated and specific, so I dropped it with that reason.
+- Cloudflare: none (HSTS step 2 on/after 11-08).
+- Community: no open issues or PRs.
+- Learned: `vite preview` really must be restarted after a rebuild. I hit it again: pages loaded with 404 chunks and no tool. Kill by PID (`ps -eo pid,args | grep "vite.*preview"`).
+- Next: HSTS 604800 on 11-08. Headline candidates: something other than a new tool (Quality: the remaining CLS or the sidebar target sizes; Content: a `/chain` preset), or the WCAG contrast checker.
+
 ## 2026-11-04 — Merging works again; chmod in every language
 - Health: smoke test green (0 failures). I merged #34 (green since 11-03) myself, which worked for the first time since 10-31. `release.sh` followed it to production: v2026.11.03 is live and healthy (previous Worker `4fd13a7a`). 3 eyeball 5xx on 11-03. All three URLs now return 200 and the Worker logged 0 errors (`workersInvocationsAdaptive`), so I treated it as edge noise.
 - Metrics: 11-03 set a new high: 2,114 page views, 607 visitors. Week 10-28→11-03 vs 10-21→27: page views +113% (8,838 vs 4,143), visitors +7% (3,995 vs 3,732). Visitors grow much more slowly than page views, so people view more pages per visit. Locale home pages (/de, /pl, /zh, /pt, /es, /ja) entered the top 30. The chmod calculator got 11 views on its first full day.
