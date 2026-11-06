@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { runChain, encodeRecipe, decodeRecipe, recipeSize, type Recipe } from './engine';
 import { CHAIN_PRESETS } from './presets';
+import { TOOL_BY_SLUG } from '$lib/tools/registry';
 import { MAX_SHARED_INPUT, encodeState } from '$lib/state/urlstate';
 
 describe('runChain', () => {
@@ -78,7 +79,65 @@ describe('recipe share state', () => {
 	});
 });
 
+describe('network and line ops', () => {
+	it('merges a CIDR list into the fewest blocks', () => {
+		const run = runChain('10.0.0.0/24\n10.0.1.0/24, 10.0.0.5', [{ op: 'cidr-aggregate' }]);
+		expect(run.failedAt).toBe(-1);
+		expect(run.output).toBe('10.0.0.0/23');
+	});
+
+	it('subtracts the comma-separated argument', () => {
+		const run = runChain('0.0.0.0/0', [{ op: 'cidr-aggregate', arg: '128.0.0.0/1' }]);
+		expect(run.output).toBe('0.0.0.0/1');
+	});
+
+	it('fails the step on a bad entry instead of skipping it', () => {
+		const run = runChain('10.0.0.0/8\n10.0.0.300', [{ op: 'cidr-aggregate' }]);
+		expect(run.failedAt).toBe(0);
+		expect(run.steps[0].error).toMatch(/^Line 2:/);
+		const ex = runChain('10.0.0.0/8', [{ op: 'cidr-aggregate', arg: 'nope' }]);
+		expect(ex.steps[0].error).toMatch(/^Minus "nope":/);
+	});
+
+	it('reports when the exclusions remove everything', () => {
+		const run = runChain('10.0.0.0/8', [{ op: 'cidr-aggregate', arg: '0.0.0.0/0' }]);
+		expect(run.failedAt).toBe(0);
+	});
+
+	it('joins non-empty lines, ", " by default, with \\n and \\t escapes', () => {
+		expect(runChain(' a \n\nb\n', [{ op: 'join-lines' }]).output).toBe('a, b');
+		expect(runChain('a\nb', [{ op: 'join-lines', arg: ' | ' }]).output).toBe('a | b');
+		expect(runChain('a\nb', [{ op: 'join-lines', arg: '\\t' }]).output).toBe('a\tb');
+	});
+
+	it('builds a WireGuard AllowedIPs line without private ranges', () => {
+		const p = CHAIN_PRESETS.find((x) => x.slug === 'wireguard-allowedips-exclude-lan')!;
+		const run = runChain(p.recipe.input, p.recipe.steps);
+		expect(run.failedAt).toBe(-1);
+		const blocks = run.output.split(', ');
+		expect(run.output).not.toContain('\n');
+		expect(blocks).toContain('11.0.0.0/8');
+		expect(blocks).toContain('192.0.0.0/9');
+		expect(blocks.some((b) => b.startsWith('10.') || b.startsWith('192.168.'))).toBe(false);
+		expect(blocks).toContain('::/1');
+	});
+
+	it('dedupes and sorts lines', () => {
+		const p = CHAIN_PRESETS.find((x) => x.slug === 'remove-duplicate-lines-and-sort')!;
+		expect(runChain(p.recipe.input, p.recipe.steps).output).toBe(
+			'alpha.example.com\nbeta.example.com\ngamma.example.com'
+		);
+	});
+});
+
 describe('presets', () => {
+	it('every preset links only to tools that exist', () => {
+		for (const p of CHAIN_PRESETS) {
+			expect(p.tools.length, p.slug).toBeGreaterThan(0);
+			for (const slug of p.tools) expect(TOOL_BY_SLUG.has(slug), `${p.slug} → ${slug}`).toBe(true);
+		}
+	});
+
 	it('every preset runs cleanly end to end', () => {
 		for (const p of CHAIN_PRESETS) {
 			const run = runChain(p.recipe.input, p.recipe.steps);

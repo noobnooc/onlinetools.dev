@@ -10,6 +10,7 @@ import { inferJsonSchema } from '$lib/tools/jsonschema';
 import { slugify, processLines } from '$lib/tools/text';
 import { formatSql, minifySql } from '$lib/tools/sqlformat';
 import { beautifyCode } from '$lib/tools/codeformat';
+import { aggregateCidrs } from '$lib/tools/cidr';
 import { markdownToHtml, htmlToMarkdown } from '$lib/tools/markdown';
 import { PIPE_OP_META, type PipeOpMeta } from './op-meta';
 
@@ -39,6 +40,33 @@ function jsonpathRun(input: string, arg?: string): ToolResult {
 function jwtPayload(input: string): ToolResult {
 	const r = decodeJwt(input);
 	return r.ok ? ok(JSON.stringify(r.value.payload, null, 2)) : r;
+}
+
+/** Join non-empty lines with a separator; an empty argument means ", ". */
+function joinLines(input: string, arg?: string): ToolResult {
+	const sep = (arg || ', ').replace(/\\n/g, '\n').replace(/\\t/g, '\t');
+	const lines = input
+		.split(/\r?\n/)
+		.map((l) => l.trim())
+		.filter(Boolean);
+	return ok(lines.join(sep));
+}
+
+/**
+ * Aggregate a CIDR list (one per line or comma-separated) into the fewest
+ * blocks, minus the comma-separated argument. A pipeline has no place to show
+ * per-line warnings, so a bad entry fails the step instead of being skipped.
+ */
+function cidrAggregate(input: string, arg?: string): ToolResult {
+	const r = aggregateCidrs(input, arg ?? '');
+	if (!r.ok) return r;
+	const bad = r.value.errors[0];
+	if (bad) {
+		const where = bad.source === 'exclude' ? `Minus "${bad.entry}"` : `Line ${bad.line}`;
+		return err(`${where}: ${bad.message}`);
+	}
+	if (r.value.cidrs.length === 0) return err('Nothing is left after the exclusions');
+	return ok(r.value.cidrs.join('\n'));
 }
 
 /** Run function per op id — kept in lockstep with PIPE_OP_META. */
@@ -72,6 +100,9 @@ const RUNS: Record<string, PipeRun> = {
 	slugify: (i) => ok(slugify(i)),
 	'sort-lines': (i) => ok(processLines(i, { sort: 'asc' }).output),
 	'dedupe-lines': (i) => ok(processLines(i, { dedupe: true }).output),
+	'join-lines': joinLines,
+
+	'cidr-aggregate': cidrAggregate,
 
 	'sql-format': (i) => formatSql(i, { dialect: 'sql', keywordCase: 'upper', indent: 2 }),
 	'sql-minify': (i) => minifySql(i),

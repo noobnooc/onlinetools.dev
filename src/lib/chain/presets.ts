@@ -19,6 +19,8 @@ export interface ChainPreset {
 	/** One-paragraph explanation shown on the page. */
 	intro: string;
 	recipe: Recipe;
+	/** Single-tool pages that do one step of this recipe in more depth (registry slugs). */
+	tools: string[];
 }
 
 const SAMPLE_JWT =
@@ -33,7 +35,8 @@ export const CHAIN_PRESETS: ChainPreset[] = [
 			'Paste a JWT and read its decoded JSON payload — the claims, issued-at and expiry. Runs entirely in your browser; the token is never uploaded.',
 		intro:
 			'Paste a JSON Web Token and this pipeline decodes it to the JSON payload — every claim laid out and pretty-printed. Nothing leaves your browser, so it is safe for real tokens.',
-		recipe: { input: SAMPLE_JWT, steps: [{ op: 'jwt-payload' }] }
+		recipe: { input: SAMPLE_JWT, steps: [{ op: 'jwt-payload' }] },
+		tools: ['jwt-decoder', 'json-formatter']
 	},
 	{
 		slug: 'extract-jwt-claim',
@@ -43,7 +46,8 @@ export const CHAIN_PRESETS: ChainPreset[] = [
 			'Decode a JWT and pull out one claim (like sub or name) with a JSONPath, in one flow. All local — the token never leaves your browser.',
 		intro:
 			'Decode a JSON Web Token and pull a single claim straight out with a JSONPath expression — change $.name to $.sub, $.exp or any claim you need. Everything runs locally.',
-		recipe: { input: SAMPLE_JWT, steps: [{ op: 'jwt-payload' }, { op: 'jsonpath', arg: '$.name' }] }
+		recipe: { input: SAMPLE_JWT, steps: [{ op: 'jwt-payload' }, { op: 'jsonpath', arg: '$.name' }] },
+		tools: ['jwt-decoder', 'jsonpath-tester']
 	},
 	{
 		slug: 'base64-decode-to-json',
@@ -56,7 +60,8 @@ export const CHAIN_PRESETS: ChainPreset[] = [
 		recipe: {
 			input: 'eyJ1c2VyIjp7Im5hbWUiOiJBZGEiLCJyb2xlcyI6WyJhZG1pbiIsImRldiJdfX0=',
 			steps: [{ op: 'base64-decode' }, { op: 'json-pretty' }]
-		}
+		},
+		tools: ['base64-decode', 'json-formatter']
 	},
 	{
 		slug: 'json-to-yaml',
@@ -69,7 +74,8 @@ export const CHAIN_PRESETS: ChainPreset[] = [
 		recipe: {
 			input: '{"name":"Ada","roles":["admin","dev"],"active":true}',
 			steps: [{ op: 'json-to-yaml' }]
-		}
+		},
+		tools: ['json-to-yaml', 'json-formatter']
 	},
 	{
 		slug: 'json-array-to-csv',
@@ -82,7 +88,53 @@ export const CHAIN_PRESETS: ChainPreset[] = [
 		recipe: {
 			input: '[{"id":1,"name":"Ada"},{"id":2,"name":"Alan"}]',
 			steps: [{ op: 'json-to-csv' }]
-		}
+		},
+		tools: ['json-to-csv', 'json-formatter']
+	},
+	{
+		slug: 'wireguard-allowedips-exclude-lan',
+		title: 'WireGuard AllowedIPs without the LAN',
+		heading: 'WireGuard AllowedIPs: route everything except your LAN',
+		description:
+			'Compute a WireGuard AllowedIPs line that sends all traffic through the tunnel except private and local ranges. Edit the exclusions; runs in your browser.',
+		intro:
+			'AllowedIPs = 0.0.0.0/0 sends everything through the tunnel, including traffic to your printer and router. WireGuard has no "except" syntax, so this pipeline subtracts the ranges you list (private IPv4, IPv6 unique-local and link-local by default) and joins the remaining blocks into one line you can paste into the [Peer] section.',
+		recipe: {
+			input: '0.0.0.0/0\n::/0',
+			steps: [
+				{ op: 'cidr-aggregate', arg: '10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, fc00::/7, fe80::/10' },
+				{ op: 'join-lines', arg: ', ' }
+			]
+		},
+		tools: ['cidr-calculator']
+	},
+	{
+		slug: 'merge-ip-ranges-into-cidrs',
+		title: 'Merge IP ranges into CIDR blocks',
+		heading: 'Merge a list of IPs and ranges into the fewest CIDR blocks',
+		description:
+			'Paste IP addresses, CIDR blocks and ranges and get the smallest list of CIDR blocks that covers exactly the same addresses. IPv4 and IPv6, all local.',
+		intro:
+			'Allowlists and firewall rules grow by accretion: single addresses, overlapping blocks, a range someone typed by hand. This pipeline merges them into the fewest CIDR blocks covering exactly the same addresses, IPv4 first, then IPv6. Add exclusions to the step if some addresses must stay out.',
+		recipe: {
+			input: '10.0.0.0/24\n10.0.1.0/24\n10.0.0.17\n192.168.1.10 - 192.168.1.20\n2001:db8::/33\n2001:db8:8000::/33',
+			steps: [{ op: 'cidr-aggregate' }]
+		},
+		tools: ['cidr-calculator']
+	},
+	{
+		slug: 'remove-duplicate-lines-and-sort',
+		title: 'Remove duplicate lines and sort',
+		heading: 'Remove duplicate lines and sort the rest',
+		description:
+			'Paste a list, drop the duplicate lines and sort what is left, in one step. Runs entirely in your browser; nothing you paste is uploaded.',
+		intro:
+			'Paste a list of emails, hostnames, IDs or anything one-per-line. This pipeline trims the surrounding whitespace, keeps the first copy of every line and sorts the result. Add a "Join lines" step to turn it into one comma-separated line.',
+		recipe: {
+			input: 'beta.example.com\nalpha.example.com\nbeta.example.com\ngamma.example.com\nalpha.example.com',
+			steps: [{ op: 'trim' }, { op: 'dedupe-lines' }, { op: 'sort-lines' }]
+		},
+		tools: ['sort-lines']
 	}
 ];
 

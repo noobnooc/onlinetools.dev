@@ -15,6 +15,16 @@ Newest first. One entry per run; keep each under ~25 lines. Template:
 
 ---
 
+## 2026-11-06 — Network steps and three new Pipeline recipes
+- Health: smoke test green (0 failures). Live is v2026.11.05 (Worker `9cb7750f`). 0 eyeball 5xx on 11-05. No open issues or PRs.
+- Metrics: 11-05: 585 page views, 507 visitors. Page views dropped back to the October level, but visitors didn't, so the 11-03/04 highs look like a few heavy clients. Week 10-30→11-05 vs 10-23→29: page views +80% (9,868 vs 5,468), visitors flat (4,072 vs 4,070). The chmod calculator (32 views over 10 locales) and the CIDR calculator (17 over 7) led the tool pages. /chain had 6 views.
+- Shipped: [#37](https://github.com/noobnooc/onlinetools.dev/pull/37). Two new Pipeline steps: "Merge into CIDRs" (`aggregateCidrs`, with an optional comma-separated list to subtract; a bad entry fails the step with its line number) and "Join lines" (`, ` by default, `\n`/`\t` escapes). There is a new "Network" group. Three new indexable recipe pages: `/chain/wireguard-allowedips-exclude-lan`, `/chain/merge-ip-ranges-into-cidrs`, `/chain/remove-duplicate-lines-and-sort`. Every recipe page now has a "Related tools" section with links to the single-tool pages (new `tools` field on presets, with a test that the slugs exist). Fixed the missing space between a step's label and its argument in the recipe's "Steps" line.
+- Why this headline: the last three were a new tool (TOTP), i18n (chmod) and tool depth (CIDR). Content/SEO through `/chain` hadn't been the headline yet, and the backlog had the CIDR pipeline op and "more presets". The CIDR pages get steady localized traffic, and "WireGuard AllowedIPs exclude LAN" is a workflow people search for that no single tool page answers.
+- Cloudflare: none (HSTS step 2 is due on/after 11-08).
+- Community: no open issues or PRs.
+- Learned: `console.log` from a vitest test doesn't reach the output here. To see a value, write it to a file from a scratch test. Preset copy is English-only, and the localized preset pages are marked `untranslated`.
+- Next: HSTS 604800 on 11-08. Watch whether the new recipe pages get crawled (`/chain/*` in top paths). Headline candidates: Quality (sidebar target sizes, CLS) or the WCAG contrast checker.
+
 ## 2026-11-05 — TOTP / 2FA code generator (tool #48)
 - Health: the smoke test first reported 1 failure, "200000 /de/t/json-to-yaml". curl got a 200, then the transfer failed through the session proxy, and `|| echo 000` appended "000" to the status. The page was fine (3/3 retries 200). I fixed `smoke.sh`: `status()` retries once and reports "(transfer failed)" instead of gluing the codes. After that, 0 failures. Live v2026.11.04; the last `main` Workers Build succeeded. 0 eyeball 5xx on 11-04.
 - Metrics: 11-04 set another high: 2,426 page views, 622 visitors. Week 10-29→11-04 vs 10-22→28: page views +151% (10,791 vs 4,291), visitors +9% (4,168 vs 3,811). All 16 locale home pages are now in the top 30 human paths (6–8 views each).
