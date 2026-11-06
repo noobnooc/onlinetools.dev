@@ -6,7 +6,7 @@
  * this and attaches the actual run functions.
  */
 
-export type PipeGroup = 'encoding' | 'json' | 'text' | 'code';
+export type PipeGroup = 'encoding' | 'json' | 'text' | 'network' | 'code';
 
 export interface PipeArg {
 	/** Short technical label, e.g. "path". */
@@ -58,6 +58,20 @@ export const PIPE_OP_META: PipeOpMeta[] = [
 	{ id: 'slugify', label: 'Slugify', group: 'text' },
 	{ id: 'sort-lines', label: 'Sort lines', group: 'text' },
 	{ id: 'dedupe-lines', label: 'Dedupe lines', group: 'text' },
+	{
+		id: 'join-lines',
+		label: 'Join lines',
+		group: 'text',
+		arg: { label: 'with', placeholder: ', ', default: ', ' }
+	},
+
+	// Network
+	{
+		id: 'cidr-aggregate',
+		label: 'Merge into CIDRs',
+		group: 'network',
+		arg: { label: 'minus', placeholder: '192.168.0.0/16, 10.0.0.0/8' }
+	},
 
 	// Code
 	{ id: 'sql-format', label: 'SQL format', group: 'code' },
@@ -71,13 +85,14 @@ export const PIPE_OP_META: PipeOpMeta[] = [
 
 export const PIPE_OP_META_BY_ID = new Map(PIPE_OP_META.map((o) => [o.id, o]));
 
-export const PIPE_GROUPS: PipeGroup[] = ['encoding', 'json', 'text', 'code'];
+export const PIPE_GROUPS: PipeGroup[] = ['encoding', 'json', 'text', 'network', 'code'];
 
 /** English group labels; the page localizes the surrounding chrome, not these. */
 export const PIPE_GROUP_LABELS: Record<PipeGroup, string> = {
 	encoding: 'Encoding',
 	json: 'JSON & Data',
 	text: 'Text',
+	network: 'Network',
 	code: 'Code & Markup'
 };
 

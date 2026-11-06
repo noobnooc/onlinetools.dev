@@ -362,7 +362,7 @@ Ops are `string → ToolResult` and must stay pure — a thin wrapper over logic
 that is already unit-tested. `engine.test.ts` exercises every op and every
 preset recipe, and an id present in `op-meta.ts` with no entry in `RUNS`
 degrades to an error result rather than a crash. A curated recipe in `chain/presets.ts` also gets
-its own indexable page — worth it when the *workflow* is what people search
+its own indexable page (and lists the single tools behind it in `tools`) — worth it when the *workflow* is what people search
 for ("decode a JWT and read its payload"), not the individual tool.
 
 ## 11. Checklist

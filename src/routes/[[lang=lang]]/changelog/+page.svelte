@@ -16,6 +16,25 @@
 	<div lang="en">
 	<section class="relative border-l border-line pb-8 pl-6">
 		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
+		<h2 class="text-sm font-medium">Network steps in the Pipeline</h2>
+		<p class="mt-0.5 font-mono text-xs text-dim">v2026.11.06</p>
+		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
+			<li>
+				Two new <a href={lp('/chain')} class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">Pipeline</a> steps: "Merge into CIDRs" (the
+				<a href={lp('/t/cidr-calculator')} class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">CIDR Calculator</a>'s list mode, with an optional list to
+				subtract) and "Join lines" (any separator, ", " by default).
+			</li>
+			<li>
+				Three new recipes: <a href={lp('/chain/wireguard-allowedips-exclude-lan')} class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">WireGuard AllowedIPs
+				without the LAN</a>, <a href={lp('/chain/merge-ip-ranges-into-cidrs')} class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">merge IP ranges into CIDR
+				blocks</a> and <a href={lp('/chain/remove-duplicate-lines-and-sort')} class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">remove duplicate lines and
+				sort</a>.
+			</li>
+			<li>Every recipe page now links to the single tools behind its steps.</li>
+		</ul>
+	</section>
+	<section class="relative border-l border-line pb-8 pl-6">
+		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
 		<h2 class="text-sm font-medium">TOTP / 2FA Code Generator</h2>
 		<p class="mt-0.5 font-mono text-xs text-dim">v2026.11.05</p>
 		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">

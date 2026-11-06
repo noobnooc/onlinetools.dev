@@ -11,6 +11,23 @@ the footer badge and every `<lastmod>` in the sitemap.
 
 ---
 
+## [2026.11.06] — Network steps in the Pipeline
+
+### Added
+
+- Pipeline step **Merge into CIDRs**: the CIDR Calculator's list mode as a
+  step. Its argument is a comma-separated list to subtract. A bad entry fails
+  the step with its line number, because a pipeline can't show skipped lines.
+- Pipeline step **Join lines**: joins non-empty lines with a separator
+  (`, ` by default; `\n` and `\t` work).
+- Three recipe pages: `/chain/wireguard-allowedips-exclude-lan`,
+  `/chain/merge-ip-ranges-into-cidrs` and
+  `/chain/remove-duplicate-lines-and-sort`.
+
+### Changed
+
+- Every recipe page links to the single-tool pages behind its steps.
+
 ## [2026.11.05] — TOTP / 2FA Code Generator
 
 ### Added

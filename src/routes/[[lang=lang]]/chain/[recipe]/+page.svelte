@@ -5,6 +5,8 @@
 	import Eyebrow from '$lib/components/Eyebrow.svelte';
 	import { opLabel } from '$lib/chain/op-meta';
 	import { CHAIN_PRESETS } from '$lib/chain/presets';
+	import { TOOL_BY_SLUG, type ToolMeta } from '$lib/tools/registry';
+	import ToolCard from '$lib/components/ToolCard.svelte';
 	import { ChevronRight, ArrowRight } from 'lucide-svelte';
 	import type { PageProps } from './$types';
 
@@ -12,6 +14,9 @@
 	const preset = $derived(data.preset);
 	const path = $derived(`/chain/${preset.slug}`);
 	const title = $derived(`${preset.heading} — free & private | onlinetools.dev`);
+	const tools = $derived(
+		preset.tools.map((slug) => TOOL_BY_SLUG.get(slug)).filter((t): t is ToolMeta => t !== undefined)
+	);
 	const others = $derived(CHAIN_PRESETS.filter((p) => p.slug !== preset.slug));
 
 	const jsonLd = $derived(
@@ -80,7 +85,7 @@
 		{#each preset.recipe.steps as step, i (i)}
 			{#if i > 0}<ChevronRight size={11} class="text-dim/40" />{/if}
 			<span class="rounded-md border border-line bg-surface px-1.5 py-0.5 text-dim">
-				{opLabel(step.op)}{#if step.arg}<span class="text-accent"> {step.arg}</span>{/if}
+				{opLabel(step.op)}{#if step.arg}<span class="ml-1 text-accent">{step.arg}</span>{/if}
 			</span>
 		{/each}
 	</div>
@@ -91,6 +96,21 @@
 			{@const Workbench = m.default}
 			<Workbench initial={preset.recipe} />
 		{/await}
+	{/if}
+
+	<!-- The single-tool pages behind the steps, for the fuller version of each -->
+	{#if tools.length}
+		<section class="mt-12" aria-labelledby="recipe-tools">
+			<div class="mb-3 flex items-center gap-3">
+				<Eyebrow id="recipe-tools" text={t('relatedTools')} />
+				<span class="h-px grow bg-line" aria-hidden="true"></span>
+			</div>
+			<div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+				{#each tools as r (r.slug)}
+					<ToolCard tool={r} />
+				{/each}
+			</div>
+		</section>
 	{/if}
 
 	<!-- More recipes: internal links between preset pages -->
