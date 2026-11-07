@@ -105,6 +105,14 @@ describe('smart paste detection', () => {
 		expect(top?.tool).toBe('totp-generator');
 		expect(detect('JBSWY3DPEHPK3PXP').some((d) => d.type === 'otpauth')).toBe(false);
 	});
+	it('detects a pair of colors and routes it to the contrast checker', () => {
+		for (const input of ['#333 on #fff', 'rgb(0 0 0), #ffffff', 'color: #222; background: #eee']) {
+			const top = detect(input)[0];
+			expect(top?.type).toBe('color-pair');
+			expect(top?.tool).toBe('contrast-checker');
+		}
+		expect(detect('#fff')[0]?.type).toBe('color');
+	});
 	it('detects YAML documents', () => {
 		expect(detect('name: demo\nversion: 2\nitems:\n  - a\n  - b')[0]?.type).toBe('yaml');
 	});

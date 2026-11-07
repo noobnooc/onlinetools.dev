@@ -4,7 +4,7 @@
 
 # onlinetools.dev
 
-**48 developer tools that run entirely in your browser.**
+**49 developer tools that run entirely in your browser.**
 No upload, no login, no ads, no trackers — and you can verify it.
 
 [**onlinetools.dev**](https://onlinetools.dev) · [Why this exists](https://onlinetools.dev/about) · [Changelog](https://onlinetools.dev/changelog) · [Contributing](CONTRIBUTING.md)
@@ -116,13 +116,14 @@ That single constraint shapes everything else:
 </details>
 
 <details>
-<summary><b>Web</b> (6)</summary>
+<summary><b>Web</b> (7)</summary>
 
 | Tool | What it does |
 | --- | --- |
 | [Regex Tester](https://onlinetools.dev/t/regex-tester) | Test regular expressions with live match highlighting and groups |
 | [URL Parser](https://onlinetools.dev/t/url-parser) | Break a URL into protocol, host, path and query parameters |
 | [Color Converter](https://onlinetools.dev/t/color-converter) | Convert colors between HEX, RGB, HSL and OKLCH with live preview |
+| [Color Contrast Checker (WCAG)](https://onlinetools.dev/t/contrast-checker) | Check text and background colors against WCAG AA and AAA, and get the nearest passing color |
 | [User-Agent Parser](https://onlinetools.dev/t/user-agent-parser) | Identify browser, engine, OS and device from a User-Agent string |
 | [CIDR / Subnet Calculator](https://onlinetools.dev/t/cidr-calculator) | Work out network, broadcast, mask and host range for any IPv4 or IPv6 CIDR block |
 | [Chmod Calculator](https://onlinetools.dev/t/chmod-calculator) | Convert Unix permissions between octal, rwx and symbolic chmod, with a clickable grid |

@@ -4,6 +4,7 @@ import { isLikelyBase64Text } from '$lib/tools/base64';
 import { isLikelyTimestamp } from '$lib/tools/timestamp';
 import { isUuid } from '$lib/tools/uuid';
 import { isLikelyColor } from '$lib/tools/color';
+import { isLikelyColorPair } from '$lib/tools/contrast';
 import { isLikelyImageDataUrl } from '$lib/tools/image';
 import { isLikelyXml } from '$lib/tools/xml';
 import { isLikelyCsv } from '$lib/tools/dataconvert';
@@ -174,7 +175,26 @@ export const DETECTORS: Detector[] = [
 				label: 'Color',
 				confidence: 0.85,
 				tool: 'color-converter',
-				actions: [{ label: 'Convert formats', tool: 'color-converter' }]
+				actions: [
+					{ label: 'Convert formats', tool: 'color-converter' },
+					{ label: 'Check contrast', tool: 'contrast-checker' }
+				]
+			};
+		}
+	},
+	{
+		id: 'color-pair',
+		detect(input) {
+			if (!isLikelyColorPair(input)) return null;
+			return {
+				type: 'color-pair',
+				format: 'color',
+				label: 'Two colors',
+				// Two explicit hex/rgb()/hsl()/oklch() tokens in a short line. Above the
+				// single-color detector, whose rgb()/hsl() check only looks at the prefix.
+				confidence: 0.88,
+				tool: 'contrast-checker',
+				actions: [{ label: 'Check contrast', tool: 'contrast-checker' }]
 			};
 		}
 	},
