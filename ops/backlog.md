@@ -37,7 +37,7 @@ _(empty — humans: put a line here to steer the next run)_
 
 | Date | Item | PR |
 | --- | --- | --- |
-| 2026-11-07 | Color Contrast Checker (tool #49): WCAG AA/AAA/UI grades, truncated ratio, alpha blending, nearest passing colors in OKLCH, Smart Paste for color pairs, 18 locales; color parser gains 148 named colors, oklch() and percentage rgb() | PR_LINK |
+| 2026-11-07 | Color Contrast Checker (tool #49): WCAG AA/AAA/UI grades, truncated ratio, alpha blending, nearest passing colors in OKLCH, Smart Paste for color pairs, 18 locales; color parser gains 148 named colors, oklch() and percentage rgb() | [#38](https://github.com/noobnooc/onlinetools.dev/pull/38) |
 | 2026-11-06 | Pipeline: "Merge into CIDRs" and "Join lines" steps; 3 recipe pages (WireGuard AllowedIPs without the LAN, merge IP ranges, dedupe + sort lines); related-tool links on recipe pages | [#37](https://github.com/noobnooc/onlinetools.dev/pull/37) |
 | 2026-11-05 | TOTP / 2FA code generator (tool #48): TOTP+HOTP, SHA-1/256/512, check-a-code with drift, new secret + otpauth URI, Smart Paste, 18 locales; smoke-test retry fix | [#36](https://github.com/noobnooc/onlinetools.dev/pull/36) |
 | 2026-11-04 | Chmod calculator About/FAQ in the other 16 locales; JWT decoder recognizes JWE | [#35](https://github.com/noobnooc/onlinetools.dev/pull/35) |
