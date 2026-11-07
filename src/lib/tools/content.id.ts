@@ -1192,6 +1192,36 @@ const TOOL_CONTENT_ID: Record<string, ToolContent> = {
 		]
 	},
 
+	'contrast-checker': {
+		about: [
+			'Masukkan warna teks dan warna latar belakang dalam notasi CSS apa pun (#hex, rgb(), hsl(), oklch(), atau salah satu dari 148 warna bernama) dan dapatkan rasio kontras WCAG, dari 1:1 untuk warna yang identik hingga 21:1 untuk hitam di atas putih. Pasangan warna dinilai terhadap kelima ambang WCAG 2.2 sekaligus: AA untuk teks normal (4.5:1) dan teks besar (3:1), AAA untuk teks normal (7:1) dan teks besar (4.5:1), serta 3:1 untuk komponen UI dan ikon.',
+			'Jika sebuah pasangan gagal, alat ini menyarankan warna terdekat yang lolos, baik untuk teks maupun latar belakang, ke arah lebih gelap dan lebih terang. Hanya kecerahan OKLCH yang diubah dan ronanya dipertahankan, sehingga biru merek tetap menjadi biru yang mudah dikenali, bukan berubah menjadi abu-abu. Setiap saran diperiksa ulang setelah dibulatkan ke hex 8-bit, jadi warna yang disarankan memang benar-benar lolos.',
+			'Rasio ditampilkan dengan pembulatan ke bawah hingga dua desimal. WCAG tidak mengizinkan pembulatan ke atas, jadi pasangan dengan rasio 4.496:1 gagal AA dan ditampilkan sebagai 4.49, bukan 4.50. Warna teks semi-transparan dicampur dengan latar belakang sebelum diukur, karena warna hasil campuran itulah yang dilihat orang.'
+		],
+		faqs: [
+			{
+				q: 'Apa yang termasuk teks besar?',
+				a: 'WCAG mendefinisikan teks besar sebagai minimal 18 poin (24 px CSS), atau minimal 14 poin (sekitar 18.66 px) jika tebal. Teks besar membutuhkan 3:1 untuk AA dan 4.5:1 untuk AAA. Semua yang lebih kecil adalah teks normal dan membutuhkan 4.5:1 untuk AA dan 7:1 untuk AAA.'
+			},
+			{
+				q: 'Kenapa #777777 di atas putih gagal padahal terlihat baik-baik saja?',
+				a: 'Rasionya 4.47:1, sedikit di bawah 4.5:1 yang diwajibkan AA untuk teks normal. #767676 (4.54:1) adalah abu-abu netral paling terang yang lolos di atas putih. Kontras diukur dengan luminans relatif, bukan dari tampilan warna di layar yang bagus, karena aturannya dimaksudkan tetap berlaku di layar redup, di bawah sinar matahari, dan bagi orang dengan penglihatan rendah.'
+			},
+			{
+				q: 'Apa aturan 3:1 untuk komponen UI?',
+				a: 'WCAG 2.1 menambahkan kriteria keberhasilan 1.4.11: bagian kontrol yang terlihat (border input, cincin fokus, status toggle) dan ikon yang bermakna membutuhkan 3:1 terhadap warna di sebelahnya. Teks placeholder dan kontrol yang dinonaktifkan dikecualikan dari aturan teks, tetapi placeholder tetap harus bisa dibaca.'
+			},
+			{
+				q: 'Apakah ini sama dengan APCA atau WCAG 3?',
+				a: 'Tidak. Alat ini memakai rumus WCAG 2.x, yang menjadi acuan undang-undang dan audit saat ini (EN 301 549, Section 508, panduan ADA). APCA adalah model kontras lain yang diusulkan untuk draf WCAG 3. Hasilnya berbeda, terutama untuk mode gelap, tetapi belum menjadi persyaratan.'
+			},
+			{
+				q: 'Bagaimana warna transparan diukur?',
+				a: 'Warna teks dengan alfa dicampur dulu dengan latar belakang, lalu warna hasil campurannya yang diukur. Latar belakang transparan ditempatkan di atas putih, karena alat ini tidak bisa mengetahui apa yang ada di belakangnya. Sebuah catatan muncul setiap kali hal ini terjadi, jadi dalam kasus itu periksa pasangan warna terhadap warna halaman yang sebenarnya.'
+			}
+		]
+	},
+
 	'chmod-calculator': {
 		about: [
 			'Ketik mode sesuai yang Anda punya — 755, 0644, rwxr-xr-x, satu baris `ls -l` utuh, u=rwx,g=rx,o=rx, atau perintah lengkap seperti chmod -R 750 /srv/app — dan lihat dalam semua bentuk lainnya: oktal, string rwx, kolom ls -l, dan kedua perintah chmod yang siap disalin. Grid menampilkan baca, tulis, dan eksekusi untuk pemilik, grup, dan lainnya; centang sebuah kotak dan mode-nya langsung diperbarui.',

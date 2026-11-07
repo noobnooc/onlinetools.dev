@@ -574,6 +574,36 @@ const vi: Messages = {
 		totpWarnNonDefault: 'Thuật toán, số chữ số hoặc chu kỳ không phải mặc định. Một số ứng dụng xác thực bỏ qua các giá trị này và hiển thị mã sai, nên hãy thử với các ứng dụng mà người dùng của bạn đang dùng.',
 		totpEmpty: 'Dán khóa bí mật 2FA hoặc URI otpauth://, hoặc tạo khóa bí mật mới',
 		totpPrivacy: 'Mã được tính bằng WebCrypto ngay trong tab này. Khóa bí mật không bao giờ được đưa vào liên kết chia sẻ, và sẽ bị xóa khỏi thanh địa chỉ nếu được truyền qua đó.',
+
+		// Contrast checker
+		contrastText: 'Màu chữ',
+		contrastBackground: 'Nền',
+		contrastPickText: 'Chọn màu chữ',
+		contrastPickBg: 'Chọn màu nền',
+		contrastSwap: 'Đổi chỗ màu chữ và nền',
+		contrastRatio: 'Tỷ lệ tương phản',
+		contrastEmpty: 'Nhập màu chữ và màu nền',
+		contrastPreview: 'Xem trước màu chữ trên nền',
+		contrastSampleBody: 'Văn bản thường cỡ 16 px. Con cáo nâu nhanh nhẹn nhảy qua con chó lười.',
+		contrastSampleLarge: 'Chữ lớn cỡ 24 px',
+		contrastSampleUi: 'Nút',
+		contrastAa: 'AA, văn bản thường',
+		contrastAaLarge: 'AA, chữ lớn',
+		contrastAaa: 'AAA, văn bản thường',
+		contrastAaaLarge: 'AAA, chữ lớn',
+		contrastUi: 'Thành phần UI và biểu tượng',
+		contrastPass: 'Đạt',
+		contrastFail: 'Không đạt',
+		contrastLargeHint: 'Chữ lớn là chữ từ 24 px trở lên, hoặc từ 18.66 px (14 pt) trở lên và in đậm.',
+		contrastFix: 'Màu đạt gần nhất',
+		contrastTarget: 'Tỷ lệ mục tiêu',
+		contrastTargetLarge: 'Chữ lớn/UI 3',
+		contrastFixText: 'Đổi màu chữ',
+		contrastFixBg: 'Đổi màu nền',
+		contrastDarker: 'Tối hơn',
+		contrastLighter: 'Sáng hơn',
+		contrastNoFix: 'Không có màu nào cùng tông màu này đạt được mục tiêu. Hãy thử đổi màu còn lại.',
+		contrastAllPass: 'Cặp màu này đã đạt mục tiêu.',
 		hbFormat: 'Byte dạng',
 		hbSep: 'Ký tự phân tách',
 		hbSpace: 'Dấu cách',
@@ -825,6 +855,10 @@ const vi: Messages = {
 		'totp-generator': {
 			name: 'Tạo mã TOTP / 2FA',
 			description: 'Lấy mã 2FA hiện tại từ khóa bí mật hoặc URI otpauth://, kiểm tra mã, hoặc tạo khóa bí mật mới'
+		},
+		'contrast-checker': {
+			name: 'Kiểm tra độ tương phản màu (WCAG)',
+			description: 'Kiểm tra màu chữ và màu nền theo WCAG AA và AAA, và nhận màu đạt chuẩn gần nhất'
 		},
 		'cidr-calculator': {
 			name: 'Máy tính CIDR / Subnet',

@@ -1192,6 +1192,36 @@ const TOOL_CONTENT_PL: Record<string, ToolContent> = {
 		]
 	},
 
+	'contrast-checker': {
+		about: [
+			'Wpisz kolor tekstu i kolor tła w dowolnym zapisie CSS (#hex, rgb(), hsl(), oklch() lub jedna ze 148 nazwanych barw) i otrzymaj współczynnik kontrastu WCAG, od 1:1 dla identycznych kolorów do 21:1 dla czerni na bieli. Para jest od razu oceniana według wszystkich pięciu progów WCAG 2.2: AA dla zwykłego tekstu (4.5:1) i dużego tekstu (3:1), AAA dla zwykłego tekstu (7:1) i dużego tekstu (4.5:1) oraz 3:1 dla komponentów UI i ikon.',
+			'Gdy para nie spełnia wymogu, narzędzie proponuje najbliższe kolory, które go spełniają, zarówno dla tekstu, jak i dla tła, ciemniejsze i jaśniejsze. Zmienia tylko jasność OKLCH i zachowuje odcień, więc firmowy niebieski pozostaje rozpoznawalnym niebieskim, zamiast zmienić się w szary. Każda propozycja jest sprawdzana ponownie po zaokrągleniu do 8-bitowego hex, więc proponowany kolor naprawdę spełnia wymóg.',
+			'Współczynnik jest pokazywany z zaokrągleniem w dół do dwóch miejsc po przecinku. WCAG nie pozwala zaokrąglać w górę, więc para o wartości 4.496:1 nie spełnia AA i jest pokazywana jako 4.49, a nie 4.50. Półprzezroczysty kolor tekstu jest przed pomiarem mieszany z tłem, bo to wymieszany kolor widzą ludzie.'
+		],
+		faqs: [
+			{
+				q: 'Co liczy się jako duży tekst?',
+				a: 'WCAG definiuje duży tekst jako co najmniej 18 punktów (24 px CSS) albo co najmniej 14 punktów (około 18.66 px) przy pogrubieniu. Duży tekst wymaga 3:1 dla AA i 4.5:1 dla AAA. Wszystko, co mniejsze, to zwykły tekst, który wymaga 4.5:1 dla AA i 7:1 dla AAA.'
+			},
+			{
+				q: 'Dlaczego #777777 na białym nie spełnia wymogu, skoro wygląda dobrze?',
+				a: 'Jego współczynnik to 4.47:1, tuż poniżej 4.5:1, których AA wymaga dla zwykłego tekstu. #767676 (4.54:1) to najjaśniejsza neutralna szarość, która spełnia wymóg na białym. Kontrast mierzy się luminancją względną, a nie tym, jak kolor wygląda na dobrym ekranie, bo reguła ma działać na przyciemnionych ekranach, w słońcu i dla osób słabowidzących.'
+			},
+			{
+				q: 'Czym jest reguła 3:1 dla komponentów UI?',
+				a: 'WCAG 2.1 dodało kryterium sukcesu 1.4.11: widoczne części kontrolek (obramowania pól, obwódki fokusu, stany przełączników) oraz znaczące ikony potrzebują 3:1 względem sąsiednich kolorów. Tekst zastępczy (placeholder) i wyłączone kontrolki są zwolnione z reguł dla tekstu, ale placeholdery nadal muszą być czytelne.'
+			},
+			{
+				q: 'Czy to to samo co APCA lub WCAG 3?',
+				a: 'Nie. To narzędzie używa wzoru z WCAG 2.x, do którego odwołują się obecne przepisy i audyty (EN 301 549, Section 508, wytyczne ADA). APCA to inny model kontrastu, zaproponowany w wersji roboczej WCAG 3. Daje inne wyniki, zwłaszcza w trybie ciemnym, ale nie jest jeszcze wymogiem.'
+			},
+			{
+				q: 'Jak mierzony jest przezroczysty kolor?',
+				a: 'Kolor tekstu z kanałem alfa jest najpierw mieszany z tłem i mierzony jest wymieszany kolor. Przezroczyste tło jest nakładane na biel, bo narzędzie nie może wiedzieć, co jest pod nim. Za każdym razem pojawia się wtedy uwaga, więc w takim przypadku sprawdź parę z prawdziwym kolorem strony.'
+			}
+		]
+	},
+
 	'chmod-calculator': {
 		about: [
 			'Wpisz tryb w takiej postaci, w jakiej go masz — 755, 0644, rwxr-xr-x, cały wiersz z `ls -l`, u=rwx,g=rx,o=rx albo pełne polecenie, np. chmod -R 750 /srv/app — i zobacz go we wszystkich pozostałych formach: ósemkowej, jako ciąg rwx, jako kolumnę ls -l oraz jako oba polecenia chmod gotowe do skopiowania. Siatka pokazuje odczyt, zapis i wykonanie dla właściciela, grupy i pozostałych; zaznacz pole, a tryb się zaktualizuje.',

@@ -565,6 +565,36 @@ const de: Messages = {
 		totpEmpty: 'Füge ein 2FA-Secret oder eine otpauth://-URI ein oder erstelle ein neues Secret',
 		totpPrivacy: 'Die Codes werden mit WebCrypto in diesem Tab berechnet. Das Secret landet nie in einem Teil-Link und wird aus der Adressleiste entfernt, falls es darüber ankommt.',
 
+		// Contrast checker
+		contrastText: 'Textfarbe',
+		contrastBackground: 'Hintergrund',
+		contrastPickText: 'Textfarbe auswählen',
+		contrastPickBg: 'Hintergrundfarbe auswählen',
+		contrastSwap: 'Text und Hintergrund tauschen',
+		contrastRatio: 'Kontrastverhältnis',
+		contrastEmpty: 'Gib eine Textfarbe und eine Hintergrundfarbe ein',
+		contrastPreview: 'Vorschau der Textfarbe auf dem Hintergrund',
+		contrastSampleBody: 'Fließtext in 16 px. Franz jagt im komplett verwahrlosten Taxi quer durch Bayern.',
+		contrastSampleLarge: 'Großer Text in 24 px',
+		contrastSampleUi: 'Button',
+		contrastAa: 'AA, normaler Text',
+		contrastAaLarge: 'AA, großer Text',
+		contrastAaa: 'AAA, normaler Text',
+		contrastAaaLarge: 'AAA, großer Text',
+		contrastUi: 'UI-Komponenten und Icons',
+		contrastPass: 'Bestanden',
+		contrastFail: 'Nicht bestanden',
+		contrastLargeHint: 'Großer Text bedeutet mindestens 24 px oder mindestens 18.66 px (14 pt) und fett.',
+		contrastFix: 'Nächstgelegene Farben, die bestehen',
+		contrastTarget: 'Zielverhältnis',
+		contrastTargetLarge: 'Groß/UI 3',
+		contrastFixText: 'Textfarbe ändern',
+		contrastFixBg: 'Hintergrund ändern',
+		contrastDarker: 'Dunkler',
+		contrastLighter: 'Heller',
+		contrastNoFix: 'Keine Farbe mit diesem Farbton erreicht das Ziel. Versuche, die andere Farbe zu ändern.',
+		contrastAllPass: 'Dieses Paar erfüllt das Ziel bereits.',
+
 		// Text ↔ hex/binary
 		hbFormat: 'Bytes als',
 		hbSep: 'Trennzeichen',
@@ -816,6 +846,10 @@ const de: Messages = {
 		'totp-generator': {
 			name: 'TOTP-/2FA-Code-Generator',
 			description: 'Den aktuellen 2FA-Code aus einem Secret oder einer otpauth://-URI abrufen, einen Code prüfen oder ein neues Secret erstellen'
+		},
+		'contrast-checker': {
+			name: 'Farbkontrast-Checker (WCAG)',
+			description: 'Text- und Hintergrundfarben auf WCAG AA und AAA prüfen und die nächstgelegene Farbe finden, die besteht'
 		},
 		'cidr-calculator': {
 			name: 'CIDR- / Subnetzrechner',

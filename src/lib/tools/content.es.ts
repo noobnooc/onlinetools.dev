@@ -1193,6 +1193,36 @@ const TOOL_CONTENT_ES: Record<string, ToolContent> = {
 		]
 	},
 
+	'contrast-checker': {
+		about: [
+			'Escribe un color de texto y un color de fondo en cualquier notación CSS (#hex, rgb(), hsl(), oklch() o uno de los 148 colores con nombre) y obtén la relación de contraste WCAG, desde 1:1 para colores idénticos hasta 21:1 para negro sobre blanco. El par se evalúa a la vez frente a los cinco umbrales de WCAG 2.2: AA para texto normal (4.5:1) y texto grande (3:1), AAA para texto normal (7:1) y texto grande (4.5:1), y 3:1 para componentes de interfaz e iconos.',
+			'Cuando un par no cumple, la herramienta sugiere los colores más cercanos que sí cumplen, tanto para el texto como para el fondo, más oscuros y más claros. Solo cambia la luminosidad OKLCH y mantiene el tono, así que un azul de marca sigue siendo un azul reconocible en lugar de volverse gris. Cada sugerencia se vuelve a comprobar tras redondearla a hex de 8 bits, para que un color sugerido cumpla de verdad.',
+			'La relación se muestra redondeada hacia abajo a dos decimales. WCAG no permite redondear hacia arriba, así que un par con 4.496:1 no cumple AA y se muestra como 4.49, no 4.50. Un color de texto semitransparente se mezcla con el fondo antes de medir, porque el color mezclado es lo que la gente ve.'
+		],
+		faqs: [
+			{
+				q: '¿Qué cuenta como texto grande?',
+				a: 'WCAG define el texto grande como al menos 18 puntos (24 px de CSS), o al menos 14 puntos (unos 18.66 px) en negrita. El texto grande necesita 3:1 para AA y 4.5:1 para AAA. Todo lo que sea más pequeño es texto normal y necesita 4.5:1 para AA y 7:1 para AAA.'
+			},
+			{
+				q: '¿Por qué #777777 sobre blanco no cumple si se ve bien?',
+				a: 'Su relación es 4.47:1, justo por debajo del 4.5:1 que AA exige para texto normal. #767676 (4.54:1) es el gris neutro más claro que cumple sobre blanco. El contraste se mide con la luminancia relativa, no con cómo se ve un color en una buena pantalla, porque la regla tiene que valer en pantallas con poco brillo, a pleno sol y para personas con baja visión.'
+			},
+			{
+				q: '¿Qué es la regla de 3:1 para componentes de interfaz?',
+				a: 'WCAG 2.1 añadió el criterio de conformidad 1.4.11: las partes visibles de los controles (bordes de campos, anillos de foco, estados de interruptores) y los iconos con significado necesitan 3:1 frente a los colores que tienen al lado. El texto de marcador de posición y los controles desactivados están exentos de las reglas de texto, pero los marcadores de posición tienen que seguir siendo legibles.'
+			},
+			{
+				q: '¿Es lo mismo que APCA o WCAG 3?',
+				a: 'No. Esta herramienta usa la fórmula de WCAG 2.x, que es a la que remiten las leyes y auditorías actuales (EN 301 549, Section 508, la guía de la ADA). APCA es un modelo de contraste distinto propuesto para el borrador de WCAG 3. Da resultados diferentes, sobre todo en modo oscuro, pero todavía no es un requisito.'
+			},
+			{
+				q: '¿Cómo se mide un color transparente?',
+				a: 'Un color de texto con alfa se mezcla primero con el fondo, y se mide el color mezclado. Un fondo transparente se coloca sobre blanco, ya que la herramienta no puede saber qué hay detrás. Siempre que ocurre esto aparece un aviso, así que en ese caso comprueba el par con el color real de la página.'
+			}
+		]
+	},
+
 	'chmod-calculator': {
 		about: [
 			'Escribe un modo tal como lo tengas — 755, 0644, rwxr-xr-x, una línea entera de `ls -l`, u=rwx,g=rx,o=rx o un comando completo como chmod -R 750 /srv/app — y míralo en todas las demás formas: octal, la cadena rwx, la columna de ls -l y los dos comandos chmod listos para copiar. La cuadrícula muestra lectura, escritura y ejecución para propietario, grupo y otros; marca una casilla y el modo se actualiza.',

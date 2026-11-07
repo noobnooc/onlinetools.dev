@@ -590,6 +590,36 @@ const th: Messages = {
 		totpEmpty: 'วางกุญแจลับ 2FA หรือ URI otpauth:// หรือสร้างกุญแจลับใหม่',
 		totpPrivacy: 'รหัสคำนวณด้วย WebCrypto ในแท็บนี้ กุญแจลับจะไม่ถูกใส่ในลิงก์แชร์ และจะถูกลบออกจากแถบที่อยู่หากส่งมาทางนั้น',
 
+		// Contrast checker
+		contrastText: 'สีข้อความ',
+		contrastBackground: 'พื้นหลัง',
+		contrastPickText: 'เลือกสีข้อความ',
+		contrastPickBg: 'เลือกสีพื้นหลัง',
+		contrastSwap: 'สลับข้อความกับพื้นหลัง',
+		contrastRatio: 'อัตราส่วนคอนทราสต์',
+		contrastEmpty: 'ใส่สีข้อความและสีพื้นหลัง',
+		contrastPreview: 'ตัวอย่างสีข้อความบนพื้นหลัง',
+		contrastSampleBody: 'ข้อความเนื้อหาขนาด 16 px เป็นมนุษย์สุดประเสริฐเลิศคุณค่า',
+		contrastSampleLarge: 'ข้อความขนาดใหญ่ 24 px',
+		contrastSampleUi: 'ปุ่ม',
+		contrastAa: 'AA, ข้อความปกติ',
+		contrastAaLarge: 'AA, ข้อความขนาดใหญ่',
+		contrastAaa: 'AAA, ข้อความปกติ',
+		contrastAaaLarge: 'AAA, ข้อความขนาดใหญ่',
+		contrastUi: 'คอมโพเนนต์ UI และไอคอน',
+		contrastPass: 'ผ่าน',
+		contrastFail: 'ไม่ผ่าน',
+		contrastLargeHint: 'ข้อความขนาดใหญ่หมายถึงขนาดอย่างน้อย 24 px หรืออย่างน้อย 18.66 px (14 pt) และเป็นตัวหนา',
+		contrastFix: 'สีที่ผ่านซึ่งใกล้ที่สุด',
+		contrastTarget: 'อัตราส่วนเป้าหมาย',
+		contrastTargetLarge: 'ตัวใหญ่/UI 3',
+		contrastFixText: 'เปลี่ยนสีข้อความ',
+		contrastFixBg: 'เปลี่ยนพื้นหลัง',
+		contrastDarker: 'เข้มขึ้น',
+		contrastLighter: 'อ่อนลง',
+		contrastNoFix: 'ไม่มีสีในโทนสีนี้ที่ถึงเป้าหมาย ลองเปลี่ยนอีกสีหนึ่งแทน',
+		contrastAllPass: 'สีคู่นี้ผ่านเป้าหมายแล้ว',
+
 		hbFormat: 'แสดงไบต์เป็น',
 		hbSep: 'ตัวคั่น',
 		hbSpace: 'ช่องว่าง',
@@ -847,6 +877,10 @@ const th: Messages = {
 		'totp-generator': {
 			name: 'ตัวสร้างรหัส TOTP / 2FA',
 			description: 'ดูรหัส 2FA ปัจจุบันจากกุญแจลับหรือ URI otpauth:// ตรวจสอบรหัส หรือสร้างกุญแจลับใหม่'
+		},
+		'contrast-checker': {
+			name: 'ตัวตรวจสอบคอนทราสต์สี (WCAG)',
+			description: 'ตรวจสอบสีข้อความและพื้นหลังตาม WCAG AA และ AAA พร้อมรับสีที่ผ่านซึ่งใกล้ที่สุด'
 		},
 		'cidr-calculator': {
 			name: 'เครื่องคำนวณ CIDR / ซับเน็ต',

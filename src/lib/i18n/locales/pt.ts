@@ -564,6 +564,36 @@ const pt: Messages = {
 		totpEmpty: 'Cole um segredo 2FA ou uma URI otpauth://, ou crie um novo segredo',
 		totpPrivacy: 'Os códigos são calculados com WebCrypto nesta aba. O segredo nunca entra em um link de compartilhamento e é removido da barra de endereço se chegar por um.',
 
+		// Contrast checker
+		contrastText: 'Cor do texto',
+		contrastBackground: 'Fundo',
+		contrastPickText: 'Escolher a cor do texto',
+		contrastPickBg: 'Escolher a cor de fundo',
+		contrastSwap: 'Trocar texto e fundo',
+		contrastRatio: 'Razão de contraste',
+		contrastEmpty: 'Digite uma cor de texto e uma cor de fundo',
+		contrastPreview: 'Prévia da cor do texto sobre o fundo',
+		contrastSampleBody: 'Texto normal em 16 px. Um pequeno jabuti xereta viu dez cegonhas felizes.',
+		contrastSampleLarge: 'Texto grande em 24 px',
+		contrastSampleUi: 'Botão',
+		contrastAa: 'AA, texto normal',
+		contrastAaLarge: 'AA, texto grande',
+		contrastAaa: 'AAA, texto normal',
+		contrastAaaLarge: 'AAA, texto grande',
+		contrastUi: 'Componentes de UI e ícones',
+		contrastPass: 'Aprovado',
+		contrastFail: 'Reprovado',
+		contrastLargeHint: 'Texto grande significa pelo menos 24 px, ou pelo menos 18.66 px (14 pt) em negrito.',
+		contrastFix: 'Cores aprovadas mais próximas',
+		contrastTarget: 'Razão alvo',
+		contrastTargetLarge: 'Grande/UI 3',
+		contrastFixText: 'Mudar a cor do texto',
+		contrastFixBg: 'Mudar o fundo',
+		contrastDarker: 'Mais escuro',
+		contrastLighter: 'Mais claro',
+		contrastNoFix: 'Nenhuma cor com este matiz atinge o alvo. Tente mudar a outra cor.',
+		contrastAllPass: 'Este par já atinge o alvo.',
+
 		// Text ↔ hex/binary
 		hbFormat: 'Bytes como',
 		hbSep: 'Separador',
@@ -814,6 +844,10 @@ const pt: Messages = {
 		'totp-generator': {
 			name: 'Gerador de códigos TOTP / 2FA',
 			description: 'Obtenha o código 2FA atual a partir de um segredo ou URI otpauth://, confira um código ou crie um novo segredo'
+		},
+		'contrast-checker': {
+			name: 'Verificador de contraste de cores (WCAG)',
+			description: 'Verifique as cores de texto e fundo segundo a WCAG AA e AAA e obtenha a cor aprovada mais próxima'
 		},
 		'cidr-calculator': {
 			name: 'Calculadora CIDR / de sub-rede',

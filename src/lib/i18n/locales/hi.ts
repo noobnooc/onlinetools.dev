@@ -589,6 +589,36 @@ const hi: Messages = {
 		totpEmpty: '2FA गुप्त कुंजी या otpauth:// URI चिपकाएँ, या नई गुप्त कुंजी बनाएँ',
 		totpPrivacy: 'कोड इसी टैब में WebCrypto से गणना किए जाते हैं। गुप्त कुंजी कभी साझा लिंक में नहीं जाती, और अगर वह एड्रेस बार में आए तो वहाँ से हटा दी जाती है।',
 
+		// Contrast checker
+		contrastText: 'टेक्स्ट का रंग',
+		contrastBackground: 'बैकग्राउंड',
+		contrastPickText: 'टेक्स्ट का रंग चुनें',
+		contrastPickBg: 'बैकग्राउंड का रंग चुनें',
+		contrastSwap: 'टेक्स्ट और बैकग्राउंड की अदला-बदली करें',
+		contrastRatio: 'कंट्रास्ट अनुपात',
+		contrastEmpty: 'टेक्स्ट का रंग और बैकग्राउंड का रंग डालिए',
+		contrastPreview: 'बैकग्राउंड पर टेक्स्ट के रंग का पूर्वावलोकन',
+		contrastSampleBody: '16 px का सामान्य टेक्स्ट। यह वाक्य दिखाता है कि टेक्स्ट पढ़ना कितना आसान है।',
+		contrastSampleLarge: '24 px का बड़ा टेक्स्ट',
+		contrastSampleUi: 'बटन',
+		contrastAa: 'AA, सामान्य टेक्स्ट',
+		contrastAaLarge: 'AA, बड़ा टेक्स्ट',
+		contrastAaa: 'AAA, सामान्य टेक्स्ट',
+		contrastAaaLarge: 'AAA, बड़ा टेक्स्ट',
+		contrastUi: 'UI कंपोनेंट और आइकन',
+		contrastPass: 'पास',
+		contrastFail: 'फ़ेल',
+		contrastLargeHint: 'बड़े टेक्स्ट का मतलब है कम से कम 24 px, या बोल्ड होने पर कम से कम 18.66 px (14 pt)।',
+		contrastFix: 'सबसे नज़दीकी पास होने वाले रंग',
+		contrastTarget: 'लक्ष्य अनुपात',
+		contrastTargetLarge: 'बड़ा/UI 3',
+		contrastFixText: 'टेक्स्ट का रंग बदलें',
+		contrastFixBg: 'बैकग्राउंड बदलें',
+		contrastDarker: 'गहरा',
+		contrastLighter: 'हल्का',
+		contrastNoFix: 'इस ह्यू वाला कोई भी रंग लक्ष्य तक नहीं पहुँचता। दूसरा रंग बदलकर देखिए।',
+		contrastAllPass: 'यह जोड़ी पहले से लक्ष्य पूरा करती है।',
+
 		hbFormat: 'बाइट इस रूप में',
 		hbSep: 'विभाजक',
 		hbSpace: 'स्पेस',
@@ -844,6 +874,10 @@ const hi: Messages = {
 		'totp-generator': {
 			name: 'TOTP / 2FA कोड जनरेटर',
 			description: 'गुप्त कुंजी या otpauth:// URI से मौजूदा 2FA कोड पाइए, कोई कोड जाँचिए या नई गुप्त कुंजी बनाइए'
+		},
+		'contrast-checker': {
+			name: 'कलर कंट्रास्ट चेकर (WCAG)',
+			description: 'टेक्स्ट और बैकग्राउंड रंगों को WCAG AA और AAA पर जाँचिए, और सबसे नज़दीकी पास होने वाला रंग पाइए'
 		},
 		'cidr-calculator': {
 			name: 'CIDR / सबनेट कैलकुलेटर',

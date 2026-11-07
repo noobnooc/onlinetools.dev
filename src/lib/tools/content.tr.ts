@@ -1192,6 +1192,36 @@ const TOOL_CONTENT_TR: Record<string, ToolContent> = {
 		]
 	},
 
+	'contrast-checker': {
+		about: [
+			'Bir metin rengi ve bir arka plan rengini herhangi bir CSS gösteriminde (#hex, rgb(), hsl(), oklch() ya da 148 adlandırılmış renkten biri) girin ve WCAG kontrast oranını alın: aynı renkler için 1:1’den beyaz üzerinde siyah için 21:1’e kadar. Çift, WCAG 2.2’nin beş eşiğinin tamamına göre aynı anda değerlendirilir: normal metin için AA (4.5:1) ve büyük metin için AA (3:1), normal metin için AAA (7:1) ve büyük metin için AAA (4.5:1), ayrıca UI bileşenleri ve simgeler için 3:1.',
+			'Bir çift başarısız olduğunda araç, hem metin hem de arka plan için, daha koyu ve daha açık yönde, geçen en yakın renkleri önerir. Yalnızca OKLCH açıklığını değiştirir ve tonu korur; böylece bir marka mavisi griye dönmez, tanınabilir bir mavi olarak kalır. Her öneri 8 bitlik hex’e yuvarlandıktan sonra yeniden denetlenir; yani önerilen renk gerçekten geçer.',
+			'Oran iki ondalığa aşağı yuvarlanarak gösterilir. WCAG yukarı yuvarlamaya izin vermez; bu yüzden 4.496:1 olan bir çift AA’dan kalır ve 4.50 değil 4.49 olarak gösterilir. Yarı saydam bir metin rengi ölçümden önce arka planla karıştırılır, çünkü insanların gördüğü karışmış renktir.'
+		],
+		faqs: [
+			{
+				q: 'Büyük metin neyi kapsar?',
+				a: 'WCAG büyük metni en az 18 punto (24 CSS px) ya da kalın yazıda en az 14 punto (yaklaşık 18.66 px) olarak tanımlar. Büyük metin AA için 3:1, AAA için 4.5:1 gerektirir. Bundan küçük her şey normal metindir ve AA için 4.5:1, AAA için 7:1 gerektirir.'
+			},
+			{
+				q: '#777777 beyaz üzerinde iyi göründüğü hâlde neden kalıyor?',
+				a: 'Oranı 4.47:1’dir; normal metin için AA’nın istediği 4.5:1’in hemen altındadır. Beyaz üzerinde geçen en açık nötr gri #767676’dır (4.54:1). Kontrast, bir rengin iyi bir ekranda nasıl göründüğüyle değil göreli parlaklıkla ölçülür, çünkü kuralın karanlık ekranlarda, güneş ışığında ve az gören kişiler için de geçerli olması amaçlanır.'
+			},
+			{
+				q: 'UI bileşenleri için 3:1 kuralı nedir?',
+				a: 'WCAG 2.1, 1.4.11 başarı ölçütünü ekledi: kontrollerin görünür parçaları (giriş alanı kenarlıkları, odak halkaları, anahtar durumları) ve anlam taşıyan simgeler, yanlarındaki renklere karşı 3:1 gerektirir. Yer tutucu metinler ve devre dışı kontroller metin kurallarından muaftır, ancak yer tutucuların yine de okunabilir olması gerekir.'
+			},
+			{
+				q: 'Bu APCA veya WCAG 3 ile aynı mı?',
+				a: 'Hayır. Bu araç, mevcut yasaların ve denetimlerin (EN 301 549, Section 508, ADA yönergeleri) başvurduğu WCAG 2.x formülünü kullanır. APCA, WCAG 3 taslağı için önerilen farklı bir kontrast modelidir. Özellikle karanlık modda farklı sonuçlar verir, ancak henüz bir gereklilik değildir.'
+			},
+			{
+				q: 'Saydam bir renk nasıl ölçülür?',
+				a: 'Alfa değeri olan bir metin rengi önce arka planla karıştırılır ve karışmış renk ölçülür. Saydam bir arka plan beyazın üzerine yerleştirilir, çünkü araç arkasında ne olduğunu bilemez. Bu durumda her seferinde bir not görünür; o zaman çifti sayfanın gerçek rengine göre denetleyin.'
+			}
+		]
+	},
+
 	'chmod-calculator': {
 		about: [
 			'Modu elinizdeki haliyle yazın — 755, 0644, rwxr-xr-x, bütün bir `ls -l` satırı, u=rwx,g=rx,o=rx ya da chmod -R 750 /srv/app gibi tam bir komut — ve onu diğer tüm biçimlerde görün: sekizli, rwx dizesi, ls -l sütunu ve kopyalanmaya hazır iki chmod komutu. Tablo, sahip, grup ve diğerleri için okuma, yazma ve çalıştırma izinlerini gösterir; bir kutuyu işaretlediğinizde mod güncellenir.',

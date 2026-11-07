@@ -592,6 +592,36 @@ const uk: Messages = {
 		totpEmpty: 'Вставте секрет 2FA або URI otpauth:// чи створіть новий секрет',
 		totpPrivacy: 'Коди обчислюються через WebCrypto у цій вкладці. Секрет ніколи не потрапляє в посилання для обміну й видаляється з адресного рядка, якщо надійшов у ньому.',
 
+		// Contrast checker
+		contrastText: 'Колір тексту',
+		contrastBackground: 'Тло',
+		contrastPickText: 'Виберіть колір тексту',
+		contrastPickBg: 'Виберіть колір тла',
+		contrastSwap: 'Поміняти текст і тло місцями',
+		contrastRatio: 'Коефіцієнт контрастності',
+		contrastEmpty: 'Введіть колір тексту й колір тла',
+		contrastPreview: 'Попередній перегляд кольору тексту на тлі',
+		contrastSampleBody: 'Основний текст 16 px. Чуєш їх, доцю, га? Кумедна ж ти, прощайся без ґольфів.',
+		contrastSampleLarge: 'Великий текст 24 px',
+		contrastSampleUi: 'Кнопка',
+		contrastAa: 'AA, звичайний текст',
+		contrastAaLarge: 'AA, великий текст',
+		contrastAaa: 'AAA, звичайний текст',
+		contrastAaaLarge: 'AAA, великий текст',
+		contrastUi: 'Компоненти UI та іконки',
+		contrastPass: 'Проходить',
+		contrastFail: 'Не проходить',
+		contrastLargeHint: 'Великий текст — це щонайменше 24 px або щонайменше 18.66 px (14 pt) жирним.',
+		contrastFix: 'Найближчі кольори, що проходять',
+		contrastTarget: 'Цільовий коефіцієнт',
+		contrastTargetLarge: 'Великий/UI 3',
+		contrastFixText: 'Змінити колір тексту',
+		contrastFixBg: 'Змінити тло',
+		contrastDarker: 'Темніше',
+		contrastLighter: 'Світліше',
+		contrastNoFix: 'Жоден колір із цим відтінком не досягає цілі. Спробуйте змінити інший колір.',
+		contrastAllPass: 'Ця пара вже досягає цілі.',
+
 		hbFormat: 'Байти як',
 		hbSep: 'Роздільник',
 		hbSpace: 'Пробіл',
@@ -849,6 +879,10 @@ const uk: Messages = {
 		'totp-generator': {
 			name: 'Генератор кодів TOTP / 2FA',
 			description: 'Отримуйте поточний код 2FA із секрету або URI otpauth://, перевіряйте код чи створюйте новий секрет'
+		},
+		'contrast-checker': {
+			name: 'Перевірка контрастності кольорів (WCAG)',
+			description: 'Перевіряйте кольори тексту й тла на відповідність WCAG AA і AAA та отримуйте найближчий колір, що проходить'
 		},
 		'cidr-calculator': {
 			name: 'CIDR / калькулятор підмереж',

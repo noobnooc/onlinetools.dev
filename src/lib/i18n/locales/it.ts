@@ -563,6 +563,36 @@ const it: Messages = {
 		totpEmpty: 'Incolla un segreto 2FA o un URI otpauth://, oppure crea un nuovo segreto',
 		totpPrivacy: 'I codici vengono calcolati con WebCrypto in questa scheda. Il segreto non finisce mai in un link di condivisione e viene rimosso dalla barra degli indirizzi se vi arriva.',
 
+		// Contrast checker
+		contrastText: 'Colore del testo',
+		contrastBackground: 'Sfondo',
+		contrastPickText: 'Scegli il colore del testo',
+		contrastPickBg: 'Scegli il colore di sfondo',
+		contrastSwap: 'Scambia testo e sfondo',
+		contrastRatio: 'Rapporto di contrasto',
+		contrastEmpty: 'Inserisci un colore del testo e un colore di sfondo',
+		contrastPreview: 'Anteprima del colore del testo sullo sfondo',
+		contrastSampleBody: 'Testo normale a 16 px. Pranzo d’acqua fa volti sghembi.',
+		contrastSampleLarge: 'Testo grande a 24 px',
+		contrastSampleUi: 'Pulsante',
+		contrastAa: 'AA, testo normale',
+		contrastAaLarge: 'AA, testo grande',
+		contrastAaa: 'AAA, testo normale',
+		contrastAaaLarge: 'AAA, testo grande',
+		contrastUi: 'Componenti UI e icone',
+		contrastPass: 'Superato',
+		contrastFail: 'Non superato',
+		contrastLargeHint: 'Per testo grande si intende almeno 24 px, oppure almeno 18.66 px (14 pt) in grassetto.',
+		contrastFix: 'Colori conformi più vicini',
+		contrastTarget: 'Rapporto obiettivo',
+		contrastTargetLarge: 'Grande/UI 3',
+		contrastFixText: 'Cambia il colore del testo',
+		contrastFixBg: 'Cambia lo sfondo',
+		contrastDarker: 'Più scuro',
+		contrastLighter: 'Più chiaro',
+		contrastNoFix: 'Nessun colore con questa tonalità raggiunge l’obiettivo. Prova a cambiare l’altro colore.',
+		contrastAllPass: 'Questa coppia raggiunge già l’obiettivo.',
+
 		// Text ↔ hex/binary
 		hbFormat: 'Byte come',
 		hbSep: 'Separatore',
@@ -813,6 +843,10 @@ const it: Messages = {
 		'totp-generator': {
 			name: 'Generatore di codici TOTP / 2FA',
 			description: 'Ottieni il codice 2FA attuale da un segreto o da un URI otpauth://, verifica un codice o crea un nuovo segreto'
+		},
+		'contrast-checker': {
+			name: 'Verifica del contrasto dei colori (WCAG)',
+			description: 'Verifica i colori di testo e sfondo rispetto a WCAG AA e AAA e ottieni il colore conforme più vicino'
 		},
 		'cidr-calculator': {
 			name: 'Calcolatore CIDR / subnet',

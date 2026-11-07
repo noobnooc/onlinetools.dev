@@ -8,7 +8,7 @@
 	import { currentResult } from '$lib/state/app.svelte';
 	import { ArrowLeftRight } from 'lucide-svelte';
 
-	// #777 on white is the classic near miss: 4.48:1, just under AA.
+	// #777 on white is the classic near miss: 4.478:1 (shown as 4.47), just under AA.
 	let fg = $state('#777777');
 	let bg = $state('#ffffff');
 	let target = $state<'4.5' | '7' | '3'>('4.5');

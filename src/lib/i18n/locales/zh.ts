@@ -562,6 +562,36 @@ const zh: Messages = {
 		totpEmpty: '粘贴两步验证密钥或 otpauth:// URI,或新建一个密钥',
 		totpPrivacy: '验证码在此标签页中通过 WebCrypto 计算。密钥绝不会写入分享链接;如果它出现在地址栏中,也会被移除。',
 
+		// Contrast checker
+		contrastText: '文字颜色',
+		contrastBackground: '背景',
+		contrastPickText: '选择文字颜色',
+		contrastPickBg: '选择背景颜色',
+		contrastSwap: '交换文字与背景',
+		contrastRatio: '对比度',
+		contrastEmpty: '输入文字颜色和背景颜色',
+		contrastPreview: '文字颜色在背景上的预览',
+		contrastSampleBody: '16 px 正文。敏捷的棕色狐狸跳过了那只懒狗。',
+		contrastSampleLarge: '24 px 大号文字',
+		contrastSampleUi: '按钮',
+		contrastAa: 'AA,普通文字',
+		contrastAaLarge: 'AA,大号文字',
+		contrastAaa: 'AAA,普通文字',
+		contrastAaaLarge: 'AAA,大号文字',
+		contrastUi: 'UI 组件和图标',
+		contrastPass: '通过',
+		contrastFail: '未通过',
+		contrastLargeHint: '大号文字指至少 24 px,或至少 18.66 px(14 pt)且加粗。',
+		contrastFix: '最接近的合格颜色',
+		contrastTarget: '目标对比度',
+		contrastTargetLarge: '大字/UI 3',
+		contrastFixText: '修改文字颜色',
+		contrastFixBg: '修改背景',
+		contrastDarker: '更深',
+		contrastLighter: '更浅',
+		contrastNoFix: '该色相下没有颜色能达到目标。请尝试修改另一个颜色。',
+		contrastAllPass: '这组颜色已达到目标。',
+
 		// Text ↔ hex/binary
 		hbFormat: '字节表示为',
 		hbSep: '分隔符',
@@ -813,6 +843,10 @@ const zh: Messages = {
 		'totp-generator': {
 			name: 'TOTP / 2FA 验证码生成器',
 			description: '用密钥或 otpauth:// URI 获取当前的两步验证码,校验验证码,或生成新密钥'
+		},
+		'contrast-checker': {
+			name: '颜色对比度检查器 (WCAG)',
+			description: '按 WCAG AA 和 AAA 检查文字与背景颜色,并给出最接近的合格颜色'
 		},
 		'cidr-calculator': {
 			name: 'CIDR / 子网计算器',

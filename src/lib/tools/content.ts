@@ -865,7 +865,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
 			},
 			{
 				q: 'Why does #777777 on white fail when it looks fine?',
-				a: 'Its ratio is 4.48:1, just under the 4.5:1 that AA requires for normal text. #767676 (4.54:1) is the lightest neutral gray that passes on white. Contrast is measured with relative luminance, not how a color looks on a good screen, because the rule is meant to hold on dim screens, in sunlight and for people with low vision.'
+				a: 'Its ratio is 4.47:1, just under the 4.5:1 that AA requires for normal text. #767676 (4.54:1) is the lightest neutral gray that passes on white. Contrast is measured with relative luminance, not how a color looks on a good screen, because the rule is meant to hold on dim screens, in sunlight and for people with low vision.'
 			},
 			{
 				q: 'What is the 3:1 rule for UI components?',
