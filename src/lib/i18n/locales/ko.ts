@@ -563,6 +563,36 @@ const ko: Messages = {
 		totpEmpty: '2단계 인증 비밀 키나 otpauth:// URI를 붙여넣거나 새 비밀 키를 만드세요',
 		totpPrivacy: '코드는 이 탭에서 WebCrypto로 계산됩니다. 비밀 키는 공유 링크에 절대 들어가지 않으며, 주소창으로 전달되면 그곳에서 제거됩니다.',
 
+		// Contrast checker
+		contrastText: '텍스트 색상',
+		contrastBackground: '배경',
+		contrastPickText: '텍스트 색상 선택',
+		contrastPickBg: '배경 색상 선택',
+		contrastSwap: '텍스트와 배경 바꾸기',
+		contrastRatio: '명암비',
+		contrastEmpty: '텍스트 색상과 배경 색상을 입력하세요',
+		contrastPreview: '배경 위 텍스트 색상 미리보기',
+		contrastSampleBody: '16 px 본문 텍스트. 다람쥐 헌 쳇바퀴에 타고파.',
+		contrastSampleLarge: '24 px 큰 텍스트',
+		contrastSampleUi: '버튼',
+		contrastAa: 'AA, 일반 텍스트',
+		contrastAaLarge: 'AA, 큰 텍스트',
+		contrastAaa: 'AAA, 일반 텍스트',
+		contrastAaaLarge: 'AAA, 큰 텍스트',
+		contrastUi: 'UI 구성 요소와 아이콘',
+		contrastPass: '통과',
+		contrastFail: '실패',
+		contrastLargeHint: '큰 텍스트는 24 px 이상, 또는 굵게 표시된 18.66 px(14 pt) 이상을 뜻합니다.',
+		contrastFix: '가장 가까운 통과 색상',
+		contrastTarget: '목표 명암비',
+		contrastTargetLarge: '큰 글자/UI 3',
+		contrastFixText: '텍스트 색상 변경',
+		contrastFixBg: '배경 변경',
+		contrastDarker: '더 어둡게',
+		contrastLighter: '더 밝게',
+		contrastNoFix: '이 색조로는 목표에 도달하는 색상이 없습니다. 다른 쪽 색상을 바꿔 보세요.',
+		contrastAllPass: '이 조합은 이미 목표를 충족합니다.',
+
 		// Text ↔ hex/binary
 		hbFormat: '바이트 표기',
 		hbSep: '구분자',
@@ -813,6 +843,10 @@ const ko: Messages = {
 		'totp-generator': {
 			name: 'TOTP / 2FA 코드 생성기',
 			description: '비밀 키나 otpauth:// URI로 현재 2단계 인증 코드 확인, 코드 검사, 새 비밀 키 생성'
+		},
+		'contrast-checker': {
+			name: '색상 명도 대비 검사기 (WCAG)',
+			description: '텍스트와 배경 색상을 WCAG AA, AAA 기준으로 검사하고 가장 가까운 통과 색상 확인'
 		},
 		'cidr-calculator': {
 			name: 'CIDR / 서브넷 계산기',

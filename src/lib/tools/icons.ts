@@ -45,7 +45,8 @@ import {
 	EyeOff,
 	Shield,
 	WandSparkles,
-	ShieldEllipsis
+	ShieldEllipsis,
+	Contrast
 } from 'lucide-svelte';
 import type { ToolCategory } from './registry';
 
@@ -84,6 +85,7 @@ export const TOOL_ICONS: Record<string, IconComponent> = {
 	'cidr-calculator': Network,
 	'chmod-calculator': FileLock,
 	'totp-generator': ShieldEllipsis,
+	'contrast-checker': Contrast,
 	'image-to-base64': FileImage,
 	'image-converter': Images,
 	'image-resizer': Scaling,

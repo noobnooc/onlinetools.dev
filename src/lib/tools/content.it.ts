@@ -1193,6 +1193,36 @@ const TOOL_CONTENT_IT: Record<string, ToolContent> = {
 		]
 	},
 
+	'contrast-checker': {
+		about: [
+			'Inserisci un colore del testo e un colore di sfondo in qualsiasi notazione CSS (#hex, rgb(), hsl(), oklch() o uno dei 148 colori con nome) e ottieni il rapporto di contrasto WCAG, da 1:1 per colori identici a 21:1 per il nero sul bianco. La coppia viene valutata in una volta sola rispetto a tutte e cinque le soglie di WCAG 2.2: AA per il testo normale (4.5:1) e il testo grande (3:1), AAA per il testo normale (7:1) e il testo grande (4.5:1), e 3:1 per componenti dell’interfaccia e icone.',
+			'Quando una coppia non supera la verifica, lo strumento suggerisce i colori conformi più vicini, sia per il testo sia per lo sfondo, più scuri e più chiari. Modifica solo la luminosità OKLCH e mantiene la tonalità, così un blu del brand resta un blu riconoscibile invece di diventare grigio. Ogni suggerimento viene ricontrollato dopo l’arrotondamento a hex a 8 bit, quindi un colore suggerito supera davvero la verifica.',
+			'Il rapporto viene mostrato arrotondato per difetto a due decimali. WCAG non ammette l’arrotondamento per eccesso, quindi una coppia a 4.496:1 non supera AA e viene mostrata come 4.49, non 4.50. Un colore del testo semitrasparente viene fuso con lo sfondo prima della misura, perché il colore risultante è quello che le persone vedono.'
+		],
+		faqs: [
+			{
+				q: 'Che cosa conta come testo grande?',
+				a: 'WCAG definisce testo grande quello di almeno 18 punti (24 px CSS), oppure di almeno 14 punti (circa 18.66 px) in grassetto. Il testo grande richiede 3:1 per AA e 4.5:1 per AAA. Tutto ciò che è più piccolo è testo normale e richiede 4.5:1 per AA e 7:1 per AAA.'
+			},
+			{
+				q: 'Perché #777777 su bianco non supera la verifica anche se sembra a posto?',
+				a: 'Il suo rapporto è 4.47:1, appena sotto il 4.5:1 che AA richiede per il testo normale. #767676 (4.54:1) è il grigio neutro più chiaro che supera la verifica su bianco. Il contrasto si misura con la luminanza relativa, non con l’aspetto di un colore su un buon schermo, perché la regola deve valere anche su schermi poco luminosi, alla luce del sole e per le persone ipovedenti.'
+			},
+			{
+				q: 'Che cos’è la regola del 3:1 per i componenti dell’interfaccia?',
+				a: 'WCAG 2.1 ha aggiunto il criterio di successo 1.4.11: le parti visibili dei controlli (bordi dei campi, anelli di focus, stati degli interruttori) e le icone significative richiedono 3:1 rispetto ai colori adiacenti. Il testo segnaposto e i controlli disattivati sono esenti dalle regole sul testo, ma i segnaposto devono comunque essere leggibili.'
+			},
+			{
+				q: 'È lo stesso di APCA o WCAG 3?',
+				a: 'No. Questo strumento usa la formula di WCAG 2.x, a cui fanno riferimento le leggi e gli audit attuali (EN 301 549, Section 508, le linee guida ADA). APCA è un modello di contrasto diverso, proposto per la bozza di WCAG 3. Dà risultati diversi, soprattutto in modalità scura, ma non è ancora un requisito.'
+			},
+			{
+				q: 'Come viene misurato un colore trasparente?',
+				a: 'Un colore del testo con alfa viene prima fuso con lo sfondo, e si misura il colore risultante. Uno sfondo trasparente viene posto sopra il bianco, perché lo strumento non può sapere cosa c’è dietro. Ogni volta che succede compare una nota, quindi in quel caso verifica la coppia con il colore reale della pagina.'
+			}
+		]
+	},
+
 	'chmod-calculator': {
 		about: [
 			'Digita un modo così come ce l’hai — 755, 0644, rwxr-xr-x, un’intera riga di `ls -l`, u=rwx,g=rx,o=rx o un comando completo come chmod -R 750 /srv/app — e vedilo in tutte le altre forme: ottale, stringa rwx, colonna di ls -l ed entrambi i comandi chmod pronti da copiare. La griglia mostra lettura, scrittura ed esecuzione per proprietario, gruppo e altri; spunta una casella e il modo si aggiorna.',

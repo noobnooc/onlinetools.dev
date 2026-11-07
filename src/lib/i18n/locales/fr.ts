@@ -563,6 +563,36 @@ const fr: Messages = {
 		totpEmpty: 'Collez un secret 2FA ou une URI otpauth://, ou créez un nouveau secret',
 		totpPrivacy: 'Les codes sont calculés avec WebCrypto dans cet onglet. Le secret n’entre jamais dans un lien de partage, et il est retiré de la barre d’adresse s’il y arrive.',
 
+		// Contrast checker
+		contrastText: 'Couleur du texte',
+		contrastBackground: 'Arrière-plan',
+		contrastPickText: 'Choisir la couleur du texte',
+		contrastPickBg: 'Choisir la couleur d’arrière-plan',
+		contrastSwap: 'Inverser le texte et l’arrière-plan',
+		contrastRatio: 'Ratio de contraste',
+		contrastEmpty: 'Saisissez une couleur de texte et une couleur d’arrière-plan',
+		contrastPreview: 'Aperçu de la couleur du texte sur l’arrière-plan',
+		contrastSampleBody: 'Texte courant en 16 px. Portez ce vieux whisky au juge blond qui fume.',
+		contrastSampleLarge: 'Grand texte en 24 px',
+		contrastSampleUi: 'Bouton',
+		contrastAa: 'AA, texte normal',
+		contrastAaLarge: 'AA, grand texte',
+		contrastAaa: 'AAA, texte normal',
+		contrastAaaLarge: 'AAA, grand texte',
+		contrastUi: 'Composants d’UI et icônes',
+		contrastPass: 'Réussi',
+		contrastFail: 'Échec',
+		contrastLargeHint: 'Un grand texte fait au moins 24 px, ou au moins 18.66 px (14 pt) en gras.',
+		contrastFix: 'Couleurs conformes les plus proches',
+		contrastTarget: 'Ratio cible',
+		contrastTargetLarge: 'Grand/UI 3',
+		contrastFixText: 'Modifier la couleur du texte',
+		contrastFixBg: 'Modifier l’arrière-plan',
+		contrastDarker: 'Plus foncé',
+		contrastLighter: 'Plus clair',
+		contrastNoFix: 'Aucune couleur de cette teinte n’atteint la cible. Essayez de modifier l’autre couleur.',
+		contrastAllPass: 'Cette paire atteint déjà la cible.',
+
 		// Text ↔ hex/binary
 		hbFormat: 'Octets en',
 		hbSep: 'Séparateur',
@@ -813,6 +843,10 @@ const fr: Messages = {
 		'totp-generator': {
 			name: 'Générateur de codes TOTP / 2FA',
 			description: 'Obtenez le code 2FA actuel à partir d’un secret ou d’une URI otpauth://, vérifiez un code ou créez un nouveau secret'
+		},
+		'contrast-checker': {
+			name: 'Vérificateur de contraste des couleurs (WCAG)',
+			description: 'Vérifiez les couleurs du texte et du fond selon WCAG AA et AAA, et obtenez la couleur conforme la plus proche'
 		},
 		'cidr-calculator': {
 			name: 'Calculateur CIDR / de sous-réseau',

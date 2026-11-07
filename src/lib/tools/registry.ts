@@ -111,7 +111,7 @@ export const TOOLS: ToolMeta[] = [
 		category: 'image',
 		aliases: ['favicon', 'ico', 'png to ico', 'favicon.ico', 'apple touch icon'],
 		keywords: ['favicon generator', 'png to ico', 'favicon.ico generator', 'apple touch icon generator'],
-		related: ['image-resizer', 'image-converter', 'background-remover', 'image-to-base64', 'qr-code-generator', 'color-converter']
+		related: ['image-resizer', 'image-converter', 'background-remover', 'image-to-base64', 'color-converter', 'contrast-checker']
 	},
 	{
 		slug: 'timestamp-converter',
@@ -201,7 +201,7 @@ export const TOOLS: ToolMeta[] = [
 		category: 'web',
 		aliases: ['color', 'colour', 'hex to rgb', 'hsl', 'oklch'],
 		keywords: ['color converter', 'hex to rgb', 'rgb to hsl', 'oklch converter'],
-		related: ['regex-tester', 'json-formatter', 'url-parser', 'diff-checker', 'uuid-generator', 'base64-decode']
+		related: ['contrast-checker', 'css-formatter', 'favicon-generator', 'image-converter', 'regex-tester', 'url-parser']
 	},
 	{
 		slug: 'case-converter',
@@ -419,7 +419,7 @@ export const TOOLS: ToolMeta[] = [
 		category: 'code',
 		aliases: ['css beautify', 'css pretty', 'css minify', 'format css'],
 		keywords: ['css formatter', 'css beautifier', 'css minifier', 'format css online'],
-		related: ['html-formatter', 'js-formatter', 'color-converter', 'sql-formatter', 'xml-formatter', 'regex-tester']
+		related: ['html-formatter', 'js-formatter', 'color-converter', 'contrast-checker', 'sql-formatter', 'xml-formatter']
 	},
 	{
 		slug: 'js-formatter',
@@ -520,6 +520,16 @@ export const TOOLS: ToolMeta[] = [
 		aliases: ['totp', 'hotp', '2fa', 'otp', 'mfa', 'one-time password', 'authenticator', 'google authenticator', 'otpauth', 'two-factor'],
 		keywords: ['totp generator', '2fa code generator', 'totp code from secret', 'otpauth uri', 'google authenticator online', 'hotp generator', 'rfc 6238'],
 		related: ['qr-code-decoder', 'qr-code-generator', 'password-generator', 'hash-generator', 'jwt-decoder', 'base64-decode']
+	},
+	{
+		slug: 'contrast-checker',
+		accepts: ['color'],
+		name: 'Color Contrast Checker (WCAG)',
+		description: 'Check text and background colors against WCAG AA and AAA, and get the nearest passing color',
+		category: 'web',
+		aliases: ['contrast', 'wcag', 'contrast ratio', 'a11y color', 'accessibility', 'color contrast', 'aa', 'aaa'],
+		keywords: ['color contrast checker', 'wcag contrast checker', 'contrast ratio calculator', 'accessible color', 'wcag aa contrast', 'text contrast checker'],
+		related: ['color-converter', 'css-formatter', 'html-formatter', 'favicon-generator', 'image-converter', 'qr-code-generator']
 	}
 ];
 

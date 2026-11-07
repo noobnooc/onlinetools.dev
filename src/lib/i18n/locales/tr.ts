@@ -570,6 +570,36 @@ const tr: Messages = {
 		totpWarnNonDefault: 'Varsayılan dışı algoritma, basamak sayısı veya süre. Bazı kimlik doğrulama uygulamaları bunları yok sayıp yanlış kodlar gösterir; bu yüzden kullanıcılarınızın kullandığı uygulamalarla test edin.',
 		totpEmpty: 'Bir 2FA gizli anahtarı veya otpauth:// URI’si yapıştırın ya da yeni bir gizli anahtar oluşturun',
 		totpPrivacy: 'Kodlar bu sekmede WebCrypto ile hesaplanır. Gizli anahtar hiçbir zaman paylaşım bağlantısına eklenmez; adres çubuğunda gelirse oradan kaldırılır.',
+
+		// Contrast checker
+		contrastText: 'Metin rengi',
+		contrastBackground: 'Arka plan',
+		contrastPickText: 'Metin rengini seçin',
+		contrastPickBg: 'Arka plan rengini seçin',
+		contrastSwap: 'Metin ve arka planı yer değiştir',
+		contrastRatio: 'Kontrast oranı',
+		contrastEmpty: 'Bir metin rengi ve bir arka plan rengi girin',
+		contrastPreview: 'Metin renginin arka plan üzerindeki önizlemesi',
+		contrastSampleBody: '16 px gövde metni. Pijamalı hasta yağız şoföre çabucak güvendi.',
+		contrastSampleLarge: '24 px büyük metin',
+		contrastSampleUi: 'Düğme',
+		contrastAa: 'AA, normal metin',
+		contrastAaLarge: 'AA, büyük metin',
+		contrastAaa: 'AAA, normal metin',
+		contrastAaaLarge: 'AAA, büyük metin',
+		contrastUi: 'UI bileşenleri ve simgeler',
+		contrastPass: 'Geçti',
+		contrastFail: 'Kaldı',
+		contrastLargeHint: 'Büyük metin en az 24 px ya da kalın yazıda en az 18.66 px (14 pt) demektir.',
+		contrastFix: 'Geçen en yakın renkler',
+		contrastTarget: 'Hedef oran',
+		contrastTargetLarge: 'Büyük/UI 3',
+		contrastFixText: 'Metin rengini değiştir',
+		contrastFixBg: 'Arka planı değiştir',
+		contrastDarker: 'Daha koyu',
+		contrastLighter: 'Daha açık',
+		contrastNoFix: 'Bu tonda hedefe ulaşan bir renk yok. Diğer rengi değiştirmeyi deneyin.',
+		contrastAllPass: 'Bu çift hedefi zaten karşılıyor.',
 		hbFormat: 'Baytlar şu biçimde',
 		hbSep: 'Ayırıcı',
 		hbSpace: 'Boşluk',
@@ -821,6 +851,10 @@ const tr: Messages = {
 		'totp-generator': {
 			name: 'TOTP / 2FA Kod Üreteci',
 			description: 'Gizli anahtardan veya otpauth:// URI’den geçerli 2FA kodunu alın, bir kodu denetleyin ya da yeni bir gizli anahtar oluşturun'
+		},
+		'contrast-checker': {
+			name: 'Renk Kontrastı Kontrol Aracı (WCAG)',
+			description: 'Metin ve arka plan renklerini WCAG AA ve AAA’ya göre kontrol edin ve geçen en yakın rengi alın'
 		},
 		'cidr-calculator': {
 			name: 'CIDR / Alt Ağ Hesaplayıcı',

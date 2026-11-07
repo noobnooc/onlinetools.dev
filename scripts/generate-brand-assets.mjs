@@ -257,7 +257,7 @@ out(
 	'og.png',
 	renderPng(
 		ogSvg({
-			eyebrow: '48 tools · local-first',
+			eyebrow: '49 tools · local-first',
 			line1: 'Developer tools that run',
 			line2: 'in your browser.',
 			sub: 'No upload, no signup, no waiting — everything runs locally, even offline.',

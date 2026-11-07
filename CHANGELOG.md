@@ -11,6 +11,28 @@ the footer badge and every `<lastmod>` in the sitemap.
 
 ---
 
+## [2026.11.07] — Color Contrast Checker
+
+### Added
+
+- **Color Contrast Checker (WCAG)** (tool #49): enter a text and a background
+  color in any CSS notation and get the WCAG 2.x contrast ratio, graded for
+  AA and AAA (normal and large text) and the 3:1 rule for UI components.
+  The ratio is rounded down, so a failing pair never reads as passing.
+  Semi-transparent colors are blended before measuring.
+- When a pair fails, it suggests the nearest darker and lighter colors that
+  pass, for the text or the background. Only the OKLCH lightness changes,
+  so the hue stays recognizable.
+- Smart Paste recognizes two colors ("#333 on #fff",
+  `color: #222; background: #eee`) and opens the checker. A single color now
+  offers "Check contrast" next to "Convert formats".
+
+### Changed
+
+- The color parser (shared by the Color Converter) now knows all 148 CSS
+  named colors, `oklch()` input, and `rgb()` with percentage or decimal
+  channels. A malformed alpha is an error instead of `NaN`.
+
 ## [2026.11.06] — Network steps in the Pipeline
 
 ### Added

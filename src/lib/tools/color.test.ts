@@ -127,3 +127,32 @@ describe('isLikelyColor', () => {
 		expect(isLikelyColor('123456')).toBe(false); // bare hex without # is likely a number
 	});
 });
+
+describe('parseColor — wider CSS syntax', () => {
+	it('knows all 148 CSS named colors', () => {
+		const a = parseColor('cornflowerblue');
+		expect(a.ok && a.value.hex).toBe('#6495ed');
+		const b = parseColor('LightGoldenrodYellow');
+		expect(b.ok && b.value.hex).toBe('#fafad2');
+	});
+	it('parses rgb() with percentage and decimal channels', () => {
+		const pct = parseColor('rgb(100% 50% 0%)');
+		expect(pct.ok && pct.value.hex).toBe('#ff8000');
+		const dec = parseColor('rgb(10.4 20.6 30)');
+		expect(dec.ok && dec.value.rgb).toBe('rgb(10 21 30)');
+	});
+	it('parses oklch() and round-trips the converter output', () => {
+		const white = parseColor('oklch(1 0 0)');
+		expect(white.ok && white.value.hex).toBe('#ffffff');
+		const pct = parseColor('oklch(0% 0 0)');
+		expect(pct.ok && pct.value.hex).toBe('#000000');
+		const src = parseColor('#4c8dff');
+		const back = src.ok ? parseColor(src.value.oklch) : null;
+		expect(back?.ok && back.value.hex).toBe('#4c8dff');
+		const alpha = parseColor('oklch(0.5 0.1 250 / 50%)');
+		expect(alpha.ok && alpha.value.alpha).toBeCloseTo(0.5, 2);
+	});
+	it('rejects a malformed alpha instead of returning NaN', () => {
+		expect(parseColor('rgb(1 2 3 / ..)').ok).toBe(false);
+	});
+});

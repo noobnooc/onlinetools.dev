@@ -1193,6 +1193,36 @@ const TOOL_CONTENT_DE: Record<string, ToolContent> = {
 		]
 	},
 
+	'contrast-checker': {
+		about: [
+			'Gib eine Textfarbe und eine Hintergrundfarbe in beliebiger CSS-Notation ein (#hex, rgb(), hsl(), oklch() oder eine der 148 benannten Farben), und du bekommst das WCAG-Kontrastverhältnis, von 1:1 für identische Farben bis 21:1 für Schwarz auf Weiß. Das Paar wird gleichzeitig gegen alle fünf Schwellenwerte von WCAG 2.2 bewertet: AA für normalen Text (4.5:1) und großen Text (3:1), AAA für normalen Text (7:1) und großen Text (4.5:1) sowie 3:1 für UI-Komponenten und Icons.',
+			'Fällt ein Paar durch, schlägt das Tool die nächstgelegenen Farben vor, die bestehen, sowohl für den Text als auch für den Hintergrund, jeweils dunkler und heller. Es verändert nur die OKLCH-Helligkeit und behält den Farbton bei, sodass ein Markenblau ein erkennbares Blau bleibt, statt grau zu werden. Jeder Vorschlag wird nach dem Runden auf 8-Bit-Hex erneut geprüft, damit eine vorgeschlagene Farbe wirklich besteht.',
+			'Das Verhältnis wird auf zwei Dezimalstellen abgerundet angezeigt. WCAG erlaubt kein Aufrunden, deshalb fällt ein Paar mit 4.496:1 bei AA durch und wird als 4.49 angezeigt, nicht als 4.50. Eine halbtransparente Textfarbe wird vor der Messung mit dem Hintergrund gemischt, denn die gemischte Farbe ist das, was man tatsächlich sieht.'
+		],
+		faqs: [
+			{
+				q: 'Was zählt als großer Text?',
+				a: 'WCAG definiert großen Text als mindestens 18 Punkt (24 CSS-px) oder mindestens 14 Punkt (etwa 18.66 px) in Fettschrift. Großer Text braucht 3:1 für AA und 4.5:1 für AAA. Alles Kleinere ist normaler Text und braucht 4.5:1 für AA und 7:1 für AAA.'
+			},
+			{
+				q: 'Warum fällt #777777 auf Weiß durch, obwohl es gut aussieht?',
+				a: 'Sein Verhältnis beträgt 4.47:1, knapp unter den 4.5:1, die AA für normalen Text verlangt. #767676 (4.54:1) ist das hellste neutrale Grau, das auf Weiß besteht. Kontrast wird über die relative Leuchtdichte gemessen, nicht danach, wie eine Farbe auf einem guten Bildschirm aussieht, denn die Regel soll auch auf dunklen Bildschirmen, im Sonnenlicht und für Menschen mit Sehbehinderung gelten.'
+			},
+			{
+				q: 'Was ist die 3:1-Regel für UI-Komponenten?',
+				a: 'WCAG 2.1 hat das Erfolgskriterium 1.4.11 eingeführt: Die sichtbaren Teile von Bedienelementen (Rahmen von Eingabefeldern, Fokusringe, Schalterzustände) und aussagekräftige Icons brauchen 3:1 gegenüber den angrenzenden Farben. Platzhaltertext und deaktivierte Bedienelemente sind von den Textregeln ausgenommen, Platzhalter sollten aber trotzdem lesbar sein.'
+			},
+			{
+				q: 'Ist das dasselbe wie APCA oder WCAG 3?',
+				a: 'Nein. Dieses Tool verwendet die Formel aus WCAG 2.x, auf die sich aktuelle Gesetze und Audits (EN 301 549, Section 508, die ADA-Leitlinien) beziehen. APCA ist ein anderes Kontrastmodell, das für den Entwurf von WCAG 3 vorgeschlagen wurde. Es liefert andere Ergebnisse, besonders im Dark Mode, ist aber noch keine Anforderung.'
+			},
+			{
+				q: 'Wie wird eine transparente Farbe gemessen?',
+				a: 'Eine Textfarbe mit Alpha wird zuerst mit dem Hintergrund gemischt, und die gemischte Farbe wird gemessen. Ein transparenter Hintergrund wird über Weiß gelegt, da das Tool nicht wissen kann, was dahinter liegt. In diesen Fällen erscheint ein Hinweis, prüfe das Paar dann mit der tatsächlichen Seitenfarbe.'
+			}
+		]
+	},
+
 	'chmod-calculator': {
 		about: [
 			'Gib einen Modus so ein, wie er dir vorliegt — 755, 0644, rwxr-xr-x, eine ganze `ls -l`-Zeile, u=rwx,g=rx,o=rx oder einen vollständigen Befehl wie chmod -R 750 /srv/app — und sieh ihn in jeder anderen Form: oktal, als rwx-Zeichenkette, als ls -l-Spalte und als beide chmod-Befehle zum Kopieren. Das Raster zeigt Lesen, Schreiben und Ausführen für Besitzer, Gruppe und andere; setze ein Häkchen, und der Modus passt sich an.',

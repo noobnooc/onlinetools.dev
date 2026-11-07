@@ -86,27 +86,191 @@ export function rgbToOklch(r: number, g: number, b: number): [number, number, nu
 	return [L, C, C < 1e-6 ? 0 : H];
 }
 
+function linearToSrgb(c: number): number {
+	return c <= 0.0031308 ? 12.92 * c : 1.055 * c ** (1 / 2.4) - 0.055;
+}
+
+/**
+ * OKLCH → sRGB channels in 0–1, unclamped: a value outside 0–1 means the
+ * color is outside the sRGB gamut.
+ */
+export function oklchToRgb(L: number, C: number, H: number): [number, number, number] {
+	const h = (H * Math.PI) / 180;
+	const A = C * Math.cos(h);
+	const B = C * Math.sin(h);
+	const l = (L + 0.3963377774 * A + 0.2158037573 * B) ** 3;
+	const m = (L - 0.1055613458 * A - 0.0638541728 * B) ** 3;
+	const s = (L - 0.0894841775 * A - 1.291485548 * B) ** 3;
+	return [
+		linearToSrgb(4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s),
+		linearToSrgb(-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s),
+		linearToSrgb(-0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s)
+	];
+}
+
+/** WCAG 2.x relative luminance of an sRGB color (channels 0–255). */
+export function relativeLuminance(r: number, g: number, b: number): number {
+	return 0.2126 * srgbToLinear(r) + 0.7152 * srgbToLinear(g) + 0.0722 * srgbToLinear(b);
+}
+
+function parseAlpha(v: string): number {
+	return v.endsWith('%') ? Number(v.slice(0, -1)) / 100 : Number(v);
+}
+
+/** The 148 CSS named colors (CSS Color 4), plus `transparent`. */
 const NAMED: Record<string, string> = {
+	aliceblue: '#f0f8ff',
+	antiquewhite: '#faebd7',
+	aqua: '#00ffff',
+	aquamarine: '#7fffd4',
+	azure: '#f0ffff',
+	beige: '#f5f5dc',
+	bisque: '#ffe4c4',
 	black: '#000000',
-	white: '#ffffff',
-	red: '#ff0000',
-	green: '#008000',
+	blanchedalmond: '#ffebcd',
 	blue: '#0000ff',
-	yellow: '#ffff00',
+	blueviolet: '#8a2be2',
+	brown: '#a52a2a',
+	burlywood: '#deb887',
+	cadetblue: '#5f9ea0',
+	chartreuse: '#7fff00',
+	chocolate: '#d2691e',
+	coral: '#ff7f50',
+	cornflowerblue: '#6495ed',
+	cornsilk: '#fff8dc',
+	crimson: '#dc143c',
 	cyan: '#00ffff',
-	magenta: '#ff00ff',
-	orange: '#ffa500',
-	purple: '#800080',
+	darkblue: '#00008b',
+	darkcyan: '#008b8b',
+	darkgoldenrod: '#b8860b',
+	darkgray: '#a9a9a9',
+	darkgreen: '#006400',
+	darkgrey: '#a9a9a9',
+	darkkhaki: '#bdb76b',
+	darkmagenta: '#8b008b',
+	darkolivegreen: '#556b2f',
+	darkorange: '#ff8c00',
+	darkorchid: '#9932cc',
+	darkred: '#8b0000',
+	darksalmon: '#e9967a',
+	darkseagreen: '#8fbc8f',
+	darkslateblue: '#483d8b',
+	darkslategray: '#2f4f4f',
+	darkslategrey: '#2f4f4f',
+	darkturquoise: '#00ced1',
+	darkviolet: '#9400d3',
+	deeppink: '#ff1493',
+	deepskyblue: '#00bfff',
+	dimgray: '#696969',
+	dimgrey: '#696969',
+	dodgerblue: '#1e90ff',
+	firebrick: '#b22222',
+	floralwhite: '#fffaf0',
+	forestgreen: '#228b22',
+	fuchsia: '#ff00ff',
+	gainsboro: '#dcdcdc',
+	ghostwhite: '#f8f8ff',
+	gold: '#ffd700',
+	goldenrod: '#daa520',
 	gray: '#808080',
+	green: '#008000',
+	greenyellow: '#adff2f',
 	grey: '#808080',
-	rebeccapurple: '#663399',
-	tomato: '#ff6347',
-	teal: '#008080',
+	honeydew: '#f0fff0',
+	hotpink: '#ff69b4',
+	indianred: '#cd5c5c',
+	indigo: '#4b0082',
+	ivory: '#fffff0',
+	khaki: '#f0e68c',
+	lavender: '#e6e6fa',
+	lavenderblush: '#fff0f5',
+	lawngreen: '#7cfc00',
+	lemonchiffon: '#fffacd',
+	lightblue: '#add8e6',
+	lightcoral: '#f08080',
+	lightcyan: '#e0ffff',
+	lightgoldenrodyellow: '#fafad2',
+	lightgray: '#d3d3d3',
+	lightgreen: '#90ee90',
+	lightgrey: '#d3d3d3',
+	lightpink: '#ffb6c1',
+	lightsalmon: '#ffa07a',
+	lightseagreen: '#20b2aa',
+	lightskyblue: '#87cefa',
+	lightslategray: '#778899',
+	lightslategrey: '#778899',
+	lightsteelblue: '#b0c4de',
+	lightyellow: '#ffffe0',
+	lime: '#00ff00',
+	limegreen: '#32cd32',
+	linen: '#faf0e6',
+	magenta: '#ff00ff',
+	maroon: '#800000',
+	mediumaquamarine: '#66cdaa',
+	mediumblue: '#0000cd',
+	mediumorchid: '#ba55d3',
+	mediumpurple: '#9370db',
+	mediumseagreen: '#3cb371',
+	mediumslateblue: '#7b68ee',
+	mediumspringgreen: '#00fa9a',
+	mediumturquoise: '#48d1cc',
+	mediumvioletred: '#c71585',
+	midnightblue: '#191970',
+	mintcream: '#f5fffa',
+	mistyrose: '#ffe4e1',
+	moccasin: '#ffe4b5',
+	navajowhite: '#ffdead',
 	navy: '#000080',
+	oldlace: '#fdf5e6',
+	olive: '#808000',
+	olivedrab: '#6b8e23',
+	orange: '#ffa500',
+	orangered: '#ff4500',
+	orchid: '#da70d6',
+	palegoldenrod: '#eee8aa',
+	palegreen: '#98fb98',
+	paleturquoise: '#afeeee',
+	palevioletred: '#db7093',
+	papayawhip: '#ffefd5',
+	peachpuff: '#ffdab9',
+	peru: '#cd853f',
+	pink: '#ffc0cb',
+	plum: '#dda0dd',
+	powderblue: '#b0e0e6',
+	purple: '#800080',
+	rebeccapurple: '#663399',
+	red: '#ff0000',
+	rosybrown: '#bc8f8f',
+	royalblue: '#4169e1',
+	saddlebrown: '#8b4513',
+	salmon: '#fa8072',
+	sandybrown: '#f4a460',
+	seagreen: '#2e8b57',
+	seashell: '#fff5ee',
+	sienna: '#a0522d',
+	silver: '#c0c0c0',
+	skyblue: '#87ceeb',
+	slateblue: '#6a5acd',
+	slategray: '#708090',
+	slategrey: '#708090',
+	snow: '#fffafa',
+	springgreen: '#00ff7f',
+	steelblue: '#4682b4',
+	tan: '#d2b48c',
+	teal: '#008080',
+	thistle: '#d8bfd8',
+	tomato: '#ff6347',
+	turquoise: '#40e0d0',
+	violet: '#ee82ee',
+	wheat: '#f5deb3',
+	white: '#ffffff',
+	whitesmoke: '#f5f5f5',
+	yellow: '#ffff00',
+	yellowgreen: '#9acd32',
 	transparent: '#00000000'
 };
 
-/** Parse hex/rgb()/hsl()/named colors into channel values. */
+/** Parse hex/rgb()/hsl()/oklch()/named colors into channel values. */
 export function parseColor(input: string): ToolResult<ColorFormats> {
 	let s = input.trim().toLowerCase();
 	if (s === '') return err('Input is empty');
@@ -135,27 +299,44 @@ export function parseColor(input: string): ToolResult<ColorFormats> {
 		}
 	}
 
-	const rgbMatch = s.match(/^rgba?\(\s*(\d{1,3})[\s,]+(\d{1,3})[\s,]+(\d{1,3})(?:[\s,/]+([\d.]+%?))?\s*\)$/);
+	// Channels may be integers, decimals or percentages (`rgb(50% 0% 100%)`).
+	const rgbMatch = s.match(
+		/^rgba?\(\s*([\d.]+%?)[\s,]+([\d.]+%?)[\s,]+([\d.]+%?)(?:[\s,/]+([\d.]+%?))?\s*\)$/
+	);
 	if (rgbMatch) {
-		r = clamp(Number(rgbMatch[1]), 0, 255);
-		g = clamp(Number(rgbMatch[2]), 0, 255);
-		b = clamp(Number(rgbMatch[3]), 0, 255);
-		if (rgbMatch[4]) {
-			alpha = rgbMatch[4].endsWith('%') ? Number(rgbMatch[4].slice(0, -1)) / 100 : Number(rgbMatch[4]);
-		}
+		const channel = (v: string) =>
+			clamp(Math.round(v.endsWith('%') ? (Number(v.slice(0, -1)) / 100) * 255 : Number(v)), 0, 255);
+		r = channel(rgbMatch[1]);
+		g = channel(rgbMatch[2]);
+		b = channel(rgbMatch[3]);
+		if ([r, g, b].some(Number.isNaN)) return err('rgb() channels must be numbers');
+		if (rgbMatch[4]) alpha = parseAlpha(rgbMatch[4]);
 	}
 
 	const hslMatch = s.match(/^hsla?\(\s*([\d.]+)(?:deg)?[\s,]+([\d.]+)%[\s,]+([\d.]+)%(?:[\s,/]+([\d.]+%?))?\s*\)$/);
 	if (hslMatch) {
 		[r, g, b] = hslToRgb(Number(hslMatch[1]), Number(hslMatch[2]), Number(hslMatch[3]));
-		if (hslMatch[4]) {
-			alpha = hslMatch[4].endsWith('%') ? Number(hslMatch[4].slice(0, -1)) / 100 : Number(hslMatch[4]);
-		}
+		if (hslMatch[4]) alpha = parseAlpha(hslMatch[4]);
+	}
+
+	// oklch(L C H): L as 0–1 or a percentage, C as a number or a percentage of 0.4.
+	const oklchMatch = s.match(
+		/^oklch\(\s*([\d.]+%?)\s+([\d.]+%?)\s+([\d.]+)(?:deg)?(?:\s*\/\s*([\d.]+%?))?\s*\)$/
+	);
+	if (oklchMatch) {
+		const L = oklchMatch[1].endsWith('%') ? Number(oklchMatch[1].slice(0, -1)) / 100 : Number(oklchMatch[1]);
+		const C = oklchMatch[2].endsWith('%') ? (Number(oklchMatch[2].slice(0, -1)) / 100) * 0.4 : Number(oklchMatch[2]);
+		const H = Number(oklchMatch[3]);
+		if ([L, C, H].some(Number.isNaN)) return err('oklch() values must be numbers');
+		// Out-of-gamut colors are clipped per channel, as browsers render them in sRGB.
+		[r, g, b] = oklchToRgb(L, C, H).map((v) => clamp(Math.round(v * 255), 0, 255));
+		if (oklchMatch[4]) alpha = parseAlpha(oklchMatch[4]);
 	}
 
 	if (r === undefined || g === undefined || b === undefined) {
-		return err('Not a recognizable color (try #hex, rgb(), hsl(), or a named color)');
+		return err('Not a recognizable color (try #hex, rgb(), hsl(), oklch(), or a named color)');
 	}
+	if (Number.isNaN(alpha)) return err('Alpha must be a number between 0 and 1');
 	alpha = clamp(alpha, 0, 1);
 
 	const [h, sPct, l] = rgbToHsl(r, g, b);
@@ -186,5 +367,5 @@ export function parseColor(input: string): ToolResult<ColorFormats> {
 export function isLikelyColor(input: string): boolean {
 	const s = input.trim();
 	return /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(s) ||
-		/^(rgb|hsl)a?\(/.test(s.toLowerCase());
+		/^(rgba?|hsla?|oklch)\(/.test(s.toLowerCase());
 }

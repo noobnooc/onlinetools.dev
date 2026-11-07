@@ -852,6 +852,36 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
 		]
 	},
 
+	'contrast-checker': {
+		about: [
+			'Enter a text color and a background color in any CSS notation (#hex, rgb(), hsl(), oklch() or one of the 148 named colors) and get the WCAG contrast ratio, from 1:1 for identical colors to 21:1 for black on white. The pair is graded against all five WCAG 2.2 thresholds at once: AA for normal text (4.5:1) and large text (3:1), AAA for normal text (7:1) and large text (4.5:1), and 3:1 for UI components and icons.',
+			'When a pair fails, the tool suggests the nearest colors that pass, both for the text and for the background, darker and lighter. It moves only the OKLCH lightness and keeps the hue, so a brand blue stays a recognizable blue instead of turning gray. Every suggestion is checked again after rounding to 8-bit hex, so a suggested color really does pass.',
+			'The ratio is shown rounded down to two decimals. WCAG does not allow rounding up, so a pair at 4.496:1 fails AA and is shown as 4.49, not 4.50. A semi-transparent text color is blended with the background before measuring, because the blended color is what people see.'
+		],
+		faqs: [
+			{
+				q: 'What counts as large text?',
+				a: 'WCAG defines large text as at least 18 point (24 CSS px), or at least 14 point (about 18.66 px) when bold. Large text needs 3:1 for AA and 4.5:1 for AAA. Everything smaller is normal text and needs 4.5:1 for AA and 7:1 for AAA.'
+			},
+			{
+				q: 'Why does #777777 on white fail when it looks fine?',
+				a: 'Its ratio is 4.47:1, just under the 4.5:1 that AA requires for normal text. #767676 (4.54:1) is the lightest neutral gray that passes on white. Contrast is measured with relative luminance, not how a color looks on a good screen, because the rule is meant to hold on dim screens, in sunlight and for people with low vision.'
+			},
+			{
+				q: 'What is the 3:1 rule for UI components?',
+				a: 'WCAG 2.1 added success criterion 1.4.11: the visible parts of controls (input borders, focus rings, toggle states) and meaningful icons need 3:1 against the colors next to them. Placeholder text and disabled controls are exempt from the text rules, but placeholders still need to be readable.'
+			},
+			{
+				q: 'Is this the same as APCA or WCAG 3?',
+				a: 'No. This tool uses the WCAG 2.x formula, which is what current laws and audits (EN 301 549, Section 508, the ADA guidance) refer to. APCA is a different contrast model proposed for the WCAG 3 draft. It gives different results, especially for dark mode, but it is not a requirement yet.'
+			},
+			{
+				q: 'How is a transparent color measured?',
+				a: 'A text color with alpha is blended with the background first, and the blended color is measured. A transparent background is placed over white, since the tool cannot know what is behind it. A note appears whenever this happens, so check the pair against the real page color in that case.'
+			}
+		]
+	},
+
 	'image-to-base64': {
 		about: [
 			'Drop, pick or paste an image and get its Base64 form in every flavor you might need: a ready-to-use data URL, a CSS background-image declaration, a complete <img> tag with intrinsic dimensions, and the raw Base64 payload. The reverse direction works too — paste a data URL or a bare Base64 blob and the image is decoded, previewed and downloadable as a file.',

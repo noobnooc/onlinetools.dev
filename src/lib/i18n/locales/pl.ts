@@ -574,6 +574,36 @@ const pl: Messages = {
 		totpWarnNonDefault: 'Niestandardowy algorytm, liczba cyfr lub okres. Niektóre aplikacje uwierzytelniające ignorują te ustawienia i pokazują błędne kody, więc przetestuj je w aplikacjach, których używają Twoi użytkownicy.',
 		totpEmpty: 'Wklej sekret 2FA lub URI otpauth:// albo utwórz nowy sekret',
 		totpPrivacy: 'Kody są obliczane za pomocą WebCrypto w tej karcie. Sekret nigdy nie trafia do linku do udostępniania, a jeśli pojawi się w pasku adresu, zostaje z niego usunięty.',
+
+		// Contrast checker
+		contrastText: 'Kolor tekstu',
+		contrastBackground: 'Tło',
+		contrastPickText: 'Wybierz kolor tekstu',
+		contrastPickBg: 'Wybierz kolor tła',
+		contrastSwap: 'Zamień tekst i tło',
+		contrastRatio: 'Współczynnik kontrastu',
+		contrastEmpty: 'Wpisz kolor tekstu i kolor tła',
+		contrastPreview: 'Podgląd koloru tekstu na tle',
+		contrastSampleBody: 'Tekst główny 16 px. Pchnąć w tę łódź jeża lub ośm skrzyń fig.',
+		contrastSampleLarge: 'Duży tekst 24 px',
+		contrastSampleUi: 'Przycisk',
+		contrastAa: 'AA, zwykły tekst',
+		contrastAaLarge: 'AA, duży tekst',
+		contrastAaa: 'AAA, zwykły tekst',
+		contrastAaaLarge: 'AAA, duży tekst',
+		contrastUi: 'Komponenty UI i ikony',
+		contrastPass: 'Spełnia',
+		contrastFail: 'Nie spełnia',
+		contrastLargeHint: 'Duży tekst to co najmniej 24 px albo co najmniej 18.66 px (14 pt) z pogrubieniem.',
+		contrastFix: 'Najbliższe kolory, które spełniają wymóg',
+		contrastTarget: 'Docelowy współczynnik',
+		contrastTargetLarge: 'Duży/UI 3',
+		contrastFixText: 'Zmień kolor tekstu',
+		contrastFixBg: 'Zmień tło',
+		contrastDarker: 'Ciemniejszy',
+		contrastLighter: 'Jaśniejszy',
+		contrastNoFix: 'Żaden kolor o tym odcieniu nie osiąga celu. Spróbuj zmienić drugi kolor.',
+		contrastAllPass: 'Ta para już spełnia wymóg.',
 		hbFormat: 'Bajty jako',
 		hbSep: 'Separator',
 		hbSpace: 'Spacja',
@@ -825,6 +855,10 @@ const pl: Messages = {
 		'totp-generator': {
 			name: 'Generator kodów TOTP / 2FA',
 			description: 'Odczytaj bieżący kod 2FA z sekretu lub URI otpauth://, sprawdź kod albo utwórz nowy sekret'
+		},
+		'contrast-checker': {
+			name: 'Sprawdzanie kontrastu kolorów (WCAG)',
+			description: 'Sprawdź kolory tekstu i tła pod kątem WCAG AA i AAA i otrzymaj najbliższy kolor, który spełnia wymóg'
 		},
 		'cidr-calculator': {
 			name: 'Kalkulator CIDR / podsieci',

@@ -16,6 +16,7 @@ export const TOOL_COMPONENTS: Record<string, () => Promise<{ default: Component 
 	'uuid-generator': () => import('./UuidTool.svelte'),
 	'hash-generator': () => import('./HashTool.svelte'),
 	'color-converter': () => import('./ColorTool.svelte'),
+	'contrast-checker': () => import('./ContrastTool.svelte'),
 	'case-converter': () => import('./CaseConverterTool.svelte'),
 	'word-counter': () => import('./WordCounterTool.svelte'),
 	'lorem-ipsum-generator': () => import('./LoremTool.svelte'),

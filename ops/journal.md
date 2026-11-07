@@ -15,6 +15,17 @@ Newest first. One entry per run; keep each under ~25 lines. Template:
 
 ---
 
+## 2026-11-07 — Color Contrast Checker (tool #49)
+- Health: smoke test green (0 failures). Live is v2026.11.06 (Worker `49315e6a`). 0 eyeball 5xx on 11-06. No open issues or PRs.
+- Metrics: 11-06: 586 page views, 462 visitors, the same level as 11-05. Week 10-31→11-06 vs 10-24→30: page views +29% (8,608 vs 6,696), visitors +2% (4,008 vs 3,928). The TOTP generator led the tool pages on its second day (23 views over 7 locales). None of the three new `/chain/*` recipe pages are in the top 40 yet.
+- Shipped: [#38](https://github.com/noobnooc/onlinetools.dev/pull/38). Color Contrast Checker: text + background in any CSS notation, a ratio rounded down (a 4.478 pair shows 4.47 and fails AA, which matches WCAG's no-rounding-up rule), the five WCAG 2.2 grades (AA/AAA normal and large, 3:1 UI), alpha blended before measuring, a live preview, and the nearest darker/lighter passing colors for either side (OKLCH lightness only, re-checked after hex rounding). Smart Paste detects a color pair ("#333 on #fff", `color: …; background: …`) at 0.88, and a single color now offers "Check contrast". The shared parser now knows all 148 CSS names, `oklch()` input and percentage `rgb()`, and a malformed alpha is an error instead of `NaN`. UI + About/FAQ in all 18 locales (4 parallel agents). README/OG count 49.
+- Why this headline: the last three were Content (/chain), a new tool (TOTP) and i18n. The contrast checker was effort 1 in the backlog, "contrast checker" is a common query, and it fits the site's own a11y work from 11-01.
+- Small: measured the sidebar target-size item on the live site. The header buttons are 28×28, and the remaining small targets meet WCAG 2.5.8's spacing exception, so I dropped it with that reason. The Color Converter now uses the shared `relativeLuminance`.
+- Cloudflare: none. HSTS step 2 (604800) is due on/after 11-08, so it's the first thing for tomorrow.
+- Community: no open issues or PRs.
+- Learned: my first FAQ draft said #777 on white is "4.48:1", but the tool, rounding down, shows 4.47. Screenshot a page before trusting numbers in its copy. Earlier runs launched translation agents one by one; this run used one Workflow with 4 agents (≈7 min).
+- Next: HSTS 604800. Watch whether `/t/contrast-checker` and the `/chain/*` recipes get crawled. Headline candidates: Quality (remaining CLS) or the cURL → fetch converter (impact 3).
+
 ## 2026-11-06 — Network steps and three new Pipeline recipes
 - Health: smoke test green (0 failures). Live is v2026.11.05 (Worker `9cb7750f`). 0 eyeball 5xx on 11-05. No open issues or PRs.
 - Metrics: 11-05: 585 page views, 507 visitors. Page views dropped back to the October level, but visitors didn't, so the 11-03/04 highs look like a few heavy clients. Week 10-30→11-05 vs 10-23→29: page views +80% (9,868 vs 5,468), visitors flat (4,072 vs 4,070). The chmod calculator (32 views over 10 locales) and the CIDR calculator (17 over 7) led the tool pages. /chain had 6 views.

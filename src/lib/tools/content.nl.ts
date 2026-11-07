@@ -1192,6 +1192,36 @@ const TOOL_CONTENT_NL: Record<string, ToolContent> = {
 		]
 	},
 
+	'contrast-checker': {
+		about: [
+			'Voer een tekstkleur en een achtergrondkleur in, in elke CSS-notatie (#hex, rgb(), hsl(), oklch() of een van de 148 benoemde kleuren), en krijg de WCAG-contrastverhouding, van 1:1 voor identieke kleuren tot 21:1 voor zwart op wit. Het paar wordt in één keer getoetst aan alle vijf drempels van WCAG 2.2: AA voor normale tekst (4.5:1) en grote tekst (3:1), AAA voor normale tekst (7:1) en grote tekst (4.5:1), en 3:1 voor UI-componenten en iconen.',
+			'Als een paar niet voldoet, stelt de tool de dichtstbijzijnde kleuren voor die wel voldoen, zowel voor de tekst als voor de achtergrond, donkerder en lichter. Alleen de OKLCH-lichtheid verandert en de tint blijft gelijk, zodat een merkblauw herkenbaar blauw blijft in plaats van grijs te worden. Elke suggestie wordt na afronding naar 8-bit hex opnieuw gecontroleerd, dus een voorgestelde kleur voldoet echt.',
+			'De verhouding wordt naar beneden afgerond op twee decimalen getoond. WCAG staat naar boven afronden niet toe, dus een paar met 4.496:1 haalt AA niet en wordt getoond als 4.49, niet als 4.50. Een halfdoorzichtige tekstkleur wordt eerst met de achtergrond gemengd voordat er gemeten wordt, omdat mensen de gemengde kleur zien.'
+		],
+		faqs: [
+			{
+				q: 'Wat telt als grote tekst?',
+				a: 'WCAG definieert grote tekst als minstens 18 punt (24 CSS-px), of minstens 14 punt (ongeveer 18.66 px) als die vet is. Grote tekst heeft 3:1 nodig voor AA en 4.5:1 voor AAA. Alles wat kleiner is, is normale tekst en heeft 4.5:1 nodig voor AA en 7:1 voor AAA.'
+			},
+			{
+				q: 'Waarom voldoet #777777 op wit niet terwijl het er prima uitziet?',
+				a: 'De verhouding is 4.47:1, net onder de 4.5:1 die AA voor normale tekst eist. #767676 (4.54:1) is het lichtste neutrale grijs dat op wit voldoet. Contrast wordt gemeten met relatieve luminantie, niet met hoe een kleur eruitziet op een goed scherm, omdat de regel moet gelden op gedimde schermen, in zonlicht en voor slechtziende mensen.'
+			},
+			{
+				q: 'Wat is de 3:1-regel voor UI-componenten?',
+				a: 'WCAG 2.1 voegde succescriterium 1.4.11 toe: de zichtbare delen van bedieningselementen (randen van invoervelden, focusringen, standen van schakelaars) en betekenisvolle iconen hebben 3:1 nodig ten opzichte van de kleuren ernaast. Placeholdertekst en uitgeschakelde elementen vallen niet onder de tekstregels, maar placeholders moeten wel leesbaar zijn.'
+			},
+			{
+				q: 'Is dit hetzelfde als APCA of WCAG 3?',
+				a: 'Nee. Deze tool gebruikt de formule van WCAG 2.x, en daar verwijzen huidige wetten en audits (EN 301 549, Section 508, de ADA-richtlijnen) naar. APCA is een ander contrastmodel dat is voorgesteld voor het concept van WCAG 3. Het geeft andere uitkomsten, vooral voor dark mode, maar het is nog geen verplichting.'
+			},
+			{
+				q: 'Hoe wordt een transparante kleur gemeten?',
+				a: 'Een tekstkleur met alfa wordt eerst met de achtergrond gemengd, en de gemengde kleur wordt gemeten. Een transparante achtergrond wordt op wit gelegd, omdat de tool niet kan weten wat erachter zit. Er verschijnt een melding wanneer dit gebeurt, dus controleer het paar in dat geval tegen de echte paginakleur.'
+			}
+		]
+	},
+
 	'chmod-calculator': {
 		about: [
 			'Typ een modus zoals je hem hebt — 755, 0644, rwxr-xr-x, een hele `ls -l`-regel, u=rwx,g=rx,o=rx of een volledig commando als chmod -R 750 /srv/app — en zie hem in elke andere vorm: octaal, de rwx-string, de ls -l-kolom en beide chmod-commando’s klaar om te kopiëren. Het raster toont lezen, schrijven en uitvoeren voor eigenaar, groep en overigen; vink een vakje aan en de modus wordt bijgewerkt.',

@@ -563,6 +563,36 @@ const ja: Messages = {
 		totpEmpty: '二要素認証のシークレットか otpauth:// URI を貼り付けるか、新しいシークレットを作成してください',
 		totpPrivacy: 'コードはこのタブ内で WebCrypto により計算されます。シークレットが共有リンクに入ることはなく、アドレスバーに含まれていた場合は削除されます。',
 
+		// Contrast checker
+		contrastText: '文字色',
+		contrastBackground: '背景',
+		contrastPickText: '文字色を選択',
+		contrastPickBg: '背景色を選択',
+		contrastSwap: '文字色と背景を入れ替え',
+		contrastRatio: 'コントラスト比',
+		contrastEmpty: '文字色と背景色を入力してください',
+		contrastPreview: '背景上の文字色のプレビュー',
+		contrastSampleBody: '16 px の本文。いろはにほへと ちりぬるを わかよたれそ つねならむ。',
+		contrastSampleLarge: '24 px の大きな文字',
+		contrastSampleUi: 'ボタン',
+		contrastAa: 'AA、通常の文字',
+		contrastAaLarge: 'AA、大きな文字',
+		contrastAaa: 'AAA、通常の文字',
+		contrastAaaLarge: 'AAA、大きな文字',
+		contrastUi: 'UI コンポーネントとアイコン',
+		contrastPass: '合格',
+		contrastFail: '不合格',
+		contrastLargeHint: '大きな文字とは、24 px 以上、または 18.66 px(14 pt)以上の太字です。',
+		contrastFix: '最も近い合格色',
+		contrastTarget: '目標比',
+		contrastTargetLarge: '大サイズ/UI 3',
+		contrastFixText: '文字色を変更',
+		contrastFixBg: '背景を変更',
+		contrastDarker: '暗く',
+		contrastLighter: '明るく',
+		contrastNoFix: 'この色相では目標に届く色がありません。もう一方の色を変更してみてください。',
+		contrastAllPass: 'この組み合わせはすでに目標を満たしています。',
+
 		// Text ↔ hex/binary
 		hbFormat: 'バイトの表記',
 		hbSep: '区切り文字',
@@ -813,6 +843,10 @@ const ja: Messages = {
 		'totp-generator': {
 			name: 'TOTP / 2FA コードジェネレーター',
 			description: 'シークレットや otpauth:// URI から現在の二要素認証コードを取得、コードの確認、新しいシークレットの作成'
+		},
+		'contrast-checker': {
+			name: 'カラーコントラストチェッカー (WCAG)',
+			description: '文字色と背景色を WCAG AA・AAA で判定し、最も近い合格色を提示'
 		},
 		'cidr-calculator': {
 			name: 'CIDR / サブネット計算機',

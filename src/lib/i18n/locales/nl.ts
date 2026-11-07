@@ -592,6 +592,36 @@ const nl: Messages = {
 		totpEmpty: 'Plak een 2FA-geheim of otpauth://-URI, of maak een nieuw geheim',
 		totpPrivacy: 'Codes worden met WebCrypto in dit tabblad berekend. Het geheim komt nooit in een deellink en wordt uit de adresbalk verwijderd als het via een link binnenkomt.',
 
+		// Contrast checker
+		contrastText: 'Tekstkleur',
+		contrastBackground: 'Achtergrond',
+		contrastPickText: 'Kies de tekstkleur',
+		contrastPickBg: 'Kies de achtergrondkleur',
+		contrastSwap: 'Tekst en achtergrond omwisselen',
+		contrastRatio: 'Contrastverhouding',
+		contrastEmpty: 'Voer een tekstkleur en een achtergrondkleur in',
+		contrastPreview: 'Voorbeeld van de tekstkleur op de achtergrond',
+		contrastSampleBody: 'Lopende tekst op 16 px. Pa’s wijze lynx bezag vroom het fikse aquaduct.',
+		contrastSampleLarge: 'Grote tekst op 24 px',
+		contrastSampleUi: 'Knop',
+		contrastAa: 'AA, normale tekst',
+		contrastAaLarge: 'AA, grote tekst',
+		contrastAaa: 'AAA, normale tekst',
+		contrastAaaLarge: 'AAA, grote tekst',
+		contrastUi: 'UI-componenten en iconen',
+		contrastPass: 'Voldoet',
+		contrastFail: 'Voldoet niet',
+		contrastLargeHint: 'Grote tekst betekent minstens 24 px, of minstens 18.66 px (14 pt) en vet.',
+		contrastFix: 'Dichtstbijzijnde kleuren die voldoen',
+		contrastTarget: 'Doelverhouding',
+		contrastTargetLarge: 'Groot/UI 3',
+		contrastFixText: 'Pas de tekstkleur aan',
+		contrastFixBg: 'Pas de achtergrond aan',
+		contrastDarker: 'Donkerder',
+		contrastLighter: 'Lichter',
+		contrastNoFix: 'Geen kleur met deze tint haalt het doel. Probeer de andere kleur aan te passen.',
+		contrastAllPass: 'Dit paar haalt het doel al.',
+
 		hbFormat: 'Bytes als',
 		hbSep: 'Scheidingsteken',
 		hbSpace: 'Spatie',
@@ -849,6 +879,10 @@ const nl: Messages = {
 		'totp-generator': {
 			name: 'TOTP / 2FA-codegenerator',
 			description: 'Haal de huidige 2FA-code uit een geheim of otpauth://-URI, controleer een code of maak een nieuw geheim'
+		},
+		'contrast-checker': {
+			name: 'Kleurcontrastchecker (WCAG)',
+			description: 'Controleer tekst- en achtergrondkleuren op WCAG AA en AAA en krijg de dichtstbijzijnde kleur die wel voldoet'
 		},
 		'cidr-calculator': {
 			name: 'CIDR- / subnetcalculator',

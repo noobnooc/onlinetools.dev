@@ -1192,6 +1192,36 @@ const TOOL_CONTENT_VI: Record<string, ToolContent> = {
 		]
 	},
 
+	'contrast-checker': {
+		about: [
+			'Nhập màu chữ và màu nền theo bất kỳ cách viết CSS nào (#hex, rgb(), hsl(), oklch() hoặc một trong 148 tên màu) và nhận tỷ lệ tương phản WCAG, từ 1:1 với hai màu giống nhau đến 21:1 với chữ đen trên nền trắng. Cặp màu được đánh giá cùng lúc theo cả năm ngưỡng của WCAG 2.2: AA cho văn bản thường (4.5:1) và chữ lớn (3:1), AAA cho văn bản thường (7:1) và chữ lớn (4.5:1), và 3:1 cho thành phần UI và biểu tượng.',
+			'Khi một cặp màu không đạt, công cụ gợi ý các màu đạt gần nhất cho cả màu chữ lẫn màu nền, theo hướng tối hơn và sáng hơn. Công cụ chỉ thay đổi độ sáng OKLCH và giữ nguyên tông màu, nên màu xanh thương hiệu vẫn là một màu xanh dễ nhận ra thay vì ngả sang xám. Mỗi gợi ý được kiểm tra lại sau khi làm tròn về hex 8 bit, nên màu được gợi ý chắc chắn đạt.',
+			'Tỷ lệ được làm tròn xuống đến hai chữ số thập phân. WCAG không cho phép làm tròn lên, nên một cặp màu ở mức 4.496:1 không đạt AA và được hiển thị là 4.49, không phải 4.50. Màu chữ bán trong suốt được trộn với nền trước khi đo, vì màu sau khi trộn mới là màu người xem nhìn thấy.'
+		],
+		faqs: [
+			{
+				q: 'Thế nào là chữ lớn?',
+				a: 'WCAG định nghĩa chữ lớn là chữ từ 18 point (24 px CSS) trở lên, hoặc từ 14 point (khoảng 18.66 px) trở lên khi in đậm. Chữ lớn cần 3:1 để đạt AA và 4.5:1 để đạt AAA. Mọi chữ nhỏ hơn là văn bản thường, cần 4.5:1 để đạt AA và 7:1 để đạt AAA.'
+			},
+			{
+				q: 'Vì sao #777777 trên nền trắng không đạt dù trông vẫn ổn?',
+				a: 'Tỷ lệ của nó là 4.47:1, chỉ thấp hơn một chút so với mức 4.5:1 mà AA yêu cầu cho văn bản thường. #767676 (4.54:1) là màu xám trung tính sáng nhất đạt chuẩn trên nền trắng. Độ tương phản được đo bằng độ chói tương đối, không phải theo cảm nhận trên một màn hình tốt, vì quy tắc này phải đúng cả trên màn hình tối, dưới ánh nắng và với người thị lực kém.'
+			},
+			{
+				q: 'Quy tắc 3:1 cho thành phần UI là gì?',
+				a: 'WCAG 2.1 bổ sung tiêu chí thành công 1.4.11: các phần nhìn thấy được của điều khiển (viền ô nhập, vòng focus, trạng thái công tắc) và các biểu tượng mang ý nghĩa cần đạt 3:1 so với màu bên cạnh. Placeholder và điều khiển bị vô hiệu hóa được miễn các quy tắc về văn bản, nhưng placeholder vẫn cần đọc được.'
+			},
+			{
+				q: 'Công cụ này có giống APCA hay WCAG 3 không?',
+				a: 'Không. Công cụ này dùng công thức của WCAG 2.x, là công thức mà luật và các đợt kiểm định hiện hành (EN 301 549, Section 508, hướng dẫn ADA) viện dẫn. APCA là một mô hình tương phản khác được đề xuất cho bản thảo WCAG 3. Nó cho kết quả khác, nhất là với chế độ tối, nhưng hiện chưa phải là yêu cầu bắt buộc.'
+			},
+			{
+				q: 'Màu trong suốt được đo như thế nào?',
+				a: 'Màu chữ có alpha được trộn với nền trước, rồi màu sau khi trộn mới được đo. Nền trong suốt được đặt lên trên màu trắng, vì công cụ không thể biết phía sau nó là gì. Một ghi chú sẽ hiện ra mỗi khi điều này xảy ra, khi đó hãy kiểm tra lại cặp màu với màu thật của trang.'
+			}
+		]
+	},
+
 	'chmod-calculator': {
 		about: [
 			'Nhập mode theo đúng dạng bạn đang có — 755, 0644, rwxr-xr-x, cả một dòng `ls -l`, u=rwx,g=rx,o=rx, hoặc một lệnh đầy đủ như chmod -R 750 /srv/app — và xem nó ở mọi dạng còn lại: bát phân, chuỗi rwx, cột ls -l và cả hai lệnh chmod sẵn sàng để sao chép. Lưới hiển thị quyền đọc, ghi và thực thi cho chủ sở hữu, nhóm và người khác; đánh dấu một ô là mode được cập nhật ngay.',

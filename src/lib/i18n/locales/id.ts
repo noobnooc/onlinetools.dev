@@ -573,6 +573,36 @@ const id: Messages = {
 		totpWarnNonDefault: 'Algoritme, digit, atau periode bukan default. Beberapa aplikasi autentikator mengabaikannya dan menampilkan kode yang salah, jadi uji dengan aplikasi yang dipakai pengguna Anda.',
 		totpEmpty: 'Tempel kunci rahasia 2FA atau URI otpauth://, atau buat kunci rahasia baru',
 		totpPrivacy: 'Kode dihitung dengan WebCrypto di tab ini. Kunci rahasia tidak pernah dimasukkan ke tautan berbagi, dan dihapus dari bilah alamat jika tiba lewat sana.',
+
+		// Contrast checker
+		contrastText: 'Warna teks',
+		contrastBackground: 'Latar belakang',
+		contrastPickText: 'Pilih warna teks',
+		contrastPickBg: 'Pilih warna latar belakang',
+		contrastSwap: 'Tukar teks dan latar belakang',
+		contrastRatio: 'Rasio kontras',
+		contrastEmpty: 'Masukkan warna teks dan warna latar belakang',
+		contrastPreview: 'Pratinjau warna teks di atas latar belakang',
+		contrastSampleBody: 'Teks isi 16 px. Kalimat contoh ini menunjukkan seberapa mudah teks dibaca.',
+		contrastSampleLarge: 'Teks besar 24 px',
+		contrastSampleUi: 'Tombol',
+		contrastAa: 'AA, teks normal',
+		contrastAaLarge: 'AA, teks besar',
+		contrastAaa: 'AAA, teks normal',
+		contrastAaaLarge: 'AAA, teks besar',
+		contrastUi: 'Komponen UI dan ikon',
+		contrastPass: 'Lolos',
+		contrastFail: 'Gagal',
+		contrastLargeHint: 'Teks besar berarti minimal 24 px, atau minimal 18.66 px (14 pt) dan tebal.',
+		contrastFix: 'Warna terdekat yang lolos',
+		contrastTarget: 'Rasio target',
+		contrastTargetLarge: 'Besar/UI 3',
+		contrastFixText: 'Ubah warna teks',
+		contrastFixBg: 'Ubah latar belakang',
+		contrastDarker: 'Lebih gelap',
+		contrastLighter: 'Lebih terang',
+		contrastNoFix: 'Tidak ada warna dengan rona ini yang mencapai target. Coba ubah warna yang lain.',
+		contrastAllPass: 'Pasangan ini sudah memenuhi target.',
 		hbFormat: 'Bita sebagai',
 		hbSep: 'Pemisah',
 		hbSpace: 'Spasi',
@@ -824,6 +854,10 @@ const id: Messages = {
 		'totp-generator': {
 			name: 'Generator Kode TOTP / 2FA',
 			description: 'Dapatkan kode 2FA saat ini dari kunci rahasia atau URI otpauth://, periksa kode, atau buat kunci rahasia baru'
+		},
+		'contrast-checker': {
+			name: 'Pemeriksa Kontras Warna (WCAG)',
+			description: 'Periksa warna teks dan latar belakang terhadap WCAG AA dan AAA, lalu dapatkan warna terdekat yang lolos'
 		},
 		'cidr-calculator': {
 			name: 'Kalkulator CIDR / Subnet',

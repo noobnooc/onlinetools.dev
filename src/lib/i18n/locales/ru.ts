@@ -564,6 +564,36 @@ const ru: Messages = {
 		totpEmpty: 'Вставьте секрет 2FA или URI otpauth:// либо создайте новый секрет',
 		totpPrivacy: 'Коды вычисляются через WebCrypto в этой вкладке. Секрет никогда не попадает в ссылку, которой можно поделиться, и удаляется из адресной строки, если пришёл в ней.',
 
+		// Contrast checker
+		contrastText: 'Цвет текста',
+		contrastBackground: 'Фон',
+		contrastPickText: 'Выберите цвет текста',
+		contrastPickBg: 'Выберите цвет фона',
+		contrastSwap: 'Поменять текст и фон местами',
+		contrastRatio: 'Коэффициент контрастности',
+		contrastEmpty: 'Введите цвет текста и цвет фона',
+		contrastPreview: 'Предпросмотр цвета текста на фоне',
+		contrastSampleBody: 'Основной текст 16 px. Съешь же ещё этих мягких французских булок, да выпей чаю.',
+		contrastSampleLarge: 'Крупный текст 24 px',
+		contrastSampleUi: 'Кнопка',
+		contrastAa: 'AA, обычный текст',
+		contrastAaLarge: 'AA, крупный текст',
+		contrastAaa: 'AAA, обычный текст',
+		contrastAaaLarge: 'AAA, крупный текст',
+		contrastUi: 'Компоненты UI и иконки',
+		contrastPass: 'Проходит',
+		contrastFail: 'Не проходит',
+		contrastLargeHint: 'Крупный текст — это не меньше 24 px или не меньше 18.66 px (14 pt) жирным.',
+		contrastFix: 'Ближайшие подходящие цвета',
+		contrastTarget: 'Целевой коэффициент',
+		contrastTargetLarge: 'Крупный/UI 3',
+		contrastFixText: 'Изменить цвет текста',
+		contrastFixBg: 'Изменить фон',
+		contrastDarker: 'Темнее',
+		contrastLighter: 'Светлее',
+		contrastNoFix: 'Ни один цвет с этим оттенком не достигает цели. Попробуйте изменить другой цвет.',
+		contrastAllPass: 'Эта пара уже достигает цели.',
+
 		// Text ↔ hex/binary
 		hbFormat: 'Байты как',
 		hbSep: 'Разделитель',
@@ -814,6 +844,10 @@ const ru: Messages = {
 		'totp-generator': {
 			name: 'Генератор кодов TOTP / 2FA',
 			description: 'Получайте текущий код 2FA из секрета или URI otpauth://, проверяйте код или создавайте новый секрет'
+		},
+		'contrast-checker': {
+			name: 'Проверка контрастности цветов (WCAG)',
+			description: 'Проверяйте цвета текста и фона на соответствие WCAG AA и AAA и получайте ближайший подходящий цвет'
 		},
 		'cidr-calculator': {
 			name: 'CIDR / калькулятор подсетей',

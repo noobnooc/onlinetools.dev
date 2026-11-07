@@ -3,7 +3,7 @@
 	import InputArea, { type BadgeSegment } from '../InputArea.svelte';
 	import OutputPanel from '../OutputPanel.svelte';
 	import EmptyState from '../EmptyState.svelte';
-	import { parseColor } from '$lib/tools/color';
+	import { parseColor, relativeLuminance } from '$lib/tools/color';
 	import { initFromHash } from '$lib/state/hashstate.svelte';
 	import { currentResult } from '$lib/state/app.svelte';
 	import { copyText } from '$lib/utils/format';
@@ -30,18 +30,10 @@
 			: []
 	);
 
-	/** WCAG relative luminance and contrast ratios vs black/white text. */
-	function luminance(r: number, g: number, b: number): number {
-		const lin = (c: number) => {
-			const cn = c / 255;
-			return cn <= 0.04045 ? cn / 12.92 : ((cn + 0.055) / 1.055) ** 2.4;
-		};
-		return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
-	}
-
+	/** WCAG contrast ratios vs black/white text; the full checker is its own tool. */
 	const contrast = $derived.by(() => {
 		if (!color) return null;
-		const L = luminance(color.r, color.g, color.b);
+		const L = relativeLuminance(color.r, color.g, color.b);
 		const vsWhite = (1 + 0.05) / (L + 0.05);
 		const vsBlack = (L + 0.05) / 0.05;
 		const grade = (ratio: number) => (ratio >= 7 ? 'AAA' : ratio >= 4.5 ? 'AA' : ratio >= 3 ? 'AA large' : 'fail');
