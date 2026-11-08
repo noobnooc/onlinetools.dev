@@ -622,6 +622,25 @@ const nl: Messages = {
 		contrastNoFix: 'Geen kleur met deze tint haalt het doel. Probeer de andere kleur aan te passen.',
 		contrastAllPass: 'Dit paar haalt het doel al.',
 
+		// cURL converter
+		curlInput: 'curl-commando',
+		curlTarget: 'Taal',
+		curlEmpty: 'Plak een curl-commando, bijvoorbeeld via "Copy as cURL" in het netwerkpaneel van je browser',
+		curlWarnUnknownOption: 'Onbekende optie {d} is genegeerd.',
+		curlWarnUnsupportedOption: '{d} wijzigt het verzoek op een manier die deze code niet nabootst.',
+		curlWarnNoScheme: 'De URL heeft geen schema, dus is http:// aangenomen, zoals curl dat ook doet.',
+		curlWarnMultipleUrls: 'Het commando bevat {d} URL\'s. Alleen de eerste wordt omgezet.',
+		curlWarnStdin: 'Gegevens van standaardinvoer (@- of -T -) kunnen niet worden omgezet. Voeg ze zelf aan de code toe.',
+		curlWarnCookieFile: '-b {d} leest cookies uit een bestand, en dat wordt niet omgezet.',
+		curlWarnHeaderFile: '-H @{d} leest headers uit een bestand, en dat wordt niet omgezet.',
+		curlWarnPasswordPrompt: '-u heeft geen wachtwoord, dus curl zou erom vragen. De code gebruikt een leeg wachtwoord.',
+		curlWarnTrailing: 'Alles na een |, ;, & of > zonder aanhalingstekens is genegeerd. Zet aanhalingstekens om URL\'s die & bevatten.',
+		curlWarnBrowserHeaders: 'Browsers laten fetch {d} niet instellen. De code werkt zoals hij is in Node.js, Deno en Bun.',
+		curlWarnFetchProxy: 'fetch heeft geen proxyoptie. Geef in Node.js een undici ProxyAgent mee als dispatcher.',
+		curlWarnFetchInsecure: 'fetch kan certificaatcontroles niet overslaan (-k). Vertrouw in plaats daarvan het certificaat, bijvoorbeeld met NODE_EXTRA_CA_CERTS in Node.js.',
+		curlSecretsNote: 'Dit commando bevat inloggegevens, dus deellinks laten het weg.',
+		curlPrivacy: 'De conversie draait in dit tabblad. Er wordt niets verzonden en het verzoek zelf wordt nooit uitgevoerd.',
+
 		hbFormat: 'Bytes als',
 		hbSep: 'Scheidingsteken',
 		hbSpace: 'Spatie',
@@ -883,6 +902,10 @@ const nl: Messages = {
 		'contrast-checker': {
 			name: 'Kleurcontrastchecker (WCAG)',
 			description: 'Controleer tekst- en achtergrondkleuren op WCAG AA en AAA en krijg de dichtstbijzijnde kleur die wel voldoet'
+		},
+		'curl-converter': {
+			name: 'cURL → fetch / Python / Go',
+			description: 'Zet een curl-commando om naar JavaScript fetch, axios, Python requests of Go-code'
 		},
 		'cidr-calculator': {
 			name: 'CIDR- / subnetcalculator',

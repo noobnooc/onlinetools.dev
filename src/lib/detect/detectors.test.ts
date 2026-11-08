@@ -99,6 +99,14 @@ describe('smart paste detection', () => {
 		expect(detect('755').some((d) => d.type === 'permissions')).toBe(false);
 	});
 
+	it('detects curl commands and routes them to the converter', () => {
+		const top = detect("curl -X POST 'https://api.example.com/v1/items?id=1' -H 'Content-Type: application/json' -d '{\"a\":1}'")[0];
+		expect(top?.type).toBe('curl');
+		expect(top?.tool).toBe('curl-converter');
+		expect(detect('curl up with a book').some((d) => d.type === 'curl')).toBe(false);
+		expect(detect('I used curl yesterday').some((d) => d.type === 'curl')).toBe(false);
+	});
+
 	it('detects otpauth URIs and routes them to the TOTP generator', () => {
 		const top = detect('otpauth://totp/Example:alice@example.com?secret=JBSWY3DPEHPK3PXP&issuer=Example')[0];
 		expect(top?.type).toBe('otpauth');

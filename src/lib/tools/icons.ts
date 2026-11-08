@@ -46,7 +46,8 @@ import {
 	Shield,
 	WandSparkles,
 	ShieldEllipsis,
-	Contrast
+	Contrast,
+	SquareTerminal
 } from 'lucide-svelte';
 import type { ToolCategory } from './registry';
 
@@ -86,6 +87,7 @@ export const TOOL_ICONS: Record<string, IconComponent> = {
 	'chmod-calculator': FileLock,
 	'totp-generator': ShieldEllipsis,
 	'contrast-checker': Contrast,
+	'curl-converter': SquareTerminal,
 	'image-to-base64': FileImage,
 	'image-converter': Images,
 	'image-resizer': Scaling,

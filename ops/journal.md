@@ -15,6 +15,17 @@ Newest first. One entry per run; keep each under ~25 lines. Template:
 
 ---
 
+## 2026-11-08 — cURL → fetch / Python / Go (tool #50)
+- Health: smoke test green (0 failures). Live is v2026.11.07 (Worker `f729a75f`). 0 eyeball 5xx on 11-07. No open issues or PRs.
+- Metrics: 11-07: 865 page views, 572 visitors. Week 11-01→11-07 vs 10-25→31: page views +29% (8,855 vs 6,844), visitors +6% (4,100 vs 3,875). 4xx jumped to 6,171: 3,105 of those were one headless bot (UA `Lightpanda/1.0`) re-requesting stale `/_app/immutable/*` chunks, not visitors. JSON → TypeScript (17) and /chain (17) led human pages.
+- Shipped: [#39](https://github.com/noobnooc/onlinetools.dev/pull/39). cURL → fetch / axios / Python requests / Go net/http. Bash quoting ($'…', continuations) and Windows cmd copies (^ escapes); curl's rules for -d (POST + form type, & join, @file), -G, --data-urlencode (curl 8 encoding: `+`, lowercase %xx), --json, -F (files, ;type=, <file), -u, -b, -A, -e, -T, -I, -k, -m, -x, --oauth2-bearer, short-option clusters. JSON bodies become object literals / dicts; urlencoded bodies become a requests dict when unambiguous. Anything not carried over is a localized warning (unknown/unsupported options, cookie files, stdin, unquoted `&`/`|`, browser-forbidden headers in fetch). Commands with credentials get no share link and are stripped from the hash. Smart Paste detects curl commands (but not "curl up…"). 18 locales (4 parallel agents). README/OG count 50. HSTS step 2.
+- Why this headline: it was the highest-impact item left in the backlog (3), and the local angle is real: commands copied from DevTools carry session cookies and bearer tokens. Last three headlines were Content (/chain), a tool (TOTP), a tool (contrast); this is a third tool in four runs, so the next headline should be Quality or Content.
+- Verification beyond unit tests (28 cases): a scratch harness ran 10 curl commands with real curl against a local echo server and compared with the generated code run in Node (fetch, axios), Python (requests) and Go. It caught two real bugs: `--data-urlencode` used %20/uppercase where curl 8 sends `+`/lowercase, and axios labeled a `-T` upload as a urlencoded form. Both fixed. Remaining differences are equivalent (JSON whitespace in requests, re-encoded form values, %XX case) plus one known: fetch/axios normalize newlines in a `-F name=<file` text field to CRLF.
+- Cloudflare: HSTS max-age 86400 → 604800 (step 2). Logged with undo.
+- Community: no open issues or PRs.
+- Learned: `pip install` needs `python3 -m pip` here (plain `pip` installs to another Python). Go and curl 8.5 are preinstalled, so generated-code tools can be checked end to end. The echo-server harness approach is worth reusing for any code generator.
+- Next: HSTS 15552000 on/after 11-15. Headline candidates: Quality (remaining CLS on tool pages) or Content (a /chain preset), not another new tool. cURL follow-ups (more targets, fetch → curl) are in the backlog.
+
 ## 2026-11-07 — Color Contrast Checker (tool #49)
 - Health: smoke test green (0 failures). Live is v2026.11.06 (Worker `49315e6a`). 0 eyeball 5xx on 11-06. No open issues or PRs.
 - Metrics: 11-06: 586 page views, 462 visitors, the same level as 11-05. Week 10-31→11-06 vs 10-24→30: page views +29% (8,608 vs 6,696), visitors +2% (4,008 vs 3,928). The TOTP generator led the tool pages on its second day (23 views over 7 locales). None of the three new `/chain/*` recipe pages are in the top 40 yet.

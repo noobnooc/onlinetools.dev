@@ -592,6 +592,25 @@ const zh: Messages = {
 		contrastNoFix: '该色相下没有颜色能达到目标。请尝试修改另一个颜色。',
 		contrastAllPass: '这组颜色已达到目标。',
 
+		// cURL converter
+		curlInput: 'curl 命令',
+		curlTarget: '语言',
+		curlEmpty: '粘贴一条 curl 命令,例如在浏览器网络面板中用「Copy as cURL」复制的内容',
+		curlWarnUnknownOption: '未知选项 {d} 已被忽略。',
+		curlWarnUnsupportedOption: '{d} 会改变请求,但这段代码没有复现这一行为。',
+		curlWarnNoScheme: 'URL 没有协议,因此与 curl 一样按 http:// 处理。',
+		curlWarnMultipleUrls: '命令中有 {d} 个 URL,只转换第一个。',
+		curlWarnStdin: '来自标准输入的数据(@- 或 -T -)无法转换,请自行添加到代码中。',
+		curlWarnCookieFile: '-b {d} 从文件读取 Cookie,这部分不会被转换。',
+		curlWarnHeaderFile: '-H @{d} 从文件读取请求头,这部分不会被转换。',
+		curlWarnPasswordPrompt: '-u 没有提供密码,curl 会提示输入。代码中使用空密码。',
+		curlWarnTrailing: '未加引号的 |、;、& 或 > 之后的内容都已被忽略。包含 & 的 URL 请用引号括起来。',
+		curlWarnBrowserHeaders: '浏览器不允许 fetch 设置 {d}。这段代码在 Node.js、Deno 和 Bun 中可直接运行。',
+		curlWarnFetchProxy: 'fetch 没有代理选项。在 Node.js 中,请将 undici ProxyAgent 作为 dispatcher 传入。',
+		curlWarnFetchInsecure: 'fetch 无法跳过证书校验(-k)。请改为信任该证书,例如在 Node.js 中使用 NODE_EXTRA_CA_CERTS。',
+		curlSecretsNote: '此命令包含凭据,因此分享链接中不会包含它。',
+		curlPrivacy: '转换在此标签页中进行。不会发送任何内容,也绝不会真正发出该请求。',
+
 		// Text ↔ hex/binary
 		hbFormat: '字节表示为',
 		hbSep: '分隔符',
@@ -847,6 +866,10 @@ const zh: Messages = {
 		'contrast-checker': {
 			name: '颜色对比度检查器 (WCAG)',
 			description: '按 WCAG AA 和 AAA 检查文字与背景颜色,并给出最接近的合格颜色'
+		},
+		'curl-converter': {
+			name: 'cURL → fetch / Python / Go',
+			description: '将 curl 命令转换为 JavaScript fetch、axios、Python requests 或 Go 代码'
 		},
 		'cidr-calculator': {
 			name: 'CIDR / 子网计算器',

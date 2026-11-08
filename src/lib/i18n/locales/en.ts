@@ -682,6 +682,25 @@ const en = {
 		contrastNoFix: 'No color with this hue reaches the target. Try changing the other color.',
 		contrastAllPass: 'This pair already meets the target.',
 
+		// cURL converter
+		curlInput: 'curl command',
+		curlTarget: 'Language',
+		curlEmpty: 'Paste a curl command, for example from "Copy as cURL" in your browser\'s network panel',
+		curlWarnUnknownOption: 'Unknown option {d} was ignored.',
+		curlWarnUnsupportedOption: '{d} changes the request in a way this code does not reproduce.',
+		curlWarnNoScheme: 'The URL has no scheme, so http:// was assumed, as curl does.',
+		curlWarnMultipleUrls: 'The command has {d} URLs. Only the first one is converted.',
+		curlWarnStdin: 'Data from standard input (@- or -T -) can\'t be converted. Add it to the code yourself.',
+		curlWarnCookieFile: '-b {d} reads cookies from a file, which is not converted.',
+		curlWarnHeaderFile: '-H @{d} reads headers from a file, which is not converted.',
+		curlWarnPasswordPrompt: '-u has no password, so curl would ask for one. The code uses an empty password.',
+		curlWarnTrailing: 'Everything after an unquoted |, ;, & or > was ignored. Put quotes around URLs that contain &.',
+		curlWarnBrowserHeaders: 'Browsers don\'t let fetch set {d}. The code works as is in Node.js, Deno and Bun.',
+		curlWarnFetchProxy: 'fetch has no proxy option. In Node.js, pass an undici ProxyAgent as the dispatcher.',
+		curlWarnFetchInsecure: 'fetch can\'t skip certificate checks (-k). Trust the certificate instead, for example with NODE_EXTRA_CA_CERTS in Node.js.',
+		curlSecretsNote: 'This command contains credentials, so share links leave it out.',
+		curlPrivacy: 'The conversion runs in this tab. Nothing is sent, and the request itself is never made.',
+
 		// Text ↔ hex/binary
 		hbFormat: 'Bytes as',
 		hbSep: 'Separator',

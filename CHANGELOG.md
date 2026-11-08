@@ -11,6 +11,23 @@ the footer badge and every `<lastmod>` in the sitemap.
 
 ---
 
+## [2026.11.08] — cURL → fetch / Python / Go
+
+### Added
+
+- **cURL → fetch / Python / Go** (tool #50): paste a curl command, for
+  example from "Copy as cURL" in the browser's network panel, and get the
+  same request as JavaScript fetch, axios, Python requests or a Go
+  net/http program. Bash and Windows cmd quoting are both understood.
+- Follows curl's own rules: -d implies POST and a form Content-Type, -G moves
+  data into the query, --data-urlencode encodes like curl 8, and --json,
+  -F uploads, -u, -b, -A, -e, -k, -m and -x map to each library's options.
+  A JSON body becomes an object literal or a Python dict.
+- Options without an equivalent (--digest, --cert, cookie files, stdin) are
+  listed as warnings instead of being dropped silently. Commands that carry
+  credentials are left out of share links.
+- Smart Paste recognizes curl commands.
+
 ## [2026.11.07] — Color Contrast Checker
 
 ### Added

@@ -620,6 +620,25 @@ const th: Messages = {
 		contrastNoFix: 'ไม่มีสีในโทนสีนี้ที่ถึงเป้าหมาย ลองเปลี่ยนอีกสีหนึ่งแทน',
 		contrastAllPass: 'สีคู่นี้ผ่านเป้าหมายแล้ว',
 
+		// cURL converter
+		curlInput: 'คำสั่ง curl',
+		curlTarget: 'ภาษา',
+		curlEmpty: 'วางคำสั่ง curl เช่น คำสั่งที่ได้จาก “Copy as cURL” ในแผง Network ของเบราว์เซอร์',
+		curlWarnUnknownOption: 'ไม่รู้จักตัวเลือก {d} จึงข้ามไป',
+		curlWarnUnsupportedOption: '{d} เปลี่ยนคำขอในแบบที่โค้ดนี้ไม่ได้ทำซ้ำ',
+		curlWarnNoScheme: 'URL ไม่มี scheme จึงถือว่าเป็น http:// เหมือนที่ curl ทำ',
+		curlWarnMultipleUrls: 'คำสั่งมี URL {d} รายการ จะแปลงเฉพาะรายการแรกเท่านั้น',
+		curlWarnStdin: 'ข้อมูลจาก standard input (@- หรือ -T -) แปลงไม่ได้ ให้เพิ่มลงในโค้ดเอง',
+		curlWarnCookieFile: '-b {d} อ่านคุกกี้จากไฟล์ ซึ่งไม่ได้ถูกแปลง',
+		curlWarnHeaderFile: '-H @{d} อ่านส่วนหัวจากไฟล์ ซึ่งไม่ได้ถูกแปลง',
+		curlWarnPasswordPrompt: '-u ไม่มีรหัสผ่าน curl จึงจะถามรหัสผ่าน โค้ดใช้รหัสผ่านว่าง',
+		curlWarnTrailing: 'ทุกอย่างหลัง |, ;, & หรือ > ที่ไม่อยู่ในเครื่องหมายคำพูดถูกข้ามไป ให้ใส่เครื่องหมายคำพูดครอบ URL ที่มี &',
+		curlWarnBrowserHeaders: 'เบราว์เซอร์ไม่อนุญาตให้ fetch ตั้งค่า {d} โค้ดนี้ใช้ได้ทันทีใน Node.js, Deno และ Bun',
+		curlWarnFetchProxy: 'fetch ไม่มีตัวเลือกพร็อกซี ใน Node.js ให้ส่ง undici ProxyAgent เป็น dispatcher',
+		curlWarnFetchInsecure: 'fetch ข้ามการตรวจสอบใบรับรอง (-k) ไม่ได้ ให้เชื่อถือใบรับรองนั้นแทน เช่น ใช้ NODE_EXTRA_CA_CERTS ใน Node.js',
+		curlSecretsNote: 'คำสั่งนี้มีข้อมูลรับรอง ลิงก์แชร์จึงไม่รวมคำสั่งนี้ไว้',
+		curlPrivacy: 'การแปลงทำงานในแท็บนี้ ไม่มีสิ่งใดถูกส่งออกไป และคำขอจะไม่ถูกส่งจริง',
+
 		hbFormat: 'แสดงไบต์เป็น',
 		hbSep: 'ตัวคั่น',
 		hbSpace: 'ช่องว่าง',
@@ -881,6 +900,10 @@ const th: Messages = {
 		'contrast-checker': {
 			name: 'ตัวตรวจสอบคอนทราสต์สี (WCAG)',
 			description: 'ตรวจสอบสีข้อความและพื้นหลังตาม WCAG AA และ AAA พร้อมรับสีที่ผ่านซึ่งใกล้ที่สุด'
+		},
+		'curl-converter': {
+			name: 'cURL → fetch / Python / Go',
+			description: 'แปลงคำสั่ง curl เป็นโค้ด JavaScript fetch, axios, Python requests หรือ Go'
 		},
 		'cidr-calculator': {
 			name: 'เครื่องคำนวณ CIDR / ซับเน็ต',

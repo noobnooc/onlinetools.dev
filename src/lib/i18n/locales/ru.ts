@@ -594,6 +594,25 @@ const ru: Messages = {
 		contrastNoFix: 'Ни один цвет с этим оттенком не достигает цели. Попробуйте изменить другой цвет.',
 		contrastAllPass: 'Эта пара уже достигает цели.',
 
+		// cURL converter
+		curlInput: 'команда curl',
+		curlTarget: 'Язык',
+		curlEmpty: 'Вставьте команду curl, например из пункта "Copy as cURL" в панели сети браузера',
+		curlWarnUnknownOption: 'Неизвестный параметр {d} пропущен.',
+		curlWarnUnsupportedOption: '{d} меняет запрос так, как этот код не воспроизводит.',
+		curlWarnNoScheme: 'У URL нет схемы, поэтому подставлен http://, как это делает curl.',
+		curlWarnMultipleUrls: 'URL в команде: {d}. Преобразуется только первый.',
+		curlWarnStdin: 'Данные из стандартного ввода (@- или -T -) нельзя преобразовать. Добавьте их в код сами.',
+		curlWarnCookieFile: '-b {d} читает cookie из файла, это не преобразуется.',
+		curlWarnHeaderFile: '-H @{d} читает заголовки из файла, это не преобразуется.',
+		curlWarnPasswordPrompt: 'У -u нет пароля, поэтому curl запросил бы его. В коде используется пустой пароль.',
+		curlWarnTrailing: 'Всё после |, ;, & или > без кавычек пропущено. Заключайте в кавычки URL, содержащие &.',
+		curlWarnBrowserHeaders: 'Браузеры не позволяют fetch задавать {d}. Код работает как есть в Node.js, Deno и Bun.',
+		curlWarnFetchProxy: 'У fetch нет параметра прокси. В Node.js передайте undici ProxyAgent в качестве dispatcher.',
+		curlWarnFetchInsecure: 'fetch не может пропустить проверку сертификата (-k). Вместо этого добавьте сертификат в доверенные, например через NODE_EXTRA_CA_CERTS в Node.js.',
+		curlSecretsNote: 'Команда содержит учётные данные, поэтому в ссылки для обмена она не попадает.',
+		curlPrivacy: 'Преобразование выполняется в этой вкладке. Ничего не отправляется, а сам запрос никогда не выполняется.',
+
 		// Text ↔ hex/binary
 		hbFormat: 'Байты как',
 		hbSep: 'Разделитель',
@@ -848,6 +867,10 @@ const ru: Messages = {
 		'contrast-checker': {
 			name: 'Проверка контрастности цветов (WCAG)',
 			description: 'Проверяйте цвета текста и фона на соответствие WCAG AA и AAA и получайте ближайший подходящий цвет'
+		},
+		'curl-converter': {
+			name: 'cURL → fetch / Python / Go',
+			description: 'Преобразуйте команду curl в код JavaScript fetch, axios, Python requests или Go'
 		},
 		'cidr-calculator': {
 			name: 'CIDR / калькулятор подсетей',

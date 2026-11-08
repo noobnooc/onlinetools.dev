@@ -1222,6 +1222,36 @@ const TOOL_CONTENT_VI: Record<string, ToolContent> = {
 		]
 	},
 
+	'curl-converter': {
+		about: [
+			'Dán một lệnh curl và nhận cùng request đó dưới dạng JavaScript fetch, axios, Python requests hoặc một chương trình Go net/http. Nguồn phổ biến nhất là "Copy as cURL" trong bảng Network của trình duyệt: Chrome và Edge có biến thể bash và cmd, Firefox có POSIX và Windows. Công cụ hiểu cả hai, bao gồm chuỗi $\'…\' của bash, ký tự thoát ^ của cmd và việc nối dòng bằng \\ hoặc ^.',
+			'Trình phân tích tuân theo đúng các quy tắc của curl. -d ngầm định POST và Content-Type dạng form, nhiều giá trị -d được nối bằng &, -G chuyển chúng vào query string, và --data-urlencode mã hóa giống hệt curl. --json, tải tệp lên bằng -F, -u, -b, -A, -e, -k, -m và -x được chuyển sang tùy chọn tương ứng của từng ngôn ngữ. Body JSON trở thành object literal (dict trong Python) thay vì một chuỗi đã escape. Các tùy chọn thay đổi request nhưng không có tương đương, như --digest hay --cert, được liệt kê dưới dạng cảnh báo, và không có gì bị bỏ đi mà không có cảnh báo.',
+			'Lệnh sao chép từ trình duyệt thường chứa cookie phiên hoặc bearer token. Việc chuyển đổi chạy ngay trong tab này và không có gì được gửi đi. Khi lệnh chứa thông tin xác thực, nó cũng không được đưa vào liên kết chia sẻ.'
+		],
+		faqs: [
+			{
+				q: 'Làm sao để sao chép một request dưới dạng cURL?',
+				a: 'Mở công cụ dành cho nhà phát triển (F12), chuyển sang tab Network rồi tải lại trang hoặc lặp lại thao tác. Nhấp chuột phải vào request, sau đó chọn Copy → Copy as cURL (bash) trong Chrome hoặc Edge, hoặc Copy Value → Copy as cURL (POSIX) trong Firefox. Biến thể cmd hoặc Windows cũng dùng được. Safari có Copy as cURL trong cùng menu đó sau khi bật menu Develop.'
+			},
+			{
+				q: 'Vì sao mã fetch lỗi trong trình duyệt nhưng chạy được trong Node.js?',
+				a: 'Trình duyệt không cho trang web đặt một số header, gồm Cookie, User-Agent, Host, Origin và Referer, đồng thời áp dụng CORS, nên một request sao chép từ trang này thường không thể lặp lại từ trang khác. Công cụ sẽ cảnh báo khi lệnh dùng một trong các header đó. Mã được tạo chạy nguyên trạng trong Node.js 18 trở lên, Deno và Bun, nơi các giới hạn này không áp dụng.'
+			},
+			{
+				q: 'Mã có đi theo chuyển hướng giống curl không?',
+				a: 'Không hoàn toàn. curl chỉ đi theo chuyển hướng khi có -L, còn fetch, axios trong Node.js, requests và http.Client của Go đều mặc định đi theo. Nếu bạn cần hành vi mặc định của curl, hãy đặt redirect: \'manual\' trong fetch, maxRedirects: 0 trong axios, allow_redirects=False trong requests, hoặc một hàm CheckRedirect trong Go.'
+			},
+			{
+				q: '-d @file và -F file=@path được xử lý thế nào?',
+				a: 'Chúng trở thành thao tác đọc tệp trong mã được tạo: readFile và openAsBlob trong Node.js (openAsBlob cần Node.js 20 trở lên), open(…, \'rb\') trong Python và os.Open trong Go. Có một khác biệt cần biết: curl xóa các dấu xuống dòng khỏi tệp gửi bằng -d @file, nhưng giữ nguyên chúng với --data-binary @file. Mã được tạo luôn gửi tệp nguyên vẹn.'
+			},
+			{
+				q: 'Vì sao axios được thêm validateStatus: () => true?',
+				a: 'curl in ra phản hồi với bất kỳ mã trạng thái nào, nhưng axios mặc định ném lỗi với 4xx và 5xx. Tùy chọn này giúp mã được tạo hoạt động giống lệnh curl, để bạn thấy phản hồi lỗi thay vì một exception. Hãy xóa nó nếu bạn muốn nhận exception.'
+			}
+		]
+	},
+
 	'chmod-calculator': {
 		about: [
 			'Nhập mode theo đúng dạng bạn đang có — 755, 0644, rwxr-xr-x, cả một dòng `ls -l`, u=rwx,g=rx,o=rx, hoặc một lệnh đầy đủ như chmod -R 750 /srv/app — và xem nó ở mọi dạng còn lại: bát phân, chuỗi rwx, cột ls -l và cả hai lệnh chmod sẵn sàng để sao chép. Lưới hiển thị quyền đọc, ghi và thực thi cho chủ sở hữu, nhóm và người khác; đánh dấu một ô là mode được cập nhật ngay.',

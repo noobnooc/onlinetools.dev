@@ -17,6 +17,7 @@ export const TOOL_COMPONENTS: Record<string, () => Promise<{ default: Component 
 	'hash-generator': () => import('./HashTool.svelte'),
 	'color-converter': () => import('./ColorTool.svelte'),
 	'contrast-checker': () => import('./ContrastTool.svelte'),
+	'curl-converter': () => import('./CurlTool.svelte'),
 	'case-converter': () => import('./CaseConverterTool.svelte'),
 	'word-counter': () => import('./WordCounterTool.svelte'),
 	'lorem-ipsum-generator': () => import('./LoremTool.svelte'),

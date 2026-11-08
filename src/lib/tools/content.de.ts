@@ -1223,6 +1223,36 @@ const TOOL_CONTENT_DE: Record<string, ToolContent> = {
 		]
 	},
 
+	'curl-converter': {
+		about: [
+			'Füge einen curl-Befehl ein und erhalte dieselbe Anfrage als JavaScript fetch, axios, Python requests oder als Go-Programm mit net/http. Die häufigste Quelle ist „Copy as cURL“ im Netzwerk-Panel des Browsers: Chrome und Edge bieten Varianten für bash und cmd, Firefox für POSIX und Windows. Beide werden verstanden, einschließlich bash-Strings mit $\'…\', cmd-Escapes mit ^ und Zeilenfortsetzungen mit \\ oder ^.',
+			'Der Parser folgt den Regeln von curl selbst. -d impliziert POST und einen Formular-Content-Type, mehrere -d-Werte werden mit & verbunden, -G verschiebt sie in den Query-String, und --data-urlencode kodiert genau wie curl. --json, Datei-Uploads mit -F, -u, -b, -A, -e, -k, -m und -x werden auf die passenden Optionen der jeweiligen Sprache übertragen. Ein JSON-Body wird zu einem Objektliteral (in Python zu einem dict) statt zu einem escapten String. Optionen, die die Anfrage verändern, aber keine Entsprechung haben, etwa --digest oder --cert, erscheinen als Warnungen, und nichts fällt ohne Warnung weg.',
+			'Aus dem Browser kopierte Befehle enthalten meist Session-Cookies oder Bearer-Tokens. Die Umwandlung läuft in diesem Tab, und nichts wird gesendet. Enthält der Befehl Zugangsdaten, bleibt er außerdem aus Teil-Links heraus.'
+		],
+		faqs: [
+			{
+				q: 'Wie kopiere ich eine Anfrage als cURL?',
+				a: 'Öffne die Developer Tools (F12), wechsle in den Network-Tab und lade die Seite neu oder wiederhole die Aktion. Klicke mit der rechten Maustaste auf die Anfrage und wähle in Chrome oder Edge Copy → Copy as cURL (bash), in Firefox Copy Value → Copy as cURL (POSIX). Die cmd- oder Windows-Variante funktioniert ebenfalls. Safari hat Copy as cURL im selben Menü, sobald das Develop-Menü aktiviert ist.'
+			},
+			{
+				q: 'Warum scheitert der fetch-Code im Browser, funktioniert aber in Node.js?',
+				a: 'Browser erlauben einer Seite nicht, bestimmte Header zu setzen, darunter Cookie, User-Agent, Host, Origin und Referer, und sie setzen CORS durch. Eine von einer Website kopierte Anfrage lässt sich deshalb meist nicht von einer anderen Seite aus wiederholen. Das Tool warnt, wenn der Befehl einen dieser Header verwendet. Der erzeugte Code läuft unverändert in Node.js 18 oder neuer, Deno und Bun, wo diese Einschränkungen nicht gelten.'
+			},
+			{
+				q: 'Folgt der Code Weiterleitungen wie curl?',
+				a: 'Nicht ganz. curl folgt Weiterleitungen nur mit -L, während fetch, axios in Node.js, requests und der http.Client von Go ihnen standardmäßig folgen. Wenn du das Standardverhalten von curl brauchst, setze redirect: \'manual\' in fetch, maxRedirects: 0 in axios, allow_redirects=False in requests oder eine CheckRedirect-Funktion in Go.'
+			},
+			{
+				q: 'Was passiert mit -d @file und -F file=@path?',
+				a: 'Sie werden im erzeugten Code zu Dateizugriffen: readFile und openAsBlob in Node.js (openAsBlob braucht Node.js 20 oder neuer), open(…, \'rb\') in Python und os.Open in Go. Einen Unterschied solltest du kennen: curl entfernt Zeilenumbrüche aus einer Datei, die mit -d @file gesendet wird, behält sie aber bei --data-binary @file. Der erzeugte Code sendet die Datei immer unverändert.'
+			},
+			{
+				q: 'Warum bekommt axios validateStatus: () => true?',
+				a: 'curl gibt die Antwort bei jedem Statuscode aus, axios wirft dagegen standardmäßig bei 4xx und 5xx eine Exception. Die Option sorgt dafür, dass sich der erzeugte Code wie der curl-Befehl verhält, sodass du die Fehlerantwort statt einer Exception siehst. Entferne sie, wenn dir die Exception lieber ist.'
+			}
+		]
+	},
+
 	'chmod-calculator': {
 		about: [
 			'Gib einen Modus so ein, wie er dir vorliegt — 755, 0644, rwxr-xr-x, eine ganze `ls -l`-Zeile, u=rwx,g=rx,o=rx oder einen vollständigen Befehl wie chmod -R 750 /srv/app — und sieh ihn in jeder anderen Form: oktal, als rwx-Zeichenkette, als ls -l-Spalte und als beide chmod-Befehle zum Kopieren. Das Raster zeigt Lesen, Schreiben und Ausführen für Besitzer, Gruppe und andere; setze ein Häkchen, und der Modus passt sich an.',

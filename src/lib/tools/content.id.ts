@@ -1222,6 +1222,36 @@ const TOOL_CONTENT_ID: Record<string, ToolContent> = {
 		]
 	},
 
+	'curl-converter': {
+		about: [
+			'Tempel perintah curl dan dapatkan request yang sama sebagai JavaScript fetch, axios, Python requests, atau program Go net/http. Sumber yang paling umum adalah "Copy as cURL" di panel jaringan browser: Chrome dan Edge menyediakan varian bash dan cmd, Firefox menyediakan POSIX dan Windows. Keduanya dipahami, termasuk string bash $\'…\', escape ^ milik cmd, dan sambungan baris dengan \\ atau ^.',
+			'Parser mengikuti aturan curl sendiri. -d berarti POST dengan Content-Type formulir, beberapa nilai -d digabung dengan &, -G memindahkannya ke query string, dan --data-urlencode meng-encode dengan cara yang sama seperti curl. --json, unggahan file -F, -u, -b, -A, -e, -k, -m, dan -x dipetakan ke opsi masing-masing bahasa. Body JSON menjadi literal objek (dict di Python), bukan string yang di-escape. Opsi yang mengubah request tetapi tidak punya padanan, seperti --digest atau --cert, ditampilkan sebagai peringatan, dan tidak ada yang dibuang tanpa peringatan.',
+			'Perintah yang disalin dari browser biasanya berisi cookie sesi atau token bearer. Konversi berjalan di tab ini dan tidak ada yang dikirim. Jika perintah berisi kredensial, perintah itu juga tidak dimasukkan ke tautan berbagi.'
+		],
+		faqs: [
+			{
+				q: 'Bagaimana cara menyalin request sebagai cURL?',
+				a: 'Buka alat pengembang (F12), masuk ke tab Network, lalu muat ulang halaman atau ulangi tindakannya. Klik kanan request, lalu pilih Copy → Copy as cURL (bash) di Chrome atau Edge, atau Copy Value → Copy as cURL (POSIX) di Firefox. Varian cmd atau Windows juga bisa dipakai. Safari punya Copy as cURL di menu yang sama setelah menu Develop diaktifkan.'
+			},
+			{
+				q: 'Kenapa kode fetch gagal di browser tetapi berjalan di Node.js?',
+				a: 'Browser tidak mengizinkan halaman mengatur beberapa header, termasuk Cookie, User-Agent, Host, Origin, dan Referer, dan browser menerapkan CORS, jadi request yang disalin dari satu situs biasanya tidak bisa diulang dari halaman lain. Alat ini memberi peringatan jika perintah memakai salah satu header tersebut. Kode yang dihasilkan berjalan apa adanya di Node.js 18 atau lebih baru, Deno, dan Bun, karena batasan itu tidak berlaku di sana.'
+			},
+			{
+				q: 'Apakah kode mengikuti redirect seperti curl?',
+				a: 'Tidak persis. curl hanya mengikuti redirect dengan -L, sedangkan fetch, axios di Node.js, requests, dan http.Client milik Go semuanya mengikutinya secara default. Jika Anda butuh perilaku default curl, atur redirect: \'manual\' di fetch, maxRedirects: 0 di axios, allow_redirects=False di requests, atau fungsi CheckRedirect di Go.'
+			},
+			{
+				q: 'Apa yang terjadi pada -d @file dan -F file=@path?',
+				a: 'Keduanya menjadi pembacaan file di kode yang dihasilkan: readFile dan openAsBlob di Node.js (openAsBlob butuh Node.js 20 atau lebih baru), open(…, \'rb\') di Python, dan os.Open di Go. Ada satu perbedaan yang perlu diketahui: curl menghapus jeda baris dari file yang dikirim dengan -d @file, tetapi mempertahankannya dengan --data-binary @file. Kode yang dihasilkan selalu mengirim file tanpa perubahan.'
+			},
+			{
+				q: 'Kenapa axios mendapat validateStatus: () => true?',
+				a: 'curl menampilkan respons untuk kode status apa pun, tetapi axios secara default melempar error untuk 4xx dan 5xx. Opsi ini membuat kode yang dihasilkan berperilaku seperti perintah curl, sehingga Anda melihat respons error alih-alih exception. Hapus opsi ini jika Anda lebih suka exception.'
+			}
+		]
+	},
+
 	'chmod-calculator': {
 		about: [
 			'Ketik mode sesuai yang Anda punya — 755, 0644, rwxr-xr-x, satu baris `ls -l` utuh, u=rwx,g=rx,o=rx, atau perintah lengkap seperti chmod -R 750 /srv/app — dan lihat dalam semua bentuk lainnya: oktal, string rwx, kolom ls -l, dan kedua perintah chmod yang siap disalin. Grid menampilkan baca, tulis, dan eksekusi untuk pemilik, grup, dan lainnya; centang sebuah kotak dan mode-nya langsung diperbarui.',

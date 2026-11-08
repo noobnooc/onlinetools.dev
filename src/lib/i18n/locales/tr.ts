@@ -600,6 +600,25 @@ const tr: Messages = {
 		contrastLighter: 'Daha açık',
 		contrastNoFix: 'Bu tonda hedefe ulaşan bir renk yok. Diğer rengi değiştirmeyi deneyin.',
 		contrastAllPass: 'Bu çift hedefi zaten karşılıyor.',
+
+		// cURL converter
+		curlInput: 'curl komutu',
+		curlTarget: 'Dil',
+		curlEmpty: 'Bir curl komutu yapıştırın; örneğin tarayıcınızın ağ panelindeki "Copy as cURL" ile kopyaladığınız bir komut',
+		curlWarnUnknownOption: 'Bilinmeyen {d} seçeneği yok sayıldı.',
+		curlWarnUnsupportedOption: '{d}, isteği bu kodun yeniden üretmediği bir şekilde değiştirir.',
+		curlWarnNoScheme: 'URL’de şema yok; bu yüzden curl’ün yaptığı gibi http:// varsayıldı.',
+		curlWarnMultipleUrls: 'Komutta {d} URL var. Yalnızca ilki dönüştürülür.',
+		curlWarnStdin: 'Standart girdiden gelen veri (@- veya -T -) dönüştürülemez. Onu koda kendiniz ekleyin.',
+		curlWarnCookieFile: '-b {d} çerezleri bir dosyadan okur; bu dönüştürülmez.',
+		curlWarnHeaderFile: '-H @{d} başlıkları bir dosyadan okur; bu dönüştürülmez.',
+		curlWarnPasswordPrompt: '-u’da parola yok, bu yüzden curl bir parola sorardı. Kod boş bir parola kullanır.',
+		curlWarnTrailing: 'Tırnak içinde olmayan bir |, ;, & veya > sonrasındaki her şey yok sayıldı. & içeren URL’leri tırnak içine alın.',
+		curlWarnBrowserHeaders: 'Tarayıcılar fetch’in {d} ayarlamasına izin vermez. Kod Node.js, Deno ve Bun’da olduğu gibi çalışır.',
+		curlWarnFetchProxy: 'fetch’in proxy seçeneği yoktur. Node.js’te dispatcher olarak bir undici ProxyAgent verin.',
+		curlWarnFetchInsecure: 'fetch sertifika denetimlerini (-k) atlayamaz. Bunun yerine sertifikaya güvenin; örneğin Node.js’te NODE_EXTRA_CA_CERTS ile.',
+		curlSecretsNote: 'Bu komut kimlik bilgileri içerdiği için paylaşım bağlantılarına eklenmez.',
+		curlPrivacy: 'Dönüştürme bu sekmede çalışır. Hiçbir şey gönderilmez ve isteğin kendisi asla yapılmaz.',
 		hbFormat: 'Baytlar şu biçimde',
 		hbSep: 'Ayırıcı',
 		hbSpace: 'Boşluk',
@@ -855,6 +874,10 @@ const tr: Messages = {
 		'contrast-checker': {
 			name: 'Renk Kontrastı Kontrol Aracı (WCAG)',
 			description: 'Metin ve arka plan renklerini WCAG AA ve AAA’ya göre kontrol edin ve geçen en yakın rengi alın'
+		},
+		'curl-converter': {
+			name: 'cURL → fetch / Python / Go',
+			description: 'Bir curl komutunu JavaScript fetch, axios, Python requests veya Go koduna dönüştürün'
 		},
 		'cidr-calculator': {
 			name: 'CIDR / Alt Ağ Hesaplayıcı',

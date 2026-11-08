@@ -1249,6 +1249,35 @@ const TOOL_CONTENT_ZH: Record<string, ToolContent> = {
 			}
 		]
 	},
+	'curl-converter': {
+		about: [
+			'粘贴一条 curl 命令,即可得到同一请求的 JavaScript fetch、axios、Python requests 或 Go net/http 程序写法。最常见的来源是浏览器网络面板中的「Copy as cURL」:Chrome 和 Edge 提供 bash 和 cmd 两种版本,Firefox 提供 POSIX 和 Windows 两种版本。两类都能识别,包括 bash 的 $\'…\' 字符串、cmd 的 ^ 转义,以及用 \\ 或 ^ 续行。',
+			'解析器遵循 curl 自身的规则。-d 意味着 POST 和表单 Content-Type,多个 -d 的值用 & 连接,-G 会把它们移到查询字符串中,--data-urlencode 的编码方式与 curl 相同。--json、-F 文件上传、-u、-b、-A、-e、-k、-m 和 -x 会转换为各语言自己的选项。JSON 请求体会变成对象字面量(在 Python 中是 dict),而不是转义后的字符串。会改变请求但没有对应写法的选项,例如 --digest 或 --cert,会列为警告,不会有任何内容在没有警告的情况下被丢弃。',
+			'从浏览器复制的命令通常包含会话 Cookie 或 Bearer 令牌。转换在此标签页中进行,不会发送任何内容。当命令包含凭据时,它也不会被写入分享链接。'
+		],
+		faqs: [
+			{
+				q: '如何将请求复制为 cURL?',
+				a: '打开开发者工具(F12),切换到 Network 标签页,然后刷新页面或重复操作。右键点击该请求,在 Chrome 或 Edge 中选择 Copy → Copy as cURL (bash),在 Firefox 中选择 Copy Value → Copy as cURL (POSIX)。cmd 或 Windows 版本也可以。在 Safari 中启用「开发」菜单后,同一菜单里也有 Copy as cURL。'
+			},
+			{
+				q: '为什么 fetch 代码在浏览器中失败,在 Node.js 中却能运行?',
+				a: '浏览器不允许页面设置某些请求头,包括 Cookie、User-Agent、Host、Origin 和 Referer,而且会执行 CORS,所以从一个网站复制的请求通常无法在另一个页面中重放。当命令使用了这些请求头时,工具会给出警告。生成的代码可在 Node.js 18 及以上版本、Deno 和 Bun 中直接运行,那里没有这些限制。'
+			},
+			{
+				q: '代码会像 curl 一样跟随重定向吗?',
+				a: '不完全一样。curl 只有加上 -L 时才跟随重定向,而 fetch、Node.js 中的 axios、requests 和 Go 的 http.Client 默认都会跟随。如果需要 curl 的默认行为,请在 fetch 中设置 redirect: \'manual\',在 axios 中设置 maxRedirects: 0,在 requests 中设置 allow_redirects=False,或在 Go 中设置 CheckRedirect 函数。'
+			},
+			{
+				q: '-d @file 和 -F file=@path 会怎样处理?',
+				a: '它们在生成的代码中会变成读取文件:Node.js 中用 readFile 和 openAsBlob(openAsBlob 需要 Node.js 20 或更高版本),Python 中用 open(…, \'rb\'),Go 中用 os.Open。有一个区别需要注意:curl 用 -d @file 发送文件时会去掉其中的换行,而用 --data-binary @file 时会保留。生成的代码始终原样发送文件。'
+			},
+			{
+				q: '为什么 axios 会带上 validateStatus: () => true?',
+				a: 'curl 对任何状态码都会输出响应,但 axios 默认在遇到 4xx 和 5xx 时抛出异常。这个选项让生成的代码与 curl 命令的行为一致,你看到的是错误响应而不是异常。如果你更想要异常,删掉它即可。'
+			}
+		]
+	},
 	'chmod-calculator': {
 		about: [
 			'按你手上的形式输入权限即可——755、0644、rwxr-xr-x、整行 `ls -l` 输出、u=rwx,g=rx,o=rx,或者完整命令 chmod -R 750 /srv/app——就能同时看到其余所有形式:八进制、rwx 字符串、ls -l 那一列,以及两种可直接复制的 chmod 命令。下方网格列出属主、属组和其他用户的读、写、执行权限,勾选或取消即可更新权限值。',

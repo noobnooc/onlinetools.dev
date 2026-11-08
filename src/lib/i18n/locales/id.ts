@@ -603,6 +603,25 @@ const id: Messages = {
 		contrastLighter: 'Lebih terang',
 		contrastNoFix: 'Tidak ada warna dengan rona ini yang mencapai target. Coba ubah warna yang lain.',
 		contrastAllPass: 'Pasangan ini sudah memenuhi target.',
+
+		// cURL converter
+		curlInput: 'Perintah curl',
+		curlTarget: 'Bahasa',
+		curlEmpty: 'Tempel perintah curl, misalnya dari "Copy as cURL" di panel jaringan browser Anda',
+		curlWarnUnknownOption: 'Opsi tidak dikenal {d} diabaikan.',
+		curlWarnUnsupportedOption: '{d} mengubah request dengan cara yang tidak ditiru oleh kode ini.',
+		curlWarnNoScheme: 'URL tidak memiliki skema, jadi http:// dianggap dipakai, seperti yang dilakukan curl.',
+		curlWarnMultipleUrls: 'Perintah ini memiliki {d} URL. Hanya URL pertama yang dikonversi.',
+		curlWarnStdin: 'Data dari input standar (@- atau -T -) tidak bisa dikonversi. Tambahkan sendiri ke kode.',
+		curlWarnCookieFile: '-b {d} membaca cookie dari file, dan ini tidak dikonversi.',
+		curlWarnHeaderFile: '-H @{d} membaca header dari file, dan ini tidak dikonversi.',
+		curlWarnPasswordPrompt: '-u tidak berisi kata sandi, jadi curl akan memintanya. Kode memakai kata sandi kosong.',
+		curlWarnTrailing: 'Semua yang ada setelah |, ;, & atau > tanpa tanda kutip diabaikan. Beri tanda kutip pada URL yang mengandung &.',
+		curlWarnBrowserHeaders: 'Browser tidak mengizinkan fetch mengatur {d}. Kode ini berjalan apa adanya di Node.js, Deno, dan Bun.',
+		curlWarnFetchProxy: 'fetch tidak punya opsi proxy. Di Node.js, berikan undici ProxyAgent sebagai dispatcher.',
+		curlWarnFetchInsecure: 'fetch tidak bisa melewati pemeriksaan sertifikat (-k). Sebagai gantinya, percayai sertifikatnya, misalnya dengan NODE_EXTRA_CA_CERTS di Node.js.',
+		curlSecretsNote: 'Perintah ini berisi kredensial, jadi tidak dimasukkan ke tautan berbagi.',
+		curlPrivacy: 'Konversi berjalan di tab ini. Tidak ada yang dikirim, dan request-nya sendiri tidak pernah dijalankan.',
 		hbFormat: 'Bita sebagai',
 		hbSep: 'Pemisah',
 		hbSpace: 'Spasi',
@@ -858,6 +877,10 @@ const id: Messages = {
 		'contrast-checker': {
 			name: 'Pemeriksa Kontras Warna (WCAG)',
 			description: 'Periksa warna teks dan latar belakang terhadap WCAG AA dan AAA, lalu dapatkan warna terdekat yang lolos'
+		},
+		'curl-converter': {
+			name: 'cURL → fetch / Python / Go',
+			description: 'Ubah perintah curl menjadi kode JavaScript fetch, axios, Python requests, atau Go'
 		},
 		'cidr-calculator': {
 			name: 'Kalkulator CIDR / Subnet',

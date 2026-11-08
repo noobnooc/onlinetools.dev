@@ -593,6 +593,25 @@ const es: Messages = {
 		contrastNoFix: 'Ningún color con este tono alcanza el objetivo. Prueba a cambiar el otro color.',
 		contrastAllPass: 'Este par ya cumple el objetivo.',
 
+		// cURL converter
+		curlInput: 'comando curl',
+		curlTarget: 'Lenguaje',
+		curlEmpty: 'Pega un comando curl, por ejemplo desde “Copy as cURL” en el panel de red de tu navegador',
+		curlWarnUnknownOption: 'Se ignoró la opción desconocida {d}.',
+		curlWarnUnsupportedOption: '{d} cambia la petición de una forma que este código no reproduce.',
+		curlWarnNoScheme: 'La URL no tiene esquema, así que se supuso http://, como hace curl.',
+		curlWarnMultipleUrls: 'El comando tiene {d} URLs. Solo se convierte la primera.',
+		curlWarnStdin: 'Los datos de la entrada estándar (@- o -T -) no se pueden convertir. Añádelos tú al código.',
+		curlWarnCookieFile: '-b {d} lee las cookies de un archivo, y eso no se convierte.',
+		curlWarnHeaderFile: '-H @{d} lee las cabeceras de un archivo, y eso no se convierte.',
+		curlWarnPasswordPrompt: '-u no tiene contraseña, así que curl la pediría. El código usa una contraseña vacía.',
+		curlWarnTrailing: 'Se ignoró todo lo que hay después de un |, ;, & o > sin comillas. Pon entre comillas las URLs que contengan &.',
+		curlWarnBrowserHeaders: 'Los navegadores no dejan que fetch establezca {d}. El código funciona tal cual en Node.js, Deno y Bun.',
+		curlWarnFetchProxy: 'fetch no tiene opción de proxy. En Node.js, pasa un undici ProxyAgent como dispatcher.',
+		curlWarnFetchInsecure: 'fetch no puede omitir la verificación de certificados (-k). En su lugar, confía en el certificado, por ejemplo con NODE_EXTRA_CA_CERTS en Node.js.',
+		curlSecretsNote: 'Este comando contiene credenciales, así que los enlaces compartidos lo omiten.',
+		curlPrivacy: 'La conversión se ejecuta en esta pestaña. No se envía nada y la petición en sí nunca se realiza.',
+
 		// Text ↔ hex/binary
 		hbFormat: 'Bytes como',
 		hbSep: 'Separador',
@@ -847,6 +866,10 @@ const es: Messages = {
 		'contrast-checker': {
 			name: 'Comprobador de contraste de color (WCAG)',
 			description: 'Comprueba los colores de texto y fondo según WCAG AA y AAA, y obtén el color más cercano que cumple'
+		},
+		'curl-converter': {
+			name: 'cURL → fetch / Python / Go',
+			description: 'Convierte un comando curl en código JavaScript fetch, axios, Python requests o Go'
 		},
 		'cidr-calculator': {
 			name: 'Calculadora CIDR / de subredes',

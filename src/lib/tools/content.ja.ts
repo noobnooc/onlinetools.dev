@@ -1223,6 +1223,36 @@ const TOOL_CONTENT_JA: Record<string, ToolContent> = {
 		]
 	},
 
+	'curl-converter': {
+		about: [
+			'curl コマンドを貼り付けると、同じリクエストを JavaScript fetch、axios、Python requests、または Go の net/http プログラムとして出力します。最もよくある入手元は、ブラウザのネットワークパネルにある「Copy as cURL」です。Chrome と Edge には bash 版と cmd 版、Firefox には POSIX 版と Windows 版があります。どちらも解釈でき、bash の $\'…\' 文字列、cmd の ^ エスケープ、\\ や ^ による行の継続にも対応しています。',
+			'パーサーは curl 自身の規則に従います。-d は POST とフォームの Content-Type を意味し、複数の -d の値は & で連結され、-G を付けるとそれらがクエリ文字列に移り、--data-urlencode は curl と同じ方法でエンコードします。--json、-F によるファイルアップロード、-u、-b、-A、-e、-k、-m、-x は各言語固有のオプションに引き継がれます。JSON の本文はエスケープされた文字列ではなく、オブジェクトリテラル(Python では dict)になります。--digest や --cert のように、リクエストを変更するのに対応するものがないオプションは警告として一覧表示され、警告なしに何かが捨てられることはありません。',
+			'ブラウザからコピーしたコマンドには、たいていセッション Cookie や Bearer トークンが含まれています。変換はこのタブ内で行われ、何も送信されません。コマンドに認証情報が含まれている場合は、共有リンクからも除外されます。'
+		],
+		faqs: [
+			{
+				q: 'リクエストを cURL としてコピーするには?',
+				a: '開発者ツール(F12)を開いて Network タブに移動し、ページを再読み込みするか操作をやり直します。リクエストを右クリックし、Chrome や Edge では Copy → Copy as cURL (bash)、Firefox では Copy Value → Copy as cURL (POSIX) を選びます。cmd 版や Windows 版でも構いません。Safari では、開発メニューを有効にすると同じメニューに Copy as cURL が表示されます。'
+			},
+			{
+				q: 'fetch のコードが Node.js では動くのに、ブラウザでは失敗するのはなぜですか?',
+				a: 'ブラウザでは、Cookie、User-Agent、Host、Origin、Referer など一部のヘッダーをページから設定できません。また CORS が適用されるため、あるサイトからコピーしたリクエストは、通常は別のページから再現できません。コマンドがこうしたヘッダーを使っている場合、ツールは警告を表示します。生成されたコードは、これらの制限がない Node.js 18 以降、Deno、Bun ではそのまま動作します。'
+			},
+			{
+				q: 'コードは curl と同じようにリダイレクトをたどりますか?',
+				a: '完全には同じではありません。curl は -L を付けたときだけリダイレクトをたどりますが、fetch、Node.js の axios、requests、Go の http.Client はいずれもデフォルトでたどります。curl のデフォルトの動作が必要なら、fetch では redirect: \'manual\'、axios では maxRedirects: 0、requests では allow_redirects=False、Go では CheckRedirect 関数を設定してください。'
+			},
+			{
+				q: '-d @file や -F file=@path はどうなりますか?',
+				a: '生成されたコードではファイルの読み込みになります。Node.js では readFile と openAsBlob(openAsBlob には Node.js 20 以降が必要)、Python では open(…, \'rb\')、Go では os.Open です。知っておきたい違いが 1 つあります。curl は -d @file で送るファイルからは改行を取り除きますが、--data-binary @file では改行を残します。生成されたコードは常にファイルを変更せずに送信します。'
+			},
+			{
+				q: 'axios に validateStatus: () => true が付くのはなぜですか?',
+				a: 'curl はどのステータスコードでもレスポンスを表示しますが、axios はデフォルトで 4xx と 5xx のときに例外を投げます。このオプションにより、生成されたコードが curl コマンドと同じように振る舞い、例外ではなくエラーレスポンスを確認できます。例外のほうがよければ削除してください。'
+			}
+		]
+	},
+
 	'chmod-calculator': {
 		about: [
 			'モードを手元にある形のまま入力してください — 755、0644、rwxr-xr-x、`ls -l` の 1 行まるごと、u=rwx,g=rx,o=rx、あるいは chmod -R 750 /srv/app のような完全なコマンドでも構いません。ほかのすべての形式がまとめて表示されます。8 進数、rwx 文字列、ls -l の列、そしてそのままコピーできる 2 通りの chmod コマンドです。グリッドには所有者・グループ・その他それぞれの読み取り・書き込み・実行が並び、チェックボックスを切り替えるとモードが更新されます。',
