@@ -593,6 +593,25 @@ const fr: Messages = {
 		contrastNoFix: 'Aucune couleur de cette teinte n’atteint la cible. Essayez de modifier l’autre couleur.',
 		contrastAllPass: 'Cette paire atteint déjà la cible.',
 
+		// cURL converter
+		curlInput: 'commande curl',
+		curlTarget: 'Langage',
+		curlEmpty: 'Collez une commande curl, par exemple depuis « Copy as cURL » dans le panneau réseau de votre navigateur',
+		curlWarnUnknownOption: 'L’option inconnue {d} a été ignorée.',
+		curlWarnUnsupportedOption: '{d} modifie la requête d’une façon que ce code ne reproduit pas.',
+		curlWarnNoScheme: 'L’URL n’a pas de schéma, donc http:// a été supposé, comme le fait curl.',
+		curlWarnMultipleUrls: 'La commande contient {d} URL. Seule la première est convertie.',
+		curlWarnStdin: 'Les données de l’entrée standard (@- ou -T -) ne peuvent pas être converties. Ajoutez-les vous-même au code.',
+		curlWarnCookieFile: '-b {d} lit les cookies depuis un fichier, ce qui n’est pas converti.',
+		curlWarnHeaderFile: '-H @{d} lit les en-têtes depuis un fichier, ce qui n’est pas converti.',
+		curlWarnPasswordPrompt: '-u n’a pas de mot de passe, donc curl en demanderait un. Le code utilise un mot de passe vide.',
+		curlWarnTrailing: 'Tout ce qui suit un |, ;, & ou > hors guillemets a été ignoré. Mettez entre guillemets les URL qui contiennent &.',
+		curlWarnBrowserHeaders: 'Les navigateurs ne laissent pas fetch définir {d}. Le code fonctionne tel quel dans Node.js, Deno et Bun.',
+		curlWarnFetchProxy: 'fetch n’a pas d’option de proxy. Dans Node.js, passez un undici ProxyAgent comme dispatcher.',
+		curlWarnFetchInsecure: 'fetch ne peut pas ignorer la vérification des certificats (-k). Faites plutôt confiance au certificat, par exemple avec NODE_EXTRA_CA_CERTS dans Node.js.',
+		curlSecretsNote: 'Cette commande contient des identifiants, les liens de partage la laissent donc de côté.',
+		curlPrivacy: 'La conversion s’exécute dans cet onglet. Rien n’est envoyé, et la requête elle-même n’est jamais effectuée.',
+
 		// Text ↔ hex/binary
 		hbFormat: 'Octets en',
 		hbSep: 'Séparateur',
@@ -847,6 +866,10 @@ const fr: Messages = {
 		'contrast-checker': {
 			name: 'Vérificateur de contraste des couleurs (WCAG)',
 			description: 'Vérifiez les couleurs du texte et du fond selon WCAG AA et AAA, et obtenez la couleur conforme la plus proche'
+		},
+		'curl-converter': {
+			name: 'cURL → fetch / Python / Go',
+			description: 'Convertissez une commande curl en code JavaScript fetch, axios, Python requests ou Go'
 		},
 		'cidr-calculator': {
 			name: 'Calculateur CIDR / de sous-réseau',

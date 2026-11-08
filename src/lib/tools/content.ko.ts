@@ -1223,6 +1223,36 @@ const TOOL_CONTENT_KO: Record<string, ToolContent> = {
 		]
 	},
 
+	'curl-converter': {
+		about: [
+			'curl 명령을 붙여넣으면 같은 요청을 JavaScript fetch, axios, Python requests 또는 Go net/http 프로그램으로 바꿔 줍니다. 가장 흔한 출처는 브라우저 네트워크 패널의 "Copy as cURL"입니다. Chrome과 Edge는 bash와 cmd 버전을, Firefox는 POSIX와 Windows 버전을 제공합니다. 두 가지 모두 인식하며, bash의 $\'…\' 문자열, cmd의 ^ 이스케이프, \\ 또는 ^를 이용한 줄 이어 쓰기도 처리합니다.',
+			'파서는 curl 자체의 규칙을 따릅니다. -d는 POST와 폼 Content-Type을 의미하고, 여러 -d 값은 &로 이어 붙이며, -G는 이 값들을 쿼리 문자열로 옮기고, --data-urlencode는 curl과 같은 방식으로 인코딩합니다. --json, -F 파일 업로드, -u, -b, -A, -e, -k, -m, -x는 각 언어 고유의 옵션으로 옮겨집니다. JSON 본문은 이스케이프된 문자열이 아니라 객체 리터럴(Python에서는 dict)이 됩니다. --digest나 --cert처럼 요청을 바꾸지만 대응하는 기능이 없는 옵션은 경고로 표시되며, 경고 없이 버려지는 것은 없습니다.',
+			'브라우저에서 복사한 명령에는 보통 세션 쿠키나 Bearer 토큰이 들어 있습니다. 변환은 이 탭에서 실행되며 아무것도 전송되지 않습니다. 명령에 자격 증명이 포함되어 있으면 공유 링크에서도 제외됩니다.'
+		],
+		faqs: [
+			{
+				q: '요청을 cURL로 복사하려면 어떻게 하나요?',
+				a: '개발자 도구(F12)를 열고 Network 탭으로 이동한 뒤 페이지를 새로고침하거나 동작을 다시 실행하세요. 요청을 마우스 오른쪽 버튼으로 클릭한 다음 Chrome이나 Edge에서는 Copy → Copy as cURL (bash)을, Firefox에서는 Copy Value → Copy as cURL (POSIX)을 선택합니다. cmd나 Windows 버전도 사용할 수 있습니다. Safari는 개발자용 메뉴를 활성화하면 같은 메뉴에 Copy as cURL이 있습니다.'
+			},
+			{
+				q: 'fetch 코드가 Node.js에서는 동작하는데 브라우저에서는 실패하는 이유는 무엇인가요?',
+				a: '브라우저는 Cookie, User-Agent, Host, Origin, Referer 등 일부 헤더를 페이지가 설정하지 못하게 하고 CORS를 적용합니다. 그래서 한 사이트에서 복사한 요청은 보통 다른 페이지에서 그대로 반복할 수 없습니다. 명령이 이런 헤더를 사용하면 도구가 경고합니다. 생성된 코드는 이러한 제한이 없는 Node.js 18 이상, Deno, Bun에서 그대로 실행됩니다.'
+			},
+			{
+				q: '코드가 curl처럼 리디렉션을 따라가나요?',
+				a: '정확히 같지는 않습니다. curl은 -L을 지정했을 때만 리디렉션을 따라가지만, fetch, Node.js의 axios, requests, Go의 http.Client는 모두 기본적으로 따라갑니다. curl의 기본 동작이 필요하면 fetch에서는 redirect: \'manual\', axios에서는 maxRedirects: 0, requests에서는 allow_redirects=False를 설정하고, Go에서는 CheckRedirect 함수를 지정하세요.'
+			},
+			{
+				q: '-d @file과 -F file=@path는 어떻게 되나요?',
+				a: '생성된 코드에서는 파일 읽기로 바뀝니다. Node.js에서는 readFile과 openAsBlob(openAsBlob은 Node.js 20 이상 필요), Python에서는 open(…, \'rb\'), Go에서는 os.Open을 사용합니다. 알아 둘 차이가 하나 있습니다. curl은 -d @file로 보내는 파일에서 줄바꿈을 제거하지만 --data-binary @file로 보낼 때는 유지합니다. 생성된 코드는 항상 파일을 변경 없이 보냅니다.'
+			},
+			{
+				q: 'axios에 validateStatus: () => true가 붙는 이유는 무엇인가요?',
+				a: 'curl은 상태 코드와 관계없이 응답을 출력하지만, axios는 기본적으로 4xx와 5xx에서 예외를 던집니다. 이 옵션은 생성된 코드가 curl 명령처럼 동작하게 하므로 예외 대신 오류 응답을 볼 수 있습니다. 예외가 더 낫다면 이 옵션을 지우세요.'
+			}
+		]
+	},
+
 	'chmod-calculator': {
 		about: [
 			'가지고 있는 형태 그대로 모드를 입력하세요 — 755, 0644, rwxr-xr-x, `ls -l` 한 줄 전체, u=rwx,g=rx,o=rx, 또는 chmod -R 750 /srv/app 같은 전체 명령까지. 나머지 모든 형태로 한 번에 보여줍니다. 8진수, rwx 문자열, ls -l 열, 그리고 바로 복사할 수 있는 두 가지 chmod 명령입니다. 표에는 소유자, 그룹, 기타 사용자의 읽기, 쓰기, 실행이 표시되며, 체크박스를 선택하면 모드가 갱신됩니다.',

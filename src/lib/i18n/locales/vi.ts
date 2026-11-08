@@ -604,6 +604,25 @@ const vi: Messages = {
 		contrastLighter: 'Sáng hơn',
 		contrastNoFix: 'Không có màu nào cùng tông màu này đạt được mục tiêu. Hãy thử đổi màu còn lại.',
 		contrastAllPass: 'Cặp màu này đã đạt mục tiêu.',
+
+		// cURL converter
+		curlInput: 'Lệnh curl',
+		curlTarget: 'Ngôn ngữ',
+		curlEmpty: 'Dán một lệnh curl, ví dụ từ "Copy as cURL" trong bảng Network của trình duyệt',
+		curlWarnUnknownOption: 'Tùy chọn không xác định {d} đã bị bỏ qua.',
+		curlWarnUnsupportedOption: '{d} thay đổi request theo cách mà đoạn mã này không tái tạo được.',
+		curlWarnNoScheme: 'URL không có scheme, nên http:// được ngầm dùng, giống như curl.',
+		curlWarnMultipleUrls: 'Lệnh có {d} URL. Chỉ URL đầu tiên được chuyển đổi.',
+		curlWarnStdin: 'Không thể chuyển đổi dữ liệu từ đầu vào chuẩn (@- hoặc -T -). Hãy tự thêm dữ liệu đó vào mã.',
+		curlWarnCookieFile: '-b {d} đọc cookie từ một tệp, phần này không được chuyển đổi.',
+		curlWarnHeaderFile: '-H @{d} đọc header từ một tệp, phần này không được chuyển đổi.',
+		curlWarnPasswordPrompt: '-u không có mật khẩu, nên curl sẽ hỏi mật khẩu. Đoạn mã dùng mật khẩu rỗng.',
+		curlWarnTrailing: 'Mọi thứ sau |, ;, & hoặc > không nằm trong dấu nháy đã bị bỏ qua. Hãy đặt URL chứa & trong dấu nháy.',
+		curlWarnBrowserHeaders: 'Trình duyệt không cho fetch đặt {d}. Đoạn mã chạy được nguyên trạng trong Node.js, Deno và Bun.',
+		curlWarnFetchProxy: 'fetch không có tùy chọn proxy. Trong Node.js, hãy truyền một undici ProxyAgent làm dispatcher.',
+		curlWarnFetchInsecure: 'fetch không thể bỏ qua kiểm tra chứng chỉ (-k). Thay vào đó hãy tin cậy chứng chỉ, ví dụ bằng NODE_EXTRA_CA_CERTS trong Node.js.',
+		curlSecretsNote: 'Lệnh này chứa thông tin xác thực, nên liên kết chia sẻ sẽ không bao gồm nó.',
+		curlPrivacy: 'Việc chuyển đổi chạy ngay trong tab này. Không có gì được gửi đi, và bản thân request không bao giờ được thực hiện.',
 		hbFormat: 'Byte dạng',
 		hbSep: 'Ký tự phân tách',
 		hbSpace: 'Dấu cách',
@@ -859,6 +878,10 @@ const vi: Messages = {
 		'contrast-checker': {
 			name: 'Kiểm tra độ tương phản màu (WCAG)',
 			description: 'Kiểm tra màu chữ và màu nền theo WCAG AA và AAA, và nhận màu đạt chuẩn gần nhất'
+		},
+		'curl-converter': {
+			name: 'cURL → fetch / Python / Go',
+			description: 'Chuyển lệnh curl thành mã JavaScript fetch, axios, Python requests hoặc Go'
 		},
 		'cidr-calculator': {
 			name: 'Máy tính CIDR / Subnet',

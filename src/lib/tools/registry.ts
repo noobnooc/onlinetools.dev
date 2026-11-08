@@ -131,7 +131,7 @@ export const TOOLS: ToolMeta[] = [
 		category: 'encoding',
 		aliases: ['jwt', 'json web token', 'jwt decode', 'jwt debugger', 'jwt encoder', 'jwt generator', 'jwt signer', 'jwt verifier', 'jws', 'jwks'],
 		keywords: ['jwt decoder', 'decode jwt', 'jwt debugger', 'json web token', 'jwt encoder', 'generate jwt', 'verify jwt signature', 'jwt jwks verify'],
-		related: ['base64-decode', 'json-formatter', 'timestamp-converter', 'hash-generator', 'url-encode-decode', 'uuid-generator']
+		related: ['base64-decode', 'json-formatter', 'timestamp-converter', 'hash-generator', 'url-encode-decode', 'curl-converter']
 	},
 	{
 		slug: 'regex-tester',
@@ -161,7 +161,7 @@ export const TOOLS: ToolMeta[] = [
 		category: 'encoding',
 		aliases: ['url encode', 'url decode', 'percent encoding', 'urlencode'],
 		keywords: ['url encode', 'url decode', 'percent encoding', 'encodeURIComponent'],
-		related: ['url-parser', 'base64-decode', 'json-formatter', 'jwt-decoder', 'regex-tester', 'diff-checker']
+		related: ['url-parser', 'base64-decode', 'json-formatter', 'jwt-decoder', 'regex-tester', 'curl-converter']
 	},
 	{
 		slug: 'url-parser',
@@ -171,7 +171,7 @@ export const TOOLS: ToolMeta[] = [
 		category: 'web',
 		aliases: ['parse url', 'query string', 'url inspector', 'query params'],
 		keywords: ['url parser', 'parse url online', 'query string parser'],
-		related: ['url-encode-decode', 'json-formatter', 'regex-tester', 'base64-decode', 'jwt-decoder', 'cidr-calculator']
+		related: ['url-encode-decode', 'json-formatter', 'regex-tester', 'base64-decode', 'jwt-decoder', 'curl-converter']
 	},
 	{
 		slug: 'uuid-generator',
@@ -339,7 +339,7 @@ export const TOOLS: ToolMeta[] = [
 		category: 'json',
 		aliases: ['ts types', 'typescript interface', 'json to ts', 'json2ts'],
 		keywords: ['json to typescript', 'json to interface', 'generate typescript types'],
-		related: ['json-formatter', 'json-to-yaml', 'jsonpath-tester', 'json-to-csv', 'case-converter', 'diff-checker']
+		related: ['json-formatter', 'json-to-yaml', 'jsonpath-tester', 'json-to-csv', 'case-converter', 'curl-converter']
 	},
 	{
 		slug: 'jsonpath-tester',
@@ -439,7 +439,7 @@ export const TOOLS: ToolMeta[] = [
 		category: 'encoding',
 		aliases: ['escape', 'unescape', 'string escape', 'json escape', 'escape quotes'],
 		keywords: ['string escape', 'json escape', 'escape string online', 'unescape string', 'sql escape'],
-		related: ['html-entities', 'url-encode-decode', 'base64-decode', 'unicode-inspector', 'text-to-hex', 'json-formatter']
+		related: ['html-entities', 'url-encode-decode', 'base64-decode', 'unicode-inspector', 'text-to-hex', 'curl-converter']
 	},
 	{
 		slug: 'number-base-converter',
@@ -530,6 +530,16 @@ export const TOOLS: ToolMeta[] = [
 		aliases: ['contrast', 'wcag', 'contrast ratio', 'a11y color', 'accessibility', 'color contrast', 'aa', 'aaa'],
 		keywords: ['color contrast checker', 'wcag contrast checker', 'contrast ratio calculator', 'accessible color', 'wcag aa contrast', 'text contrast checker'],
 		related: ['color-converter', 'css-formatter', 'html-formatter', 'favicon-generator', 'image-converter', 'qr-code-generator']
+	},
+	{
+		slug: 'curl-converter',
+		accepts: ['curl'],
+		name: 'cURL → fetch / Python / Go',
+		description: 'Convert a curl command into JavaScript fetch, axios, Python requests or Go code',
+		category: 'web',
+		aliases: ['curl', 'curl to fetch', 'curl to python', 'curl to go', 'curl to axios', 'curl converter', 'copy as curl', 'curlconverter'],
+		keywords: ['curl to fetch', 'curl to python requests', 'curl to javascript', 'convert curl command', 'curl to go', 'curl to axios', 'curl command converter'],
+		related: ['url-parser', 'json-formatter', 'jwt-decoder', 'string-escape', 'url-encode-decode', 'json-to-typescript']
 	}
 ];
 

@@ -882,6 +882,36 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
 		]
 	},
 
+	'curl-converter': {
+		about: [
+			'Paste a curl command and get the same request as JavaScript fetch, axios, Python requests or a Go net/http program. The most common source is "Copy as cURL" in the browser\'s network panel: Chrome and Edge offer bash and cmd variants, Firefox offers POSIX and Windows. Both are understood, including bash $\'…\' strings, cmd ^ escapes and line continuations with \\ or ^.',
+			'The parser follows curl\'s own rules. -d implies POST and a form Content-Type, several -d values are joined with &, -G moves them into the query string, and --data-urlencode encodes the way curl does. --json, -F file uploads, -u, -b, -A, -e, -k, -m and -x are carried over to each language\'s own options. A JSON body becomes an object literal (a dict in Python) instead of an escaped string. Options that change the request but have no equivalent, such as --digest or --cert, are listed as warnings, and nothing is dropped without one.',
+			'Commands copied from a browser usually contain session cookies or bearer tokens. The conversion runs in this tab and nothing is sent. When the command contains credentials, it is also left out of share links.'
+		],
+		faqs: [
+			{
+				q: 'How do I copy a request as cURL?',
+				a: 'Open the developer tools (F12), go to the Network tab and reload or repeat the action. Right-click the request, then choose Copy → Copy as cURL (bash) in Chrome or Edge, or Copy Value → Copy as cURL (POSIX) in Firefox. The cmd or Windows variant works too. Safari has Copy as cURL in the same menu once the Develop menu is enabled.'
+			},
+			{
+				q: 'Why does the fetch code fail in the browser but work in Node.js?',
+				a: 'Browsers do not let a page set some headers, including Cookie, User-Agent, Host, Origin and Referer, and they enforce CORS, so a request copied from one site usually cannot be repeated from another page. The tool warns when the command uses one of those headers. The generated code runs as is in Node.js 18 or later, Deno and Bun, where those limits do not apply.'
+			},
+			{
+				q: 'Does the code follow redirects like curl?',
+				a: 'Not exactly. curl only follows redirects with -L, while fetch, axios in Node.js, requests and Go\'s http.Client all follow them by default. If you need curl\'s default, set redirect: \'manual\' in fetch, maxRedirects: 0 in axios, allow_redirects=False in requests, or a CheckRedirect function in Go.'
+			},
+			{
+				q: 'What happens to -d @file and -F file=@path?',
+				a: 'They become file reads in the generated code: readFile and openAsBlob in Node.js (openAsBlob needs Node.js 20 or later), open(…, \'rb\') in Python and os.Open in Go. One difference to know: curl removes line breaks from a file sent with -d @file, but keeps them with --data-binary @file. The generated code always sends the file unchanged.'
+			},
+			{
+				q: 'Why does axios get validateStatus: () => true?',
+				a: 'curl prints the response for any status code, but axios throws on 4xx and 5xx by default. The option makes the generated code behave like the curl command, so you see the error response instead of an exception. Remove it if you prefer the exception.'
+			}
+		]
+	},
+
 	'image-to-base64': {
 		about: [
 			'Drop, pick or paste an image and get its Base64 form in every flavor you might need: a ready-to-use data URL, a CSS background-image declaration, a complete <img> tag with intrinsic dimensions, and the raw Base64 payload. The reverse direction works too — paste a data URL or a bare Base64 blob and the image is decoded, previewed and downloadable as a file.',

@@ -594,6 +594,25 @@ const pt: Messages = {
 		contrastNoFix: 'Nenhuma cor com este matiz atinge o alvo. Tente mudar a outra cor.',
 		contrastAllPass: 'Este par já atinge o alvo.',
 
+		// cURL converter
+		curlInput: 'Comando curl',
+		curlTarget: 'Linguagem',
+		curlEmpty: 'Cole um comando curl, por exemplo de "Copy as cURL" no painel de rede do seu navegador',
+		curlWarnUnknownOption: 'A opção desconhecida {d} foi ignorada.',
+		curlWarnUnsupportedOption: '{d} altera a requisição de um jeito que este código não reproduz.',
+		curlWarnNoScheme: 'A URL não tem esquema, então http:// foi presumido, como o curl faz.',
+		curlWarnMultipleUrls: 'O comando tem {d} URLs. Só a primeira é convertida.',
+		curlWarnStdin: 'Dados da entrada padrão (@- ou -T -) não podem ser convertidos. Adicione-os ao código você mesmo.',
+		curlWarnCookieFile: '-b {d} lê cookies de um arquivo, o que não é convertido.',
+		curlWarnHeaderFile: '-H @{d} lê cabeçalhos de um arquivo, o que não é convertido.',
+		curlWarnPasswordPrompt: '-u não tem senha, então o curl pediria uma. O código usa uma senha vazia.',
+		curlWarnTrailing: 'Tudo depois de um |, ;, & ou > sem aspas foi ignorado. Coloque aspas em URLs que contêm &.',
+		curlWarnBrowserHeaders: 'Navegadores não deixam o fetch definir {d}. O código funciona como está no Node.js, Deno e Bun.',
+		curlWarnFetchProxy: 'O fetch não tem opção de proxy. No Node.js, passe um undici ProxyAgent como dispatcher.',
+		curlWarnFetchInsecure: 'O fetch não consegue pular a verificação de certificados (-k). Em vez disso, confie no certificado, por exemplo com NODE_EXTRA_CA_CERTS no Node.js.',
+		curlSecretsNote: 'Este comando contém credenciais, então os links de compartilhamento o deixam de fora.',
+		curlPrivacy: 'A conversão roda nesta aba. Nada é enviado, e a requisição em si nunca é feita.',
+
 		// Text ↔ hex/binary
 		hbFormat: 'Bytes como',
 		hbSep: 'Separador',
@@ -848,6 +867,10 @@ const pt: Messages = {
 		'contrast-checker': {
 			name: 'Verificador de contraste de cores (WCAG)',
 			description: 'Verifique as cores de texto e fundo segundo a WCAG AA e AAA e obtenha a cor aprovada mais próxima'
+		},
+		'curl-converter': {
+			name: 'cURL → fetch / Python / Go',
+			description: 'Converta um comando curl em código JavaScript fetch, axios, Python requests ou Go'
 		},
 		'cidr-calculator': {
 			name: 'Calculadora CIDR / de sub-rede',

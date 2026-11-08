@@ -1223,6 +1223,36 @@ const TOOL_CONTENT_FR: Record<string, ToolContent> = {
 		]
 	},
 
+	'curl-converter': {
+		about: [
+			'Collez une commande curl et obtenez la même requête en JavaScript fetch, axios, Python requests ou sous forme de programme Go avec net/http. La source la plus courante est « Copy as cURL » dans le panneau réseau du navigateur : Chrome et Edge proposent des variantes bash et cmd, Firefox des variantes POSIX et Windows. Les deux sont comprises, y compris les chaînes bash $\'…\', les échappements ^ de cmd et les continuations de ligne avec \\ ou ^.',
+			'L’analyseur suit les règles de curl lui-même. -d implique POST et un Content-Type de formulaire, plusieurs valeurs -d sont jointes avec &, -G les déplace dans la query string, et --data-urlencode encode comme le fait curl. --json, les envois de fichiers avec -F, -u, -b, -A, -e, -k, -m et -x sont repris avec les options propres à chaque langage. Un corps JSON devient un littéral d’objet (un dict en Python) plutôt qu’une chaîne échappée. Les options qui modifient la requête sans avoir d’équivalent, comme --digest ou --cert, sont signalées par un avertissement, et rien n’est abandonné sans avertissement.',
+			'Les commandes copiées depuis un navigateur contiennent généralement des cookies de session ou des jetons bearer. La conversion s’exécute dans cet onglet et rien n’est envoyé. Quand la commande contient des identifiants, elle est aussi exclue des liens de partage.'
+		],
+		faqs: [
+			{
+				q: 'Comment copier une requête en cURL ?',
+				a: 'Ouvrez les outils de développement (F12), allez dans l’onglet Network et rechargez la page ou répétez l’action. Faites un clic droit sur la requête, puis choisissez Copy → Copy as cURL (bash) dans Chrome ou Edge, ou Copy Value → Copy as cURL (POSIX) dans Firefox. La variante cmd ou Windows fonctionne aussi. Safari propose Copy as cURL dans le même menu une fois le menu Develop activé.'
+			},
+			{
+				q: 'Pourquoi le code fetch échoue-t-il dans le navigateur alors qu’il fonctionne dans Node.js ?',
+				a: 'Les navigateurs ne laissent pas une page définir certains en-têtes, dont Cookie, User-Agent, Host, Origin et Referer, et ils appliquent CORS : une requête copiée depuis un site ne peut donc généralement pas être rejouée depuis une autre page. L’outil prévient quand la commande utilise l’un de ces en-têtes. Le code généré fonctionne tel quel dans Node.js 18 ou plus récent, Deno et Bun, où ces limites ne s’appliquent pas.'
+			},
+			{
+				q: 'Le code suit-il les redirections comme curl ?',
+				a: 'Pas exactement. curl ne suit les redirections qu’avec -L, alors que fetch, axios dans Node.js, requests et le http.Client de Go les suivent par défaut. Si vous avez besoin du comportement par défaut de curl, utilisez redirect: \'manual\' dans fetch, maxRedirects: 0 dans axios, allow_redirects=False dans requests, ou une fonction CheckRedirect en Go.'
+			},
+			{
+				q: 'Que deviennent -d @file et -F file=@path ?',
+				a: 'Ils deviennent des lectures de fichier dans le code généré : readFile et openAsBlob dans Node.js (openAsBlob nécessite Node.js 20 ou plus récent), open(…, \'rb\') en Python et os.Open en Go. Une différence à connaître : curl supprime les sauts de ligne d’un fichier envoyé avec -d @file, mais les conserve avec --data-binary @file. Le code généré envoie toujours le fichier tel quel.'
+			},
+			{
+				q: 'Pourquoi axios reçoit-il validateStatus: () => true ?',
+				a: 'curl affiche la réponse quel que soit le code de statut, mais axios lève par défaut une exception sur les 4xx et 5xx. L’option fait en sorte que le code généré se comporte comme la commande curl : vous voyez la réponse d’erreur au lieu d’une exception. Supprimez-la si vous préférez l’exception.'
+			}
+		]
+	},
+
 	'chmod-calculator': {
 		about: [
 			'Saisissez un mode tel que vous l’avez — 755, 0644, rwxr-xr-x, une ligne `ls -l` entière, u=rwx,g=rx,o=rx ou une commande complète comme chmod -R 750 /srv/app — et voyez-le sous toutes les autres formes : octal, chaîne rwx, colonne de ls -l et les deux commandes chmod prêtes à copier. La grille affiche lecture, écriture et exécution pour le propriétaire, le groupe et les autres ; cochez une case et le mode se met à jour.',

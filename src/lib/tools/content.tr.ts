@@ -1222,6 +1222,36 @@ const TOOL_CONTENT_TR: Record<string, ToolContent> = {
 		]
 	},
 
+	'curl-converter': {
+		about: [
+			'Bir curl komutu yapıştırın ve aynı isteği JavaScript fetch, axios, Python requests ya da bir Go net/http programı olarak alın. En yaygın kaynak, tarayıcının ağ panelindeki "Copy as cURL" seçeneğidir: Chrome ve Edge bash ve cmd varyantlarını, Firefox ise POSIX ve Windows varyantlarını sunar. Bash $\'…\' dizeleri, cmd ^ kaçışları ve \\ ya da ^ ile satır devamları dahil hepsi anlaşılır.',
+			'Ayrıştırıcı curl’ün kendi kurallarını izler. -d, POST ve bir form Content-Type’ı anlamına gelir; birden fazla -d değeri & ile birleştirilir, -G bunları sorgu dizesine taşır ve --data-urlencode tam curl’ün yaptığı gibi kodlar. --json, -F dosya yüklemeleri, -u, -b, -A, -e, -k, -m ve -x her dilin kendi seçeneklerine aktarılır. Bir JSON gövdesi, kaçışlı bir dize yerine bir nesne değişmezine (Python’da bir dict) dönüşür. İsteği değiştiren ama karşılığı olmayan --digest veya --cert gibi seçenekler uyarı olarak listelenir ve uyarı verilmeden hiçbir şey atlanmaz.',
+			'Tarayıcıdan kopyalanan komutlar genellikle oturum çerezleri veya bearer token’lar içerir. Dönüştürme bu sekmede çalışır ve hiçbir şey gönderilmez. Komut kimlik bilgileri içerdiğinde paylaşım bağlantılarına da eklenmez.'
+		],
+		faqs: [
+			{
+				q: 'Bir isteği cURL olarak nasıl kopyalarım?',
+				a: 'Geliştirici araçlarını açın (F12), Network sekmesine gidin ve sayfayı yenileyin ya da işlemi tekrarlayın. İsteğe sağ tıklayın, ardından Chrome veya Edge’de Copy → Copy as cURL (bash), Firefox’ta ise Copy Value → Copy as cURL (POSIX) seçeneğini seçin. cmd veya Windows varyantı da çalışır. Safari’de Develop menüsü etkinleştirildikten sonra aynı menüde Copy as cURL bulunur.'
+			},
+			{
+				q: 'fetch kodu neden tarayıcıda başarısız oluyor ama Node.js’te çalışıyor?',
+				a: 'Tarayıcılar bir sayfanın Cookie, User-Agent, Host, Origin ve Referer gibi bazı başlıkları ayarlamasına izin vermez ve CORS uygular; bu yüzden bir siteden kopyalanan istek genellikle başka bir sayfadan tekrarlanamaz. Komut bu başlıklardan birini kullandığında araç uyarır. Üretilen kod, bu sınırların geçerli olmadığı Node.js 18 veya üzeri, Deno ve Bun’da olduğu gibi çalışır.'
+			},
+			{
+				q: 'Kod, yönlendirmeleri curl gibi izliyor mu?',
+				a: 'Tam olarak değil. curl yönlendirmeleri yalnızca -L ile izler; fetch, Node.js’teki axios, requests ve Go’nun http.Client’ı ise hepsi varsayılan olarak izler. curl’ün varsayılan davranışına ihtiyacınız varsa fetch’te redirect: \'manual\', axios’ta maxRedirects: 0, requests’te allow_redirects=False ya da Go’da bir CheckRedirect fonksiyonu ayarlayın.'
+			},
+			{
+				q: '-d @file ve -F file=@path ne olur?',
+				a: 'Üretilen kodda dosya okumalarına dönüşürler: Node.js’te readFile ve openAsBlob (openAsBlob için Node.js 20 veya üzeri gerekir), Python’da open(…, \'rb\') ve Go’da os.Open. Bilinmesi gereken bir fark var: curl, -d @file ile gönderilen bir dosyadaki satır sonlarını kaldırır, ancak --data-binary @file ile korur. Üretilen kod dosyayı her zaman değiştirmeden gönderir.'
+			},
+			{
+				q: 'axios neden validateStatus: () => true alıyor?',
+				a: 'curl her durum kodu için yanıtı yazdırır, ancak axios varsayılan olarak 4xx ve 5xx’te hata fırlatır. Bu seçenek, üretilen kodun curl komutu gibi davranmasını sağlar; böylece bir istisna yerine hata yanıtını görürsünüz. İstisnayı tercih ediyorsanız seçeneği kaldırın.'
+			}
+		]
+	},
+
 	'chmod-calculator': {
 		about: [
 			'Modu elinizdeki haliyle yazın — 755, 0644, rwxr-xr-x, bütün bir `ls -l` satırı, u=rwx,g=rx,o=rx ya da chmod -R 750 /srv/app gibi tam bir komut — ve onu diğer tüm biçimlerde görün: sekizli, rwx dizesi, ls -l sütunu ve kopyalanmaya hazır iki chmod komutu. Tablo, sahip, grup ve diğerleri için okuma, yazma ve çalıştırma izinlerini gösterir; bir kutuyu işaretlediğinizde mod güncellenir.',

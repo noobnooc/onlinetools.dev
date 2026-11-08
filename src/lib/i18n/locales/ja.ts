@@ -593,6 +593,25 @@ const ja: Messages = {
 		contrastNoFix: 'この色相では目標に届く色がありません。もう一方の色を変更してみてください。',
 		contrastAllPass: 'この組み合わせはすでに目標を満たしています。',
 
+		// cURL converter
+		curlInput: 'curl コマンド',
+		curlTarget: '言語',
+		curlEmpty: 'curl コマンドを貼り付けてください。たとえばブラウザのネットワークパネルの「Copy as cURL」でコピーしたものです',
+		curlWarnUnknownOption: '不明なオプション {d} は無視されました。',
+		curlWarnUnsupportedOption: '{d} はリクエストを変更しますが、このコードではその動作を再現していません。',
+		curlWarnNoScheme: 'URL にスキームがないため、curl と同様に http:// とみなしました。',
+		curlWarnMultipleUrls: 'コマンドに URL が {d} 個あります。変換されるのは最初の 1 つだけです。',
+		curlWarnStdin: '標準入力からのデータ(@- または -T -)は変換できません。コードに自分で追加してください。',
+		curlWarnCookieFile: '-b {d} はファイルから Cookie を読み込みますが、これは変換されません。',
+		curlWarnHeaderFile: '-H @{d} はファイルからヘッダーを読み込みますが、これは変換されません。',
+		curlWarnPasswordPrompt: '-u にパスワードがないため、curl ならパスワードの入力を求めます。コードでは空のパスワードを使います。',
+		curlWarnTrailing: '引用符で囲まれていない |、;、& または > 以降はすべて無視されました。& を含む URL は引用符で囲んでください。',
+		curlWarnBrowserHeaders: 'ブラウザでは fetch で {d} を設定できません。このコードは Node.js、Deno、Bun ではそのまま動作します。',
+		curlWarnFetchProxy: 'fetch にはプロキシのオプションがありません。Node.js では undici ProxyAgent を dispatcher として渡してください。',
+		curlWarnFetchInsecure: 'fetch では証明書の検証を省略できません(-k)。代わりに証明書を信頼させてください。たとえば Node.js なら NODE_EXTRA_CA_CERTS を使います。',
+		curlSecretsNote: 'このコマンドには認証情報が含まれているため、共有リンクには含めません。',
+		curlPrivacy: '変換はこのタブ内で行われます。何も送信されず、リクエスト自体も実行されません。',
+
 		// Text ↔ hex/binary
 		hbFormat: 'バイトの表記',
 		hbSep: '区切り文字',
@@ -847,6 +866,10 @@ const ja: Messages = {
 		'contrast-checker': {
 			name: 'カラーコントラストチェッカー (WCAG)',
 			description: '文字色と背景色を WCAG AA・AAA で判定し、最も近い合格色を提示'
+		},
+		'curl-converter': {
+			name: 'cURL → fetch / Python / Go',
+			description: 'curl コマンドを JavaScript fetch、axios、Python requests、Go のコードに変換'
 		},
 		'cidr-calculator': {
 			name: 'CIDR / サブネット計算機',

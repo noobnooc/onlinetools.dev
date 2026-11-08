@@ -1223,6 +1223,36 @@ const TOOL_CONTENT_ES: Record<string, ToolContent> = {
 		]
 	},
 
+	'curl-converter': {
+		about: [
+			'Pega un comando curl y obtén la misma petición como JavaScript fetch, axios, Python requests o un programa Go con net/http. La fuente más habitual es “Copy as cURL” en el panel de red del navegador: Chrome y Edge ofrecen variantes bash y cmd, y Firefox, POSIX y Windows. Se entienden ambas, incluidas las cadenas $\'…\' de bash, los escapes ^ de cmd y las continuaciones de línea con \\ o ^.',
+			'El analizador sigue las reglas del propio curl. -d implica POST y un Content-Type de formulario, varios valores -d se unen con &, -G los pasa a la query string y --data-urlencode codifica igual que curl. --json, las subidas de archivos con -F, -u, -b, -A, -e, -k, -m y -x se trasladan a las opciones propias de cada lenguaje. Un cuerpo JSON se convierte en un literal de objeto (un dict en Python) en lugar de una cadena escapada. Las opciones que cambian la petición pero no tienen equivalente, como --digest o --cert, aparecen como avisos, y nada se descarta sin uno.',
+			'Los comandos copiados de un navegador suelen contener cookies de sesión o tokens bearer. La conversión se ejecuta en esta pestaña y no se envía nada. Cuando el comando contiene credenciales, además se omite de los enlaces compartidos.'
+		],
+		faqs: [
+			{
+				q: '¿Cómo copio una petición como cURL?',
+				a: 'Abre las herramientas para desarrolladores (F12), ve a la pestaña Network y recarga la página o repite la acción. Haz clic derecho en la petición y elige Copy → Copy as cURL (bash) en Chrome o Edge, o Copy Value → Copy as cURL (POSIX) en Firefox. La variante cmd o Windows también sirve. Safari tiene Copy as cURL en el mismo menú una vez activado el menú Develop.'
+			},
+			{
+				q: '¿Por qué el código fetch falla en el navegador pero funciona en Node.js?',
+				a: 'Los navegadores no dejan que una página establezca algunas cabeceras, como Cookie, User-Agent, Host, Origin y Referer, y aplican CORS, así que una petición copiada de un sitio normalmente no se puede repetir desde otra página. La herramienta avisa cuando el comando usa una de esas cabeceras. El código generado funciona tal cual en Node.js 18 o posterior, Deno y Bun, donde esos límites no se aplican.'
+			},
+			{
+				q: '¿El código sigue las redirecciones como curl?',
+				a: 'No exactamente. curl solo sigue las redirecciones con -L, mientras que fetch, axios en Node.js, requests y el http.Client de Go las siguen por defecto. Si necesitas el comportamiento por defecto de curl, usa redirect: \'manual\' en fetch, maxRedirects: 0 en axios, allow_redirects=False en requests o una función CheckRedirect en Go.'
+			},
+			{
+				q: '¿Qué pasa con -d @file y -F file=@path?',
+				a: 'Se convierten en lecturas de archivo en el código generado: readFile y openAsBlob en Node.js (openAsBlob necesita Node.js 20 o posterior), open(…, \'rb\') en Python y os.Open en Go. Hay una diferencia que conviene conocer: curl elimina los saltos de línea de un archivo enviado con -d @file, pero los conserva con --data-binary @file. El código generado siempre envía el archivo sin cambios.'
+			},
+			{
+				q: '¿Por qué axios lleva validateStatus: () => true?',
+				a: 'curl muestra la respuesta con cualquier código de estado, pero axios lanza una excepción con 4xx y 5xx por defecto. La opción hace que el código generado se comporte como el comando curl, así que ves la respuesta de error en lugar de una excepción. Quítala si prefieres la excepción.'
+			}
+		]
+	},
+
 	'chmod-calculator': {
 		about: [
 			'Escribe un modo tal como lo tengas — 755, 0644, rwxr-xr-x, una línea entera de `ls -l`, u=rwx,g=rx,o=rx o un comando completo como chmod -R 750 /srv/app — y míralo en todas las demás formas: octal, la cadena rwx, la columna de ls -l y los dos comandos chmod listos para copiar. La cuadrícula muestra lectura, escritura y ejecución para propietario, grupo y otros; marca una casilla y el modo se actualiza.',

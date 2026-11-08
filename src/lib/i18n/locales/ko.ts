@@ -593,6 +593,25 @@ const ko: Messages = {
 		contrastNoFix: '이 색조로는 목표에 도달하는 색상이 없습니다. 다른 쪽 색상을 바꿔 보세요.',
 		contrastAllPass: '이 조합은 이미 목표를 충족합니다.',
 
+		// cURL converter
+		curlInput: 'curl 명령',
+		curlTarget: '언어',
+		curlEmpty: 'curl 명령을 붙여넣으세요. 예를 들어 브라우저 네트워크 패널의 "Copy as cURL"로 복사한 명령을 사용할 수 있습니다',
+		curlWarnUnknownOption: '알 수 없는 옵션 {d}은(는) 무시되었습니다.',
+		curlWarnUnsupportedOption: '{d}은(는) 요청을 변경하지만 이 코드는 그 동작을 재현하지 않습니다.',
+		curlWarnNoScheme: 'URL에 스킴이 없어 curl과 같이 http://로 간주했습니다.',
+		curlWarnMultipleUrls: '명령에 URL이 {d}개 있습니다. 첫 번째 URL만 변환됩니다.',
+		curlWarnStdin: '표준 입력의 데이터(@- 또는 -T -)는 변환할 수 없습니다. 코드에 직접 추가하세요.',
+		curlWarnCookieFile: '-b {d}은(는) 파일에서 쿠키를 읽는데, 이 부분은 변환되지 않습니다.',
+		curlWarnHeaderFile: '-H @{d}은(는) 파일에서 헤더를 읽는데, 이 부분은 변환되지 않습니다.',
+		curlWarnPasswordPrompt: '-u에 비밀번호가 없어 curl이라면 비밀번호를 물어봅니다. 코드에서는 빈 비밀번호를 사용합니다.',
+		curlWarnTrailing: '따옴표로 감싸지 않은 |, ;, & 또는 > 뒤의 내용은 모두 무시되었습니다. &가 포함된 URL은 따옴표로 감싸세요.',
+		curlWarnBrowserHeaders: '브라우저에서는 fetch로 {d}을(를) 설정할 수 없습니다. 이 코드는 Node.js, Deno, Bun에서는 그대로 동작합니다.',
+		curlWarnFetchProxy: 'fetch에는 프록시 옵션이 없습니다. Node.js에서는 undici ProxyAgent를 dispatcher로 전달하세요.',
+		curlWarnFetchInsecure: 'fetch는 인증서 검사를 건너뛸 수 없습니다(-k). 대신 인증서를 신뢰하도록 설정하세요. 예를 들어 Node.js에서는 NODE_EXTRA_CA_CERTS를 사용합니다.',
+		curlSecretsNote: '이 명령에는 자격 증명이 포함되어 있어 공유 링크에서 제외됩니다.',
+		curlPrivacy: '변환은 이 탭에서 실행됩니다. 아무것도 전송되지 않으며 요청 자체도 보내지 않습니다.',
+
 		// Text ↔ hex/binary
 		hbFormat: '바이트 표기',
 		hbSep: '구분자',
@@ -847,6 +866,10 @@ const ko: Messages = {
 		'contrast-checker': {
 			name: '색상 명도 대비 검사기 (WCAG)',
 			description: '텍스트와 배경 색상을 WCAG AA, AAA 기준으로 검사하고 가장 가까운 통과 색상 확인'
+		},
+		'curl-converter': {
+			name: 'cURL → fetch / Python / Go',
+			description: 'curl 명령을 JavaScript fetch, axios, Python requests 또는 Go 코드로 변환'
 		},
 		'cidr-calculator': {
 			name: 'CIDR / 서브넷 계산기',

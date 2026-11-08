@@ -16,6 +16,25 @@
 	<div lang="en">
 	<section class="relative border-l border-line pb-8 pl-6">
 		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
+		<h2 class="text-sm font-medium">cURL → fetch / Python / Go</h2>
+		<p class="mt-0.5 font-mono text-xs text-dim">v2026.11.08</p>
+		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
+			<li>
+				New tool: <a href={lp('/t/curl-converter')} class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">cURL →
+				fetch / Python / Go</a>. Paste a curl command, for example from "Copy as cURL" in the network panel, and get
+				the same request as JavaScript fetch, axios, Python requests or Go net/http.
+			</li>
+			<li>
+				It follows curl's own rules for -d, -G, --data-urlencode, --json, -F uploads, -u, -b and more, and turns a
+				JSON body into an object literal. Anything it can't carry over is listed as a warning.
+			</li>
+			<li>
+				Commands with tokens or cookies stay out of share links. Smart Paste recognizes curl commands.
+			</li>
+		</ul>
+	</section>
+	<section class="relative border-l border-line pb-8 pl-6">
+		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
 		<h2 class="text-sm font-medium">Color Contrast Checker</h2>
 		<p class="mt-0.5 font-mono text-xs text-dim">v2026.11.07</p>
 		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">

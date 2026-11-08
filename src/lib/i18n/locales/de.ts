@@ -595,6 +595,25 @@ const de: Messages = {
 		contrastNoFix: 'Keine Farbe mit diesem Farbton erreicht das Ziel. Versuche, die andere Farbe zu ändern.',
 		contrastAllPass: 'Dieses Paar erfüllt das Ziel bereits.',
 
+		// cURL converter
+		curlInput: 'curl-Befehl',
+		curlTarget: 'Sprache',
+		curlEmpty: 'Füge einen curl-Befehl ein, zum Beispiel über „Copy as cURL“ im Netzwerk-Panel deines Browsers',
+		curlWarnUnknownOption: 'Die unbekannte Option {d} wurde ignoriert.',
+		curlWarnUnsupportedOption: '{d} verändert die Anfrage auf eine Weise, die dieser Code nicht nachbildet.',
+		curlWarnNoScheme: 'Die URL hat kein Schema, daher wurde wie bei curl http:// angenommen.',
+		curlWarnMultipleUrls: 'Der Befehl enthält {d} URLs. Nur die erste wird umgewandelt.',
+		curlWarnStdin: 'Daten von der Standardeingabe (@- oder -T -) lassen sich nicht umwandeln. Füge sie selbst in den Code ein.',
+		curlWarnCookieFile: '-b {d} liest Cookies aus einer Datei, das wird nicht umgewandelt.',
+		curlWarnHeaderFile: '-H @{d} liest Header aus einer Datei, das wird nicht umgewandelt.',
+		curlWarnPasswordPrompt: '-u hat kein Passwort, curl würde also danach fragen. Der Code verwendet ein leeres Passwort.',
+		curlWarnTrailing: 'Alles nach einem |, ;, & oder > außerhalb von Anführungszeichen wurde ignoriert. Setze URLs, die & enthalten, in Anführungszeichen.',
+		curlWarnBrowserHeaders: 'Browser lassen fetch {d} nicht setzen. In Node.js, Deno und Bun funktioniert der Code unverändert.',
+		curlWarnFetchProxy: 'fetch hat keine Proxy-Option. Übergib in Node.js einen undici ProxyAgent als dispatcher.',
+		curlWarnFetchInsecure: 'fetch kann die Zertifikatsprüfung nicht überspringen (-k). Vertraue stattdessen dem Zertifikat, zum Beispiel mit NODE_EXTRA_CA_CERTS in Node.js.',
+		curlSecretsNote: 'Dieser Befehl enthält Zugangsdaten, deshalb lassen Teil-Links ihn weg.',
+		curlPrivacy: 'Die Umwandlung läuft in diesem Tab. Nichts wird gesendet, und die Anfrage selbst wird nie ausgeführt.',
+
 		// Text ↔ hex/binary
 		hbFormat: 'Bytes als',
 		hbSep: 'Trennzeichen',
@@ -850,6 +869,10 @@ const de: Messages = {
 		'contrast-checker': {
 			name: 'Farbkontrast-Checker (WCAG)',
 			description: 'Text- und Hintergrundfarben auf WCAG AA und AAA prüfen und die nächstgelegene Farbe finden, die besteht'
+		},
+		'curl-converter': {
+			name: 'cURL → fetch / Python / Go',
+			description: 'Einen curl-Befehl in Code für JavaScript fetch, axios, Python requests oder Go umwandeln'
 		},
 		'cidr-calculator': {
 			name: 'CIDR- / Subnetzrechner',

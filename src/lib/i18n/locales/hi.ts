@@ -619,6 +619,25 @@ const hi: Messages = {
 		contrastNoFix: 'इस ह्यू वाला कोई भी रंग लक्ष्य तक नहीं पहुँचता। दूसरा रंग बदलकर देखिए।',
 		contrastAllPass: 'यह जोड़ी पहले से लक्ष्य पूरा करती है।',
 
+		// cURL converter
+		curlInput: 'curl कमांड',
+		curlTarget: 'भाषा',
+		curlEmpty: 'कोई curl कमांड चिपकाइए, उदाहरण के लिए अपने ब्राउज़र के नेटवर्क पैनल में "Copy as cURL" से',
+		curlWarnUnknownOption: 'अज्ञात विकल्प {d} को अनदेखा किया गया।',
+		curlWarnUnsupportedOption: '{d} रिक्वेस्ट को ऐसे बदलता है जिसे यह कोड दोहराता नहीं है।',
+		curlWarnNoScheme: 'URL में कोई स्कीम नहीं है, इसलिए curl की तरह http:// मान लिया गया।',
+		curlWarnMultipleUrls: 'कमांड में {d} URL हैं। सिर्फ़ पहला URL कन्वर्ट किया जाता है।',
+		curlWarnStdin: 'स्टैंडर्ड इनपुट (@- या -T -) से आने वाला डेटा कन्वर्ट नहीं किया जा सकता। इसे कोड में खुद जोड़िए।',
+		curlWarnCookieFile: '-b {d} कुकी एक फ़ाइल से पढ़ता है, जिसे कन्वर्ट नहीं किया जाता।',
+		curlWarnHeaderFile: '-H @{d} हेडर एक फ़ाइल से पढ़ता है, जिसे कन्वर्ट नहीं किया जाता।',
+		curlWarnPasswordPrompt: '-u में पासवर्ड नहीं है, इसलिए curl पासवर्ड माँगता। कोड खाली पासवर्ड इस्तेमाल करता है।',
+		curlWarnTrailing: 'बिना कोट वाले |, ;, & या > के बाद का सब कुछ अनदेखा किया गया। जिन URL में & है, उन्हें कोट में रखिए।',
+		curlWarnBrowserHeaders: 'ब्राउज़र fetch को {d} सेट नहीं करने देते। Node.js, Deno और Bun में कोड बिना बदलाव के काम करता है।',
+		curlWarnFetchProxy: 'fetch में प्रॉक्सी का कोई विकल्प नहीं है। Node.js में dispatcher के रूप में undici ProxyAgent दीजिए।',
+		curlWarnFetchInsecure: 'fetch सर्टिफ़िकेट की जाँच (-k) नहीं छोड़ सकता। इसके बजाय सर्टिफ़िकेट पर भरोसा कीजिए, उदाहरण के लिए Node.js में NODE_EXTRA_CA_CERTS से।',
+		curlSecretsNote: 'इस कमांड में क्रेडेंशियल हैं, इसलिए साझा लिंक में इसे शामिल नहीं किया जाता।',
+		curlPrivacy: 'कन्वर्ज़न इसी टैब में होता है। कुछ भी भेजा नहीं जाता, और रिक्वेस्ट खुद कभी नहीं भेजी जाती।',
+
 		hbFormat: 'बाइट इस रूप में',
 		hbSep: 'विभाजक',
 		hbSpace: 'स्पेस',
@@ -878,6 +897,10 @@ const hi: Messages = {
 		'contrast-checker': {
 			name: 'कलर कंट्रास्ट चेकर (WCAG)',
 			description: 'टेक्स्ट और बैकग्राउंड रंगों को WCAG AA और AAA पर जाँचिए, और सबसे नज़दीकी पास होने वाला रंग पाइए'
+		},
+		'curl-converter': {
+			name: 'cURL → fetch / Python / Go',
+			description: 'किसी curl कमांड को JavaScript fetch, axios, Python requests या Go कोड में बदलिए'
 		},
 		'cidr-calculator': {
 			name: 'CIDR / सबनेट कैलकुलेटर',

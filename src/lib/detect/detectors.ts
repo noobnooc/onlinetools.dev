@@ -13,6 +13,7 @@ import { isLikelyHexDump } from '$lib/tools/hexbin';
 import { isLikelyCidr } from '$lib/tools/cidr';
 import { isLikelyPermissions } from '$lib/tools/chmod';
 import { isLikelyOtpauth } from '$lib/tools/totp';
+import { isLikelyCurl } from '$lib/tools/curl';
 import type { DataFormat } from './formats';
 
 export interface Detection {
@@ -195,6 +196,21 @@ export const DETECTORS: Detector[] = [
 				confidence: 0.88,
 				tool: 'contrast-checker',
 				actions: [{ label: 'Check contrast', tool: 'contrast-checker' }]
+			};
+		}
+	},
+	{
+		id: 'curl',
+		detect(input) {
+			if (!isLikelyCurl(input)) return null;
+			return {
+				type: 'curl',
+				format: 'curl',
+				label: 'curl command',
+				// Starting with "curl " and an argument is a command, not prose.
+				confidence: 0.96,
+				tool: 'curl-converter',
+				actions: [{ label: 'Convert to code', tool: 'curl-converter' }]
 			};
 		}
 	},

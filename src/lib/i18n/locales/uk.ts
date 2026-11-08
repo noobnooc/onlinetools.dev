@@ -622,6 +622,25 @@ const uk: Messages = {
 		contrastNoFix: 'Жоден колір із цим відтінком не досягає цілі. Спробуйте змінити інший колір.',
 		contrastAllPass: 'Ця пара вже досягає цілі.',
 
+		// cURL converter
+		curlInput: 'команда curl',
+		curlTarget: 'Мова',
+		curlEmpty: 'Вставте команду curl, наприклад із пункту "Copy as cURL" у панелі мережі браузера',
+		curlWarnUnknownOption: 'Невідомий параметр {d} пропущено.',
+		curlWarnUnsupportedOption: '{d} змінює запит так, як цей код не відтворює.',
+		curlWarnNoScheme: 'URL не має схеми, тому підставлено http://, як це робить curl.',
+		curlWarnMultipleUrls: 'URL у команді: {d}. Перетворюється лише перший.',
+		curlWarnStdin: 'Дані зі стандартного введення (@- або -T -) не можна перетворити. Додайте їх до коду самостійно.',
+		curlWarnCookieFile: '-b {d} читає cookie з файлу, це не перетворюється.',
+		curlWarnHeaderFile: '-H @{d} читає заголовки з файлу, це не перетворюється.',
+		curlWarnPasswordPrompt: '-u не має пароля, тому curl запитав би його. Код використовує порожній пароль.',
+		curlWarnTrailing: 'Усе після |, ;, & або > без лапок пропущено. Беріть у лапки URL, що містять &.',
+		curlWarnBrowserHeaders: 'Браузери не дозволяють fetch задавати {d}. Код працює як є в Node.js, Deno і Bun.',
+		curlWarnFetchProxy: 'fetch не має параметра проксі. У Node.js передайте undici ProxyAgent як dispatcher.',
+		curlWarnFetchInsecure: 'fetch не може пропустити перевірку сертифіката (-k). Натомість додайте сертифікат до довірених, наприклад через NODE_EXTRA_CA_CERTS у Node.js.',
+		curlSecretsNote: 'Команда містить облікові дані, тому в посилання для обміну вона не потрапляє.',
+		curlPrivacy: 'Перетворення відбувається в цій вкладці. Нічого не надсилається, а сам запит ніколи не виконується.',
+
 		hbFormat: 'Байти як',
 		hbSep: 'Роздільник',
 		hbSpace: 'Пробіл',
@@ -883,6 +902,10 @@ const uk: Messages = {
 		'contrast-checker': {
 			name: 'Перевірка контрастності кольорів (WCAG)',
 			description: 'Перевіряйте кольори тексту й тла на відповідність WCAG AA і AAA та отримуйте найближчий колір, що проходить'
+		},
+		'curl-converter': {
+			name: 'cURL → fetch / Python / Go',
+			description: 'Перетворюйте команду curl на код JavaScript fetch, axios, Python requests або Go'
 		},
 		'cidr-calculator': {
 			name: 'CIDR / калькулятор підмереж',
