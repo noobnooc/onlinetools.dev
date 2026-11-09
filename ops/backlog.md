@@ -39,7 +39,7 @@ _(empty — humans: put a line here to steer the next run)_
 
 | Date | Item | PR |
 | --- | --- | --- |
-| 2026-11-09 | Lighter pages: Smart Paste sniffers moved to dependency-free modules, tool About/FAQ via a server load. JS gzip: home 202 → 133 KB, tool pages ≈250 → 138 KB, localized tool pages 310 → 153 KB; a test guards the detector import graph | [#40](https://github.com/noobnooc/onlinetools.dev/pull/40) |
+| 2026-11-09 (PR green, awaiting merge) | Lighter pages: Smart Paste sniffers moved to dependency-free modules, tool About/FAQ via a server load. JS gzip: home 202 → 133 KB, tool pages ≈250 → 138 KB, localized tool pages 310 → 153 KB; a test guards the detector import graph | [#40](https://github.com/noobnooc/onlinetools.dev/pull/40) |
 | 2026-11-08 | cURL → fetch / axios / Python requests / Go converter (tool #50): bash + cmd quoting, curl's -d/-G/--data-urlencode/--json/-F rules, per-library auth/timeout/proxy/-k, warnings for anything not carried over, credentials kept out of share links, Smart Paste, 18 locales | [#39](https://github.com/noobnooc/onlinetools.dev/pull/39) |
 | 2026-11-08 | HSTS step 2 (max-age 1 week) | (Cloudflare API, see cloudflare-changes.md) |
 | 2026-11-07 | Color Contrast Checker (tool #49): WCAG AA/AAA/UI grades, truncated ratio, alpha blending, nearest passing colors in OKLCH, Smart Paste for color pairs, 18 locales; color parser gains 148 named colors, oklch() and percentage rgb() | [#38](https://github.com/noobnooc/onlinetools.dev/pull/38) |
