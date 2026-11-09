@@ -54,7 +54,8 @@ Cloudflare Workers Static Assets  ──►  prerendered HTML (built at deploy t
 Browser hydrates SvelteKit
         │
         ├─ [[lang=lang]]/+layout.ts → loadMessages('zh')   (code-split catalog)
-        ├─ t/[slug]/+page.ts        → registry entry + zh long-form content
+        ├─ t/[slug]/+page.ts        → registry entry
+        ├─ t/[slug]/+page.server.ts → zh long-form content (prerendered, not bundled)
         └─ TOOL_COMPONENTS[slug]()  → dynamic import of just this tool's UI
         │
         ▼

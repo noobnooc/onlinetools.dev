@@ -346,6 +346,12 @@ structured detectors (JWT 0.98, JSON 0.95, XML 0.93), in the band where YAML
 data type, add it to `DataFormat` in `src/lib/detect/formats.ts` along with its
 fallback chain, and cover the ranking in `detectors.test.ts`.
 
+Detectors run on every page, so whatever `detectors.ts` imports ships in the
+shared bundle. Keep your `isLikely…` function in a module with no heavy
+dependency: if your tool module imports a library (yaml, marked, a parser),
+put the sniffer in `src/lib/detect/sniff.ts` instead and re-export it from the
+tool module. `detect/bundle.test.ts` fails if a heavy package gets in.
+
 **Pipelines** — expose the transform as a chainable op so it can appear in
 `/chain` recipes. This is two files, deliberately split so prerendered pages can
 read op labels without importing browser-only tool libraries:

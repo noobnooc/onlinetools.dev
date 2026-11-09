@@ -1,6 +1,8 @@
 import { type ToolResult, ok, err } from './types';
 import { XMLParser, XMLBuilder, XMLValidator } from 'fast-xml-parser';
 
+export { isLikelyXml } from '$lib/detect/sniff';
+
 export function validateXml(input: string): ToolResult<true> {
 	if (input.trim() === '') return err('Input is empty');
 	const res = XMLValidator.validate(input, { allowBooleanAttributes: true });
@@ -183,13 +185,4 @@ export function jsonToXml(input: string, indent = 2): ToolResult {
 	} catch (e) {
 		return err(e instanceof Error ? e.message.split('\n')[0] : 'Could not build XML from this JSON');
 	}
-}
-
-/** Detector for Smart Paste: does this look like an XML document? */
-export function isLikelyXml(input: string): boolean {
-	const s = input.trim();
-	if (!s.startsWith('<') || !s.endsWith('>')) return false;
-	if (/^<!doctype\s+html/i.test(s) || /^<html[\s>]/i.test(s)) return false;
-	if (!/^<\?xml|^<[A-Za-z_][\w.-]*[\s>/]/.test(s)) return false;
-	return XMLValidator.validate(s, { allowBooleanAttributes: true }) === true;
 }
