@@ -29,6 +29,8 @@ export const PIPE_OP_META: PipeOpMeta[] = [
 	{ id: 'base64-encode', label: 'Base64 encode', group: 'encoding' },
 	{ id: 'url-decode', label: 'URL decode', group: 'encoding' },
 	{ id: 'url-encode', label: 'URL encode', group: 'encoding' },
+	{ id: 'query-to-json', label: 'Query string → JSON', group: 'encoding' },
+	{ id: 'json-to-query', label: 'JSON → query string', group: 'encoding' },
 	{ id: 'hex-decode', label: 'Hex → text', group: 'encoding' },
 	{ id: 'hex-encode', label: 'Text → hex', group: 'encoding' },
 	{ id: 'html-entities-decode', label: 'HTML entities decode', group: 'encoding' },

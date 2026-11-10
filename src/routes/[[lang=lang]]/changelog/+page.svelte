@@ -16,6 +16,23 @@
 	<div lang="en">
 	<section class="relative border-l border-line pb-8 pl-6">
 		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
+		<h2 class="text-sm font-medium">Query strings in the Pipeline</h2>
+		<p class="mt-0.5 font-mono text-xs text-dim">v2026.11.10</p>
+		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
+			<li>
+				Two new Pipeline steps: "Query string → JSON" and "JSON → query string". Repeated keys become arrays, and
+				bracket notation like <code>user[name]=Ada</code> or <code>tags[]=a</code> becomes nested objects and arrays.
+			</li>
+			<li>
+				Four new recipes: <a href={lp('/chain/query-string-to-json')} class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">parse a query string into JSON</a>,
+				<a href={lp('/chain/get-query-parameter-from-url')} class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">get one parameter from a URL</a>,
+				<a href={lp('/chain/json-to-query-string')} class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">convert JSON to a query string</a> and
+				<a href={lp('/chain/yaml-to-json')} class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">convert YAML to JSON</a>.
+			</li>
+		</ul>
+	</section>
+	<section class="relative border-l border-line pb-8 pl-6">
+		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
 		<h2 class="text-sm font-medium">Lighter pages</h2>
 		<p class="mt-0.5 font-mono text-xs text-dim">v2026.11.09</p>
 		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">

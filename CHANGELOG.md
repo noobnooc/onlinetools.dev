@@ -11,6 +11,19 @@ the footer badge and every `<lastmod>` in the sitemap.
 
 ---
 
+## [2026.11.10] — Query strings in the Pipeline
+
+### Added
+
+- Pipeline steps "Query string → JSON" (`queryToJson`) and "JSON → query
+  string" (`jsonToQuery`) in `src/lib/tools/url.ts`. Repeated keys become
+  arrays; `tags[]=`, `user[name]=` and `items[0][id]=` bracket notation
+  expands to arrays and nested objects, and serializes back the same way.
+  Values stay strings.
+- Four recipe pages: `/chain/query-string-to-json`,
+  `/chain/get-query-parameter-from-url`, `/chain/json-to-query-string`,
+  `/chain/yaml-to-json`.
+
 ## [2026.11.09] — Lighter pages
 
 ### Changed

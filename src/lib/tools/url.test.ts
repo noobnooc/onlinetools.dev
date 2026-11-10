@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { encodeUrl, decodeUrl, parseUrl } from './url';
+import { encodeUrl, decodeUrl, parseUrl, queryToJson, jsonToQuery } from './url';
 
 describe('encodeUrl', () => {
 	it('component mode escapes delimiters', () => {
@@ -93,5 +93,75 @@ describe('parseUrl', () => {
 		expect(parseUrl('').ok).toBe(false);
 		// '%' is invalid in a host outside a proper percent escape.
 		expect(parseUrl('%%%').ok).toBe(false);
+	});
+});
+
+describe('queryToJson', () => {
+	const parse = (s: string) => {
+		const r = queryToJson(s);
+		if (!r.ok) throw new Error(r.error);
+		return JSON.parse(r.value);
+	};
+	it('reads a full URL, a ?query and a bare query', () => {
+		const want = { q: 'hello world', page: '2' };
+		expect(parse('https://example.com/search?q=hello+world&page=2#top')).toEqual(want);
+		expect(parse('?q=hello%20world&page=2')).toEqual(want);
+		expect(parse('q=hello+world&page=2')).toEqual(want);
+	});
+	it('collects repeated keys into an array', () => {
+		expect(parse('tag=a&tag=b&tag=c')).toEqual({ tag: ['a', 'b', 'c'] });
+	});
+	it('expands bracket notation', () => {
+		expect(parse('tags[]=a&tags[]=b&user[name]=Ada&user[address][city]=London')).toEqual({
+			tags: ['a', 'b'],
+			user: { name: 'Ada', address: { city: 'London' } }
+		});
+		expect(parse('items[0][id]=1&items[0][qty]=2&items[1][id]=7')).toEqual({
+			items: [{ id: '1', qty: '2' }, { id: '7' }]
+		});
+		expect(parse('a[5]=x')).toEqual({ a: { '5': 'x' } });
+	});
+	it('decodes percent-encoded brackets and UTF-8', () => {
+		expect(parse('user%5Bname%5D=%E4%BD%A0%E5%A5%BD')).toEqual({ user: { name: '你好' } });
+	});
+	it('keeps empty values and flag-style keys', () => {
+		expect(parse('a=&b')).toEqual({ a: '', b: '' });
+	});
+	it('does not treat __proto__ specially', () => {
+		const v = parse('__proto__[x]=1');
+		expect(Object.hasOwn(v, '__proto__')).toBe(true);
+		expect(({} as Record<string, unknown>).x).toBeUndefined();
+	});
+	it('errors helpfully', () => {
+		expect(queryToJson('').ok).toBe(false);
+		expect(queryToJson('https://example.com/path')).toMatchObject({ ok: false, error: 'This URL has no query string' });
+		expect(queryToJson('a=1&a[b]=2').ok).toBe(false);
+		expect(queryToJson('a[b]=1&a=2').ok).toBe(false);
+		expect(queryToJson('a[]=1&a[5]=2').ok).toBe(false);
+	});
+});
+
+describe('jsonToQuery', () => {
+	it('serializes scalars, arrays and nested objects', () => {
+		const r = jsonToQuery(
+			JSON.stringify({ q: 'hello world', page: 2, safe: true, empty: null, tag: ['a', 'b'], user: { name: 'Ada' } })
+		);
+		expect(r).toEqual({ ok: true, value: 'q=hello+world&page=2&safe=true&empty=&tag=a&tag=b&user[name]=Ada' });
+	});
+	it('indexes arrays of objects and encodes reserved characters', () => {
+		const r = jsonToQuery(JSON.stringify({ items: [{ id: 1 }, { id: 2 }], 'a&b': 'c=d', city: 'São Paulo' }));
+		expect(r).toEqual({ ok: true, value: 'items[0][id]=1&items[1][id]=2&a%26b=c%3Dd&city=S%C3%A3o+Paulo' });
+	});
+	it('round-trips through queryToJson', () => {
+		const obj = { q: 'x y', tag: ['a', 'b'], user: { name: 'Ada', address: { city: 'London' } }, items: [{ id: '1' }, { id: '2' }] };
+		const qs = jsonToQuery(JSON.stringify(obj));
+		expect(qs.ok).toBe(true);
+		const back = qs.ok ? queryToJson(qs.value) : qs;
+		expect(back.ok && JSON.parse(back.value)).toEqual(obj);
+	});
+	it('rejects non-objects', () => {
+		expect(jsonToQuery('[1,2]').ok).toBe(false);
+		expect(jsonToQuery('"x"').ok).toBe(false);
+		expect(jsonToQuery('{bad').ok).toBe(false);
 	});
 });

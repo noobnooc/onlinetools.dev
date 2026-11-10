@@ -211,7 +211,7 @@ be routed into a text tool.
   already-tested tool functions. Importing it pulls in browser-only code, so it
   stays client-side.
 
-26 ops today. `presets.ts` holds five curated recipes, each with its own page
+35 ops today. `presets.ts` holds 12 curated recipes, each with its own page
 under `/chain/<slug>` — these target workflow-shaped queries ("decode a JWT and
 read its payload") that single-tool pages don't answer. Preset copy is
 English-only by design, so the localized prefixes carry `noindex,follow` and
