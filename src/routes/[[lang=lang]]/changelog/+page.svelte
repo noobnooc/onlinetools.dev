@@ -16,6 +16,24 @@
 	<div lang="en">
 	<section class="relative border-l border-line pb-8 pl-6">
 		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
+		<h2 class="text-sm font-medium">Lighter pages</h2>
+		<p class="mt-0.5 font-mono text-xs text-dim">v2026.11.09</p>
+		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
+			<li>
+				Every page downloads less JavaScript. Tool pages went from about 250 KB to 140 KB (compressed), the home
+				page from about 200 KB to 135 KB, and localized tool pages from about 310 KB to 155 KB.
+			</li>
+			<li>
+				Smart Paste no longer loads the YAML, TOML, Markdown and XML libraries on every page just to recognize a
+				format. They now load only on the tools that use them.
+			</li>
+			<li>
+				A tool page now carries only its own About and FAQ, not the text for every tool.
+			</li>
+		</ul>
+	</section>
+	<section class="relative border-l border-line pb-8 pl-6">
+		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
 		<h2 class="text-sm font-medium">cURL → fetch / Python / Go</h2>
 		<p class="mt-0.5 font-mono text-xs text-dim">v2026.11.08</p>
 		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">

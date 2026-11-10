@@ -11,6 +11,21 @@ the footer badge and every `<lastmod>` in the sitemap.
 
 ---
 
+## [2026.11.09] — Lighter pages
+
+### Changed
+
+- Every page downloads less JavaScript (gzip, measured on a production
+  build): tool pages ≈250 → 140 KB, the home page ≈200 → 135 KB, localized
+  tool pages ≈310 → 155 KB.
+- Smart Paste's format sniffers (XML, CSV, Markdown) moved to dependency-free
+  modules (`src/lib/detect/sniff.ts`, `src/lib/tools/csv.ts`), so yaml,
+  smol-toml, marked, turndown and the fast-xml-parser parser/builder load only
+  on the tools that use them.
+- Tool About/FAQ content comes from a server load (`+page.server.ts`), so it
+  is prerendered into each page and its `__data.json` instead of bundling
+  every tool's text into the client.
+
 ## [2026.11.08] — cURL → fetch / Python / Go
 
 ### Added

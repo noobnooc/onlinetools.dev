@@ -2,6 +2,8 @@ import { type ToolResult, ok, err } from './types';
 import { marked } from 'marked';
 import TurndownService from 'turndown';
 
+export { isLikelyMarkdown } from '$lib/detect/sniff';
+
 export interface MdStats {
 	words: number;
 	headings: number;
@@ -59,19 +61,4 @@ export function markdownStats(input: string): MdStats {
 		links: (input.match(/\[[^\]]*\]\([^)]*\)/g) ?? []).length,
 		codeBlocks: (input.match(/```/g) ?? []).length >> 1
 	};
-}
-
-/** Detector for Smart Paste: markdown-looking text (headings, fences, links, lists). */
-export function isLikelyMarkdown(input: string): boolean {
-	const s = input.trim();
-	if (s.length < 40) return false;
-	if (s.startsWith('<') || /^[[{"]/.test(s)) return false;
-	let signals = 0;
-	if (/^#{1,6}\s+\S/m.test(s)) signals++;
-	if (/^```/m.test(s)) signals++;
-	if (/\[[^\]]+\]\([^)]+\)/.test(s)) signals++;
-	if (/^(\s*[-*+]\s+\S.*\n){2,}/m.test(s)) signals++;
-	if (/^>\s+\S/m.test(s)) signals++;
-	if (/\*\*[^*\n]+\*\*/.test(s)) signals++;
-	return signals >= 2;
 }

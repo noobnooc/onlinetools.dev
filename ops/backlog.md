@@ -15,6 +15,8 @@ _(empty — humans: put a line here to steer the next run)_
 
 | Item | Area | Impact | Effort | Notes |
 | --- | --- | :-: | :-: | --- |
+| Lighten /chain: it loads ≈320 KB gzip of JS because `chain/ops.ts` imports every tool module (yaml, xml, sql-formatter…) statically. Load each op implementation on first run instead | quality | 2 | 2 | Measured 11-09. /chain and the 8 recipe pages in 18 locales are the heaviest pages on the site. Keep op metadata (`op-meta.ts`) static so the step picker and prerendered recipe text stay as they are |
+| Shared vendor weight after 11-09: svelte, lucide-svelte, bits-ui and kit are now most of the ≈133 KB home bundle. Check whether bits-ui (command palette) can load on first open, and that lucide icons are imported per icon | quality | 1 | 2 | Measure with a temporary `build.sourcemap` and Playwright, like 11-09 |
 | Keep a 7-day log of the top human HTML paths | growth | 3 | 1 | Seven days (10-27→11-02) now recorded in `metrics.md`: traffic is a long tail with no dominant tool; localized pages (zh, uk, pl, id, de) regularly make the top 10, and the CIDR calculator led on 11-02. Next step: rank tools over the 7 days and pick depth work for the top 5 |
 | JSON diff (semantic, key-order-insensitive) | tool | 2 | 2 | The text differ already exists; reuse its rendering |
 | Timezone converter / meeting planner | tool | 2 | 2 | `Intl` does the work; no tz database needed |
@@ -37,6 +39,7 @@ _(empty — humans: put a line here to steer the next run)_
 
 | Date | Item | PR |
 | --- | --- | --- |
+| 2026-11-09 (PR green, awaiting merge) | Lighter pages: Smart Paste sniffers moved to dependency-free modules, tool About/FAQ via a server load. JS gzip: home 202 → 133 KB, tool pages ≈250 → 138 KB, localized tool pages 310 → 153 KB; a test guards the detector import graph | [#40](https://github.com/noobnooc/onlinetools.dev/pull/40) |
 | 2026-11-08 | cURL → fetch / axios / Python requests / Go converter (tool #50): bash + cmd quoting, curl's -d/-G/--data-urlencode/--json/-F rules, per-library auth/timeout/proxy/-k, warnings for anything not carried over, credentials kept out of share links, Smart Paste, 18 locales | [#39](https://github.com/noobnooc/onlinetools.dev/pull/39) |
 | 2026-11-08 | HSTS step 2 (max-age 1 week) | (Cloudflare API, see cloudflare-changes.md) |
 | 2026-11-07 | Color Contrast Checker (tool #49): WCAG AA/AAA/UI grades, truncated ratio, alpha blending, nearest passing colors in OKLCH, Smart Paste for color pairs, 18 locales; color parser gains 148 named colors, oklch() and percentage rgb() | [#38](https://github.com/noobnooc/onlinetools.dev/pull/38) |
