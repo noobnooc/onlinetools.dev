@@ -78,6 +78,64 @@ export const CHAIN_PRESETS: ChainPreset[] = [
 		tools: ['json-to-yaml', 'json-formatter']
 	},
 	{
+		slug: 'query-string-to-json',
+		title: 'Parse a query string into JSON',
+		heading: 'Parse a URL query string into JSON',
+		description:
+			'Paste a URL or query string and get its parameters as JSON: repeated keys become arrays and user[name]=… brackets become nested objects. Runs in your browser.',
+		intro:
+			'Long tracking links and API calls are hard to read as one line. Paste a full URL or just the part after the ?, and this pipeline decodes every parameter into a JSON object. A repeated key becomes an array, and the bracket notation PHP, Rails and qs use (tags[]=a, user[name]=Ada, items[0][id]=1) becomes arrays and nested objects. Values stay strings, because a query string has no types.',
+		recipe: {
+			input:
+				'https://shop.example.com/search?q=running+shoes&size=42&size=43&filter[brand]=Acme&filter[color][]=red&filter[color][]=blue&utm_source=newsletter',
+			steps: [{ op: 'query-to-json' }]
+		},
+		tools: ['url-parser', 'url-encode-decode', 'json-formatter']
+	},
+	{
+		slug: 'get-query-parameter-from-url',
+		title: 'Get one parameter from a URL',
+		heading: 'Get the value of one query parameter from a URL',
+		description:
+			'Pull a single query parameter (like utm_source, code or redirect_uri) out of a URL, already decoded. Change the name in the JSONPath step; runs locally.',
+		intro:
+			'Need just the redirect_uri, the OAuth code or the utm_source from a long link? This pipeline parses the query string into JSON and picks one parameter with a JSONPath, so the value comes out fully decoded. Change $.redirect_uri to the parameter you need; use $[\'name\'] for names with dashes.',
+		recipe: {
+			input:
+				'https://auth.example.com/authorize?response_type=code&client_id=demo-app&redirect_uri=https%3A%2F%2Fapp.example.com%2Fcallback%3Fnext%3D%252Fhome&scope=openid+email&state=xyz123',
+			steps: [{ op: 'query-to-json' }, { op: 'jsonpath', arg: '$.redirect_uri' }]
+		},
+		tools: ['url-parser', 'jsonpath-tester']
+	},
+	{
+		slug: 'json-to-query-string',
+		title: 'Convert JSON to a query string',
+		heading: 'Convert a JSON object to a URL query string',
+		description:
+			'Turn a JSON object into a URL-encoded query string: arrays repeat the key and nested objects use brackets (user[name]=Ada). Runs entirely in your browser.',
+		intro:
+			'Building a GET request or a test link from data you already have as JSON? This pipeline encodes every field into a query string. Arrays of values repeat the key (tag=a&tag=b), nested objects use bracket notation (filter[brand]=Acme), arrays of objects get indexes (items[0][id]=1), and null becomes an empty value. Spaces become + and other reserved characters are percent-encoded, as an HTML form would send them.',
+		recipe: {
+			input: '{"q":"running shoes","page":2,"size":[42,43],"filter":{"brand":"Acme","in_stock":true}}',
+			steps: [{ op: 'json-to-query' }]
+		},
+		tools: ['url-encode-decode', 'url-parser', 'json-formatter']
+	},
+	{
+		slug: 'yaml-to-json',
+		title: 'Convert YAML to JSON',
+		heading: 'Convert YAML to JSON',
+		description:
+			'Paste YAML (a config file, a Kubernetes manifest, an OpenAPI spec) and get formatted JSON back. Runs entirely in your browser; nothing is uploaded.',
+		intro:
+			'Paste YAML and get the same data as pretty-printed JSON, for an API body, a jq query or a JSON-only tool. Anchors and aliases are resolved, and a syntax error points at the line. The conversion runs entirely in your browser, so private configs stay private.',
+		recipe: {
+			input: 'name: web\nreplicas: 3\nports:\n  - 80\n  - 443\nenv:\n  LOG_LEVEL: info\n  DEBUG: false\n',
+			steps: [{ op: 'yaml-to-json' }]
+		},
+		tools: ['json-to-yaml', 'json-formatter']
+	},
+	{
 		slug: 'json-array-to-csv',
 		title: 'Flatten a JSON array into CSV',
 		heading: 'Flatten a JSON array into CSV',

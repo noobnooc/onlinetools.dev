@@ -188,7 +188,7 @@ src/
     components/     UI shell — InputArea, OutputPanel, palette, sidebar…
       tools/        one Svelte component per tool, lazily imported
     detect/         Smart Paste detectors + the data-format taxonomy
-    chain/          pipeline engine, 33 ops and 8 curated preset recipes
+    chain/          pipeline engine, 35 ops and 12 curated preset recipes
     i18n/           locale codes, message catalogs, t()/lp()/canonical helpers
     state/          URL-fragment state, hash restore, favorites, UI stores
   routes/

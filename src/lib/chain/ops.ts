@@ -1,6 +1,6 @@
 import { type ToolResult, ok, err } from '$lib/tools/types';
 import { encodeBase64, decodeBase64 } from '$lib/tools/base64';
-import { encodeUrl, decodeUrl } from '$lib/tools/url';
+import { encodeUrl, decodeUrl, queryToJson, jsonToQuery } from '$lib/tools/url';
 import { encodeBytes, decodeBytes } from '$lib/tools/hexbin';
 import { encodeEntities, decodeEntities } from '$lib/tools/htmlentities';
 import { formatJson } from '$lib/tools/json';
@@ -75,6 +75,8 @@ const RUNS: Record<string, PipeRun> = {
 	'base64-encode': (i) => encodeBase64(i),
 	'url-decode': (i) => decodeUrl(i),
 	'url-encode': (i) => encodeUrl(i),
+	'query-to-json': (i) => queryToJson(i),
+	'json-to-query': (i) => jsonToQuery(i),
 	'hex-decode': (i) => decodeBytes(i, 'hex'),
 	'hex-encode': (i) => encodeBytes(i, { format: 'hex', separator: ' ', uppercase: false, prefix: false }),
 	'html-entities-decode': (i) => decodeEntities(i),

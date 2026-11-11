@@ -131,6 +131,34 @@ describe('network and line ops', () => {
 });
 
 describe('presets', () => {
+	it('parses a query string into nested JSON', () => {
+		const p = CHAIN_PRESETS.find((x) => x.slug === 'query-string-to-json')!;
+		const run = runChain(p.recipe.input, p.recipe.steps);
+		expect(run.failedAt).toBe(-1);
+		expect(JSON.parse(run.output)).toMatchObject({
+			q: 'running shoes',
+			size: ['42', '43'],
+			filter: { brand: 'Acme', color: ['red', 'blue'] }
+		});
+	});
+
+	it('picks one decoded parameter out of a URL', () => {
+		const p = CHAIN_PRESETS.find((x) => x.slug === 'get-query-parameter-from-url')!;
+		const run = runChain(p.recipe.input, p.recipe.steps);
+		expect(run.output).toBe('https://app.example.com/callback?next=%2Fhome');
+	});
+
+	it('serializes JSON to a query string', () => {
+		const p = CHAIN_PRESETS.find((x) => x.slug === 'json-to-query-string')!;
+		const run = runChain(p.recipe.input, p.recipe.steps);
+		expect(run.output).toBe('q=running+shoes&page=2&size=42&size=43&filter[brand]=Acme&filter[in_stock]=true');
+	});
+
+	it('fails the query step on a URL without a query', () => {
+		const run = runChain('https://example.com/', [{ op: 'query-to-json' }]);
+		expect(run.failedAt).toBe(0);
+	});
+
 	it('every preset links only to tools that exist', () => {
 		for (const p of CHAIN_PRESETS) {
 			expect(p.tools.length, p.slug).toBeGreaterThan(0);

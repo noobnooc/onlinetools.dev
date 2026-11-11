@@ -15,6 +15,16 @@ Newest first. One entry per run; keep each under ~25 lines. Template:
 
 ---
 
+## 2026-11-10 — Query strings in the Pipeline (+4 recipe pages)
+- Health: smoke test green (0 failures). #40 was merged 11-10 15:12 UTC (by the owner, since my 11-09 merge was denied); live is v2026.11.09 (Worker `ec3b4431`), both checks green on `main`. 0 eyeball 5xx on 11-09.
+- Metrics: 11-09: 773 page views, 629 visitors. Week 11-03→11-09 vs 10-27→11-02: page views +26% (9,163 vs 7,285), visitors +10% (4,320 vs 3,928). The cURL converter (5) and contrast checker (14 over 4 locales) already show in the top paths.
+- Shipped (PR open and green, **not merged**): [#41](https://github.com/noobnooc/onlinetools.dev/pull/41). My merge was denied by the session's permission policy ("Merge Without Review"), as on 11-09. I didn't try other routes, and production stays on v2026.11.09 (`ec3b4431`). Pipeline steps "Query string → JSON" and "JSON → query string" (`queryToJson`/`jsonToQuery` in `tools/url.ts`): full URL, `?…` or bare query; repeated keys → arrays; `tags[]`, `user[name]`, `items[0][id]` bracket notation both ways; values stay strings; null-prototype objects so `__proto__[x]` is plain data; clear errors for key conflicts and index gaps. Four recipe pages: `/chain/query-string-to-json`, `/chain/get-query-parameter-from-url` (decoded redirect_uri via JSONPath), `/chain/json-to-query-string`, `/chain/yaml-to-json`. 12 recipes, 35 ops now.
+- Why this headline: the last four were three new tools and a Quality pass; the 11-09 note asked for Content. The backlog's "query→JSON op" unlocked recipes for common workflow searches, and YAML → JSON needed no new op at all. Checked every factual claim in the recipe copy by running it (anchors resolve, YAML errors carry a line, `$['my-key']` works).
+- Cloudflare: none (HSTS step 3 on/after 11-15).
+- Community: no outside issues or PRs. #31 (merge permission) stays open, with an update comment.
+- Learned: `sed 's/2026.11.09'/…/'` also matched `2026-11-09'` (the dot), and wrote a dotted SITE_UPDATED. Escape the dots. svelte-check wants an explicit type on an index computed from a loop-reassigned union (`const idx: number`).
+- Next: if #41 is merged, run `release.sh <merge-sha> ec3b4431-320c-42fb-b31d-d2f1401befcd 2026.11.10`. If merging is still denied, keep the run small. HSTS step 3 on/after 11-15. Watch whether the four new `/chain/*` pages get crawled. The /chain bundle (≈320 KB gzip) is still the heaviest page and grew a little today; good Quality headline when that area comes around again.
+
 ## 2026-11-09 — Lighter pages: 34–51% less JavaScript
 - Health: smoke test green (0 failures). Live is v2026.11.08 (Worker `496bf87b`); both checks green on `main`. 0 eyeball 5xx on 11-08. No open issues or PRs.
 - Metrics: 11-08 had the most visitors in the log: 921 (1,814 page views). Week 11-02→11-08 vs 10-26→11-01: page views +31% (9,140 vs 7,003), visitors +8% (4,235 vs 3,922). The contrast checker (21 views, 4 locales) and TOTP (17) are already among the top tool pages.
