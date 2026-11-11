@@ -1,8 +1,13 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeAll } from 'vitest';
 import { runChain, encodeRecipe, decodeRecipe, recipeSize, type Recipe } from './engine';
+import { loadOps } from './ops';
+import { PIPE_OP_META } from './op-meta';
 import { CHAIN_PRESETS } from './presets';
 import { TOOL_BY_SLUG } from '$lib/tools/registry';
 import { MAX_SHARED_INPUT, encodeState } from '$lib/state/urlstate';
+
+// Heavy ops load on first use; load them all up front, as the page would.
+beforeAll(() => loadOps(PIPE_OP_META.map((o) => o.id)));
 
 describe('runChain', () => {
 	it('feeds each step output into the next', () => {

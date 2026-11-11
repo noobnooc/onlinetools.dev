@@ -15,7 +15,6 @@ _(empty — humans: put a line here to steer the next run)_
 
 | Item | Area | Impact | Effort | Notes |
 | --- | --- | :-: | :-: | --- |
-| Lighten /chain: it loads ≈320 KB gzip of JS because `chain/ops.ts` imports every tool module (yaml, xml, sql-formatter…) statically. Load each op implementation on first run instead | quality | 2 | 2 | Measured 11-09. /chain and the 8 recipe pages in 18 locales are the heaviest pages on the site. Keep op metadata (`op-meta.ts`) static so the step picker and prerendered recipe text stay as they are |
 | Shared vendor weight after 11-09: svelte, lucide-svelte, bits-ui and kit are now most of the ≈133 KB home bundle. Check whether bits-ui (command palette) can load on first open, and that lucide icons are imported per icon | quality | 1 | 2 | Measure with a temporary `build.sourcemap` and Playwright, like 11-09 |
 | Keep a 7-day log of the top human HTML paths | growth | 3 | 1 | Seven days (10-27→11-02) now recorded in `metrics.md`: traffic is a long tail with no dominant tool; localized pages (zh, uk, pl, id, de) regularly make the top 10, and the CIDR calculator led on 11-02. Next step: rank tools over the 7 days and pick depth work for the top 5 |
 | JSON diff (semantic, key-order-insensitive) | tool | 2 | 2 | The text differ already exists; reuse its rendering |
@@ -39,7 +38,8 @@ _(empty — humans: put a line here to steer the next run)_
 
 | Date | Item | PR |
 | --- | --- | --- |
-| 2026-11-10 (PR green, awaiting merge) | Pipeline: "Query string → JSON" and "JSON → query string" steps (bracket notation both ways); recipe pages for query string → JSON, one parameter from a URL, JSON → query string, YAML → JSON | [#41](https://github.com/noobnooc/onlinetools.dev/pull/41) |
+| 2026-11-11 | Lighter /chain: heavy op libraries load on first use. JS gzip /chain 321 → 139 KB, recipe pages 324 → 142–178 KB; tests guard the split | [#42](https://github.com/noobnooc/onlinetools.dev/pull/42) |
+| 2026-11-10 (merged 11-11) | Pipeline: "Query string → JSON" and "JSON → query string" steps (bracket notation both ways); recipe pages for query string → JSON, one parameter from a URL, JSON → query string, YAML → JSON | [#41](https://github.com/noobnooc/onlinetools.dev/pull/41) |
 | 2026-11-09 (merged by the owner 11-10) | Lighter pages: Smart Paste sniffers moved to dependency-free modules, tool About/FAQ via a server load. JS gzip: home 202 → 133 KB, tool pages ≈250 → 138 KB, localized tool pages 310 → 153 KB; a test guards the detector import graph | [#40](https://github.com/noobnooc/onlinetools.dev/pull/40) |
 | 2026-11-08 | cURL → fetch / axios / Python requests / Go converter (tool #50): bash + cmd quoting, curl's -d/-G/--data-urlencode/--json/-F rules, per-library auth/timeout/proxy/-k, warnings for anything not carried over, credentials kept out of share links, Smart Paste, 18 locales | [#39](https://github.com/noobnooc/onlinetools.dev/pull/39) |
 | 2026-11-08 | HSTS step 2 (max-age 1 week) | (Cloudflare API, see cloudflare-changes.md) |

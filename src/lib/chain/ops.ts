@@ -5,37 +5,26 @@ import { encodeBytes, decodeBytes } from '$lib/tools/hexbin';
 import { encodeEntities, decodeEntities } from '$lib/tools/htmlentities';
 import { formatJson } from '$lib/tools/json';
 import { decodeJwt } from '$lib/tools/jwt';
-import { convertData, jsonToCsv, jsonToTypescript, queryJsonPath } from '$lib/tools/dataconvert';
-import { inferJsonSchema } from '$lib/tools/jsonschema';
 import { slugify, processLines } from '$lib/tools/text';
-import { formatSql, minifySql } from '$lib/tools/sqlformat';
-import { beautifyCode } from '$lib/tools/codeformat';
 import { aggregateCidrs } from '$lib/tools/cidr';
-import { markdownToHtml, htmlToMarkdown } from '$lib/tools/markdown';
 import { PIPE_OP_META, type PipeOpMeta } from './op-meta';
 
 /**
  * Runnable pipeline operations: the SSR-safe metadata in `op-meta.ts` paired
  * with a run function. Each run is a thin, pure wrapper over an already
  * unit-tested tool-logic function, normalized to `string → ToolResult` so steps
- * compose generically. Importing this module pulls in the underlying tool
- * libraries (some browser-only), so it must stay client-side.
+ * compose generically.
+ *
+ * Ops over small, dependency-free tool modules are bundled with the page.
+ * Ops that need a heavy library (yaml, ajv, sql-formatter, js-beautify,
+ * marked/turndown) are loaded the first time a pipeline uses them, so /chain
+ * and its recipe pages don't download every library up front. Call
+ * `loadOps()` before `runChain()`; `bundle.test.ts` guards the split.
  */
 
 export type PipeRun = (input: string, arg?: string) => ToolResult;
 
-export interface PipeOp extends PipeOpMeta {
-	run: PipeRun;
-}
-
-function jsonpathRun(input: string, arg?: string): ToolResult {
-	const res = queryJsonPath(input, arg?.trim() || '$');
-	if (!res.ok) return res;
-	if (res.value.length === 0) return err('No matches for that path');
-	const values = res.value.map((m) => m.value);
-	const out = values.length === 1 ? values[0] : values;
-	return ok(typeof out === 'string' ? out : JSON.stringify(out, null, 2));
-}
+export type PipeOp = PipeOpMeta;
 
 function jwtPayload(input: string): ToolResult {
 	const r = decodeJwt(input);
@@ -69,8 +58,8 @@ function cidrAggregate(input: string, arg?: string): ToolResult {
 	return ok(r.value.cidrs.join('\n'));
 }
 
-/** Run function per op id — kept in lockstep with PIPE_OP_META. */
-const RUNS: Record<string, PipeRun> = {
+/** Ops bundled with the page: their tool modules have no dependencies. */
+const EAGER: Record<string, PipeRun> = {
 	'base64-decode': (i) => decodeBase64(i),
 	'base64-encode': (i) => encodeBase64(i),
 	'url-decode': (i) => decodeUrl(i),
@@ -86,15 +75,6 @@ const RUNS: Record<string, PipeRun> = {
 	'json-pretty': (i) => formatJson(i, { indent: 2 }),
 	'json-minify': (i) => formatJson(i, { indent: 'min' }),
 	'json-sort-keys': (i) => formatJson(i, { indent: 2, sortKeys: true }),
-	jsonpath: jsonpathRun,
-	'json-to-yaml': (i) => convertData(i, 'json', 'yaml'),
-	'yaml-to-json': (i) => convertData(i, 'yaml', 'json'),
-	'json-to-csv': (i) => {
-		const r = jsonToCsv(i);
-		return r.ok ? ok(r.value.csv) : r;
-	},
-	'json-to-ts': (i) => jsonToTypescript(i),
-	'json-schema': (i) => inferJsonSchema(i),
 
 	uppercase: (i) => ok(i.toUpperCase()),
 	lowercase: (i) => ok(i.toLowerCase()),
@@ -104,21 +84,123 @@ const RUNS: Record<string, PipeRun> = {
 	'dedupe-lines': (i) => ok(processLines(i, { dedupe: true }).output),
 	'join-lines': joinLines,
 
-	'cidr-aggregate': cidrAggregate,
-
-	'sql-format': (i) => formatSql(i, { dialect: 'sql', keywordCase: 'upper', indent: 2 }),
-	'sql-minify': (i) => minifySql(i),
-	'css-format': (i) => beautifyCode('css', i),
-	'js-format': (i) => beautifyCode('js', i),
-	'html-format': (i) => beautifyCode('html', i),
-	'markdown-to-html': (i) => markdownToHtml(i),
-	'html-to-markdown': (i) => htmlToMarkdown(i)
+	'cidr-aggregate': cidrAggregate
 };
 
-export const PIPE_OPS: PipeOp[] = PIPE_OP_META.map((meta) => ({
-	...meta,
-	run: RUNS[meta.id] ?? (() => err(`No implementation for "${meta.id}"`))
-}));
+const dataconvert = () => import('$lib/tools/dataconvert');
+const sqlformat = () => import('$lib/tools/sqlformat');
+const codeformat = () => import('$lib/tools/codeformat');
+const markdown = () => import('$lib/tools/markdown');
+
+/** Ops whose tool module pulls in a heavy library, imported on first use. */
+const LAZY: Record<string, () => Promise<PipeRun>> = {
+	jsonpath: async () => {
+		const { queryJsonPath } = await dataconvert();
+		return (input, arg) => {
+			const res = queryJsonPath(input, arg?.trim() || '$');
+			if (!res.ok) return res;
+			if (res.value.length === 0) return err('No matches for that path');
+			const values = res.value.map((m) => m.value);
+			const out = values.length === 1 ? values[0] : values;
+			return ok(typeof out === 'string' ? out : JSON.stringify(out, null, 2));
+		};
+	},
+	'json-to-yaml': async () => {
+		const { convertData } = await dataconvert();
+		return (i) => convertData(i, 'json', 'yaml');
+	},
+	'yaml-to-json': async () => {
+		const { convertData } = await dataconvert();
+		return (i) => convertData(i, 'yaml', 'json');
+	},
+	'json-to-csv': async () => {
+		const { jsonToCsv } = await dataconvert();
+		return (i) => {
+			const r = jsonToCsv(i);
+			return r.ok ? ok(r.value.csv) : r;
+		};
+	},
+	'json-to-ts': async () => {
+		const { jsonToTypescript } = await dataconvert();
+		return (i) => jsonToTypescript(i);
+	},
+	'json-schema': async () => {
+		const { inferJsonSchema } = await import('$lib/tools/jsonschema');
+		return (i) => inferJsonSchema(i);
+	},
+
+	'sql-format': async () => {
+		const { formatSql } = await sqlformat();
+		return (i) => formatSql(i, { dialect: 'sql', keywordCase: 'upper', indent: 2 });
+	},
+	'sql-minify': async () => {
+		const { minifySql } = await sqlformat();
+		return (i) => minifySql(i);
+	},
+	'css-format': async () => {
+		const { beautifyCode } = await codeformat();
+		return (i) => beautifyCode('css', i);
+	},
+	'js-format': async () => {
+		const { beautifyCode } = await codeformat();
+		return (i) => beautifyCode('js', i);
+	},
+	'html-format': async () => {
+		const { beautifyCode } = await codeformat();
+		return (i) => beautifyCode('html', i);
+	},
+	'markdown-to-html': async () => {
+		const { markdownToHtml } = await markdown();
+		return (i) => markdownToHtml(i);
+	},
+	'html-to-markdown': async () => {
+		const { htmlToMarkdown } = await markdown();
+		return (i) => htmlToMarkdown(i);
+	}
+};
+
+const loaded = new Map<string, PipeRun>(Object.entries(EAGER));
+/** Ops whose module failed to load (offline after a deploy, blocked chunk). */
+const failed = new Set<string>();
+
+/**
+ * The run function for an op: a function once it is available, 'loading'
+ * while its module still has to be fetched, 'failed' if fetching it failed,
+ * or undefined for an id that isn't an op at all.
+ */
+export function getRun(id: string): PipeRun | 'loading' | 'failed' | undefined {
+	const run = loaded.get(id);
+	if (run) return run;
+	if (failed.has(id)) return 'failed';
+	return id in LAZY ? 'loading' : undefined;
+}
+
+/** True when every given op can run right away. */
+export function opsReady(ids: Iterable<string>): boolean {
+	for (const id of ids) if (getRun(id) === 'loading') return false;
+	return true;
+}
+
+/**
+ * Import the modules the given ops need. Resolves once all of them settled;
+ * a failed import marks its op 'failed' instead of rejecting, and a later
+ * call retries it.
+ */
+export async function loadOps(ids: Iterable<string>): Promise<void> {
+	const todo = [...new Set(ids)].filter((id) => !loaded.has(id) && id in LAZY);
+	await Promise.all(
+		todo.map(async (id) => {
+			try {
+				loaded.set(id, await LAZY[id]());
+				failed.delete(id);
+			} catch {
+				failed.add(id);
+			}
+		})
+	);
+}
+
+export const PIPE_OPS: PipeOp[] = PIPE_OP_META;
 
 export const PIPE_OP_BY_ID = new Map(PIPE_OPS.map((o) => [o.id, o]));
 

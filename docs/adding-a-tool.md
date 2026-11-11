@@ -360,14 +360,23 @@ read op labels without importing browser-only tool libraries:
 // src/lib/chain/op-meta.ts — SSR-safe metadata, no tool imports
 { id: 'rot13', label: 'ROT13', group: 'encoding' },
 
-// src/lib/chain/ops.ts — the run function, keyed by the same id
+// src/lib/chain/ops.ts — the run function, keyed by the same id.
+// In EAGER if the tool module has no dependencies:
 'rot13': (i) => rotate(i, { variant: 'rot13' }),
+// …or in LAZY if it imports a library, so /chain only loads it on first use:
+'yaml-to-json': async () => {
+	const { convertData } = await dataconvert();
+	return (i) => convertData(i, 'yaml', 'json');
+},
 ```
+
+`detect/bundle.test.ts` fails if a heavy package becomes a static import of
+`ops.ts`.
 
 Ops are `string → ToolResult` and must stay pure — a thin wrapper over logic
 that is already unit-tested. `engine.test.ts` exercises every op and every
-preset recipe, and an id present in `op-meta.ts` with no entry in `RUNS`
-degrades to an error result rather than a crash. A curated recipe in `chain/presets.ts` also gets
+preset recipe, and an id present in `op-meta.ts` with no entry in `EAGER` or
+`LAZY` fails `ops.test.ts` (at runtime it to an error result rather than a crash). A curated recipe in `chain/presets.ts` also gets
 its own indexable page (and lists the single tools behind it in `tools`) — worth it when the *workflow* is what people search
 for ("decode a JWT and read its payload"), not the individual tool.
 

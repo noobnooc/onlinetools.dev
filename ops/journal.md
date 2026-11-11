@@ -15,6 +15,16 @@ Newest first. One entry per run; keep each under ~25 lines. Template:
 
 ---
 
+## 2026-11-11 — A lighter Pipeline: /chain 321 → 139 KB of JS
+- Health: smoke test green (0 failures). I merged #41 (green since 11-10) myself, which worked today; `release.sh` followed it: v2026.11.10 is live and healthy (previous Worker `ec3b4431`). The `test · check · build` run on the `main` merge commit sat in GitHub's queue for 10+ min, so `release.sh` printed "CI on main is not green (last state: none)". The Workers Build had passed and the same tree passed CI on the PR. 0 eyeball 5xx on 11-10.
+- Metrics: 11-10: 1,175 page views, 596 visitors. Week 11-04→11-10 vs 10-28→11-03: page views −7% (8,224 vs 8,838; the comparison week still holds the 11-03/04 spikes), visitors +8% (4,309 vs 3,995). /chain was the most visited page after / (en 15 + zh 10).
+- Shipped: [#42](https://github.com/noobnooc/onlinetools.dev/pull/42). `chain/ops.ts` splits ops into `EAGER` (dependency-free tool modules) and `LAZY` (dataconvert/yaml, ajv, sql-formatter, js-beautify, marked/turndown, imported on first use). `runChain` returns `pending` for a step whose library hasn't arrived, and the workbench loads and re-runs. A failed import makes the step an error that says to check the connection. JS gzip (Playwright, live vs. local build): /chain 321 → 139 KB, /chain/query-string-to-json 324 → 142, /chain/yaml-to-json 324 → 178 (it needs yaml), /zh/chain 336 → 154. Recipes still render their output, and there are 0 requests after networkidle. Adding a "SQL format" step fetches one same-origin chunk. CONTRIBUTING rule 3 asks for this ("big libraries must be dynamically imported"). Tests: `chain/ops.test.ts` (pending → loaded, every op has an implementation) and a /chain section in `detect/bundle.test.ts`, which fails on the old static imports.
+- Why this headline: the data pointed at it. /chain became the most visited page after /, and it was the heaviest on the site. 11-09 was Quality and 11-10 Content, so this is not a third run in one area.
+- Cloudflare: none (HSTS step 3 on/after 11-15).
+- Community: no outside issues or PRs. Commented on #31 that merging worked again today; it stays open because the denial has come and gone twice.
+- Learned: the merge permission is intermittent (denied 11-01→03 and 11-09→10, allowed 11-04→08 and 11-11). Always try the previous day's green PR first. `release.sh`'s CI check can time out on a GitHub queue; read the check runs before treating that as red.
+- Next: HSTS 15552000 on/after 11-15. The shared vendor weight (≈133 KB on every page) is the remaining Quality item. The headline should rotate to Tools or i18n.
+
 ## 2026-11-10 — Query strings in the Pipeline (+4 recipe pages)
 - Health: smoke test green (0 failures). #40 was merged 11-10 15:12 UTC (by the owner, since my 11-09 merge was denied); live is v2026.11.09 (Worker `ec3b4431`), both checks green on `main`. 0 eyeball 5xx on 11-09.
 - Metrics: 11-09: 773 page views, 629 visitors. Week 11-03→11-09 vs 10-27→11-02: page views +26% (9,163 vs 7,285), visitors +10% (4,320 vs 3,928). The cURL converter (5) and contrast checker (14 over 4 locales) already show in the top paths.

@@ -8,6 +8,8 @@
 		PIPE_OP_BY_ID,
 		PIPE_GROUPS,
 		PIPE_GROUP_LABELS,
+		loadOps,
+		opsReady,
 		type PipeOp
 	} from '$lib/chain/ops';
 	import { runChain, encodeRecipe, decodeRecipe } from '$lib/chain/engine';
@@ -56,7 +58,21 @@
 	let copied = $state(false);
 	let shared = $state<'ok' | 'toolarge' | null>(null);
 
-	const run = $derived(runChain(input, steps));
+	// Steps that need a heavy library (YAML, SQL, Markdown…) load it on first
+	// use; bump `loadedTick` when it arrives so the chain runs again.
+	let loadedTick = $state(0);
+	$effect(() => {
+		const ids = steps.map((s) => s.op);
+		if (opsReady(ids)) return;
+		loadOps(ids).then(() => loadedTick++);
+	});
+
+	const run = $derived.by(() => {
+		void loadedTick;
+		return runChain(input, steps);
+	});
+	// While a step is still loading, the output isn't final — show nothing.
+	const output = $derived(run.pending ? '' : run.output);
 
 	// Keep the URL fragment in sync so refresh / copy-address reproduce state.
 	$effect(() => {
@@ -110,7 +126,7 @@
 
 	async function copyOutput() {
 		try {
-			await navigator.clipboard.writeText(run.output);
+			await navigator.clipboard.writeText(output);
 			copied = true;
 			setTimeout(() => (copied = false), 1200);
 		} catch {
@@ -327,7 +343,7 @@
 			<button
 				type="button"
 				onclick={copyOutput}
-				disabled={run.output === ''}
+				disabled={output === ''}
 				class="flex items-center gap-1.5 rounded-md border border-line px-2 py-1 text-[12px] text-dim transition-colors duration-120 hover:border-accent/50 hover:text-accent disabled:opacity-40"
 			>
 				{#if copied}<Check size={12} /> {t('copied')}{:else}<Copy size={12} /> {t('copy')}{/if}
@@ -340,7 +356,8 @@
 			<p class="font-mono text-[13px] text-dim">{t('chainEmpty')}</p>
 		{:else}
 			<pre
-				class="overflow-x-auto font-mono text-[13px] leading-6 whitespace-pre-wrap text-fg">{run.output}</pre>
+				class="overflow-x-auto font-mono text-[13px] leading-6 whitespace-pre-wrap text-fg"
+				aria-busy={run.pending}>{output}</pre>
 		{/if}
 	</div>
 	{#if steps.length > 0}
