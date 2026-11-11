@@ -91,7 +91,7 @@ src/
       recommend.ts       ranking: content format × ToolMeta.accepts
     chain/
       op-meta.ts         SSR-safe op metadata (no tool imports)
-      ops.ts             op id → pure run function
+      ops.ts             op id → pure run function (heavy ones lazy)
       engine.ts          recipe execution + URL encoding
       presets.ts         curated, individually indexable recipes
     i18n/
@@ -208,8 +208,11 @@ be routed into a text tool.
 - **`op-meta.ts`** — ids, labels, groups, argument specs, with *no* imports of
   tool libraries. Prerendered pages (preset pages, the sitemap) read this.
 - **`ops.ts`** — `id → (input, arg?) => ToolResult`, thin pure wrappers over
-  already-tested tool functions. Importing it pulls in browser-only code, so it
-  stays client-side.
+  already-tested tool functions. Ops over dependency-free tool modules are
+  bundled; ops that need a library (yaml, ajv, sql-formatter, js-beautify,
+  marked/turndown) are dynamically imported the first time a recipe uses one,
+  so /chain ships ≈140 KB gzip of JS instead of ≈320 KB. `runChain` marks
+  such a step `pending` until `loadOps()` has fetched it.
 
 35 ops today. `presets.ts` holds 12 curated recipes, each with its own page
 under `/chain/<slug>` — these target workflow-shaped queries ("decode a JWT and

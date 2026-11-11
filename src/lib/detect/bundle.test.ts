@@ -57,3 +57,19 @@ describe('Smart Paste bundle', () => {
 		}
 	});
 });
+
+// /chain and its recipe pages bundle `chain/ops.ts`; ops that need a heavy
+// library must import it dynamically (on first use), not statically.
+describe('Pipeline bundle', () => {
+	const { files, packages } = walk(resolve(ROOT, 'lib/chain/engine.ts'));
+
+	it('walks the op registry', () => {
+		expect(files.some((f) => f.endsWith('lib/chain/ops.ts'))).toBe(true);
+		expect(files.some((f) => f.endsWith('lib/tools/base64.ts'))).toBe(true);
+	});
+
+	it('pulls in no heavy tool dependency', () => {
+		expect(packages.filter((p) => HEAVY.includes(p.spec))).toEqual([]);
+		expect(files.filter((f) => /lib\/tools\/(dataconvert|jsonschema|sqlformat|codeformat|markdown)\.ts$/.test(f))).toEqual([]);
+	});
+});

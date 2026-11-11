@@ -11,6 +11,17 @@ the footer badge and every `<lastmod>` in the sitemap.
 
 ---
 
+## [2026.11.11] — A lighter Pipeline
+
+### Changed
+
+- `/chain` and its recipe pages load ≈56% less JavaScript (gzip: /chain
+  321 → 139 KB, /chain/query-string-to-json 324 → 142 KB). `chain/ops.ts`
+  now imports the libraries behind YAML, JSON Schema, SQL, code-format and
+  Markdown steps on first use (`LAZY`, `loadOps()`); dependency-free ops stay
+  bundled (`EAGER`). `runChain` reports a not-yet-loaded step as `pending`.
+  `detect/bundle.test.ts` guards the split and `chain/ops.test.ts` covers it.
+
 ## [2026.11.10] — Query strings in the Pipeline
 
 ### Added

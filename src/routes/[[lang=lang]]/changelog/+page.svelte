@@ -16,6 +16,18 @@
 	<div lang="en">
 	<section class="relative border-l border-line pb-8 pl-6">
 		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
+		<h2 class="text-sm font-medium">A lighter Pipeline</h2>
+		<p class="mt-0.5 font-mono text-xs text-dim">v2026.11.11</p>
+		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
+			<li>
+				The <a href={lp('/chain')} class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">Pipeline</a>
+				and its recipe pages now download less than half the JavaScript they did. Steps that need a bigger library
+				(YAML, SQL, Markdown, code formatting, JSON Schema) load it the first time you add one, from this site.
+			</li>
+		</ul>
+	</section>
+	<section class="relative border-l border-line pb-8 pl-6">
+		<span class="absolute top-1 -left-[5px] h-2.5 w-2.5 rounded-full border-2 border-line bg-bg" aria-hidden="true"></span>
 		<h2 class="text-sm font-medium">Query strings in the Pipeline</h2>
 		<p class="mt-0.5 font-mono text-xs text-dim">v2026.11.10</p>
 		<ul class="mt-3 list-disc space-y-1.5 pl-4 text-sm text-dim marker:text-dim/50">
